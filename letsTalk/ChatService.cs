@@ -136,7 +136,6 @@ namespace letsTalk
 
         public DownloadFileInfo AvatarDownload(DownloadRequest request)
         {
-            Thread.Sleep(1500);
             DownloadFileInfo downloadFileInfo = null;
             try
             {
