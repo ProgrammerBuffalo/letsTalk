@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/letsTalk" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/letsTalk" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ServerUserInfo">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AuthenticationUserInfo">
+        <xs:sequence>
+          <xs:element name="Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="SqlId" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ServerUserInfo" nillable="true" type="tns:ServerUserInfo" />
+  <xs:complexType name="AuthenticationUserInfo">
+    <xs:sequence>
+      <xs:element name="Login" nillable="true" type="xs:string" />
+      <xs:element name="Password" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AuthenticationUserInfo" nillable="true" type="tns:AuthenticationUserInfo" />
+  <xs:complexType name="LoginExceptionFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LoginExceptionFault" nillable="true" type="tns:LoginExceptionFault" />
+  <xs:complexType name="NicknameExceptionFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="NicknameExceptionFault" nillable="true" type="tns:NicknameExceptionFault" />
+  <xs:complexType name="AuthorizationExceptionFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AuthorizationExceptionFault" nillable="true" type="tns:AuthorizationExceptionFault" />
+  <xs:complexType name="ConnectionExceptionFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConnectionExceptionFault" nillable="true" type="tns:ConnectionExceptionFault" />
+</xs:schema>

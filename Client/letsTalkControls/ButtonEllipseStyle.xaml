@@ -1,0 +1,59 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Icons ="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                    xmlns:local="clr-namespace:Client.letsTalkControls">
+
+    <Style x:Key="buttonEllipseStyle" TargetType="{x:Type Button}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+
+                    <Grid>
+                        <Rectangle RadiusX="20" RadiusY="20" Fill="#FFF0F0F0"/>
+                        <Border CornerRadius="20" BorderThickness="1" BorderBrush="Gray">
+
+                            <Icons:PackIconMaterial x:Name="icon" Opacity="0" Width="32" Height="32"
+                                                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                    Kind="RefreshCircle" Foreground="Yellow"
+                                                    RenderTransformOrigin="0.5,0.5" >
+                                <Icons:PackIconMaterial.RenderTransform>
+                                    <TransformGroup>
+                                        <RotateTransform x:Name="rotationIcon" Angle="0"/>
+                                    </TransformGroup>
+                                </Icons:PackIconMaterial.RenderTransform>
+                            </Icons:PackIconMaterial>
+                            
+                            <Border.Background>
+                                <ImageBrush ImageSource="{Binding Path=UserImage, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Stretch="Fill"/>
+                            </Border.Background>
+                            
+                        </Border>
+
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="icon" Property="Opacity" Value="100"/>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="rotationIcon" Storyboard.TargetProperty="Angle" From="0" To="360" Duration="0:0:1" RepeatBehavior="Forever"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="rotationIcon" Storyboard.TargetProperty="Angle" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

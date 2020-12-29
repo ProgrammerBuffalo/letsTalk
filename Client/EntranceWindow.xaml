@@ -1,0 +1,137 @@
+﻿<Window x:Class="Client.EntranceWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Controls ="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:Icons ="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:UserControls="clr-namespace:Client.letsTalkControls"
+        xmlns:local="clr-namespace:Client"
+        mc:Ignorable="d"
+        Title="Entrance" Height="450" Width="350">
+
+    <Grid x:Name="grid_main">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+
+            <ColumnDefinition>
+                <ColumnDefinition.Style>
+                    <Style TargetType="{x:Type ColumnDefinition}">
+                        <Setter Property="ColumnDefinition.Width" Value="0"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="true">
+                                <Setter Property="Width" Value="1*" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="false">
+                                <Setter Property="Width" Value="0" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ColumnDefinition.Style>
+            </ColumnDefinition>
+
+        </Grid.ColumnDefinitions>
+
+        <TextBox x:Name="textBox_name" Controls:TextBoxHelper.Watermark="Your Name"
+                 Controls:TextBoxHelper.ClearTextButton="True"
+                 Margin="15" FontSize="18" Grid.Row="0" Grid.Column="0">
+
+            <TextBox.Style>
+                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MahApps.Styles.TextBox}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="true">
+                            <Setter Property="TextBox.Visibility" Value="Visible" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="false">
+                            <Setter Property="TextBox.Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+
+        </TextBox>
+
+        <TextBox x:Name="textBox_login" Controls:TextBoxHelper.Watermark="Login"
+                 Controls:TextBoxHelper.ClearTextButton="True"
+                 Margin="15" FontSize="18" Grid.Row="1" Grid.Column="0"/>
+
+        <TextBox x:Name="textBox_password" Controls:TextBoxHelper.Watermark="Password"
+                 Controls:TextBoxHelper.ClearTextButton="True"
+                 Margin="15" FontSize="18" Grid.Row="2" Grid.Column="0"/>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="btn_sign" Grid.Column="0" Margin="10, 50, 10, 100"
+                    Content="Sign In" Click="btn_sign_Click">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MahApps.Styles.Button}">
+                        <Setter Property="Visibility" Value="Visible"></Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="false">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="true">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+
+            <Button x:Name="btn_reg"  Margin="10, 50, 10, 100"
+                    Content="Registrate" Click="btn_reg_Click">
+
+                <Button.Style>
+
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MahApps.Styles.Button}">
+                        <Setter Property="Grid.Column" Value="1"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="false">
+                                <Setter Property="Grid.Column" Value="1" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="true">
+                                <Setter Property="Grid.Column" Value="0" />
+                                <Setter Property="Grid.ColumnSpan" Value="2"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+
+                </Button.Style>
+
+            </Button>
+
+        </Grid>
+
+        <Button x:Name="btn_photo" Grid.Column="1" Grid.RowSpan="3" Margin="5, 15" Padding="15 30" Click="btn_photo_Click">
+            <Button.ContentTemplate>
+                <DataTemplate>
+                    <Icons:PackIconMaterialDesign Width="Auto" Height="Auto" Foreground="#FFDA0B" Kind="AddAPhoto"/>
+                </DataTemplate>
+            </Button.ContentTemplate>
+        </Button>
+
+        <Button x:Name="btn_back" Content="Back"
+                Grid.Row="3"  Margin="10, 50, 10, 100" Grid.Column="1"
+                Click="btn_back_Click">
+        </Button>
+
+        <UserControls:LoadingControl x:Name="animated_control" State="Loading" Grid.RowSpan="4" Grid.ColumnSpan="2"  Visibility="Collapsed"/>
+
+        <TextBlock Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.ColumnSpan="2" x:Name="textBlock_info" />
+
+
+    </Grid>
+
+</Window>

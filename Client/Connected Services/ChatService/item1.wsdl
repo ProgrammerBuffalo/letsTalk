@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="letsTalk.IChatService" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="letsTalk.IChatService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="letsTalk.IChatService/Imports">
+      <xsd:import schemaLocation="http://localhost:8301/?xsd=xsd0" namespace="letsTalk.IChatService" />
+      <xsd:import schemaLocation="http://localhost:8301/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/letsTalk" />
+      <xsd:import schemaLocation="http://localhost:8301/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="Chat_Registration_InputMessage">
+    <wsdl:part name="parameters" element="tns:Registration" />
+  </wsdl:message>
+  <wsdl:message name="Chat_Registration_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RegistrationResponse" />
+  </wsdl:message>
+  <wsdl:message name="Chat_Registration_LoginExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/letsTalk" name="detail" element="q1:LoginExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="Chat_Registration_NicknameExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/letsTalk" name="detail" element="q2:NicknameExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="Chat_Authorization_InputMessage">
+    <wsdl:part name="parameters" element="tns:Authorization" />
+  </wsdl:message>
+  <wsdl:message name="Chat_Authorization_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AuthorizationResponse" />
+  </wsdl:message>
+  <wsdl:message name="Chat_Authorization_AuthorizationExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q3="http://schemas.datacontract.org/2004/07/letsTalk" name="detail" element="q3:AuthorizationExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="Chat_Connect_InputMessage">
+    <wsdl:part name="parameters" element="tns:Connect" />
+  </wsdl:message>
+  <wsdl:message name="Chat_Connect_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectResponse" />
+  </wsdl:message>
+  <wsdl:message name="Chat_Connect_ConnectionExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q4="http://schemas.datacontract.org/2004/07/letsTalk" name="detail" element="q4:ConnectionExceptionFault" />
+  </wsdl:message>
+  <wsdl:message name="Chat_Disconnect_InputMessage">
+    <wsdl:part name="parameters" element="tns:Disconnect" />
+  </wsdl:message>
+  <wsdl:message name="Chat_Disconnect_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DisconnectResponse" />
+  </wsdl:message>
+  <wsdl:portType name="Chat">
+    <wsdl:operation name="Registration">
+      <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/Registration" message="tns:Chat_Registration_InputMessage" />
+      <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/RegistrationResponse" message="tns:Chat_Registration_OutputMessage" />
+      <wsdl:fault wsaw:Action="letsTalk.IChatService/Chat/RegistrationLoginExceptionFaultFault" name="LoginExceptionFaultFault" message="tns:Chat_Registration_LoginExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="letsTalk.IChatService/Chat/RegistrationNicknameExceptionFaultFault" name="NicknameExceptionFaultFault" message="tns:Chat_Registration_NicknameExceptionFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Authorization">
+      <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/Authorization" message="tns:Chat_Authorization_InputMessage" />
+      <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/AuthorizationResponse" message="tns:Chat_Authorization_OutputMessage" />
+      <wsdl:fault wsaw:Action="letsTalk.IChatService/Chat/AuthorizationAuthorizationExceptionFaultFault" name="AuthorizationExceptionFaultFault" message="tns:Chat_Authorization_AuthorizationExceptionFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Connect">
+      <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/Connect" message="tns:Chat_Connect_InputMessage" />
+      <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/ConnectResponse" message="tns:Chat_Connect_OutputMessage" />
+      <wsdl:fault wsaw:Action="letsTalk.IChatService/Chat/ConnectConnectionExceptionFaultFault" name="ConnectionExceptionFaultFault" message="tns:Chat_Connect_ConnectionExceptionFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Disconnect">
+      <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/Disconnect" message="tns:Chat_Disconnect_InputMessage" />
+      <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/DisconnectResponse" message="tns:Chat_Disconnect_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>

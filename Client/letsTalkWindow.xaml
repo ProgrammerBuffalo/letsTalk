@@ -1,0 +1,135 @@
+﻿<Window x:Class="Client.letsTalkWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Controls ="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:Icons ="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:local="clr-namespace:Client"
+        mc:Ignorable="d"
+        Title="letsTalkWindow" Height="450" Width="800" Loaded="Window_Loaded" Closed="Window_Closed">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="letsTalkControls/ButtonEllipseStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid>
+        
+        <Grid.Resources>
+            <DataTemplate x:Key="HamburgerMenuOptionsTemplate" DataType="{x:Type Controls:HamburgerMenuIconItem}">
+                <DockPanel Height="48" LastChildFill="True">
+                    
+                    <ContentControl  x:Name="IconPart"
+                                     Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Controls:HamburgerMenu}}, Path=CompactPaneLength}"
+                                     Content="{Binding Icon}"
+                                     DockPanel.Dock="Left"/>
+                    
+                    <TextBlock       x:Name="TextPart"
+                                     VerticalAlignment="Center"
+                                     FontSize="16"
+                                     Text="{Binding Label}" />
+                </DockPanel>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Controls:HamburgerMenu}}, Path=PanePlacement}" Value="Right">
+                        <Setter TargetName="IconPart" Property="DockPanel.Dock" Value="Right" />
+                        <Setter TargetName="TextPart" Property="Margin" Value="8 0 0 0" />
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+        </Grid.Resources>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+
+        <Controls:HamburgerMenu x:Name="hamburgerMenu" PaneBackground="#FFEF00" PaneForeground="Gray"
+                                 OptionsItemTemplate="{StaticResource HamburgerMenuOptionsTemplate}">
+
+            <Controls:HamburgerMenu.OptionsItemsSource>
+                <Controls:HamburgerMenuItemCollection>
+                    <Controls:HamburgerMenuIconItem Label="Add User">
+                        <Controls:HamburgerMenuIconItem.Icon>
+                            <Icons:PackIconMaterial HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Kind="AccountPlus"/>
+                        </Controls:HamburgerMenuIconItem.Icon>
+                    </Controls:HamburgerMenuIconItem>
+                </Controls:HamburgerMenuItemCollection>
+            </Controls:HamburgerMenu.OptionsItemsSource>
+
+            <Controls:HamburgerMenu.HamburgerMenuHeaderTemplate>
+                <DataTemplate>
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="64"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Margin="10, 2" Grid.Column="0"
+                                Style="{StaticResource buttonEllipseStyle}"
+                                Click="ImageButton_Click">
+
+                        </Button>
+
+                        <TextBlock Grid.Column="1" HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="16"
+                                Foreground="Gray"
+                                Text="{Binding Path=UserName, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"/>
+
+                    </Grid>
+                </DataTemplate>
+            </Controls:HamburgerMenu.HamburgerMenuHeaderTemplate>
+
+            <Controls:HamburgerMenu.ContentTemplate>
+
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="48" />
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Margin="-1 0 -1 0" Grid.Row="0">
+
+                            <TextBlock Text="{Binding Path=Name}"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       Foreground="Gray"/>
+                        </Border>
+
+                        <Controls:TransitioningContentControl Grid.Row="1"
+                                                              Content="{Binding}"
+                                                              RestartTransitionOnContentChange="True"
+                                                              Transition="Default">
+
+                            <Controls:TransitioningContentControl.Resources>
+                                
+                                <DataTemplate DataType="{x:Type Controls:HamburgerMenuIconItem}">
+                                    
+                                    <ContentControl Content="{Binding Tag, Mode=OneWay}"
+                                                    Focusable="True"
+                                                    IsTabStop="False" />
+                                </DataTemplate>
+
+                            </Controls:TransitioningContentControl.Resources>
+
+                        </Controls:TransitioningContentControl>
+
+                    </Grid>
+                </DataTemplate>
+
+            </Controls:HamburgerMenu.ContentTemplate>
+
+        </Controls:HamburgerMenu>
+
+    </Grid>
+
+</Window>
