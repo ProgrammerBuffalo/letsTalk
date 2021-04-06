@@ -2,6 +2,11 @@
 
 namespace letsTalk
 {
+    // !!! Возможные ошибки, которые следует сообщать клиенту
+    
+    // DataContract -> данный объект будет сериализоваться
+    // DataMember -> поле должно сериализоваться
+ 
     [DataContract]
     public class LoginExceptionFault
     {

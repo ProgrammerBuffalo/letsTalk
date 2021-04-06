@@ -8,14 +8,22 @@ using System.Threading.Tasks;
 
 namespace letsTalk
 {
-    [ServiceContract(Name = "File", Namespace = "letsTalk.IFileService")]
+    // ИНТЕРФЕЙС РАБОТАЕТ НА БАЗЕ ПРОТОКОЛА HTTP
+
+    // Интерфейс, который отвечает за работу файлов
+
+    // MessageContract -> Сообщение структурируется в SOAP
+    // MessageBodyMember -> Всё равно что DataMember
+
+    // Для общения с методами данного интерфейса используется адрес http://localhost:8301/File
+    [ServiceContract(Name = "File", Namespace = "letsTalk.IFileService")] 
     public interface IFileService
     {
         [OperationContract]
-        DownloadFileInfo AvatarDownload(DownloadRequest request);
+        DownloadFileInfo AvatarDownload(DownloadRequest request); // Отправка клиенту аватарки
 
         [OperationContract]
-        void AvatarUpload(UploadFileInfo uploadRequest);
+        void AvatarUpload(UploadFileInfo uploadRequest); // Отправка серверу от клиента аватарки
     }
 
     [MessageContract]

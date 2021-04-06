@@ -22,11 +22,12 @@ using System.Windows.Shapes;
 
 namespace Client
 {
+    // Самое первое окно, когда пользователь запускается
     public partial class EntranceWindow : Window, INotifyPropertyChanged
     {
-        private bool _isSectionShown = false;
+        private bool _isSectionShown = false; // Нужен для переключения окна между авторизацией и регистрацией
 
-        private ChatService.UploadFileInfo uploadFileInfo;
+        private ChatService.UploadFileInfo uploadFileInfo; // Нужен для отправки аватарки серверу
 
         public bool IsSectionShown
         {
@@ -48,6 +49,7 @@ namespace Client
                 handler(this, new PropertyChangedEventArgs(propName));
         }
 
+        // Регистрация пользователя
         private void btn_reg_Click(object sender, RoutedEventArgs e)
         {
             if (IsSectionShown)
@@ -75,8 +77,8 @@ namespace Client
             animated_control.Visibility = Visibility.Visible;
             animated_control.State = letsTalkControls.Status.Loading;
 
-            var chatClient = new ChatService.ChatClient();
-            var fileClient = new ChatService.FileClient();
+            var chatClient = new ChatService.ChatClient(); // Работает с net.tcp (регистрация)
+            var fileClient = new ChatService.FileClient(); // Работает с http (отправка аватарки)
 
             try
             {
@@ -104,7 +106,7 @@ namespace Client
                 textBlock_info.Text = "Something wrong with server";
             }
 
-            await Task.Delay(1000);
+            await Task.Delay(1000); // нужен для того чтобы анимация закончилась до конца
 
             animated_control.Visibility = Visibility.Collapsed;
             grid_main.IsEnabled = !grid_main.IsEnabled;
@@ -115,7 +117,8 @@ namespace Client
         {
             return true;
         }
-
+        
+        // Указываем какую фотографию мы отправим серверу, но пока не отправляем
         private void btn_photo_Click(object sender, RoutedEventArgs e)
         {
             FileStream fileReader = null;
@@ -152,6 +155,7 @@ namespace Client
             if (uploadFileInfo.FileStream != null) uploadFileInfo.FileStream.Dispose();
         }
 
+        // Если авторизация произошла успешно, то открывается окно letsTalkWindow (Главное окно)
         private void btn_sign_Click(object sender, RoutedEventArgs e)
         {
             var chatClient = new ChatService.ChatClient();

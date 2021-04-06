@@ -3,7 +3,10 @@ using System.ServiceModel;
 
 namespace letsTalk
 {
+    // DataContract -> данный объект будет сериализоваться
+    // DataMember -> поле должно сериализоваться
 
+    // IsRequired -> обязательно отправляет/получает поле
     [DataContract]
     public class AuthenticationUserInfo
     {

@@ -14,16 +14,17 @@ using System.Transactions;
 
 namespace letsTalk
 {
-   [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single,
-                    IncludeExceptionDetailInFaults = true, 
-                    ConcurrencyMode = ConcurrencyMode.Multiple)]
+    // Реализация логики сервера
+   [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, // Single -> Объект ChatService является синглтоном
+                    IncludeExceptionDetailInFaults = true, // Faults == Exceptions
+                    ConcurrencyMode = ConcurrencyMode.Multiple)] // Multiple => Сервер должен держать нескольких пользователей себе (Под каждого юзера свой поток)
    public class ChatService : IChatService, IFileService
    {
 
         private static string connection_string = @"Server=(local);Database=MessengerDB;Integrated Security=true;";
-
+        // Сервер хранит подключенных пользователей в Dictionary, задавая каждому уникальный ID-подключения (GUID)
         private Dictionary<Guid, ConnectedServerUser> connectedUsers = new Dictionary<Guid, ConnectedServerUser>();
-
+        // Авторизация на сервер, метод ищет пользователя в БД
         public ServerUserInfo Authorization(AuthenticationUserInfo authenticationUserInfo)
         {
             ServerUserInfo serverUserInfo = null;
@@ -64,7 +65,7 @@ namespace letsTalk
             return serverUserInfo;
         }
 
-
+        // Регистрация пользователя, добавление нового пользователя в БД
         public int Registration(ServerUserInfo serverUserInfo)
         {
             SqlTransaction sqlTransaction = null;
@@ -133,10 +134,10 @@ namespace letsTalk
             Console.WriteLine("User with nickname: " + serverUserInfo.Name + " is registered");
             return UserId;
         }
-
+        // Сервер отправляет аватарку зарегистированного пользователя в БД (Метод ищет аватарку пользователя, посредством связей в БД.
+        // После того, как аватарка была найдена в БД, у нас открывается поток под эту картинку для того чтобы клиентская часть сегментами подгрузила её)
         public DownloadFileInfo AvatarDownload(DownloadRequest request)
         {
-            Thread.Sleep(2000);
             DownloadFileInfo downloadFileInfo = null;
             try
             {
@@ -180,6 +181,7 @@ namespace letsTalk
             return downloadFileInfo;
         }
 
+        // Здесь сервер заносит картинку в файловую таблицу, процесс обратный методу AvatarDownload
         public void AvatarUpload(UploadFileInfo uploadResponse)
         {
 
@@ -247,6 +249,7 @@ namespace letsTalk
             finally { if (uploadResponse.FileStream != null) uploadResponse.FileStream.Dispose(); }
         }
 
+        // Захват пользователя на сервере, и выдача ему уникального ID (сеансовый ID, не путать с SQL)
         public Guid Connect(int sqlId)
         {
             Guid uniqueId = Guid.NewGuid();
@@ -263,6 +266,7 @@ namespace letsTalk
             return uniqueId;
         }
 
+        // Процесс обратный Connect
         public void Disconnect(Guid uniqueId)
         {
             connectedUsers.Remove(uniqueId);
