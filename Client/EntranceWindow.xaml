@@ -40,7 +40,7 @@
 
         </Grid.ColumnDefinitions>
 
-        <TextBox x:Name="textBox_name" Controls:TextBoxHelper.Watermark="Your Name"
+        <TextBox x:Name="textBox_name" Controls:TextBoxHelper.Watermark="Your Name" 
                  Controls:TextBoxHelper.ClearTextButton="True"
                  Margin="15" FontSize="18" Grid.Row="0" Grid.Column="0">
 
