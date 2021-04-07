@@ -225,8 +225,6 @@
       <DependentUpon>letsTalkWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainViewModel.cs" />
-    <Compile Include="MenuItem.cs" />
-    <Compile Include="NavigationService.cs" />
     <Compile Include="Views\UCAvailableUsers.xaml.cs">
       <DependentUpon>UCAvailableUsers.xaml</DependentUpon>
     </Compile>
