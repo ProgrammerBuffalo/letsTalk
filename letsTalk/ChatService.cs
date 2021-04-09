@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.Text;
 using System.Data;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Data.SqlClient;
 using System.Data.SqlTypes;
+using System.IO;
+using System.ServiceModel;
 using System.Transactions;
 
 namespace letsTalk
 {
     // Реализация логики сервера
-   [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, // Single -> Объект ChatService является синглтоном
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, // Single -> Объект ChatService является синглтоном
                     IncludeExceptionDetailInFaults = true, // Faults == Exceptions
                     ConcurrencyMode = ConcurrencyMode.Multiple)] // Multiple => Сервер должен держать нескольких пользователей себе (Под каждого юзера свой поток)
    public class ChatService : IChatService, IFileService

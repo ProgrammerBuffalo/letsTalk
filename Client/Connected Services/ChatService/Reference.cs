@@ -109,6 +109,25 @@ namespace Client.ChatService {
                 }
             }
         }
+
+        public async void Registrate(UploadFileInfo avatar)
+        {
+            try
+            {
+                var chatClient = new ChatService.ChatClient(); // Работает с net.tcp (регистрация)
+                var fileClient = new ChatService.FileClient(); // Работает с http (отправка аватарки)
+
+                int UserId = await chatClient.RegistrationAsync(this);
+
+                if (avatar.FileStream.CanRead)
+                    await fileClient.AvatarUploadAsync(avatar.FileExtension, UserId, avatar.FileStream);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -369,6 +388,12 @@ namespace Client.ChatService {
         
         public UploadFileInfo() {
         }
+
+        //
+        public UploadFileInfo(string path){
+            FileStream = new System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+            FileExtension = path.Substring(path.LastIndexOf(".") + 1);
+        }
         
         public UploadFileInfo(string FileExtension, int Responsed_UserSqlId, System.IO.Stream FileStream) {
             this.FileExtension = FileExtension;
@@ -426,8 +451,8 @@ namespace Client.ChatService {
             Length = retVal.Length;
             FileStream = retVal.FileStream;
             return retVal.FileExtension;
-        }
-        
+        }       
+
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         System.Threading.Tasks.Task<Client.ChatService.DownloadFileInfo> Client.ChatService.File.AvatarDownloadAsync(Client.ChatService.DownloadRequest request) {
             return base.Channel.AvatarDownloadAsync(request);
