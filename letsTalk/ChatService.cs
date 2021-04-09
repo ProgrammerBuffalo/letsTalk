@@ -134,6 +134,7 @@ namespace letsTalk
             Console.WriteLine("User with nickname: " + serverUserInfo.Name + " is registered");
             return UserId;
         }
+
         // Сервер отправляет аватарку зарегистированного пользователя в БД (Метод ищет аватарку пользователя, посредством связей в БД.
         // После того, как аватарка была найдена в БД, у нас открывается поток под эту картинку для того чтобы клиентская часть сегментами подгрузила её)
         public DownloadFileInfo AvatarDownload(DownloadRequest request)
@@ -193,10 +194,10 @@ namespace letsTalk
                     {
                         sqlConnection.Open();
 
-                        SqlCommand sqlCommandAddAvatar = new SqlCommand($@" INSERT INTO DataFT(file_stream, name)
+                        SqlCommand sqlCommandAddAvatar = new SqlCommand($@" INSERT INTO DataFT(file_stream, name, path_locator)
                                                                         OUTPUT INSERTED.stream_id, GET_FILESTREAM_TRANSACTION_CONTEXT(),
                                                                         INSERTED.file_stream.PathName()
-                                                                        VALUES(CAST('' as varbinary(MAX)), @name)", sqlConnection);
+                                                                        VALUES(CAST('' as varbinary(MAX)), @name, dbo.GetPathLocatorForChild('Avatars'))", sqlConnection);
 
                         sqlCommandAddAvatar.CommandType = CommandType.Text;
 
@@ -215,8 +216,6 @@ namespace letsTalk
                         }
 
                         const int bufferSize = 2048;
-
-
 
                         using (SqlFileStream sqlFileStream = new SqlFileStream(full_path, transaction_context, FileAccess.Write))
                         {
