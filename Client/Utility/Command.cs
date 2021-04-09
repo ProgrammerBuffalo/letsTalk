@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Client
+namespace Client.Utility
 {
     class Command : ICommand
     {
@@ -29,4 +25,5 @@ namespace Client
             execute?.Invoke(parameter);
         }
     }
+
 }
