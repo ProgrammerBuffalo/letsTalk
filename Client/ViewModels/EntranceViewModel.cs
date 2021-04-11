@@ -15,6 +15,7 @@ namespace Client.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private string fileName;
         private System.Windows.Window entranceWindow;
 
         private bool isSectionShown;
@@ -91,7 +92,7 @@ namespace Client.ViewModels
                     LoaderState = LoaderState.Loading;
                     try
                     {
-                        registrationInfo.Registrate(uploadFileInfo);
+                        MakeRegister(registrationInfo);
                         LoaderState = LoaderState.Success;
                     }
                     catch (FaultException<ChatService.LoginExceptionFault> ex)
@@ -104,11 +105,20 @@ namespace Client.ViewModels
                         LoaderState = LoaderState.Fault;
                         Info = ex.Message;
                     }
+                    catch (FaultException<ChatService.StreamExceptionFault> ex)
+                    {
+                        LoaderState = LoaderState.Fault;
+                        Info = ex.Message;
+                    }
                     catch (Exception ex)
                     {
                         System.Windows.MessageBox.Show(ex.Message);
                         LoaderState = LoaderState.Fault;
                         Info = "Something wrong with server";
+                    }
+                    finally
+                    {
+                        if (uploadFileInfo.FileStream != null) uploadFileInfo.FileStream.Dispose();
                     }
 
                     await Task.Delay(1000); // нужен для того чтобы анимация закончилась до конца
@@ -120,10 +130,23 @@ namespace Client.ViewModels
             IsSectionShown = true;
         }
 
+
+        private async void MakeRegister(ChatService.ServerUserInfo registrationInfo)
+        {
+            var chatClient = new ChatService.ChatClient(); // Работает с net.tcp (регистрация)
+            var fileClient = new ChatService.FileClient(); // Работает с http (отправка аватарки)
+
+            int UserId = await chatClient.RegistrationAsync(registrationInfo);
+
+            uploadFileInfo.FileExtension = fileName.Substring(fileName.LastIndexOf(".") + 1);
+            uploadFileInfo.FileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read); ;
+
+            if (uploadFileInfo.FileStream.CanRead)
+                await fileClient.AvatarUploadAsync(uploadFileInfo.FileExtension, UserId, uploadFileInfo.FileStream);
+        }
+
         private void SetPhoto(object param)
         {
-            // зачем это нужно?
-            FileStream fileReader = null;
             try
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -131,15 +154,13 @@ namespace Client.ViewModels
                 openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg; *.jpeg; *.png";
 
                 if (openFileDialog.ShowDialog() == true)
-                    uploadFileInfo = new ChatService.UploadFileInfo(openFileDialog.FileName);
+                    uploadFileInfo = new ChatService.UploadFileInfo();
+
+                fileName = openFileDialog.FileName;
             }
             catch (Exception ex)
             {
                 System.Windows.MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                if (fileReader != null) fileReader.Close();
             }
         }
 

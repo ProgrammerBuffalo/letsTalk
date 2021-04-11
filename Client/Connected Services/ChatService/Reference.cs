@@ -109,25 +109,6 @@ namespace Client.ChatService {
                 }
             }
         }
-
-        public async void Registrate(UploadFileInfo avatar)
-        {
-            try
-            {
-                var chatClient = new ChatService.ChatClient(); // Работает с net.tcp (регистрация)
-                var fileClient = new ChatService.FileClient(); // Работает с http (отправка аватарки)
-
-                int UserId = await chatClient.RegistrationAsync(this);
-
-                if (avatar.FileStream.CanRead)
-                    await fileClient.AvatarUploadAsync(avatar.FileExtension, UserId, avatar.FileStream);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-        }
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -310,6 +291,51 @@ namespace Client.ChatService {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="StreamExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
+    [System.SerializableAttribute()]
+    public partial class StreamExceptionFault : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MessageField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Message {
+            get {
+                return this.MessageField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MessageField, value) != true)) {
+                    this.MessageField = value;
+                    this.RaisePropertyChanged("Message");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="letsTalk.IFileService", ConfigurationName="ChatService.File")]
     public interface File {
@@ -323,6 +349,7 @@ namespace Client.ChatService {
         
         // CODEGEN: Generating message contract since the operation AvatarUpload is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IFileService/File/AvatarUpload", ReplyAction="letsTalk.IFileService/File/AvatarUploadResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(Client.ChatService.StreamExceptionFault), Action="letsTalk.IFileService/File/AvatarUploadStreamExceptionFaultFault", Name="StreamExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
         Client.ChatService.AvatarUploadResponse AvatarUpload(Client.ChatService.UploadFileInfo request);
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IFileService/File/AvatarUpload", ReplyAction="letsTalk.IFileService/File/AvatarUploadResponse")]
@@ -388,12 +415,6 @@ namespace Client.ChatService {
         
         public UploadFileInfo() {
         }
-
-        //
-        public UploadFileInfo(string path){
-            FileStream = new System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-            FileExtension = path.Substring(path.LastIndexOf(".") + 1);
-        }
         
         public UploadFileInfo(string FileExtension, int Responsed_UserSqlId, System.IO.Stream FileStream) {
             this.FileExtension = FileExtension;
@@ -451,8 +472,8 @@ namespace Client.ChatService {
             Length = retVal.Length;
             FileStream = retVal.FileStream;
             return retVal.FileExtension;
-        }       
-
+        }
+        
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         System.Threading.Tasks.Task<Client.ChatService.DownloadFileInfo> Client.ChatService.File.AvatarDownloadAsync(Client.ChatService.DownloadRequest request) {
             return base.Channel.AvatarDownloadAsync(request);
@@ -517,6 +538,24 @@ namespace Client.ChatService {
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/Connect", ReplyAction="letsTalk.IChatService/Chat/ConnectResponse")]
         System.Threading.Tasks.Task<System.Guid> ConnectAsync(int sqlId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/SendMessage", ReplyAction="letsTalk.IChatService/Chat/SendMessageResponse")]
+        bool SendMessage(string message);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/SendMessage", ReplyAction="letsTalk.IChatService/Chat/SendMessageResponse")]
+        System.Threading.Tasks.Task<bool> SendMessageAsync(string message);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/GetUsers", ReplyAction="letsTalk.IChatService/Chat/GetUsersResponse")]
+        System.Collections.Generic.Dictionary<int, string> GetUsers(int count, int offset);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/GetUsers", ReplyAction="letsTalk.IChatService/Chat/GetUsersResponse")]
+        System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> GetUsersAsync(int count, int offset);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/CreateChatroom")]
+        void CreateChatroom(string chatName, int[] users);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/CreateChatroom")]
+        System.Threading.Tasks.Task CreateChatroomAsync(string chatName, int[] users);
+        
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/Disconnect", ReplyAction="letsTalk.IChatService/Chat/DisconnectResponse")]
         void Disconnect(System.Guid UserId);
         
@@ -573,6 +612,30 @@ namespace Client.ChatService {
         
         public System.Threading.Tasks.Task<System.Guid> ConnectAsync(int sqlId) {
             return base.Channel.ConnectAsync(sqlId);
+        }
+        
+        public bool SendMessage(string message) {
+            return base.Channel.SendMessage(message);
+        }
+        
+        public System.Threading.Tasks.Task<bool> SendMessageAsync(string message) {
+            return base.Channel.SendMessageAsync(message);
+        }
+        
+        public System.Collections.Generic.Dictionary<int, string> GetUsers(int count, int offset) {
+            return base.Channel.GetUsers(count, offset);
+        }
+        
+        public System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> GetUsersAsync(int count, int offset) {
+            return base.Channel.GetUsersAsync(count, offset);
+        }
+        
+        public void CreateChatroom(string chatName, int[] users) {
+            base.Channel.CreateChatroom(chatName, users);
+        }
+        
+        public System.Threading.Tasks.Task CreateChatroomAsync(string chatName, int[] users) {
+            return base.Channel.CreateChatroomAsync(chatName, users);
         }
         
         public void Disconnect(System.Guid UserId) {

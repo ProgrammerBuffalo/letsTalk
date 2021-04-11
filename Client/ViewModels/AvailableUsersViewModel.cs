@@ -9,6 +9,13 @@ namespace Client.ViewModels
 {
     public class AvailableUsersViewModel : INotifyPropertyChanged
     {
+        public string Info { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public AvailableUsersViewModel()
+        {
+            
+        }
     }
 }

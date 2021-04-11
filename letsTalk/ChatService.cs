@@ -224,7 +224,7 @@ namespace letsTalk
                             }
 
                         }
-                        
+
                         SqlCommand UpdateUserAvatar = new SqlCommand($@" UPDATE Users SET Users.stream_id = @stream_id WHERE Users.Id = @user_id", sqlConnection);
 
                         UpdateUserAvatar.CommandType = CommandType.Text;
@@ -239,8 +239,13 @@ namespace letsTalk
                     }
                 }
             }
-            catch (Exception ex) { Console.WriteLine(ex.Message); }
-            finally { if (uploadResponse.FileStream != null) uploadResponse.FileStream.Dispose(); }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                StreamExceptionFault streamExceptionFault = new StreamExceptionFault();
+
+                throw new FaultException<StreamExceptionFault>(streamExceptionFault, streamExceptionFault.Message);
+            }
         }
 
         // Захват пользователя на сервере, и выдача ему уникального ID (сеансовый ID, не путать с SQL)
@@ -266,5 +271,47 @@ namespace letsTalk
             connectedUsers.Remove(uniqueId);
             Console.WriteLine($"User: {uniqueId} is Disconnected");
         }
+
+        public Dictionary<int, string> GetUsers(int count, int offset)
+        {
+            Dictionary<int, string> users = new Dictionary<int, string>();
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(connection_string))
+                {
+                    sqlConnection.Open();
+
+                    SqlCommand sqlCommandShowMoreUsers = new SqlCommand(@"SELECT Id, Name FROM ShowMoreUsers(@count, @offset)");
+                    sqlCommandShowMoreUsers.CommandType = CommandType.Text;
+
+                    sqlCommandShowMoreUsers.Parameters.Add("@count", SqlDbType.SmallInt).Value = count;
+                    sqlCommandShowMoreUsers.Parameters.Add("@offset", SqlDbType.SmallInt).Value = offset;
+
+                    using (SqlDataReader sqlDataReader = sqlCommandShowMoreUsers.ExecuteReader())
+                    {
+                        if (sqlDataReader.HasRows)
+                        {
+                            while (sqlDataReader.Read())
+                            {
+                                users.Add(sqlDataReader.GetSqlInt32(0).Value, sqlDataReader.GetSqlString(1).Value);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            return users;
+        }
+
+        public void CreateChatroom(string chatName, List<int> users)
+        {
+            
+        }
+
+        public bool SendMessage(string message)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

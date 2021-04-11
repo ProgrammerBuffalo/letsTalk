@@ -23,6 +23,7 @@ namespace letsTalk
         DownloadFileInfo AvatarDownload(DownloadRequest request); // Отправка клиенту аватарки
 
         [OperationContract]
+        [FaultContract(typeof(StreamExceptionFault))]
         void AvatarUpload(UploadFileInfo uploadRequest); // Отправка серверу от клиента аватарки
     }
 

@@ -267,6 +267,9 @@
     <None Include="Connected Services\ChatService\item11.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\ChatService\item2.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\ChatService\item21.xsd">
       <SubType>Designer</SubType>
     </None>
