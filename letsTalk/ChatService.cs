@@ -15,7 +15,6 @@ namespace letsTalk
                     ConcurrencyMode = ConcurrencyMode.Multiple)] // Multiple => Сервер должен держать нескольких пользователей себе (Под каждого юзера свой поток)
    public class ChatService : IChatService, IFileService
    {
-
         private static string connection_string = @"Server=(local);Database=MessengerDB;Integrated Security=true;";
         // Сервер хранит подключенных пользователей в Dictionary, задавая каждому уникальный ID-подключения (GUID)
         private Dictionary<Guid, ConnectedServerUser> connectedUsers = new Dictionary<Guid, ConnectedServerUser>();
@@ -56,7 +55,14 @@ namespace letsTalk
                     }
                 }
             }
-            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
             return serverUserInfo;
         }
 
@@ -121,6 +127,10 @@ namespace letsTalk
                 Console.WriteLine("Rollback sql");
                 Console.WriteLine(sqlEx.Message);
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
             finally
             {
                 sqlConnection.Close();
@@ -134,7 +144,8 @@ namespace letsTalk
         // После того, как аватарка была найдена в БД, у нас открывается поток под эту картинку для того чтобы клиентская часть сегментами подгрузила её)
         public DownloadFileInfo AvatarDownload(DownloadRequest request)
         {
-            DownloadFileInfo downloadFileInfo = null;
+            DownloadFileInfo downloadFileInfo = new DownloadFileInfo();
+
             try
             {
                 using (SqlConnection sqlConnection = new SqlConnection(connection_string))
@@ -149,7 +160,7 @@ namespace letsTalk
 
                     if (stream_id.GetType() == typeof(DBNull))
                     {
-                        throw new FileNotFoundException("Avatar not found");
+                        return downloadFileInfo;
                     }
 
                     SqlCommand sqlCommandTakeAvatar = new SqlCommand($@"SELECT* FROM GetAvatar(@stream_id)", sqlConnection);
@@ -159,8 +170,6 @@ namespace letsTalk
                     {
                         while (reader.Read())
                         {
-                            downloadFileInfo = new DownloadFileInfo();
-
                             var stream = new FileStream(reader[0].ToString(), FileMode.Open, FileAccess.Read);
 
                             downloadFileInfo.FileExtension = reader[1].ToString();
@@ -272,7 +281,7 @@ namespace letsTalk
             Console.WriteLine($"User: {uniqueId} is Disconnected");
         }
 
-        public Dictionary<int, string> GetUsers(int count, int offset)
+        public Dictionary<int, string> GetUsers(int count, int offset, int callerId)
         {
             Dictionary<int, string> users = new Dictionary<int, string>();
             try
@@ -281,11 +290,12 @@ namespace letsTalk
                 {
                     sqlConnection.Open();
 
-                    SqlCommand sqlCommandShowMoreUsers = new SqlCommand(@"SELECT Id, Name FROM ShowMoreUsers(@count, @offset)");
+                    SqlCommand sqlCommandShowMoreUsers = new SqlCommand(@"SELECT Id, Name FROM ShowMoreUsers(@count, @offset, @callerId)", sqlConnection);
                     sqlCommandShowMoreUsers.CommandType = CommandType.Text;
 
                     sqlCommandShowMoreUsers.Parameters.Add("@count", SqlDbType.SmallInt).Value = count;
                     sqlCommandShowMoreUsers.Parameters.Add("@offset", SqlDbType.SmallInt).Value = offset;
+                    sqlCommandShowMoreUsers.Parameters.Add("@callerId", SqlDbType.SmallInt).Value = callerId;
 
                     using (SqlDataReader sqlDataReader = sqlCommandShowMoreUsers.ExecuteReader())
                     {
@@ -305,7 +315,9 @@ namespace letsTalk
 
         public void CreateChatroom(string chatName, List<int> users)
         {
-            
+            Console.WriteLine("chat: " + chatName);
+            foreach(var item in users)
+                Console.WriteLine("User:" + item);
         }
 
         public bool SendMessage(string message)

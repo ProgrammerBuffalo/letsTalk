@@ -10,13 +10,15 @@ namespace Client.Models
     {
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 
+        private static ClientUserInfo instance;
+
+        public static ClientUserInfo getInstance()
+        {
+            return instance;
+        }
+
         private string userName;
         private BitmapImage userImage = null; // Аватарка
-
-        public ClientUserInfo()
-        {
-            UserImage = null;
-        }
 
         public ClientUserInfo(Guid unique_id, int sqlId, ChatService.ChatClient chatClient, string userName)
         {
@@ -24,6 +26,7 @@ namespace Client.Models
             SqlId = sqlId;
             ChatClient = chatClient;
             UserName = userName;
+            instance = this;
         }
 
         public ChatService.ChatClient ChatClient { private set; get; } // Сеанс
@@ -36,34 +39,36 @@ namespace Client.Models
 
         public BitmapImage UserImage { get => userImage; set => Set(ref userImage, value); }
 
-        public void DownloadAvatarAsync()
+        public async void DownloadAvatarAsync()
         {
             ChatService.DownloadRequest request = new ChatService.DownloadRequest(SqlId);
             var fileClient = new ChatService.FileClient();
+
             Stream stream = null;
-            long lenght;
+            long lenght = 0;
+
             try
             {
-                System.Threading.Tasks.Task.Run(() =>
-                {
-                    fileClient.AvatarDownload(SqlId, out lenght, out stream);
-                    MemoryStream memoryStream = FileHelper.ReadFileByPart(stream);
+                await System.Threading.Tasks.Task.Run(() =>
+                 {
+                     fileClient.AvatarDownload(SqlId, out lenght, out stream);
+                     MemoryStream memoryStream = FileHelper.ReadFileByPart(stream);
 
-                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        var bitmapImage = new BitmapImage();
-                        bitmapImage.BeginInit();
-                        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                        bitmapImage.StreamSource = memoryStream;
-                        bitmapImage.EndInit();
+                     System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                     {
+                         var bitmapImage = new BitmapImage();
+                         bitmapImage.BeginInit();
+                         bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                         bitmapImage.StreamSource = memoryStream;
+                         bitmapImage.EndInit();
 
-                        UserImage = bitmapImage;
-                    });
-                    memoryStream.Close();
-                    memoryStream.Dispose();
-                    stream.Close();
-                    stream.Dispose();
-                });
+                         UserImage = bitmapImage;
+                     });
+                     memoryStream.Close();
+                     memoryStream.Dispose();
+                     stream.Close();
+                     stream.Dispose();
+                 });
 
             }
             catch (FaultException<ChatService.ConnectionExceptionFault> ex)

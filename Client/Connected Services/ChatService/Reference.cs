@@ -545,10 +545,10 @@ namespace Client.ChatService {
         System.Threading.Tasks.Task<bool> SendMessageAsync(string message);
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/GetUsers", ReplyAction="letsTalk.IChatService/Chat/GetUsersResponse")]
-        System.Collections.Generic.Dictionary<int, string> GetUsers(int count, int offset);
+        System.Collections.Generic.Dictionary<int, string> GetUsers(int count, int offset, int callerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/GetUsers", ReplyAction="letsTalk.IChatService/Chat/GetUsersResponse")]
-        System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> GetUsersAsync(int count, int offset);
+        System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> GetUsersAsync(int count, int offset, int callerId);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/CreateChatroom")]
         void CreateChatroom(string chatName, int[] users);
@@ -622,12 +622,12 @@ namespace Client.ChatService {
             return base.Channel.SendMessageAsync(message);
         }
         
-        public System.Collections.Generic.Dictionary<int, string> GetUsers(int count, int offset) {
-            return base.Channel.GetUsers(count, offset);
+        public System.Collections.Generic.Dictionary<int, string> GetUsers(int count, int offset, int callerId) {
+            return base.Channel.GetUsers(count, offset, callerId);
         }
         
-        public System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> GetUsersAsync(int count, int offset) {
-            return base.Channel.GetUsersAsync(count, offset);
+        public System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> GetUsersAsync(int count, int offset, int callerId) {
+            return base.Channel.GetUsersAsync(count, offset, callerId);
         }
         
         public void CreateChatroom(string chatName, int[] users) {
