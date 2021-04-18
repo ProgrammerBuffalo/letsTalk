@@ -69,7 +69,7 @@ namespace Client.ViewModels
             ChatService.ServerUserInfo serverUserInfo = chatClient.Authorization(new ChatService.AuthenticationUserInfo() { Login = Login, Password = Password });
 
             MainWindow mainWindow = new MainWindow();
-            mainWindow.DataContext = new ViewModels.MainViewModel(serverUserInfo.Name, serverUserInfo.SqlId);
+            mainWindow.DataContext = new MainViewModel(serverUserInfo.Name, serverUserInfo.SqlId);
             mainWindow.Show();
             entranceWindow.Close();
         }
