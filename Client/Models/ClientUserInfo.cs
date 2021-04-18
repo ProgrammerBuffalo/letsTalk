@@ -12,10 +12,13 @@ namespace Client.Models
     {
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 
+        private static ClientUserInfo instance;
+
         private string userName;
         private string userDesc; // описание пользователя (Hey there i am using Lets Talk!!!)
         private BitmapImage userImage = null; // Аватарка
         private Activity activity; // поле для показа подключенных и не подключенных клиентов
+
 
         public static ClientUserInfo getInstance()
         {
