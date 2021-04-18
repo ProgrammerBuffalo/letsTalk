@@ -54,4 +54,16 @@ namespace letsTalk
             Message = "This user is already connected";
         }
     }
+
+    [DataContract]
+    public class StreamExceptionFault
+    {
+        [DataMember]
+        public string Message { get; private set; }
+
+        public StreamExceptionFault()
+        {
+            Message = "Failed to send file";
+        }
+    }
 }

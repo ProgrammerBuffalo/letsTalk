@@ -42,4 +42,10 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ConnectionExceptionFault" nillable="true" type="tns:ConnectionExceptionFault" />
+  <xs:complexType name="StreamExceptionFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="StreamExceptionFault" nillable="true" type="tns:StreamExceptionFault" />
 </xs:schema>

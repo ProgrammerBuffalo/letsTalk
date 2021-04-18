@@ -23,10 +23,7 @@ namespace Client.Views
         public UCAvailableUsers()
         {
             InitializeComponent();
-        }
-
-        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
-        {
+            DataContext = new ViewModels.AvailableUsersViewModel();
 
         }
     }

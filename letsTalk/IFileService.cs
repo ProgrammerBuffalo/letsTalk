@@ -23,6 +23,7 @@ namespace letsTalk
         DownloadFileInfo AvatarDownload(DownloadRequest request); // Отправка клиенту аватарки
 
         [OperationContract]
+        [FaultContract(typeof(StreamExceptionFault))]
         void AvatarUpload(UploadFileInfo uploadRequest); // Отправка серверу от клиента аватарки
     }
 
@@ -37,13 +38,13 @@ namespace letsTalk
     public class DownloadFileInfo : IDisposable
     {
         [MessageHeader(MustUnderstand = true)]
-        public string FileExtension;
+        public string FileExtension = "";
 
         [MessageHeader(MustUnderstand = true)]
-        public long Length;
+        public long Length = 0;
 
         [MessageBodyMember(Order = 1)]
-        public Stream FileStream;
+        public Stream FileStream = Stream.Null;
 
         public void Dispose()
         {

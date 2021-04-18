@@ -56,9 +56,6 @@ namespace Client.ViewModels
             Type userControl = Type.GetType("Client.Views." + menuIconItem.Tag);
 
             CurrentView = Activator.CreateInstance(userControl) as ContentControl;
-
-            //что это?
-            ContentControl contentControl = new ContentControl();
         }
 
         public void SelectedChatChanged(object param)

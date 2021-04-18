@@ -15,6 +15,7 @@ namespace Client.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private string fileName;
         private System.Windows.Window entranceWindow;
 
         private bool isSectionShown;
@@ -66,12 +67,20 @@ namespace Client.ViewModels
         private void SignIn(object param)
         {
             var chatClient = new ChatService.ChatClient();
-            ChatService.ServerUserInfo serverUserInfo = chatClient.Authorization(new ChatService.AuthenticationUserInfo() { Login = Login, Password = Password });
+            try
+            {
+                ChatService.ServerUserInfo serverUserInfo = chatClient.Authorization(new ChatService.AuthenticationUserInfo() { Login = Login, Password = Password });
 
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.DataContext = new MainViewModel(serverUserInfo.Name, serverUserInfo.SqlId);
-            mainWindow.Show();
-            entranceWindow.Close();
+                MainWindow mainWindow = new MainWindow();
+                mainWindow.DataContext = new ViewModels.MainViewModel(serverUserInfo.Name, serverUserInfo.SqlId);
+                mainWindow.Show();
+                entranceWindow.Close();
+            }
+            catch (FaultException<ChatService.AuthorizationExceptionFault> ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message);
+                Info = ex.Message;
+            }
         }
 
         private async void Registrate(object param)
@@ -89,27 +98,9 @@ namespace Client.ViewModels
                 {
                     LoaderVisibility = System.Windows.Visibility.Visible;
                     LoaderState = LoaderState.Loading;
-                    try
-                    {
-                        registrationInfo.Registrate(uploadFileInfo);
-                        LoaderState = LoaderState.Success;
-                    }
-                    catch (FaultException<ChatService.LoginExceptionFault> ex)
-                    {
-                        LoaderState = LoaderState.Fault;
-                        Info = ex.Message;
-                    }
-                    catch (FaultException<ChatService.NicknameExceptionFault> ex)
-                    {
-                        LoaderState = LoaderState.Fault;
-                        Info = ex.Message;
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Windows.MessageBox.Show(ex.Message);
-                        LoaderState = LoaderState.Fault;
-                        Info = "Something wrong with server";
-                    }
+
+                    MakeRegister(registrationInfo);
+                    LoaderState = LoaderState.Success;
 
                     await Task.Delay(1000); // нужен для того чтобы анимация закончилась до конца
 
@@ -120,10 +111,62 @@ namespace Client.ViewModels
             IsSectionShown = true;
         }
 
+
+        private async void MakeRegister(ChatService.ServerUserInfo registrationInfo)
+        {
+
+            var chatClient = new ChatService.ChatClient(); // Работает с net.tcp (регистрация)
+            var fileClient = new ChatService.FileClient(); // Работает с http (отправка аватарки)
+
+            try
+            {
+                int UserId = await chatClient.RegistrationAsync(registrationInfo);
+
+                uploadFileInfo.FileExtension = fileName.Substring(fileName.LastIndexOf(".") + 1);
+                uploadFileInfo.FileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read); ;
+
+                if (uploadFileInfo.FileStream.CanRead)
+                    await fileClient.AvatarUploadAsync(uploadFileInfo.FileExtension, UserId, uploadFileInfo.FileStream);
+            }
+            catch (FaultException<ChatService.LoginExceptionFault> ex)
+            {
+                LoaderState = LoaderState.Fault;
+                Info = ex.Message;
+            }
+            catch (FaultException<ChatService.NicknameExceptionFault> ex)
+            {
+                LoaderState = LoaderState.Fault;
+                Info = ex.Message;
+            }
+            catch (FaultException<ChatService.StreamExceptionFault> ex)
+            {
+                LoaderState = LoaderState.Fault;
+                Info = ex.Message;
+            }
+            catch (FaultException<ChatService.AuthorizationExceptionFault> ex)
+            {
+                LoaderState = LoaderState.Fault;
+                Info = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message);
+                LoaderState = LoaderState.Fault;
+                Info = "Something wrong with server";
+            }
+            finally
+            {
+                if (uploadFileInfo != null)
+                {
+                    if (uploadFileInfo.FileStream != null)
+                        uploadFileInfo.FileStream.Dispose();
+                }
+            }
+
+        }
+
         private void SetPhoto(object param)
         {
-            // зачем это нужно?
-            FileStream fileReader = null;
             try
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -131,15 +174,13 @@ namespace Client.ViewModels
                 openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg; *.jpeg; *.png";
 
                 if (openFileDialog.ShowDialog() == true)
-                    uploadFileInfo = new ChatService.UploadFileInfo(openFileDialog.FileName);
+                    uploadFileInfo = new ChatService.UploadFileInfo();
+
+                fileName = openFileDialog.FileName;
             }
             catch (Exception ex)
             {
                 System.Windows.MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                if (fileReader != null) fileReader.Close();
             }
         }
 

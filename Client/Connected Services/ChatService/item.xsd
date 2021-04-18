@@ -2,6 +2,7 @@
 <xs:schema xmlns:tns="letsTalk.IChatService" elementFormDefault="qualified" targetNamespace="letsTalk.IChatService" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://localhost:8301/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/letsTalk" />
   <xs:import schemaLocation="http://localhost:8301/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import schemaLocation="http://localhost:8301/?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:element name="Registration">
     <xs:complexType>
       <xs:sequence>
@@ -44,10 +45,48 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="SendMessage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="message" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SendMessageResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SendMessageResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetUsers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="count" type="xs:int" />
+        <xs:element minOccurs="0" name="offset" type="xs:int" />
+        <xs:element minOccurs="0" name="callerId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetUsersResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetUsersResult" nillable="true" type="q5:ArrayOfKeyValueOfintstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateChatroom">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="chatName" nillable="true" type="xs:string" />
+        <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="users" nillable="true" type="q6:ArrayOfint" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="Disconnect">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="UserId" type="q5:guid" />
+        <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="UserId" type="q7:guid" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

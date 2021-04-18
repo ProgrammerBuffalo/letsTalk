@@ -15,7 +15,6 @@ namespace letsTalk
                     ConcurrencyMode = ConcurrencyMode.Multiple)] // Multiple => Сервер должен держать нескольких пользователей себе (Под каждого юзера свой поток)
    public class ChatService : IChatService, IFileService
    {
-
         private static string connection_string = @"Server=(local);Database=MessengerDB;Integrated Security=true;";
         // Сервер хранит подключенных пользователей в Dictionary, задавая каждому уникальный ID-подключения (GUID)
         private Dictionary<Guid, ConnectedServerUser> connectedUsers = new Dictionary<Guid, ConnectedServerUser>();
@@ -56,7 +55,14 @@ namespace letsTalk
                     }
                 }
             }
-            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
             return serverUserInfo;
         }
 
@@ -121,6 +127,10 @@ namespace letsTalk
                 Console.WriteLine("Rollback sql");
                 Console.WriteLine(sqlEx.Message);
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
             finally
             {
                 sqlConnection.Close();
@@ -129,11 +139,13 @@ namespace letsTalk
             Console.WriteLine("User with nickname: " + serverUserInfo.Name + " is registered");
             return UserId;
         }
+
         // Сервер отправляет аватарку зарегистированного пользователя в БД (Метод ищет аватарку пользователя, посредством связей в БД.
         // После того, как аватарка была найдена в БД, у нас открывается поток под эту картинку для того чтобы клиентская часть сегментами подгрузила её)
         public DownloadFileInfo AvatarDownload(DownloadRequest request)
         {
-            DownloadFileInfo downloadFileInfo = null;
+            DownloadFileInfo downloadFileInfo = new DownloadFileInfo();
+
             try
             {
                 using (SqlConnection sqlConnection = new SqlConnection(connection_string))
@@ -148,7 +160,7 @@ namespace letsTalk
 
                     if (stream_id.GetType() == typeof(DBNull))
                     {
-                        throw new FileNotFoundException("Avatar not found");
+                        return downloadFileInfo;
                     }
 
                     SqlCommand sqlCommandTakeAvatar = new SqlCommand($@"SELECT* FROM GetAvatar(@stream_id)", sqlConnection);
@@ -158,8 +170,6 @@ namespace letsTalk
                     {
                         while (reader.Read())
                         {
-                            downloadFileInfo = new DownloadFileInfo();
-
                             var stream = new FileStream(reader[0].ToString(), FileMode.Open, FileAccess.Read);
 
                             downloadFileInfo.FileExtension = reader[1].ToString();
@@ -188,10 +198,10 @@ namespace letsTalk
                     {
                         sqlConnection.Open();
 
-                        SqlCommand sqlCommandAddAvatar = new SqlCommand($@" INSERT INTO DataFT(file_stream, name)
+                        SqlCommand sqlCommandAddAvatar = new SqlCommand($@" INSERT INTO DataFT(file_stream, name, path_locator)
                                                                         OUTPUT INSERTED.stream_id, GET_FILESTREAM_TRANSACTION_CONTEXT(),
                                                                         INSERTED.file_stream.PathName()
-                                                                        VALUES(CAST('' as varbinary(MAX)), @name)", sqlConnection);
+                                                                        VALUES(CAST('' as varbinary(MAX)), @name, dbo.GetPathLocatorForChild('Avatars'))", sqlConnection);
 
                         sqlCommandAddAvatar.CommandType = CommandType.Text;
 
@@ -211,8 +221,6 @@ namespace letsTalk
 
                         const int bufferSize = 2048;
 
-
-
                         using (SqlFileStream sqlFileStream = new SqlFileStream(full_path, transaction_context, FileAccess.Write))
                         {
                             int bytesRead = 0;
@@ -225,7 +233,7 @@ namespace letsTalk
                             }
 
                         }
-                        
+
                         SqlCommand UpdateUserAvatar = new SqlCommand($@" UPDATE Users SET Users.stream_id = @stream_id WHERE Users.Id = @user_id", sqlConnection);
 
                         UpdateUserAvatar.CommandType = CommandType.Text;
@@ -240,8 +248,13 @@ namespace letsTalk
                     }
                 }
             }
-            catch (Exception ex) { Console.WriteLine(ex.Message); }
-            finally { if (uploadResponse.FileStream != null) uploadResponse.FileStream.Dispose(); }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                StreamExceptionFault streamExceptionFault = new StreamExceptionFault();
+
+                throw new FaultException<StreamExceptionFault>(streamExceptionFault, streamExceptionFault.Message);
+            }
         }
 
         // Захват пользователя на сервере, и выдача ему уникального ID (сеансовый ID, не путать с SQL)
@@ -267,5 +280,50 @@ namespace letsTalk
             connectedUsers.Remove(uniqueId);
             Console.WriteLine($"User: {uniqueId} is Disconnected");
         }
+
+        public Dictionary<int, string> GetUsers(int count, int offset, int callerId)
+        {
+            Dictionary<int, string> users = new Dictionary<int, string>();
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(connection_string))
+                {
+                    sqlConnection.Open();
+
+                    SqlCommand sqlCommandShowMoreUsers = new SqlCommand(@"SELECT Id, Name FROM ShowMoreUsers(@count, @offset, @callerId)", sqlConnection);
+                    sqlCommandShowMoreUsers.CommandType = CommandType.Text;
+
+                    sqlCommandShowMoreUsers.Parameters.Add("@count", SqlDbType.SmallInt).Value = count;
+                    sqlCommandShowMoreUsers.Parameters.Add("@offset", SqlDbType.SmallInt).Value = offset;
+                    sqlCommandShowMoreUsers.Parameters.Add("@callerId", SqlDbType.SmallInt).Value = callerId;
+
+                    using (SqlDataReader sqlDataReader = sqlCommandShowMoreUsers.ExecuteReader())
+                    {
+                        if (sqlDataReader.HasRows)
+                        {
+                            while (sqlDataReader.Read())
+                            {
+                                users.Add(sqlDataReader.GetSqlInt32(0).Value, sqlDataReader.GetSqlString(1).Value);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            return users;
+        }
+
+        public void CreateChatroom(string chatName, List<int> users)
+        {
+            Console.WriteLine("chat: " + chatName);
+            foreach(var item in users)
+                Console.WriteLine("User:" + item);
+        }
+
+        public bool SendMessage(string message)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

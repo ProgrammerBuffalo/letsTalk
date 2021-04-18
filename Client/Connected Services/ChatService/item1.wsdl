@@ -5,6 +5,7 @@
       <xsd:import schemaLocation="http://localhost:8301/?xsd=xsd0" namespace="letsTalk.IChatService" />
       <xsd:import schemaLocation="http://localhost:8301/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/letsTalk" />
       <xsd:import schemaLocation="http://localhost:8301/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:8301/?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="Chat_Registration_InputMessage">
@@ -37,6 +38,21 @@
   <wsdl:message name="Chat_Connect_ConnectionExceptionFaultFault_FaultMessage">
     <wsdl:part xmlns:q4="http://schemas.datacontract.org/2004/07/letsTalk" name="detail" element="q4:ConnectionExceptionFault" />
   </wsdl:message>
+  <wsdl:message name="Chat_SendMessage_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendMessage" />
+  </wsdl:message>
+  <wsdl:message name="Chat_SendMessage_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendMessageResponse" />
+  </wsdl:message>
+  <wsdl:message name="Chat_GetUsers_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetUsers" />
+  </wsdl:message>
+  <wsdl:message name="Chat_GetUsers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetUsersResponse" />
+  </wsdl:message>
+  <wsdl:message name="Chat_CreateChatroom_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateChatroom" />
+  </wsdl:message>
   <wsdl:message name="Chat_Disconnect_InputMessage">
     <wsdl:part name="parameters" element="tns:Disconnect" />
   </wsdl:message>
@@ -59,6 +75,17 @@
       <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/Connect" message="tns:Chat_Connect_InputMessage" />
       <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/ConnectResponse" message="tns:Chat_Connect_OutputMessage" />
       <wsdl:fault wsaw:Action="letsTalk.IChatService/Chat/ConnectConnectionExceptionFaultFault" name="ConnectionExceptionFaultFault" message="tns:Chat_Connect_ConnectionExceptionFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendMessage">
+      <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/SendMessage" message="tns:Chat_SendMessage_InputMessage" />
+      <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/SendMessageResponse" message="tns:Chat_SendMessage_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUsers">
+      <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/GetUsers" message="tns:Chat_GetUsers_InputMessage" />
+      <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/GetUsersResponse" message="tns:Chat_GetUsers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateChatroom">
+      <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/CreateChatroom" message="tns:Chat_CreateChatroom_InputMessage" />
     </wsdl:operation>
     <wsdl:operation name="Disconnect">
       <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/Disconnect" message="tns:Chat_Disconnect_InputMessage" />

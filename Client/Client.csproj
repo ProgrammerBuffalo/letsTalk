@@ -181,6 +181,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\AvailableUser.cs" />
     <Compile Include="Models\Chat.cs" />
     <Compile Include="Models\ClientUserInfo.cs" />
     <Compile Include="Models\Message.cs" />
@@ -316,6 +317,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\ChatService\item11.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ChatService\item2.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\ChatService\item21.xsd">

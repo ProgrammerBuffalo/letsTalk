@@ -81,6 +81,30 @@
         <soap12:fault use="literal" name="ConnectionExceptionFaultFault" namespace="" />
       </wsdl:fault>
     </wsdl:operation>
+    <wsdl:operation name="SendMessage">
+      <soap12:operation soapAction="letsTalk.IChatService/Chat/SendMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUsers">
+      <soap12:operation soapAction="letsTalk.IChatService/Chat/GetUsers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateChatroom">
+      <soap12:operation soapAction="letsTalk.IChatService/Chat/CreateChatroom" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
     <wsdl:operation name="Disconnect">
       <soap12:operation soapAction="letsTalk.IChatService/Chat/Disconnect" style="document" />
       <wsdl:input>
@@ -115,6 +139,9 @@
       <wsdl:output>
         <soap:body use="literal" />
       </wsdl:output>
+      <wsdl:fault name="StreamExceptionFaultFault">
+        <soap:fault use="literal" name="StreamExceptionFaultFault" namespace="" />
+      </wsdl:fault>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="ChatService">
@@ -123,7 +150,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8302/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>LAPTOP-39BIREFL\user</Upn>
+          <Upn>HP-EliteBook\Elman</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

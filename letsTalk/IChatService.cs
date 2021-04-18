@@ -44,9 +44,17 @@ namespace letsTalk
         [FaultContract(typeof(ConnectionExceptionFault))]
         Guid Connect(int sqlId);
 
+        [OperationContract(IsOneWay = false)]
+        bool SendMessage(string message);
+
+        [OperationContract(IsOneWay = false)]
+        Dictionary<int, string> GetUsers(int count, int offset, int callerId);
+
+        [OperationContract(IsOneWay = true)]
+        void CreateChatroom(string chatName, List<int> users);
+
         [OperationContract]
         void Disconnect(Guid UserId);
     }
-
 
 }
