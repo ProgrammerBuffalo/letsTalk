@@ -22,8 +22,9 @@
                   ItemContainerStyle="{StaticResource ListViewItemStyle}"
                   ItemTemplateSelector="{StaticResource MessageSelector}"
                   ItemsSource="{Binding Path=Chat.Messages}"
-                  Background="YellowGreen"
-                  ScrollViewer.CanContentScroll="False">
+                  ScrollViewer.CanContentScroll="False"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  Background="YellowGreen">
         </ListView>
 
         <Grid Grid.Row="1">

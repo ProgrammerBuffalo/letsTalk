@@ -26,36 +26,47 @@
     </ControlTemplate>
 
     <DataTemplate x:Key="TextDataTemplate">
-        <Border x:Name="border" BorderBrush="AliceBlue" BorderThickness="4" CornerRadius="15" MaxWidth="500">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition x:Name="row1" Height="0"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="20"/>
-                </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Row="0" x:Name="group" Text="{Binding Path=Login}" Visibility="Hidden" Margin="15,0" FontSize="12" Foreground="Green"/>
-                <TextBlock Grid.Row="1" Margin="5" Text="{Binding Path=Message.Text}" TextWrapping="Wrap" Foreground="Black" FontSize="18"/>
-                <TextBlock Grid.Row="2" Margin="10, 2" Text="{Binding Path=Message.Date, StringFormat={}{0:hh:mm}}" Foreground="DarkSlateGray" FontSize="12"/>
-            </Grid>
-        </Border>
+            <Border x:Name="border" BorderBrush="AliceBlue" BorderThickness="4" CornerRadius="15" Margin="10,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition x:Name="row1" Height="0"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="20"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" x:Name="group" Text="{Binding Path=Login}" Visibility="Hidden" Margin="15,0" FontSize="12" Foreground="Green"/>
+                    <TextBlock Grid.Row="1" Margin="5" Text="{Binding Path=Message.Text}" TextWrapping="Wrap" Foreground="Black" FontSize="18"/>
+                    <TextBlock Grid.Row="2" Margin="10, 2" Text="{Binding Path=Message.Date, StringFormat={}{0:hh:mm}}" Foreground="DarkSlateGray" FontSize="12"/>
+                </Grid>
+            </Border>
+        </Grid>
 
         <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:SourceMessage}">
-                <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
-                <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
-            </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:UserMessage}">
+                <Setter TargetName="border" Property="Grid.Column" Value="1"/>
                 <Setter TargetName="border" Property="Background" Value="#EF44F2"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Right"/>
             </DataTrigger>
+            <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:SourceMessage}">
+                <Setter TargetName="border" Property="Grid.Column" Value="0"/>
+                <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
+                <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
+            </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:GroupMessage}">
+                <Setter TargetName="border" Property="Grid.Column" Value="0"/>
                 <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
                 <Setter TargetName="row1" Property="Height" Value="18"/>
                 <Setter TargetName="group" Property="Visibility" Value="Visible"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:SystemMessage}">
+                <Setter TargetName="border" Property="Grid.ColumnSpan" Value="2"/>
                 <Setter TargetName="border" Property="Background" Value="#A6A2A6"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Center"/>
             </DataTrigger>
@@ -63,30 +74,40 @@
     </DataTemplate>
 
     <DataTemplate x:Key="ImageDataTemplate">
-        <Border x:Name="border" Width="400" Height="400" BorderBrush="AliceBlue" BorderThickness="4">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition x:Name="row1" Height="0"/>
-                    <RowDefinition x:Name="row2" MinHeight="340"/>
-                    <RowDefinition Height="20"/>
-                </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Row="0" x:Name="group" Text="{Binding Path=Login}" Visibility="Hidden" Margin="15, 0" FontSize="12" Foreground="Green"/>
-                <Image Grid.Row="1" Source="{Binding Path=Message.Path}" Stretch="Fill"/>
-                <TextBlock Grid.Row="2" Margin="10, 2" Text="{Binding Path=Message.Date, StringFormat={}{0:hh:mm}}" Foreground="DarkSlateGray" FontSize="12"/>
-            </Grid>
-        </Border>
+            <Border x:Name="border" MaxHeight="400" MaxWidth="400" Width="{Binding ElementName=border, Path=Height}" BorderBrush="AliceBlue" BorderThickness="4">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition x:Name="row1" Height="0"/>
+                        <RowDefinition x:Name="row2" MinHeight="340"/>
+                        <RowDefinition Height="20"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" x:Name="group" Text="{Binding Path=Login}" Visibility="Hidden" Margin="15, 0" FontSize="12" Foreground="Green"/>
+                    <Image Grid.Row="1" Source="{Binding Path=Message.Path}" Stretch="Fill"/>
+                    <TextBlock Grid.Row="2" Margin="10, 2" Text="{Binding Path=Message.Date, StringFormat={}{0:hh:mm}}" Foreground="DarkSlateGray" FontSize="12"/>
+                </Grid>
+            </Border>
+        </Grid>
 
         <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:SourceMessage}">
-                <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
-                <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
-            </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:UserMessage}">
+                <Setter TargetName="border" Property="Grid.Column" Value="1"/>
                 <Setter TargetName="border" Property="Background" Value="#EF44F2"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Right"/>
             </DataTrigger>
+            <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:SourceMessage}">
+                <Setter TargetName="border" Property="Grid.Column" Value="0"/>
+                <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
+                <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
+            </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:GroupMessage}">
+                <Setter TargetName="border" Property="Grid.Column" Value="0"/>
                 <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
                 <Setter TargetName="group" Property="Visibility" Value="Visible"/>
@@ -94,6 +115,7 @@
                 <Setter TargetName="row2" Property="Height" Value="350"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:SystemMessage}">
+                <Setter TargetName="border" Property="Grid.ColumnSpan" Value="2"/>
                 <Setter TargetName="border" Property="Background" Value="#A6A2A6"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Center"/>
             </DataTrigger>
@@ -101,7 +123,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="FileDataTemplate">
-        <Border x:Name="border" Width="250" Height="80" BorderBrush="AliceBlue" BorderThickness="3" CornerRadius="15">
+        <Border x:Name="border" MinWidth="250" Height="80" BorderBrush="AliceBlue" BorderThickness="3" CornerRadius="15">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition x:Name="row1"/>
@@ -146,13 +168,13 @@
                 <Setter TargetName="icon" Property="Source" Value="/images/zip.png"/>
             </DataTrigger>
 
-            <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:SourceMessage}">
-                <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
-                <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
-            </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:UserMessage}">
                 <Setter TargetName="border" Property="Background" Value="#EF44F2"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Right"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:SourceMessage}">
+                <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
+                <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:GroupMessage}">
                 <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
@@ -169,47 +191,60 @@
     </DataTemplate>
 
     <DataTemplate x:Key="AudioDataTemplate">
-        <Border x:Name="border" Width="300" Height="60" BorderBrush="AliceBlue" BorderThickness="3" CornerRadius="15">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition x:Name="row1" Height="0"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="20"/>
-                </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Row="0" x:Name="group" Text="{Binding Path=Login}" Visibility="Hidden" Margin="15, 0" FontSize="12" Foreground="Green"/>
-                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10,0">
-                    <Button x:Name="btn"
+            <Border x:Name="border" MaxWidth="300" Height="60" BorderBrush="AliceBlue" BorderThickness="3" CornerRadius="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition x:Name="row1" Height="0"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="20"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" x:Name="group" Text="{Binding Path=Login}" Visibility="Hidden" Margin="15, 0" FontSize="12" Foreground="Green"/>
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10,0">
+                        <Button x:Name="btn"
                         Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.MediaPlayCommand}"
                         CommandParameter="{Binding BindsDirectlyToSource=True}"
                         Template="{StaticResource PlayToggle}">
-                    </Button>
-                    <Slider x:Name="slider" Value="{Binding Path=Message.CurrentLength}" Minimum="0" Maximum="{Binding Path=Message.Lenght}" Margin="30, 5, 10, 5" Style="{StaticResource MahApps.Styles.Slider.Win10}" Width="150">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="ValueChanged">
-                                <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.MediaPosChangedCommand}" CommandParameter="{Binding BindsDirectlyToSource=True}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Slider>
+                        </Button>
 
-                    <TextBlock Text="{Binding ElementName=slider, Path=Value, Converter={StaticResource TicksToTime}}" FontSize="15"/>
-                    <TextBlock Text=" "/>
-                    <TextBlock Text="{Binding Path=Message.Lenght, Converter={StaticResource TicksToTime}}" FontSize="15"></TextBlock>
-                </StackPanel>
-                <TextBlock Grid.Row="2" Margin="10, 0" Text="{Binding Path=Message.Date, StringFormat={}{0:hh:mm}}" Foreground="DarkSlateGray" FontSize="12"/>
-            </Grid>
-        </Border>
+                        <Slider x:Name="slider" Value="{Binding Path=Message.CurrentLength}" Minimum="0" Maximum="{Binding Path=Message.Length}" Margin="30, 5, 10, 5" Style="{StaticResource MahApps.Styles.Slider.Win10}" Width="150">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="ValueChanged">
+                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.MediaPosChangedCommand}" CommandParameter="{Binding BindsDirectlyToSource=True}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Slider>
+
+                        <TextBlock Text="{Binding ElementName=slider, Path=Value, Converter={StaticResource TicksToTime}}" FontSize="15"/>
+                        <TextBlock Text=" "/>
+                        <TextBlock Text="{Binding Path=Message.Length, Converter={StaticResource TicksToTime}}" FontSize="15"/>
+                    </StackPanel>
+                    <TextBlock Grid.Row="2" Margin="10, 0" Text="{Binding Path=Message.Date, StringFormat={}{0:hh:mm}}" Foreground="DarkSlateGray" FontSize="12"/>
+                </Grid>
+            </Border>
+
+        </Grid>
 
         <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:SourceMessage}">
-                <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
-                <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
-            </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:UserMessage}">
+                <Setter TargetName="border" Property="Grid.Column" Value="1"/>
                 <Setter TargetName="border" Property="Background" Value="#EF44F2"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Right"/>
             </DataTrigger>
+            <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:SourceMessage}">
+                <Setter TargetName="border" Property="Grid.Column" Value="0"/>
+                <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
+                <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
+            </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:GroupMessage}">
+                <Setter TargetName="border" Property="Grid.Column" Value="0"/>
                 <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
                 <Setter TargetName="border" Property="Height" Value="80"/>
@@ -217,6 +252,7 @@
                 <Setter TargetName="group" Property="Visibility" Value="Visible"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:SystemMessage}">
+                <Setter TargetName="border" Property="Grid.Column" Value="0"/>
                 <Setter TargetName="border" Property="Background" Value="#A6A2A6"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Center"/>
             </DataTrigger>

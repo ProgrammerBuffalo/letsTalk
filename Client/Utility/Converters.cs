@@ -96,4 +96,21 @@ namespace Client.Utility
             return value;
         }
     }
+
+    class WidthMultyConverter : System.Windows.Data.IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (values[0].ToString() == "NaN") return 0;
+            int val = System.Convert.ToInt32(values[0]);
+            for (int i = 1; i < values.Length; i++)
+                val -= System.Convert.ToInt32(values[i]);
+            return val;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
 }

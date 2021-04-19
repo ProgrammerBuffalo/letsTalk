@@ -81,7 +81,7 @@ namespace Client.Models
 
     public class MediaMessage : FileMessage
     {
-        private long lenght;
+        private long length;
         private long currentLength;
         private bool isPlaying;
 
@@ -89,7 +89,7 @@ namespace Client.Models
         {
             using (var shell = Microsoft.WindowsAPICodePack.Shell.ShellFile.FromFilePath(path))
             {
-                Lenght = (long)shell.Properties.System.Media.Duration.Value.Value;
+                Length = (long)shell.Properties.System.Media.Duration.Value.Value;
             }
         }
 
@@ -98,7 +98,7 @@ namespace Client.Models
             Date = date;
         }
 
-        public long Lenght { get => lenght; set => Set(ref lenght, value); }
+        public long Length { get => length; set => Set(ref length, value); }
         public long CurrentLength { get => currentLength; set => Set(ref currentLength, value); }
         public bool IsPlaying { get => isPlaying; set => Set(ref isPlaying, value); }
     }
