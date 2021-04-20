@@ -68,11 +68,11 @@ namespace letsTalk
                                 SqlId = int.Parse(reader["Id"].ToString()),
                                 Name = reader["Name"].ToString()
                             };
-
                         }
-
                     }
                 }
+                Console.WriteLine("User is authorized (" + serverUserInfo.SqlId + ")");
+
             }
             catch (SqlException ex)
             {
@@ -315,6 +315,8 @@ namespace letsTalk
         {
             try
             {
+                Console.WriteLine("Creating chatroom (" + CurrentCallback.GetHashCode() + ")");
+
                 using (TransactionScope trScope = new TransactionScope())
                 {
                     using (SqlConnection sqlConnection = new SqlConnection(connection_string))
@@ -396,12 +398,15 @@ namespace letsTalk
 
                         lock (lockerSyncObj) {
 
+                            Console.WriteLine("Users added to chat callbacks...");
+
                             foreach (ConnectedUser connectedUser in chatroomsInUsers.Keys)
                             {
                                 foreach (var user in users)
                                 {
                                     if (connectedUser.SqlID == user)
                                     {
+
                                         chatroomsInUsers[connectedUser].Add(chat_id);
                                         if(connectedUser.ChatCallback != CurrentCallback)
                                             connectedUser.ChatCallback.NotifyUserIsAddedToChat(chat_id, users);
@@ -412,6 +417,8 @@ namespace letsTalk
                         }
                     }
                 }
+
+                Console.WriteLine("Chatroom has been created (" + CurrentCallback.GetHashCode() + ")");
             }
             catch (Exception ex)
             {
@@ -424,6 +431,7 @@ namespace letsTalk
         {
             if (new FileInfo(path).Length <= 0)
             {
+                Console.WriteLine("Creating declaration for XML" + CurrentCallback.GetHashCode() + ")");
                 XmlDocument document = new XmlDocument();
                 document.Load(path);
                 XmlDeclaration declaration = document.CreateXmlDeclaration("1.0", "UTF-8", null);
@@ -431,12 +439,16 @@ namespace letsTalk
                 XmlElement root = document.CreateElement("Messages");
                 document.AppendChild(root);
                 document.Save(path);
+                Console.WriteLine("Declaration has been created for XML" + CurrentCallback.GetHashCode() + ")");
             }
         }
 
         //Отправка текстового сообщения с чатрума
         public void SendMessageText(ServiceMessageText message, int chatroomId)
         {
+            Console.WriteLine("Sending message to server (" + CurrentCallback.GetHashCode() + ")");
+
+
             List<ConnectedUser> users = chatroomsInUsers.Where(chatrooms => chatrooms.Value
                                                         .Contains(chatroomId))
                                                         .Select(u => u.Key).ToList();
@@ -459,14 +471,18 @@ namespace letsTalk
                 lock (lockerSyncObj)
                 {
                     AddToXML(fullpath, message);
+                    Console.WriteLine("Sending message callbacks...");
                     foreach (IChatCallback chatCallback in users)
                     {
                         if (chatCallback != CurrentCallback)
                             chatCallback.ReplyMessage(message, chatroomId);
                     }
                 }
+
+                Console.WriteLine("Message has been sent (" + CurrentCallback.GetHashCode() + ")");
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -475,6 +491,7 @@ namespace letsTalk
         //Добавление узла в XML-файл
         private void AddToXML(string full_path, ServiceMessage serviceMessage)
         {
+            Console.WriteLine("Adding message to XML (" + CurrentCallback.GetHashCode() + ")");
             if (!File.Exists(full_path))
             {
                 throw new Exception("File xml doesnt exsists!");
@@ -513,11 +530,14 @@ namespace letsTalk
             xDoc.Root.Add(xMessageEl);
 
             xDoc.Save(full_path);
+            Console.WriteLine("Message is added to XML (" + CurrentCallback.GetHashCode() + ")");
         }
 
         //Нахождение сообщений чатрума в XML-файле
-        List<ServiceMessage> FindXmlNodes(string fullpath)
+        private List<ServiceMessage> FindXmlNodes(string fullpath)
         {
+            Console.WriteLine("Finding messages for all chatrooms (" + CurrentCallback.GetHashCode() + ")");
+
             XDocument xDocument = XDocument.Load(fullpath);
             List<ServiceMessage> serviceMessages = new List<ServiceMessage>();
 
@@ -543,6 +563,7 @@ namespace letsTalk
                     });
                 }
             }
+            Console.WriteLine("Messages for all chatrooms are found (" + CurrentCallback.GetHashCode() + ")");
 
             return serviceMessages;
         }
@@ -553,6 +574,8 @@ namespace letsTalk
             List<ConnectedUser> users = chatroomsInUsers.Where(chatrooms => chatrooms.Value
                                                         .Contains(chatroomId))
                                                         .Select(u => u.Key).ToList();
+
+            Console.WriteLine("Message is writing callbacks...");
 
             foreach (IChatCallback chatCallback in users)
             {
@@ -579,6 +602,8 @@ namespace letsTalk
 
                     try
                     {
+                        Console.WriteLine("User in connected callbacks...");
+
                         foreach (ConnectedUser user in chatroomsInUsers.Keys)
                         {
                             if (user.SqlID == sqlId)
@@ -596,6 +621,8 @@ namespace letsTalk
                     }
 
                 }
+
+                Console.WriteLine("User is connected(" + CurrentCallback.GetHashCode() + ")");
             }
             else
             {
@@ -614,6 +641,7 @@ namespace letsTalk
                 lock (lockerSyncObj)
                 {
                     chatroomsInUsers.Remove(discUser);
+                    Console.WriteLine("User is offline callbacks...");
                     foreach (var user in chatroomsInUsers.Keys)
                     {
                         IChatCallback chatCallback = user.ChatCallback;
@@ -621,6 +649,7 @@ namespace letsTalk
                     }
                 }
             }
+            Console.WriteLine("User is disconnected (" + CurrentCallback.GetHashCode() + ")");
         }
 
         //Поиск всех чатрумов для клиента во время подключения к серверу
@@ -628,6 +657,7 @@ namespace letsTalk
         {
             try
             {
+                Console.WriteLine("Finding chatrooms for user" + "(" + CurrentCallback.GetHashCode() + ")");
                 Dictionary<int, List<int>> usersInChatroom = new Dictionary<int, List<int>>();
 
                 using (SqlConnection sqlConnection = new SqlConnection(connection_string))
@@ -658,6 +688,7 @@ namespace letsTalk
                         }
                     }
                 }
+                Console.WriteLine("Chatrooms are found" + "(" + CurrentCallback.GetHashCode() + ")");
                 return usersInChatroom;
             }
             catch (Exception ex)
@@ -670,6 +701,7 @@ namespace letsTalk
         //Поиск всех чатрумов в которых находится подключенный клиент
         private List<int> FindAllChatroomsForServer(int sqlId)
         {
+            Console.WriteLine("Adding chatrooms to server (" + CurrentCallback.GetHashCode() + ")");
             List<int> chatrooms = new List<int>();
             try
             {
@@ -689,6 +721,7 @@ namespace letsTalk
                         }
                     }
                 }
+                Console.WriteLine("Chatrooms were added to server (" + CurrentCallback.GetHashCode() + ")");
             }
             catch (SqlException sqlEx)
             {
@@ -703,6 +736,7 @@ namespace letsTalk
         {
             try
             {
+                Console.WriteLine("Adding user to chatroom (" + CurrentCallback.GetHashCode() + ")");
                 using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                 {
                     sqlConnection.Open();
@@ -725,12 +759,16 @@ namespace letsTalk
                     ConnectedUser connectedUser = chatroomsInUsers.Keys.First(u => u.SqlID == userId);
                     connectedUser.ChatCallback.NotifyUserIsAddedToChat(chatId, users.Select(u => u.SqlID).ToList());
 
+                    Console.WriteLine("User joined callbacks...");
+
                     foreach (var user in users)
                     {
                         if (user.ChatCallback != CurrentCallback)
                             user.ChatCallback.UserJoinedToChatroom(userId);
                     }
                 }
+                Console.WriteLine("User has been added to chatroom (" + CurrentCallback.GetHashCode() + ")");
+
             }
             catch (Exception ex)
             {
@@ -744,6 +782,8 @@ namespace letsTalk
         {
             try
             {
+                Console.WriteLine("Removing user from chatroom (" + CurrentCallback.GetHashCode() + ")");
+
                 using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                 {
                     sqlConnection.Open();
@@ -767,12 +807,16 @@ namespace letsTalk
                                         .First().Remove(chatId);
                     }
 
+                    Console.WriteLine("User left callbacks...");
+
                     foreach (IChatCallback chatCallback in chatroomsInUsers.Keys)
                     {
                         if (chatCallback != CurrentCallback)
                             chatCallback.UserLeftChatroom(userId);
                     }
                 }
+                Console.WriteLine("User was removed from chatroom (" + CurrentCallback.GetHashCode() + ")");
+
             }
             catch (Exception ex)
             {
@@ -785,6 +829,8 @@ namespace letsTalk
         {
             try
             {
+                Console.WriteLine("Deleting chatroom (" + CurrentCallback.GetHashCode() + ")");
+
                 using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                 {
                     sqlConnection.Open();
@@ -808,6 +854,8 @@ namespace letsTalk
 
                     }
                 }
+                Console.WriteLine("Chatroom is deleted (" + CurrentCallback.GetHashCode() + ")");
+
             }
             catch (Exception ex)
             {
@@ -948,7 +996,9 @@ namespace letsTalk
             string fullpathXML;
             try
             {
-                using(SqlConnection sqlConnection = new SqlConnection(connection_string))
+                Console.WriteLine("Finding messages from chatroom " + chatroomId + " (" + CurrentCallback.GetHashCode() + ")");
+
+                using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                 {
                     sqlConnection.Open();
                     SqlCommand sqlCommandTakeXML = new SqlCommand(@"SELECT dbo.GetXMLFile(@chatId)", sqlConnection);
@@ -956,6 +1006,7 @@ namespace letsTalk
                     sqlCommandTakeXML.Parameters.Add("@chatId", SqlDbType.Int).Value = chatroomId;
                     fullpathXML = sqlCommandTakeXML.ExecuteScalar().ToString();
                 }
+                Console.WriteLine("Messages were found from chatroom " + chatroomId + " (" + CurrentCallback.GetHashCode() + ")");
 
                 return FindXmlNodes(fullpathXML);
 

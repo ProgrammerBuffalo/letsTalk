@@ -34,17 +34,14 @@ namespace Client.Models
             Activity = activity;
         }
 
-        public ClientUserInfo(Dictionary<int, int[]> clients, int sqlId, string userName)
+        public ClientUserInfo(int sqlId, string userName)
         {
-            Clients = clients;
             SqlId = sqlId;
             UserName = userName;
             instance = this;
         }
 
         public int SqlId { private set; get; } // Id в БД
-
-        public Dictionary<int, int[]> Clients { get; set; }
 
         public string UserName { get => userName; set => Set(ref userName, value); }
 
@@ -64,9 +61,11 @@ namespace Client.Models
 
             try
             {
+                avatarClient.AvatarDownload(SqlId, out lenght, out stream);
+                if (lenght <= 0)
+                    return;
                 await System.Threading.Tasks.Task.Run(() =>
                  {
-                     avatarClient.AvatarDownload(SqlId, out lenght, out stream);
                      MemoryStream memoryStream = FileHelper.ReadFileByPart(stream);
 
                      System.Windows.Application.Current.Dispatcher.Invoke(() =>

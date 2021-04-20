@@ -25,6 +25,8 @@ namespace Client.ViewModels
 
         private ContentControl currentView;
 
+        public Dictionary<int, int[]> ChatroomsWithUsers { get; set; }
+
         public MainViewModel()
         {
             LoadedWindowCommand = new Command(LoadedWindow);
@@ -36,11 +38,11 @@ namespace Client.ViewModels
         public MainViewModel(string name, int sqlId) : this()
         {
             ChatClient = new ChatService.ChatClient(new InstanceContext(this));
-            Dictionary<int, int[]> usersInChatrooms = ChatClient.Connect(sqlId, name);
+            ChatroomsWithUsers = ChatClient.Connect(sqlId, name);
 
-            ClientUserInfo = new ClientUserInfo(usersInChatrooms, sqlId, name);
+            ClientUserInfo = new ClientUserInfo(sqlId, name);
 
-            //Demo();
+            Demo();
         }
 
         public ICommand LoadedWindowCommand { get; }
