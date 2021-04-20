@@ -27,7 +27,7 @@ namespace letsTalk
         void AvatarUpload(UploadFileInfo uploadRequest); // Отправка серверу аватарки
 
         [OperationContract]
-        void FileUpload(UploadFileInfo uploadRequest, int chatroomId); // Отправка серверу файла с чатрума
+        void FileUpload(UploadFromChatToServer chatToServer); // Отправка серверу файла с чатрума
 
         [OperationContract]
         DownloadFileInfo FileDownload(FileFromChatDownloadRequest request); // Отправка клиенту файла
@@ -45,6 +45,31 @@ namespace letsTalk
     {
         [MessageBodyMember]
         public Guid StreamId;
+    }
+
+    [MessageContract]
+    public class UploadFromChatToServer : IDisposable
+    {
+        [MessageHeader(MustUnderstand = true)]
+        public int ChatroomId;
+
+        [MessageHeader(MustUnderstand = true)]
+        public int Responsed_UserSqlId;
+
+        [MessageHeader(MustUnderstand = true)]
+        public string FileName;
+
+        [MessageBodyMember(Order = 1)]
+        public Stream FileStream;
+
+        public void Dispose()
+        {
+            if (FileStream != null)
+            {
+                FileStream.Close();
+                FileStream = null;
+            }
+        }
     }
 
     [MessageContract]

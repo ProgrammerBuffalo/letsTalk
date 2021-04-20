@@ -826,7 +826,7 @@ namespace letsTalk
         }
 
         //Отправка файла с чатрума на сервер
-        public void FileUpload(UploadFileInfo uploadRequest, int chatroomId)
+        public void FileUpload(UploadFromChatToServer chatToServer)
         {
             try
             {
@@ -841,7 +841,7 @@ namespace letsTalk
 
                         sqlCommandAddFileToDataFT.CommandType = CommandType.Text;
 
-                        string fileName = uploadRequest.FileName;
+                        string fileName = chatToServer.FileName;
                         Random random = new Random();
                         sqlCommandAddFileToDataFT.Parameters.Add("@name", SqlDbType.NVarChar).Value = fileName.Substring(0, fileName.LastIndexOf("."))
                                                                                                     + $"{random.Next(0, 2000000)}" + $".{fileName.Substring(fileName.LastIndexOf(".") + 1)}";
@@ -862,7 +862,7 @@ namespace letsTalk
                         catch(SqlException ex)
                         {
                             Console.WriteLine(ex.Message);
-                            FileUpload(uploadRequest, chatroomId);
+                            FileUpload(chatToServer);
                         }
 
                         const int bufferSize = 2048;
@@ -872,7 +872,7 @@ namespace letsTalk
                             int bytesRead = 0;
                             var buffer = new byte[bufferSize];
 
-                            while ((bytesRead = uploadRequest.FileStream.Read(buffer, 0, bufferSize)) > 0)
+                            while ((bytesRead = chatToServer.FileStream.Read(buffer, 0, bufferSize)) > 0)
                             {
                                 sqlFileStream.Write(buffer, 0, bytesRead);
                                 sqlFileStream.Flush();
@@ -882,14 +882,14 @@ namespace letsTalk
 
                         SqlCommand sqlCommandTakeXML = new SqlCommand(@"SELECT dbo.GetXMLFile(@chatId)", sqlConnection);
 
-                        sqlCommandTakeXML.Parameters.Add("@chatId", SqlDbType.Int).Value = chatroomId;
+                        sqlCommandTakeXML.Parameters.Add("@chatId", SqlDbType.Int).Value = chatToServer.ChatroomId;
                         string fullpathXML = sqlCommandTakeXML.ExecuteScalar().ToString();
 
                         lock (lockerSyncObj)
                         {
                             ServiceMessageFile serviceMessageFile = new ServiceMessageFile
                             {
-                                Sender = uploadRequest.Responsed_UserSqlId,
+                                Sender = chatToServer.Responsed_UserSqlId,
                                 StreamId = stream_id,
                                 DateTime = DateTime.Now,
                                 FileName = fileName
@@ -901,7 +901,7 @@ namespace letsTalk
                             {
                                 if(chatCallback != CurrentCallback)
                                 {
-                                    chatCallback.NotifyUserFileSendedToChat(serviceMessageFile, chatroomId);
+                                    chatCallback.NotifyUserFileSendedToChat(serviceMessageFile, chatToServer.ChatroomId);
                                 }
                                     
                             }
