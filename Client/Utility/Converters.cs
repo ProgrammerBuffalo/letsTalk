@@ -1,6 +1,4 @@
-﻿using Client.Models;
-using System;
-using System.Globalization;
+﻿using System;
 
 //конверторы служат для предоставления данных в болле удобной форме для пользователя
 //метод Convert преврашает данные из модели в данные для View 
@@ -57,14 +55,14 @@ namespace Client.Utility
     //для зеленого кружка в ChatItem если значение count больше чем 99 то получаем "99+" 
     class CountConverter : System.Windows.Data.IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             int count = System.Convert.ToInt32(value);
             if (count > 99) return "99+";
             else return count;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             return value;
         }
@@ -72,12 +70,12 @@ namespace Client.Utility
 
     class TypeConverter : System.Windows.Data.IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             return value.GetType();
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             return value;
         }
@@ -86,12 +84,12 @@ namespace Client.Utility
     //выборка нужного цвета для никнеймов в груповых сообщениях
     class ColorConverter : System.Windows.Data.IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             throw new NotImplementedException();
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             return value;
         }
@@ -99,7 +97,7 @@ namespace Client.Utility
 
     class WidthMultyConverter : System.Windows.Data.IMultiValueConverter
     {
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (values[0].ToString() == "NaN") return 0;
             int val = System.Convert.ToInt32(values[0]);
@@ -108,7 +106,7 @@ namespace Client.Utility
             return val;
         }
 
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
         {
             return null;
         }

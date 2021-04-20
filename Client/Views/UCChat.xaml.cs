@@ -7,7 +7,7 @@
     {
         public UCChat()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
     }
 }

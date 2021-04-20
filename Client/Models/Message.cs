@@ -76,7 +76,13 @@ namespace Client.Models
             Date = date;
         }
 
+        public FileMessage(string path, DateTime date, Guid streamId) : this(path, date)
+        {
+            StreamId = streamId;
+        }
+
         public string Path { get => path; set => Set(ref path, value); }
+        public Guid StreamId { get; set; }
     }
 
     public class MediaMessage : FileMessage
