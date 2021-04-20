@@ -20,17 +20,21 @@ namespace letsTalk
     public interface IFileService
     {
         [OperationContract]
+        void FileUpload(UploadFromChatToServer chatToServer); // Отправка серверу файла с чатрума
+
+        [OperationContract]
+        DownloadFileInfo FileDownload(FileFromChatDownloadRequest request); // Отправка клиенту файла
+    }
+
+    [ServiceContract(Name = "Avatar", Namespace = "letsTalk.IAvatarService")]
+    public interface IAvatarService
+    {
+        [OperationContract]
         DownloadFileInfo AvatarDownload(DownloadRequest request); // Отправка клиенту аватарки
 
         [OperationContract]
         [FaultContract(typeof(StreamExceptionFault))]
         void AvatarUpload(UploadFileInfo uploadRequest); // Отправка серверу аватарки
-
-        [OperationContract]
-        void FileUpload(UploadFromChatToServer chatToServer); // Отправка серверу файла с чатрума
-
-        [OperationContract]
-        DownloadFileInfo FileDownload(FileFromChatDownloadRequest request); // Отправка клиенту файла
     }
 
     [MessageContract]

@@ -66,10 +66,10 @@ namespace Client.ViewModels
 
         private void SignIn(object param)
         {
-            var chatClient = new ChatService.ChatClient();
+            var unitClient = new ChatService.UnitClient();
             try
             {
-                ChatService.ServerUserInfo serverUserInfo = chatClient.Authorization(new ChatService.AuthenticationUserInfo() { Login = Login, Password = Password });
+                ChatService.ServerUserInfo serverUserInfo = unitClient.Authorization(new ChatService.AuthenticationUserInfo() { Login = Login, Password = Password });
 
                 MainWindow mainWindow = new MainWindow();
                 mainWindow.DataContext = new ViewModels.MainViewModel(serverUserInfo.Name, serverUserInfo.SqlId);
@@ -115,18 +115,18 @@ namespace Client.ViewModels
         private async void MakeRegister(ChatService.ServerUserInfo registrationInfo)
         {
 
-            var chatClient = new ChatService.ChatClient(); // Работает с net.tcp (регистрация)
-            var fileClient = new ChatService.FileClient(); // Работает с http (отправка аватарки)
+            var unitClient = new ChatService.UnitClient(); // Работает с net.tcp (регистрация)
+            var avatarClient = new ChatService.AvatarClient(); // Работает с http (отправка аватарки)
 
             try
             {
-                int UserId = await chatClient.RegistrationAsync(registrationInfo);
+                int UserId = await unitClient.RegistrationAsync(registrationInfo);
 
-                uploadFileInfo.FileExtension = fileName.Substring(fileName.LastIndexOf(".") + 1);
+                uploadFileInfo.FileName = fileName;
                 uploadFileInfo.FileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read); ;
 
                 if (uploadFileInfo.FileStream.CanRead)
-                    await fileClient.AvatarUploadAsync(uploadFileInfo.FileExtension, UserId, uploadFileInfo.FileStream);
+                    await avatarClient.AvatarUploadAsync(uploadFileInfo.FileName, UserId, uploadFileInfo.FileStream);
             }
             catch (FaultException<ChatService.LoginExceptionFault> ex)
             {

@@ -17,7 +17,7 @@ namespace letsTalk
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, // Single -> Объект ChatService является синглтоном
                     IncludeExceptionDetailInFaults = true, // Faults == Exceptions
                     ConcurrencyMode = ConcurrencyMode.Multiple)] // Multiple => Сервер должен держать нескольких пользователей себе (Под каждого юзера свой поток)
-    public class ChatService : IChatService, IFileService
+    public class ChatService : IChatService, IFileService, IAvatarService, IUnitService
     {
         //Строка для подключения к БД
         private static string connection_string = @"Server=(local);Database=MessengerDB;Integrated Security=true;";
@@ -35,7 +35,7 @@ namespace letsTalk
         }
 
         //Нужен для синхронизации
-        private object lockerSyncObj;
+        private object lockerSyncObj = new object();
 
         // Авторизация на сервер, метод ищет пользователя в БД
         public ServerUserInfo Authorization(AuthenticationUserInfo authenticationUserInfo)
@@ -687,8 +687,8 @@ namespace letsTalk
                 {
                     sqlConnection.Open();
 
-                    SqlCommand FindChatroomsCommand = new SqlCommand(@"SELECT Id_Chat FROM User_Chatroom WHERE Id_User = @Id_User");
-
+                    SqlCommand FindChatroomsCommand = new SqlCommand(@"SELECT Id_Chat FROM User_Chatroom WHERE Id_User = @Id_User", sqlConnection);
+                    FindChatroomsCommand.CommandType = CommandType.Text;
                     FindChatroomsCommand.Parameters.Add("@Id_User", SqlDbType.Int).Value = sqlId;
 
                     using (SqlDataReader reader = FindChatroomsCommand.ExecuteReader())

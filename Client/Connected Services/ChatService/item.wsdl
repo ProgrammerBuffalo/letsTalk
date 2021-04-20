@@ -1,45 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="letsTalk.IFileService" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="letsTalk.IFileService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="letsTalk.IUnitService" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="letsTalk.IUnitService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
-    <xsd:schema targetNamespace="letsTalk.IFileService/Imports">
-      <xsd:import schemaLocation="http://localhost:8301/?xsd=xsd4" namespace="letsTalk.IFileService" />
+    <xsd:schema targetNamespace="letsTalk.IUnitService/Imports">
+      <xsd:import schemaLocation="http://localhost:8301/?xsd=xsd4" namespace="letsTalk.IUnitService" />
+      <xsd:import schemaLocation="http://localhost:8301/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/letsTalk" />
       <xsd:import schemaLocation="http://localhost:8301/?xsd=xsd0" namespace="letsTalk.IChatService" />
       <xsd:import schemaLocation="http://localhost:8301/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://localhost:8301/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/letsTalk" />
       <xsd:import schemaLocation="http://localhost:8301/?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import schemaLocation="http://localhost:8301/?xsd=xsd5" namespace="http://schemas.microsoft.com/Message" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="DownloadRequest">
-    <wsdl:part name="parameters" element="tns:DownloadRequest" />
+  <wsdl:message name="Unit_Authorization_InputMessage">
+    <wsdl:part name="parameters" element="tns:Authorization" />
   </wsdl:message>
-  <wsdl:message name="DownloadFileInfo">
-    <wsdl:part name="parameters" element="tns:DownloadFileInfo" />
+  <wsdl:message name="Unit_Authorization_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AuthorizationResponse" />
   </wsdl:message>
-  <wsdl:message name="DownloadFileInfo_Headers">
-    <wsdl:part name="FileExtension" element="tns:FileExtension" />
-    <wsdl:part name="Length" element="tns:Length" />
+  <wsdl:message name="Unit_Authorization_AuthorizationExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/letsTalk" name="detail" element="q1:AuthorizationExceptionFault" />
   </wsdl:message>
-  <wsdl:message name="UploadFileInfo">
-    <wsdl:part name="parameters" element="tns:UploadFileInfo" />
+  <wsdl:message name="Unit_Registration_InputMessage">
+    <wsdl:part name="parameters" element="tns:Registration" />
   </wsdl:message>
-  <wsdl:message name="UploadFileInfo_Headers">
-    <wsdl:part name="FileExtension" element="tns:FileExtension" />
-    <wsdl:part name="Responsed_UserSqlId" element="tns:Responsed_UserSqlId" />
+  <wsdl:message name="Unit_Registration_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RegistrationResponse" />
   </wsdl:message>
-  <wsdl:message name="File_AvatarUpload_OutputMessage" />
-  <wsdl:message name="File_AvatarUpload_StreamExceptionFaultFault_FaultMessage">
-    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/letsTalk" name="detail" element="q1:StreamExceptionFault" />
+  <wsdl:message name="Unit_Registration_LoginExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/letsTalk" name="detail" element="q2:LoginExceptionFault" />
   </wsdl:message>
-  <wsdl:portType name="File">
-    <wsdl:operation name="AvatarDownload">
-      <wsdl:input wsaw:Action="letsTalk.IFileService/File/AvatarDownload" name="DownloadRequest" message="tns:DownloadRequest" />
-      <wsdl:output wsaw:Action="letsTalk.IFileService/File/AvatarDownloadResponse" name="DownloadFileInfo" message="tns:DownloadFileInfo" />
+  <wsdl:message name="Unit_Registration_NicknameExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q3="http://schemas.datacontract.org/2004/07/letsTalk" name="detail" element="q3:NicknameExceptionFault" />
+  </wsdl:message>
+  <wsdl:portType name="Unit">
+    <wsdl:operation name="Authorization">
+      <wsdl:input wsaw:Action="letsTalk.IUnitService/Unit/Authorization" message="tns:Unit_Authorization_InputMessage" />
+      <wsdl:output wsaw:Action="letsTalk.IUnitService/Unit/AuthorizationResponse" message="tns:Unit_Authorization_OutputMessage" />
+      <wsdl:fault wsaw:Action="letsTalk.IUnitService/Unit/AuthorizationAuthorizationExceptionFaultFault" name="AuthorizationExceptionFaultFault" message="tns:Unit_Authorization_AuthorizationExceptionFaultFault_FaultMessage" />
     </wsdl:operation>
-    <wsdl:operation name="AvatarUpload">
-      <wsdl:input wsaw:Action="letsTalk.IFileService/File/AvatarUpload" name="UploadFileInfo" message="tns:UploadFileInfo" />
-      <wsdl:output wsaw:Action="letsTalk.IFileService/File/AvatarUploadResponse" message="tns:File_AvatarUpload_OutputMessage" />
-      <wsdl:fault wsaw:Action="letsTalk.IFileService/File/AvatarUploadStreamExceptionFaultFault" name="StreamExceptionFaultFault" message="tns:File_AvatarUpload_StreamExceptionFaultFault_FaultMessage" />
+    <wsdl:operation name="Registration">
+      <wsdl:input wsaw:Action="letsTalk.IUnitService/Unit/Registration" message="tns:Unit_Registration_InputMessage" />
+      <wsdl:output wsaw:Action="letsTalk.IUnitService/Unit/RegistrationResponse" message="tns:Unit_Registration_OutputMessage" />
+      <wsdl:fault wsaw:Action="letsTalk.IUnitService/Unit/RegistrationLoginExceptionFaultFault" name="LoginExceptionFaultFault" message="tns:Unit_Registration_LoginExceptionFaultFault_FaultMessage" />
+      <wsdl:fault wsaw:Action="letsTalk.IUnitService/Unit/RegistrationNicknameExceptionFaultFault" name="NicknameExceptionFaultFault" message="tns:Unit_Registration_NicknameExceptionFaultFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

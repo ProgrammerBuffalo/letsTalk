@@ -1,5 +1,6 @@
 ﻿using Client.Utility;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel;
 using System.Windows.Media.Imaging;
@@ -25,7 +26,6 @@ namespace Client.Models
             return instance;
         }
 
-        //надо убрать 
         public ClientUserInfo(string userName, string userDesc, string imagePath, Activity activity)
         {
             UserName = userName;
@@ -34,9 +34,9 @@ namespace Client.Models
             Activity = activity;
         }
 
-        public ClientUserInfo(Guid unique_id, int sqlId, ChatService.ChatClient chatClient, string userName)
+        public ClientUserInfo(Dictionary<int, int[]> clients, int sqlId, ChatService.ChatClient chatClient, string userName)
         {
-            ConnectionId = unique_id;
+            Clients = clients;
             SqlId = sqlId;
             ChatClient = chatClient;
             UserName = userName;
@@ -47,7 +47,7 @@ namespace Client.Models
 
         public int SqlId { private set; get; } // Id в БД
 
-        public Guid ConnectionId { private set; get; } // Сеансовый Id
+        public Dictionary<int, int[]> Clients { get; set; }
 
         public string UserName { get => userName; set => Set(ref userName, value); }
 
@@ -60,7 +60,7 @@ namespace Client.Models
         public async void DownloadAvatarAsync()
         {
             ChatService.DownloadRequest request = new ChatService.DownloadRequest(SqlId);
-            var fileClient = new ChatService.FileClient();
+            var avatarClient = new ChatService.AvatarClient();
 
             Stream stream = null;
             long lenght = 0;
@@ -69,7 +69,7 @@ namespace Client.Models
             {
                 await System.Threading.Tasks.Task.Run(() =>
                  {
-                     fileClient.AvatarDownload(SqlId, out lenght, out stream);
+                     avatarClient.AvatarDownload(SqlId, out lenght, out stream);
                      MemoryStream memoryStream = FileHelper.ReadFileByPart(stream);
 
                      System.Windows.Application.Current.Dispatcher.Invoke(() =>

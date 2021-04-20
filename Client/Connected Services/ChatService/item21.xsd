@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="letsTalk.IFileService" elementFormDefault="qualified" targetNamespace="letsTalk.IFileService" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://localhost:8301/?xsd=xsd5" namespace="http://schemas.microsoft.com/Message" />
-  <xs:element name="DownloadRequest">
+<xs:schema xmlns:tns="letsTalk.IUnitService" elementFormDefault="qualified" targetNamespace="letsTalk.IUnitService" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:8301/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/letsTalk" />
+  <xs:element name="Authorization">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="Requested_UserSqlId" type="xs:int" />
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/letsTalk" minOccurs="0" name="authenticationUserInfo" nillable="true" type="q1:AuthenticationUserInfo" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="DownloadFileInfo">
+  <xs:element name="AuthorizationResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.microsoft.com/Message" name="FileStream" type="q1:StreamBody" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/letsTalk" minOccurs="0" name="AuthorizationResult" nillable="true" type="q2:ServerUserInfo" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="FileExtension" nillable="true" type="xs:string" />
-  <xs:element name="Length" type="xs:long" />
-  <xs:element name="UploadFileInfo">
+  <xs:element name="Registration">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.microsoft.com/Message" name="FileStream" type="q2:StreamBody" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/letsTalk" minOccurs="0" name="serverUserInfo" nillable="true" type="q3:ServerUserInfo" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="Responsed_UserSqlId" type="xs:int" />
+  <xs:element name="RegistrationResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RegistrationResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

@@ -1,7 +1,9 @@
-﻿using Client.Models;
+﻿using Client.ChatService;
+using Client.Models;
 using Client.Utility;
 using MahApps.Metro.Controls;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.ServiceModel;
@@ -11,13 +13,13 @@ using System.Windows.Input;
 
 namespace Client.ViewModels
 {
-    public class MainViewModel : System.ComponentModel.INotifyPropertyChanged
+    public class MainViewModel : System.ComponentModel.INotifyPropertyChanged, ChatService.ChatCallback
     {
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 
         private ClientUserInfo clientUserInfo;
 
-        private ObservableCollection<Chat> chats;
+        private ObservableCollection<Models.Chat> chats;
 
         private ContentControl currentView;
 
@@ -31,10 +33,10 @@ namespace Client.ViewModels
 
         public MainViewModel(string name, int sqlId) : this()
         {
-            ChatService.ChatClient chatClient = new ChatService.ChatClient();
-            Guid unique_id = chatClient.Connect(sqlId);
+            ChatService.ChatClient chatClient = new ChatService.ChatClient(new InstanceContext(this));
+            Dictionary<int, int[]> usersInChatrooms = chatClient.Connect(sqlId, name);
 
-            ClientUserInfo = new ClientUserInfo(unique_id, sqlId, chatClient, name);
+            ClientUserInfo = new ClientUserInfo(usersInChatrooms, sqlId, chatClient, name);
 
             Demo();
         }
@@ -46,7 +48,7 @@ namespace Client.ViewModels
 
         public ClientUserInfo ClientUserInfo { get => clientUserInfo; set => Set(ref clientUserInfo, value); } // Вся информация о подключенном юзере
 
-        public ObservableCollection<Chat> Chats { get => chats; set => Set(ref chats, value); }
+        public ObservableCollection<Models.Chat> Chats { get => chats; set => Set(ref chats, value); }
 
         public ContentControl CurrentView { get => currentView; set => Set(ref currentView, value); }
 
@@ -60,7 +62,7 @@ namespace Client.ViewModels
 
         public void SelectedChatChanged(object param)
         {
-            Chat chat = (Chat)param;
+            Models.Chat chat = (Models.Chat)param;
             Views.UCChat chatView = new Views.UCChat();
             chatView.DataContext = new ChatViewModel(chat, clientUserInfo);
             CurrentView = chatView;
@@ -85,7 +87,7 @@ namespace Client.ViewModels
 
         public void ClosedWindow(object sender)
         {
-            ClientUserInfo.ChatClient.Disconnect(ClientUserInfo.ConnectionId);
+            ClientUserInfo.ChatClient.Disconnect();
         }
 
         public void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
@@ -96,7 +98,7 @@ namespace Client.ViewModels
 
         private void Demo()
         {
-            Chats = new ObservableCollection<Chat>();
+            Chats = new ObservableCollection<Models.Chat>();
 
             ObservableCollection<SourceMessage> Messages = new ObservableCollection<SourceMessage>();
             Messages.Add(new SourceMessage(new TextMessage("files/hall.png")));
@@ -123,6 +125,51 @@ namespace Client.ViewModels
             Messages1.Add(new UserMessage(new TextMessage("Bye")));
 
             Chats.Add(new ChatOne(Messages1, new ClientUserInfo("Kesha", "Fly Forever", "files/pexels-caio-56733.jpg", Activity.Online), 124));
+        }
+
+        public void NotifyUserIsOnline(int sqlUserId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void NotifyUserIsOffline(int sqlUserId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void NotifyUserIsAddedToChat(int chatId, int[] usersInChat)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void NotifyUserIsRemovedFromChat(int chatId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UserJoinedToChatroom(int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UserLeftChatroom(int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ReplyMessage(ServiceMessageText message, int chatroomId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ReplyMessageIsWriting(int sqlId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void NotifyUserFileSendedToChat(ServiceMessageFile serviceMessageFile, int chatroomId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

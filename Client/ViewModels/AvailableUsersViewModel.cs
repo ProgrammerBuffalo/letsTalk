@@ -81,7 +81,7 @@ namespace Client.ViewModels
         {
             ClientUserInfo client = ClientUserInfo.getInstance();
             Dictionary<int, string> keyValuePairs = new Dictionary<int, string>();
-            keyValuePairs = client.ChatClient.GetUsers(count, offset, client.SqlId);
+            keyValuePairs = client.ChatClient.GetRegisteredUsers(count, offset, client.SqlId);
 
             foreach (var item in keyValuePairs)
             {
@@ -101,12 +101,12 @@ namespace Client.ViewModels
             System.IO.MemoryStream memoryStream = null;
             try
             {
-                var fileClient = new ChatService.FileClient();
+                var avatarClient = new ChatService.AvatarClient();
                 long lenght;
 
                 await System.Threading.Tasks.Task.Run(() =>
                 {
-                    fileClient.AvatarDownload(downloadRequest.Requested_UserSqlId, out lenght, out stream);
+                    avatarClient.AvatarDownload(downloadRequest.Requested_UserSqlId, out lenght, out stream);
                     if (lenght != 0)
                     {
                         memoryStream = FileHelper.ReadFileByPart(stream);
