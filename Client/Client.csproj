@@ -305,7 +305,16 @@
     <None Include="Connected Services\ChatService\Client.ChatService.DownloadFileInfo.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Connected Services\ChatService\Client.ChatService.DownloadFileInfo1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\ChatService\Client.ChatService.FileUploadResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\ChatService\Client.ChatService.ServerUserInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\ChatService\Client.ChatService.ServiceMessage1.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\ChatService\item.wsdl" />
@@ -319,13 +328,21 @@
     <None Include="Connected Services\ChatService\item11.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\ChatService\item2.wsdl" />
     <None Include="Connected Services\ChatService\item2.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\ChatService\item21.wsdl" />
     <None Include="Connected Services\ChatService\item21.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\ChatService\item22.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ChatService\item3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ChatService\item31.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />

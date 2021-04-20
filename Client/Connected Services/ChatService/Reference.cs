@@ -15,6 +15,176 @@ namespace Client.ChatService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ServiceMessage", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(Client.ChatService.ServiceMessageFile))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(Client.ChatService.ServiceMessageText))]
+    public partial class ServiceMessage : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime DateTimeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int SenderField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime DateTime {
+            get {
+                return this.DateTimeField;
+            }
+            set {
+                if ((this.DateTimeField.Equals(value) != true)) {
+                    this.DateTimeField = value;
+                    this.RaisePropertyChanged("DateTime");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Sender {
+            get {
+                return this.SenderField;
+            }
+            set {
+                if ((this.SenderField.Equals(value) != true)) {
+                    this.SenderField = value;
+                    this.RaisePropertyChanged("Sender");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ServiceMessageFile", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
+    [System.SerializableAttribute()]
+    public partial class ServiceMessageFile : Client.ChatService.ServiceMessage {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string FileNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid StreamIdField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string FileName {
+            get {
+                return this.FileNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FileNameField, value) != true)) {
+                    this.FileNameField = value;
+                    this.RaisePropertyChanged("FileName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid StreamId {
+            get {
+                return this.StreamIdField;
+            }
+            set {
+                if ((this.StreamIdField.Equals(value) != true)) {
+                    this.StreamIdField = value;
+                    this.RaisePropertyChanged("StreamId");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ServiceMessageText", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
+    [System.SerializableAttribute()]
+    public partial class ServiceMessageText : Client.ChatService.ServiceMessage {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TextField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Text {
+            get {
+                return this.TextField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TextField, value) != true)) {
+                    this.TextField = value;
+                    this.RaisePropertyChanged("Text");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ConnectionExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
+    [System.SerializableAttribute()]
+    public partial class ConnectionExceptionFault : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MessageField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Message {
+            get {
+                return this.MessageField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MessageField, value) != true)) {
+                    this.MessageField = value;
+                    this.RaisePropertyChanged("Message");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="AuthenticationUserInfo", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
     [System.SerializableAttribute()]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(Client.ChatService.ServerUserInfo))]
@@ -113,6 +283,51 @@ namespace Client.ChatService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AuthorizationExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
+    [System.SerializableAttribute()]
+    public partial class AuthorizationExceptionFault : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MessageField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Message {
+            get {
+                return this.MessageField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MessageField, value) != true)) {
+                    this.MessageField = value;
+                    this.RaisePropertyChanged("Message");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="LoginExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
     [System.SerializableAttribute()]
     public partial class LoginExceptionFault : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -203,96 +418,6 @@ namespace Client.ChatService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="AuthorizationExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
-    [System.SerializableAttribute()]
-    public partial class AuthorizationExceptionFault : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string MessageField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Message {
-            get {
-                return this.MessageField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.MessageField, value) != true)) {
-                    this.MessageField = value;
-                    this.RaisePropertyChanged("Message");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ConnectionExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
-    [System.SerializableAttribute()]
-    public partial class ConnectionExceptionFault : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string MessageField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Message {
-            get {
-                return this.MessageField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.MessageField, value) != true)) {
-                    this.MessageField = value;
-                    this.RaisePropertyChanged("Message");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="StreamExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
     [System.SerializableAttribute()]
     public partial class StreamExceptionFault : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -337,32 +462,302 @@ namespace Client.ChatService {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="letsTalk.IFileService", ConfigurationName="ChatService.File")]
-    public interface File {
+    [System.ServiceModel.ServiceContractAttribute(Namespace="letsTalk.IUnitService", ConfigurationName="ChatService.Unit")]
+    public interface Unit {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/Authorization", ReplyAction="letsTalk.IUnitService/Unit/AuthorizationResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(Client.ChatService.AuthorizationExceptionFault), Action="letsTalk.IUnitService/Unit/AuthorizationAuthorizationExceptionFaultFault", Name="AuthorizationExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
+        Client.ChatService.ServerUserInfo Authorization(Client.ChatService.AuthenticationUserInfo authenticationUserInfo);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/Authorization", ReplyAction="letsTalk.IUnitService/Unit/AuthorizationResponse")]
+        System.Threading.Tasks.Task<Client.ChatService.ServerUserInfo> AuthorizationAsync(Client.ChatService.AuthenticationUserInfo authenticationUserInfo);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/Registration", ReplyAction="letsTalk.IUnitService/Unit/RegistrationResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(Client.ChatService.LoginExceptionFault), Action="letsTalk.IUnitService/Unit/RegistrationLoginExceptionFaultFault", Name="LoginExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
+        [System.ServiceModel.FaultContractAttribute(typeof(Client.ChatService.NicknameExceptionFault), Action="letsTalk.IUnitService/Unit/RegistrationNicknameExceptionFaultFault", Name="NicknameExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
+        int Registration(Client.ChatService.ServerUserInfo serverUserInfo);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/Registration", ReplyAction="letsTalk.IUnitService/Unit/RegistrationResponse")]
+        System.Threading.Tasks.Task<int> RegistrationAsync(Client.ChatService.ServerUserInfo serverUserInfo);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface UnitChannel : Client.ChatService.Unit, System.ServiceModel.IClientChannel {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class UnitClient : System.ServiceModel.ClientBase<Client.ChatService.Unit>, Client.ChatService.Unit {
+        
+        public UnitClient() {
+        }
+        
+        public UnitClient(string endpointConfigurationName) : 
+                base(endpointConfigurationName) {
+        }
+        
+        public UnitClient(string endpointConfigurationName, string remoteAddress) : 
+                base(endpointConfigurationName, remoteAddress) {
+        }
+        
+        public UnitClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(endpointConfigurationName, remoteAddress) {
+        }
+        
+        public UnitClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(binding, remoteAddress) {
+        }
+        
+        public Client.ChatService.ServerUserInfo Authorization(Client.ChatService.AuthenticationUserInfo authenticationUserInfo) {
+            return base.Channel.Authorization(authenticationUserInfo);
+        }
+        
+        public System.Threading.Tasks.Task<Client.ChatService.ServerUserInfo> AuthorizationAsync(Client.ChatService.AuthenticationUserInfo authenticationUserInfo) {
+            return base.Channel.AuthorizationAsync(authenticationUserInfo);
+        }
+        
+        public int Registration(Client.ChatService.ServerUserInfo serverUserInfo) {
+            return base.Channel.Registration(serverUserInfo);
+        }
+        
+        public System.Threading.Tasks.Task<int> RegistrationAsync(Client.ChatService.ServerUserInfo serverUserInfo) {
+            return base.Channel.RegistrationAsync(serverUserInfo);
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ServiceModel.ServiceContractAttribute(Namespace="letsTalk.IChatService", ConfigurationName="ChatService.Chat", CallbackContract=typeof(Client.ChatService.ChatCallback))]
+    public interface Chat {
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/MessageIsWriting")]
+        void MessageIsWriting(int chatroomId, int userSqlId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/MessageIsWriting")]
+        System.Threading.Tasks.Task MessageIsWritingAsync(int chatroomId, int userSqlId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/SendMessageText", ReplyAction="letsTalk.IChatService/Chat/SendMessageTextResponse")]
+        void SendMessageText(Client.ChatService.ServiceMessageText message, int chatroomId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/SendMessageText", ReplyAction="letsTalk.IChatService/Chat/SendMessageTextResponse")]
+        System.Threading.Tasks.Task SendMessageTextAsync(Client.ChatService.ServiceMessageText message, int chatroomId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/GetRegisteredUsers", ReplyAction="letsTalk.IChatService/Chat/GetRegisteredUsersResponse")]
+        System.Collections.Generic.Dictionary<int, string> GetRegisteredUsers(int count, int offset, int callerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/GetRegisteredUsers", ReplyAction="letsTalk.IChatService/Chat/GetRegisteredUsersResponse")]
+        System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> GetRegisteredUsersAsync(int count, int offset, int callerId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/CreateChatroom")]
+        void CreateChatroom(string chatName, int[] users);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/CreateChatroom")]
+        System.Threading.Tasks.Task CreateChatroomAsync(string chatName, int[] users);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/DeleteChatroom")]
+        void DeleteChatroom(int chatId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/DeleteChatroom")]
+        System.Threading.Tasks.Task DeleteChatroomAsync(int chatId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/AddUserToChatroom", ReplyAction="letsTalk.IChatService/Chat/AddUserToChatroomResponse")]
+        void AddUserToChatroom(int userId, int chatId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/AddUserToChatroom", ReplyAction="letsTalk.IChatService/Chat/AddUserToChatroomResponse")]
+        System.Threading.Tasks.Task AddUserToChatroomAsync(int userId, int chatId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/RemoveUserFromChatroom", ReplyAction="letsTalk.IChatService/Chat/RemoveUserFromChatroomResponse")]
+        void RemoveUserFromChatroom(int userId, int chatId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/RemoveUserFromChatroom", ReplyAction="letsTalk.IChatService/Chat/RemoveUserFromChatroomResponse")]
+        System.Threading.Tasks.Task RemoveUserFromChatroomAsync(int userId, int chatId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/Connect", ReplyAction="letsTalk.IChatService/Chat/ConnectResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(Client.ChatService.ConnectionExceptionFault), Action="letsTalk.IChatService/Chat/ConnectConnectionExceptionFaultFault", Name="ConnectionExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
+        System.Collections.Generic.Dictionary<int, int[]> Connect(int sqlId, string userName);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/Connect", ReplyAction="letsTalk.IChatService/Chat/ConnectResponse")]
+        System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, int[]>> ConnectAsync(int sqlId, string userName);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/MessagesFromOneChat", ReplyAction="letsTalk.IChatService/Chat/MessagesFromOneChatResponse")]
+        Client.ChatService.ServiceMessage[] MessagesFromOneChat(int chatroomId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/MessagesFromOneChat", ReplyAction="letsTalk.IChatService/Chat/MessagesFromOneChatResponse")]
+        System.Threading.Tasks.Task<Client.ChatService.ServiceMessage[]> MessagesFromOneChatAsync(int chatroomId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/Disconnect", ReplyAction="letsTalk.IChatService/Chat/DisconnectResponse")]
+        void Disconnect();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/Disconnect", ReplyAction="letsTalk.IChatService/Chat/DisconnectResponse")]
+        System.Threading.Tasks.Task DisconnectAsync();
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface ChatCallback {
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/NotifyUserIsOnline")]
+        void NotifyUserIsOnline(int sqlUserId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/NotifyUserIsOffline")]
+        void NotifyUserIsOffline(int sqlUserId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/NotifyUserIsAddedToChat")]
+        void NotifyUserIsAddedToChat(int chatId, int[] usersInChat);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/NotifyUserIsRemovedFromChat")]
+        void NotifyUserIsRemovedFromChat(int chatId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/UserJoinedToChatroom")]
+        void UserJoinedToChatroom(int userId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/UserLeftChatroom")]
+        void UserLeftChatroom(int userId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/ReplyMessage")]
+        void ReplyMessage(Client.ChatService.ServiceMessageText message, int chatroomId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/ReplyMessageIsWriting")]
+        void ReplyMessageIsWriting(int sqlId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/NotifyUserFileSendedToChat")]
+        void NotifyUserFileSendedToChat(Client.ChatService.ServiceMessageFile serviceMessageFile, int chatroomId);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface ChatChannel : Client.ChatService.Chat, System.ServiceModel.IClientChannel {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class ChatClient : System.ServiceModel.DuplexClientBase<Client.ChatService.Chat>, Client.ChatService.Chat {
+        
+        public ChatClient(System.ServiceModel.InstanceContext callbackInstance) : 
+                base(callbackInstance) {
+        }
+        
+        public ChatClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+                base(callbackInstance, endpointConfigurationName) {
+        }
+        
+        public ChatClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
+        }
+        
+        public ChatClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
+        }
+        
+        public ChatClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, binding, remoteAddress) {
+        }
+        
+        public void MessageIsWriting(int chatroomId, int userSqlId) {
+            base.Channel.MessageIsWriting(chatroomId, userSqlId);
+        }
+        
+        public System.Threading.Tasks.Task MessageIsWritingAsync(int chatroomId, int userSqlId) {
+            return base.Channel.MessageIsWritingAsync(chatroomId, userSqlId);
+        }
+        
+        public void SendMessageText(Client.ChatService.ServiceMessageText message, int chatroomId) {
+            base.Channel.SendMessageText(message, chatroomId);
+        }
+        
+        public System.Threading.Tasks.Task SendMessageTextAsync(Client.ChatService.ServiceMessageText message, int chatroomId) {
+            return base.Channel.SendMessageTextAsync(message, chatroomId);
+        }
+        
+        public System.Collections.Generic.Dictionary<int, string> GetRegisteredUsers(int count, int offset, int callerId) {
+            return base.Channel.GetRegisteredUsers(count, offset, callerId);
+        }
+        
+        public System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> GetRegisteredUsersAsync(int count, int offset, int callerId) {
+            return base.Channel.GetRegisteredUsersAsync(count, offset, callerId);
+        }
+        
+        public void CreateChatroom(string chatName, int[] users) {
+            base.Channel.CreateChatroom(chatName, users);
+        }
+        
+        public System.Threading.Tasks.Task CreateChatroomAsync(string chatName, int[] users) {
+            return base.Channel.CreateChatroomAsync(chatName, users);
+        }
+        
+        public void DeleteChatroom(int chatId) {
+            base.Channel.DeleteChatroom(chatId);
+        }
+        
+        public System.Threading.Tasks.Task DeleteChatroomAsync(int chatId) {
+            return base.Channel.DeleteChatroomAsync(chatId);
+        }
+        
+        public void AddUserToChatroom(int userId, int chatId) {
+            base.Channel.AddUserToChatroom(userId, chatId);
+        }
+        
+        public System.Threading.Tasks.Task AddUserToChatroomAsync(int userId, int chatId) {
+            return base.Channel.AddUserToChatroomAsync(userId, chatId);
+        }
+        
+        public void RemoveUserFromChatroom(int userId, int chatId) {
+            base.Channel.RemoveUserFromChatroom(userId, chatId);
+        }
+        
+        public System.Threading.Tasks.Task RemoveUserFromChatroomAsync(int userId, int chatId) {
+            return base.Channel.RemoveUserFromChatroomAsync(userId, chatId);
+        }
+        
+        public System.Collections.Generic.Dictionary<int, int[]> Connect(int sqlId, string userName) {
+            return base.Channel.Connect(sqlId, userName);
+        }
+        
+        public System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, int[]>> ConnectAsync(int sqlId, string userName) {
+            return base.Channel.ConnectAsync(sqlId, userName);
+        }
+        
+        public Client.ChatService.ServiceMessage[] MessagesFromOneChat(int chatroomId) {
+            return base.Channel.MessagesFromOneChat(chatroomId);
+        }
+        
+        public System.Threading.Tasks.Task<Client.ChatService.ServiceMessage[]> MessagesFromOneChatAsync(int chatroomId) {
+            return base.Channel.MessagesFromOneChatAsync(chatroomId);
+        }
+        
+        public void Disconnect() {
+            base.Channel.Disconnect();
+        }
+        
+        public System.Threading.Tasks.Task DisconnectAsync() {
+            return base.Channel.DisconnectAsync();
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ServiceModel.ServiceContractAttribute(Namespace="letsTalk.IAvatarService", ConfigurationName="ChatService.Avatar")]
+    public interface Avatar {
         
         // CODEGEN: Generating message contract since the wrapper name (DownloadRequest) of message DownloadRequest does not match the default value (AvatarDownload)
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IFileService/File/AvatarDownload", ReplyAction="letsTalk.IFileService/File/AvatarDownloadResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IAvatarService/Avatar/AvatarDownload", ReplyAction="letsTalk.IAvatarService/Avatar/AvatarDownloadResponse")]
         Client.ChatService.DownloadFileInfo AvatarDownload(Client.ChatService.DownloadRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IFileService/File/AvatarDownload", ReplyAction="letsTalk.IFileService/File/AvatarDownloadResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IAvatarService/Avatar/AvatarDownload", ReplyAction="letsTalk.IAvatarService/Avatar/AvatarDownloadResponse")]
         System.Threading.Tasks.Task<Client.ChatService.DownloadFileInfo> AvatarDownloadAsync(Client.ChatService.DownloadRequest request);
         
         // CODEGEN: Generating message contract since the operation AvatarUpload is neither RPC nor document wrapped.
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IFileService/File/AvatarUpload", ReplyAction="letsTalk.IFileService/File/AvatarUploadResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(Client.ChatService.StreamExceptionFault), Action="letsTalk.IFileService/File/AvatarUploadStreamExceptionFaultFault", Name="StreamExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IAvatarService/Avatar/AvatarUpload", ReplyAction="letsTalk.IAvatarService/Avatar/AvatarUploadResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(Client.ChatService.StreamExceptionFault), Action="letsTalk.IAvatarService/Avatar/AvatarUploadStreamExceptionFaultFault", Name="StreamExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
         Client.ChatService.AvatarUploadResponse AvatarUpload(Client.ChatService.UploadFileInfo request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IFileService/File/AvatarUpload", ReplyAction="letsTalk.IFileService/File/AvatarUploadResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IAvatarService/Avatar/AvatarUpload", ReplyAction="letsTalk.IAvatarService/Avatar/AvatarUploadResponse")]
         System.Threading.Tasks.Task<Client.ChatService.AvatarUploadResponse> AvatarUploadAsync(Client.ChatService.UploadFileInfo request);
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="DownloadRequest", WrapperNamespace="letsTalk.IFileService", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="DownloadRequest", WrapperNamespace="letsTalk.IAvatarService", IsWrapped=true)]
     public partial class DownloadRequest {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="letsTalk.IFileService", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="letsTalk.IAvatarService", Order=0)]
         public int Requested_UserSqlId;
         
         public DownloadRequest() {
@@ -376,16 +771,16 @@ namespace Client.ChatService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="DownloadFileInfo", WrapperNamespace="letsTalk.IFileService", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="DownloadFileInfo", WrapperNamespace="letsTalk.IAvatarService", IsWrapped=true)]
     public partial class DownloadFileInfo {
         
-        [System.ServiceModel.MessageHeaderAttribute(Namespace="letsTalk.IFileService")]
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="letsTalk.IAvatarService")]
         public string FileExtension;
         
-        [System.ServiceModel.MessageHeaderAttribute(Namespace="letsTalk.IFileService")]
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="letsTalk.IAvatarService")]
         public long Length;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="letsTalk.IFileService", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="letsTalk.IAvatarService", Order=0)]
         public System.IO.Stream FileStream;
         
         public DownloadFileInfo() {
@@ -401,23 +796,23 @@ namespace Client.ChatService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="UploadFileInfo", WrapperNamespace="letsTalk.IFileService", IsWrapped=true)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="UploadFileInfo", WrapperNamespace="letsTalk.IAvatarService", IsWrapped=true)]
     public partial class UploadFileInfo {
         
-        [System.ServiceModel.MessageHeaderAttribute(Namespace="letsTalk.IFileService")]
-        public string FileExtension;
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="letsTalk.IAvatarService")]
+        public string FileName;
         
-        [System.ServiceModel.MessageHeaderAttribute(Namespace="letsTalk.IFileService")]
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="letsTalk.IAvatarService")]
         public int Responsed_UserSqlId;
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="letsTalk.IFileService", Order=0)]
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="letsTalk.IAvatarService", Order=0)]
         public System.IO.Stream FileStream;
         
         public UploadFileInfo() {
         }
         
-        public UploadFileInfo(string FileExtension, int Responsed_UserSqlId, System.IO.Stream FileStream) {
-            this.FileExtension = FileExtension;
+        public UploadFileInfo(string FileName, int Responsed_UserSqlId, System.IO.Stream FileStream) {
+            this.FileName = FileName;
             this.Responsed_UserSqlId = Responsed_UserSqlId;
             this.FileStream = FileStream;
         }
@@ -430,6 +825,185 @@ namespace Client.ChatService {
     public partial class AvatarUploadResponse {
         
         public AvatarUploadResponse() {
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface AvatarChannel : Client.ChatService.Avatar, System.ServiceModel.IClientChannel {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class AvatarClient : System.ServiceModel.ClientBase<Client.ChatService.Avatar>, Client.ChatService.Avatar {
+        
+        public AvatarClient() {
+        }
+        
+        public AvatarClient(string endpointConfigurationName) : 
+                base(endpointConfigurationName) {
+        }
+        
+        public AvatarClient(string endpointConfigurationName, string remoteAddress) : 
+                base(endpointConfigurationName, remoteAddress) {
+        }
+        
+        public AvatarClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(endpointConfigurationName, remoteAddress) {
+        }
+        
+        public AvatarClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(binding, remoteAddress) {
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        Client.ChatService.DownloadFileInfo Client.ChatService.Avatar.AvatarDownload(Client.ChatService.DownloadRequest request) {
+            return base.Channel.AvatarDownload(request);
+        }
+        
+        public string AvatarDownload(int Requested_UserSqlId, out long Length, out System.IO.Stream FileStream) {
+            Client.ChatService.DownloadRequest inValue = new Client.ChatService.DownloadRequest();
+            inValue.Requested_UserSqlId = Requested_UserSqlId;
+            Client.ChatService.DownloadFileInfo retVal = ((Client.ChatService.Avatar)(this)).AvatarDownload(inValue);
+            Length = retVal.Length;
+            FileStream = retVal.FileStream;
+            return retVal.FileExtension;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<Client.ChatService.DownloadFileInfo> Client.ChatService.Avatar.AvatarDownloadAsync(Client.ChatService.DownloadRequest request) {
+            return base.Channel.AvatarDownloadAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<Client.ChatService.DownloadFileInfo> AvatarDownloadAsync(int Requested_UserSqlId) {
+            Client.ChatService.DownloadRequest inValue = new Client.ChatService.DownloadRequest();
+            inValue.Requested_UserSqlId = Requested_UserSqlId;
+            return ((Client.ChatService.Avatar)(this)).AvatarDownloadAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        Client.ChatService.AvatarUploadResponse Client.ChatService.Avatar.AvatarUpload(Client.ChatService.UploadFileInfo request) {
+            return base.Channel.AvatarUpload(request);
+        }
+        
+        public void AvatarUpload(string FileName, int Responsed_UserSqlId, System.IO.Stream FileStream) {
+            Client.ChatService.UploadFileInfo inValue = new Client.ChatService.UploadFileInfo();
+            inValue.FileName = FileName;
+            inValue.Responsed_UserSqlId = Responsed_UserSqlId;
+            inValue.FileStream = FileStream;
+            Client.ChatService.AvatarUploadResponse retVal = ((Client.ChatService.Avatar)(this)).AvatarUpload(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<Client.ChatService.AvatarUploadResponse> Client.ChatService.Avatar.AvatarUploadAsync(Client.ChatService.UploadFileInfo request) {
+            return base.Channel.AvatarUploadAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<Client.ChatService.AvatarUploadResponse> AvatarUploadAsync(string FileName, int Responsed_UserSqlId, System.IO.Stream FileStream) {
+            Client.ChatService.UploadFileInfo inValue = new Client.ChatService.UploadFileInfo();
+            inValue.FileName = FileName;
+            inValue.Responsed_UserSqlId = Responsed_UserSqlId;
+            inValue.FileStream = FileStream;
+            return ((Client.ChatService.Avatar)(this)).AvatarUploadAsync(inValue);
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ServiceModel.ServiceContractAttribute(Namespace="letsTalk.IFileService", ConfigurationName="ChatService.File")]
+    public interface File {
+        
+        // CODEGEN: Generating message contract since the operation FileUpload is neither RPC nor document wrapped.
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IFileService/File/FileUpload", ReplyAction="letsTalk.IFileService/File/FileUploadResponse")]
+        Client.ChatService.FileUploadResponse FileUpload(Client.ChatService.UploadFromChatToServer request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IFileService/File/FileUpload", ReplyAction="letsTalk.IFileService/File/FileUploadResponse")]
+        System.Threading.Tasks.Task<Client.ChatService.FileUploadResponse> FileUploadAsync(Client.ChatService.UploadFromChatToServer request);
+        
+        // CODEGEN: Generating message contract since the wrapper name (FileFromChatDownloadRequest) of message FileFromChatDownloadRequest does not match the default value (FileDownload)
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IFileService/File/FileDownload", ReplyAction="letsTalk.IFileService/File/FileDownloadResponse")]
+        Client.ChatService.DownloadFileInfo1 FileDownload(Client.ChatService.FileFromChatDownloadRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IFileService/File/FileDownload", ReplyAction="letsTalk.IFileService/File/FileDownloadResponse")]
+        System.Threading.Tasks.Task<Client.ChatService.DownloadFileInfo1> FileDownloadAsync(Client.ChatService.FileFromChatDownloadRequest request);
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="UploadFromChatToServer", WrapperNamespace="letsTalk.IFileService", IsWrapped=true)]
+    public partial class UploadFromChatToServer {
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="letsTalk.IFileService")]
+        public int ChatroomId;
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="letsTalk.IFileService")]
+        public string FileName;
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="letsTalk.IFileService")]
+        public int Responsed_UserSqlId;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="letsTalk.IFileService", Order=0)]
+        public System.IO.Stream FileStream;
+        
+        public UploadFromChatToServer() {
+        }
+        
+        public UploadFromChatToServer(int ChatroomId, string FileName, int Responsed_UserSqlId, System.IO.Stream FileStream) {
+            this.ChatroomId = ChatroomId;
+            this.FileName = FileName;
+            this.Responsed_UserSqlId = Responsed_UserSqlId;
+            this.FileStream = FileStream;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class FileUploadResponse {
+        
+        public FileUploadResponse() {
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="FileFromChatDownloadRequest", WrapperNamespace="letsTalk.IFileService", IsWrapped=true)]
+    public partial class FileFromChatDownloadRequest {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="letsTalk.IFileService", Order=0)]
+        public System.Guid StreamId;
+        
+        public FileFromChatDownloadRequest() {
+        }
+        
+        public FileFromChatDownloadRequest(System.Guid StreamId) {
+            this.StreamId = StreamId;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="DownloadFileInfo", WrapperNamespace="letsTalk.IFileService", IsWrapped=true)]
+    public partial class DownloadFileInfo1 {
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="letsTalk.IFileService")]
+        public string FileExtension;
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="letsTalk.IFileService")]
+        public long Length;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="letsTalk.IFileService", Order=0)]
+        public System.IO.Stream FileStream;
+        
+        public DownloadFileInfo1() {
+        }
+        
+        public DownloadFileInfo1(string FileExtension, long Length, System.IO.Stream FileStream) {
+            this.FileExtension = FileExtension;
+            this.Length = Length;
+            this.FileStream = FileStream;
         }
     }
     
@@ -461,189 +1035,56 @@ namespace Client.ChatService {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        Client.ChatService.DownloadFileInfo Client.ChatService.File.AvatarDownload(Client.ChatService.DownloadRequest request) {
-            return base.Channel.AvatarDownload(request);
+        Client.ChatService.FileUploadResponse Client.ChatService.File.FileUpload(Client.ChatService.UploadFromChatToServer request) {
+            return base.Channel.FileUpload(request);
         }
         
-        public string AvatarDownload(int Requested_UserSqlId, out long Length, out System.IO.Stream FileStream) {
-            Client.ChatService.DownloadRequest inValue = new Client.ChatService.DownloadRequest();
-            inValue.Requested_UserSqlId = Requested_UserSqlId;
-            Client.ChatService.DownloadFileInfo retVal = ((Client.ChatService.File)(this)).AvatarDownload(inValue);
+        public void FileUpload(int ChatroomId, string FileName, int Responsed_UserSqlId, System.IO.Stream FileStream) {
+            Client.ChatService.UploadFromChatToServer inValue = new Client.ChatService.UploadFromChatToServer();
+            inValue.ChatroomId = ChatroomId;
+            inValue.FileName = FileName;
+            inValue.Responsed_UserSqlId = Responsed_UserSqlId;
+            inValue.FileStream = FileStream;
+            Client.ChatService.FileUploadResponse retVal = ((Client.ChatService.File)(this)).FileUpload(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<Client.ChatService.FileUploadResponse> Client.ChatService.File.FileUploadAsync(Client.ChatService.UploadFromChatToServer request) {
+            return base.Channel.FileUploadAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<Client.ChatService.FileUploadResponse> FileUploadAsync(int ChatroomId, string FileName, int Responsed_UserSqlId, System.IO.Stream FileStream) {
+            Client.ChatService.UploadFromChatToServer inValue = new Client.ChatService.UploadFromChatToServer();
+            inValue.ChatroomId = ChatroomId;
+            inValue.FileName = FileName;
+            inValue.Responsed_UserSqlId = Responsed_UserSqlId;
+            inValue.FileStream = FileStream;
+            return ((Client.ChatService.File)(this)).FileUploadAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        Client.ChatService.DownloadFileInfo1 Client.ChatService.File.FileDownload(Client.ChatService.FileFromChatDownloadRequest request) {
+            return base.Channel.FileDownload(request);
+        }
+        
+        public string FileDownload(System.Guid StreamId, out long Length, out System.IO.Stream FileStream) {
+            Client.ChatService.FileFromChatDownloadRequest inValue = new Client.ChatService.FileFromChatDownloadRequest();
+            inValue.StreamId = StreamId;
+            Client.ChatService.DownloadFileInfo1 retVal = ((Client.ChatService.File)(this)).FileDownload(inValue);
             Length = retVal.Length;
             FileStream = retVal.FileStream;
             return retVal.FileExtension;
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<Client.ChatService.DownloadFileInfo> Client.ChatService.File.AvatarDownloadAsync(Client.ChatService.DownloadRequest request) {
-            return base.Channel.AvatarDownloadAsync(request);
+        System.Threading.Tasks.Task<Client.ChatService.DownloadFileInfo1> Client.ChatService.File.FileDownloadAsync(Client.ChatService.FileFromChatDownloadRequest request) {
+            return base.Channel.FileDownloadAsync(request);
         }
         
-        public System.Threading.Tasks.Task<Client.ChatService.DownloadFileInfo> AvatarDownloadAsync(int Requested_UserSqlId) {
-            Client.ChatService.DownloadRequest inValue = new Client.ChatService.DownloadRequest();
-            inValue.Requested_UserSqlId = Requested_UserSqlId;
-            return ((Client.ChatService.File)(this)).AvatarDownloadAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        Client.ChatService.AvatarUploadResponse Client.ChatService.File.AvatarUpload(Client.ChatService.UploadFileInfo request) {
-            return base.Channel.AvatarUpload(request);
-        }
-        
-        public void AvatarUpload(string FileExtension, int Responsed_UserSqlId, System.IO.Stream FileStream) {
-            Client.ChatService.UploadFileInfo inValue = new Client.ChatService.UploadFileInfo();
-            inValue.FileExtension = FileExtension;
-            inValue.Responsed_UserSqlId = Responsed_UserSqlId;
-            inValue.FileStream = FileStream;
-            Client.ChatService.AvatarUploadResponse retVal = ((Client.ChatService.File)(this)).AvatarUpload(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<Client.ChatService.AvatarUploadResponse> Client.ChatService.File.AvatarUploadAsync(Client.ChatService.UploadFileInfo request) {
-            return base.Channel.AvatarUploadAsync(request);
-        }
-        
-        public System.Threading.Tasks.Task<Client.ChatService.AvatarUploadResponse> AvatarUploadAsync(string FileExtension, int Responsed_UserSqlId, System.IO.Stream FileStream) {
-            Client.ChatService.UploadFileInfo inValue = new Client.ChatService.UploadFileInfo();
-            inValue.FileExtension = FileExtension;
-            inValue.Responsed_UserSqlId = Responsed_UserSqlId;
-            inValue.FileStream = FileStream;
-            return ((Client.ChatService.File)(this)).AvatarUploadAsync(inValue);
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="letsTalk.IChatService", ConfigurationName="ChatService.Chat")]
-    public interface Chat {
-        
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/Registration", ReplyAction="letsTalk.IChatService/Chat/RegistrationResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(Client.ChatService.LoginExceptionFault), Action="letsTalk.IChatService/Chat/RegistrationLoginExceptionFaultFault", Name="LoginExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
-        [System.ServiceModel.FaultContractAttribute(typeof(Client.ChatService.NicknameExceptionFault), Action="letsTalk.IChatService/Chat/RegistrationNicknameExceptionFaultFault", Name="NicknameExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
-        int Registration(Client.ChatService.ServerUserInfo serverUserInfo);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/Registration", ReplyAction="letsTalk.IChatService/Chat/RegistrationResponse")]
-        System.Threading.Tasks.Task<int> RegistrationAsync(Client.ChatService.ServerUserInfo serverUserInfo);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/Authorization", ReplyAction="letsTalk.IChatService/Chat/AuthorizationResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(Client.ChatService.AuthorizationExceptionFault), Action="letsTalk.IChatService/Chat/AuthorizationAuthorizationExceptionFaultFault", Name="AuthorizationExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
-        Client.ChatService.ServerUserInfo Authorization(Client.ChatService.AuthenticationUserInfo authenticationUserInfo);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/Authorization", ReplyAction="letsTalk.IChatService/Chat/AuthorizationResponse")]
-        System.Threading.Tasks.Task<Client.ChatService.ServerUserInfo> AuthorizationAsync(Client.ChatService.AuthenticationUserInfo authenticationUserInfo);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/Connect", ReplyAction="letsTalk.IChatService/Chat/ConnectResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(Client.ChatService.ConnectionExceptionFault), Action="letsTalk.IChatService/Chat/ConnectConnectionExceptionFaultFault", Name="ConnectionExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
-        System.Guid Connect(int sqlId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/Connect", ReplyAction="letsTalk.IChatService/Chat/ConnectResponse")]
-        System.Threading.Tasks.Task<System.Guid> ConnectAsync(int sqlId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/SendMessage", ReplyAction="letsTalk.IChatService/Chat/SendMessageResponse")]
-        bool SendMessage(string message);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/SendMessage", ReplyAction="letsTalk.IChatService/Chat/SendMessageResponse")]
-        System.Threading.Tasks.Task<bool> SendMessageAsync(string message);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/GetUsers", ReplyAction="letsTalk.IChatService/Chat/GetUsersResponse")]
-        System.Collections.Generic.Dictionary<int, string> GetUsers(int count, int offset, int callerId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/GetUsers", ReplyAction="letsTalk.IChatService/Chat/GetUsersResponse")]
-        System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> GetUsersAsync(int count, int offset, int callerId);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/CreateChatroom")]
-        void CreateChatroom(string chatName, int[] users);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/CreateChatroom")]
-        System.Threading.Tasks.Task CreateChatroomAsync(string chatName, int[] users);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/Disconnect", ReplyAction="letsTalk.IChatService/Chat/DisconnectResponse")]
-        void Disconnect(System.Guid UserId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/Disconnect", ReplyAction="letsTalk.IChatService/Chat/DisconnectResponse")]
-        System.Threading.Tasks.Task DisconnectAsync(System.Guid UserId);
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface ChatChannel : Client.ChatService.Chat, System.ServiceModel.IClientChannel {
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class ChatClient : System.ServiceModel.ClientBase<Client.ChatService.Chat>, Client.ChatService.Chat {
-        
-        public ChatClient() {
-        }
-        
-        public ChatClient(string endpointConfigurationName) : 
-                base(endpointConfigurationName) {
-        }
-        
-        public ChatClient(string endpointConfigurationName, string remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
-        }
-        
-        public ChatClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
-        }
-        
-        public ChatClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(binding, remoteAddress) {
-        }
-        
-        public int Registration(Client.ChatService.ServerUserInfo serverUserInfo) {
-            return base.Channel.Registration(serverUserInfo);
-        }
-        
-        public System.Threading.Tasks.Task<int> RegistrationAsync(Client.ChatService.ServerUserInfo serverUserInfo) {
-            return base.Channel.RegistrationAsync(serverUserInfo);
-        }
-        
-        public Client.ChatService.ServerUserInfo Authorization(Client.ChatService.AuthenticationUserInfo authenticationUserInfo) {
-            return base.Channel.Authorization(authenticationUserInfo);
-        }
-        
-        public System.Threading.Tasks.Task<Client.ChatService.ServerUserInfo> AuthorizationAsync(Client.ChatService.AuthenticationUserInfo authenticationUserInfo) {
-            return base.Channel.AuthorizationAsync(authenticationUserInfo);
-        }
-        
-        public System.Guid Connect(int sqlId) {
-            return base.Channel.Connect(sqlId);
-        }
-        
-        public System.Threading.Tasks.Task<System.Guid> ConnectAsync(int sqlId) {
-            return base.Channel.ConnectAsync(sqlId);
-        }
-        
-        public bool SendMessage(string message) {
-            return base.Channel.SendMessage(message);
-        }
-        
-        public System.Threading.Tasks.Task<bool> SendMessageAsync(string message) {
-            return base.Channel.SendMessageAsync(message);
-        }
-        
-        public System.Collections.Generic.Dictionary<int, string> GetUsers(int count, int offset, int callerId) {
-            return base.Channel.GetUsers(count, offset, callerId);
-        }
-        
-        public System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> GetUsersAsync(int count, int offset, int callerId) {
-            return base.Channel.GetUsersAsync(count, offset, callerId);
-        }
-        
-        public void CreateChatroom(string chatName, int[] users) {
-            base.Channel.CreateChatroom(chatName, users);
-        }
-        
-        public System.Threading.Tasks.Task CreateChatroomAsync(string chatName, int[] users) {
-            return base.Channel.CreateChatroomAsync(chatName, users);
-        }
-        
-        public void Disconnect(System.Guid UserId) {
-            base.Channel.Disconnect(UserId);
-        }
-        
-        public System.Threading.Tasks.Task DisconnectAsync(System.Guid UserId) {
-            return base.Channel.DisconnectAsync(UserId);
+        public System.Threading.Tasks.Task<Client.ChatService.DownloadFileInfo1> FileDownloadAsync(System.Guid StreamId) {
+            Client.ChatService.FileFromChatDownloadRequest inValue = new Client.ChatService.FileFromChatDownloadRequest();
+            inValue.StreamId = StreamId;
+            return ((Client.ChatService.File)(this)).FileDownloadAsync(inValue);
         }
     }
 }

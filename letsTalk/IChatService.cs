@@ -32,15 +32,6 @@ namespace letsTalk
                      CallbackContract = typeof(IChatCallback))]
     public interface IChatService
     {
-        [OperationContract(IsOneWay = false)]
-        [FaultContract(typeof(LoginExceptionFault))]
-        [FaultContract(typeof(NicknameExceptionFault))]
-        int Registration(ServerUserInfo serverUserInfo);
-
-        [OperationContract(IsOneWay = false)]
-        [FaultContract(typeof(AuthorizationExceptionFault))]
-        ServerUserInfo Authorization(AuthenticationUserInfo authenticationUserInfo);
-
         [OperationContract(IsOneWay = true)]
         void MessageIsWriting(int chatroomId, int userSqlId);
 
