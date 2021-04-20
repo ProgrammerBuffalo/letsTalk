@@ -38,9 +38,6 @@ namespace letsTalk
         [OperationContract(IsOneWay = false)]
         void SendMessageText(ServiceMessageText message, int chatroomId);
 
-        [OperationContract(IsOneWay = false)]
-        Dictionary<int, string> GetRegisteredUsers(int count, int offset, int callerId);
-
         [OperationContract(IsOneWay = true)]
         void CreateChatroom(string chatName, List<int> users);
 

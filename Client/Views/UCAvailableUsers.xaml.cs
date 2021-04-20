@@ -5,10 +5,10 @@
     /// </summary>
     public partial class UCAvailableUsers : System.Windows.Controls.UserControl
     {
-        public UCAvailableUsers()
+        public UCAvailableUsers(ChatService.ChatClient chatClient)
         {
             InitializeComponent();
-            DataContext = new ViewModels.AvailableUsersViewModel();
+            DataContext = new ViewModels.AvailableUsersViewModel(chatClient);
 
         }
     }

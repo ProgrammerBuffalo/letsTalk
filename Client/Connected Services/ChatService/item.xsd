@@ -23,27 +23,11 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetRegisteredUsers">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="count" type="xs:int" />
-        <xs:element minOccurs="0" name="offset" type="xs:int" />
-        <xs:element minOccurs="0" name="callerId" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetRegisteredUsersResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetRegisteredUsersResult" nillable="true" type="q2:ArrayOfKeyValueOfintstring" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
   <xs:element name="CreateChatroom">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="chatName" nillable="true" type="xs:string" />
-        <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="users" nillable="true" type="q3:ArrayOfint" />
+        <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="users" nillable="true" type="q2:ArrayOfint" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -91,7 +75,7 @@
   <xs:element name="ConnectResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConnectResult" nillable="true" type="q4:ArrayOfKeyValueOfintArrayOfintty7Ep6D1" />
+        <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConnectResult" nillable="true" type="q3:ArrayOfKeyValueOfintArrayOfintty7Ep6D1" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -105,7 +89,7 @@
   <xs:element name="MessagesFromOneChatResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/letsTalk" minOccurs="0" name="MessagesFromOneChatResult" nillable="true" type="q5:ArrayOfServiceMessage" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/letsTalk" minOccurs="0" name="MessagesFromOneChatResult" nillable="true" type="q4:ArrayOfServiceMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -137,7 +121,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="chatId" type="xs:int" />
-        <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="usersInChat" nillable="true" type="q6:ArrayOfint" />
+        <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="usersInChat" nillable="true" type="q5:ArrayOfint" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -165,7 +149,7 @@
   <xs:element name="ReplyMessage">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/letsTalk" minOccurs="0" name="message" nillable="true" type="q7:ServiceMessageText" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/letsTalk" minOccurs="0" name="message" nillable="true" type="q6:ServiceMessageText" />
         <xs:element minOccurs="0" name="chatroomId" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
@@ -180,7 +164,7 @@
   <xs:element name="NotifyUserFileSendedToChat">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/letsTalk" minOccurs="0" name="serviceMessageFile" nillable="true" type="q8:ServiceMessageFile" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/letsTalk" minOccurs="0" name="serviceMessageFile" nillable="true" type="q7:ServiceMessageFile" />
         <xs:element minOccurs="0" name="chatroomId" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
