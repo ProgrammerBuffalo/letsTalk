@@ -122,11 +122,15 @@ namespace Client.ViewModels
             {
                 int UserId = await unitClient.RegistrationAsync(registrationInfo);
 
-                uploadFileInfo.FileName = fileName;
-                uploadFileInfo.FileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read); ;
+                if (uploadFileInfo != null)
+                {
 
-                if (uploadFileInfo.FileStream.CanRead)
-                    await avatarClient.AvatarUploadAsync(uploadFileInfo.FileName, UserId, uploadFileInfo.FileStream);
+                    uploadFileInfo.FileName = fileName;
+                    uploadFileInfo.FileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read); ;
+
+                    if (uploadFileInfo.FileStream.CanRead)
+                        await avatarClient.AvatarUploadAsync(uploadFileInfo.FileName, UserId, uploadFileInfo.FileStream);
+                }
             }
             catch (FaultException<ChatService.LoginExceptionFault> ex)
             {
