@@ -231,7 +231,7 @@
                 <Path x:Name="path_success" Width="18.574" Height="20.851" Canvas.Left="30.012" Canvas.Top="29.118" Stretch="Fill" Fill="#00FFFF00" Data="F1 M 23.7501,33.25L 34.8334,44.3333L 52.2499,22.1668L 56.9999,26.9168L 34.8334,53.8333L 19.0001,38L 23.7501,33.25 Z "/>
                 <Path x:Name="path_fault" Width="17.055" Height="18.035" Canvas.Left="30.012" Canvas.Top="29.39" Stretch="Fill" Fill="#00000000" Data="F1 M 26.9166,22.1667L 37.9999,33.25L 49.0832,22.1668L 53.8332,26.9168L 42.7499,38L 53.8332,49.0834L 49.0833,53.8334L 37.9999,42.75L 26.9166,53.8334L 22.1666,49.0833L 33.25,38L 22.1667,26.9167L 26.9166,22.1667 Z "/>
             </Canvas>
-            
+
             <ControlTemplate.Triggers>
                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=State}" Value="Loading">
                     <DataTrigger.EnterActions>

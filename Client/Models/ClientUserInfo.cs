@@ -6,19 +6,33 @@ using System.Windows.Media.Imaging;
 
 namespace Client.Models
 {
+    public enum Activity { Online, Offline, Busy }
+
     public class ClientUserInfo : System.ComponentModel.INotifyPropertyChanged
     {
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 
         private static ClientUserInfo instance;
 
+        private string userName;
+        private string userDesc; // описание пользователя (Hey there i am using Lets Talk!!!)
+        private BitmapImage userImage = null; // Аватарка
+        private Activity activity; // поле для показа подключенных и не подключенных клиентов
+
+
         public static ClientUserInfo getInstance()
         {
             return instance;
         }
 
-        private string userName;
-        private BitmapImage userImage = null; // Аватарка
+        //надо убрать 
+        public ClientUserInfo(string userName, string userDesc, string imagePath, Activity activity)
+        {
+            UserName = userName;
+            UserDesc = userDesc;
+            UserImage = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + imagePath));
+            Activity = activity;
+        }
 
         public ClientUserInfo(Guid unique_id, int sqlId, ChatService.ChatClient chatClient, string userName)
         {
@@ -35,7 +49,11 @@ namespace Client.Models
 
         public Guid ConnectionId { private set; get; } // Сеансовый Id
 
-        public string UserName { get => userName; set => Set(ref userName, value); } // Никнейм (Логин == Никнейм)
+        public string UserName { get => userName; set => Set(ref userName, value); }
+
+        public string UserDesc { get => userDesc; set => Set(ref userDesc, value); }
+
+        public Activity Activity { get => activity; set => Set(ref activity, value); }
 
         public BitmapImage UserImage { get => userImage; set => Set(ref userImage, value); }
 

@@ -6,8 +6,10 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:icons ="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:controls ="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:uc="clr-namespace:Client.UserControls"
+        xmlns:utility="clr-namespace:Client.Utility"
         mc:Ignorable="d"
-        Title="letsTalkWindow" Height="450" Width="800">
+        Title="letsTalkWindow" Height="700" Width="1200" WindowStartupLocation="CenterScreen">
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -23,23 +25,18 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/WindowResources/ButtonEllipseStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
 
-    <Grid>
-        <Grid.Resources>
             <DataTemplate x:Key="HamburgerMenuOptionsTemplate" DataType="{x:Type controls:HamburgerMenuIconItem}">
-                <DockPanel Height="48" LastChildFill="True">
+                <WrapPanel Margin="5, 8" Cursor="Hand">
                     <ContentControl  x:Name="IconPart"
                                      Width="{Binding ElementName=hamburgerMenu, Path=CompactPaneLength}"
-                                     Content="{Binding Path=Icon}"
-                                     DockPanel.Dock="Left"/>
+                                     Content="{Binding Path=Icon}"/>
 
                     <TextBlock       x:Name="TextPart"
                                      VerticalAlignment="Center"
                                      FontSize="18"
                                      Text="{Binding Path=Label}" />
-                </DockPanel>
+                </WrapPanel>
 
                 <DataTemplate.Triggers>
                     <DataTrigger Binding="{Binding ElementName=hamburgerMenu, Path=PanePlacement}" Value="Right">
@@ -48,8 +45,69 @@
                     </DataTrigger>
                 </DataTemplate.Triggers>
             </DataTemplate>
-        </Grid.Resources>
 
+            <Style x:Key="HamburgerOptionItemContainerStyle" TargetType="ListBoxItem">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <Border x:Name="border" Cursor="Hand" Background="#ffff1a">
+                                <ContentPresenter/>
+                            </Border>
+
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#CCCCFF"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="DarkSeaGreen"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <ControlTemplate x:Key="HamburgerOptionsItemTemplate" TargetType="ListBoxItem">
+                <WrapPanel>
+                    <ContentPresenter/>
+                </WrapPanel>
+            </ControlTemplate>
+
+            <Style x:Key="ChatListBoxItemStyle" TargetType="ListBoxItem">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <Border Margin="0,5" Cursor="Hand">
+                                <ContentPresenter/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <DataTemplate x:Key="ChatOneDataTemplate">
+                <uc:ChatItem 
+                    UserName="{Binding Path=ClientUserInfo.UserName}"
+                    Description="{Binding Path=ClientUserInfo.UserDesc}"
+                    Avatar="{Binding Path=ClientUserInfo.UserImage}"
+                    Count="{Binding Path=Count}"
+                    Activity="{Binding Path=ClientUserInfo.Activity}"
+                    />
+            </DataTemplate>
+
+            <DataTemplate x:Key="ChatGroupDataTemplate">
+                <uc:ChatItem UserName="{Binding Path=ClientUserInfo.UserName}"/>
+            </DataTemplate>
+
+            <utility:ChatDataTemplateSelector
+                x:Key="ChatDataTemplateSelector"
+                ChatOneDataTemplate="{StaticResource ChatOneDataTemplate}"
+                ChatGroupDataTemplate="{StaticResource ChatGroupDataTemplate}">
+            </utility:ChatDataTemplateSelector>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="3*"/>
@@ -57,40 +115,37 @@
 
         <UserControl Grid.Column="1" Content="{Binding CurrentView}"/>
 
-        <controls:HamburgerMenu x:Name="hamburgerMenu"  PaneBackground="#FFEF00" PaneForeground="Gray"
+        <controls:HamburgerMenu x:Name="hamburgerMenu"  PaneBackground="#ffff1a" PaneForeground="Gray"
                                  OptionsItemTemplate="{StaticResource HamburgerMenuOptionsTemplate}"
-                                 OptionsItemsSource="{Binding Path=OptionViewList}"
-                                 IsPaneOpen="True">
+                                 OptionsItemContainerStyle="{StaticResource HamburgerOptionItemContainerStyle}"
+                                 ItemContainerStyle="{StaticResource ChatListBoxItemStyle}"
+                                 ItemTemplateSelector="{StaticResource ChatDataTemplateSelector}"
+                                 ItemsSource="{Binding Path=Chats}"                        
+                                 IsPaneOpen="False">
 
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="OptionsItemClick">
-                    <i:InvokeCommandAction Command="{Binding SelectedHambugerItemOptionCommand}"
-                                           CommandParameter="{Binding ElementName=hamburgerMenu, Path=SelectedOptionsItem}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
+            <controls:HamburgerMenu.OptionsItemsSource>
+                <controls:HamburgerMenuItemCollection>
 
-            <!--<Controls:HamburgerMenu.OptionsItemsSource>
-                <Controls:HamburgerMenuItemCollection>
-                    <Controls:HamburgerMenuIconItem Label="Available Users" Tag="UsersPage">
-                        <Controls:HamburgerMenuIconItem.Icon>
-                            <Icons:PackIconMaterial Width="22"
-                                                    Height="22"
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"
-                                                    Kind="AccountHeart"/>
-                        </Controls:HamburgerMenuIconItem.Icon>
-                    </Controls:HamburgerMenuIconItem>
-                    <Controls:HamburgerMenuIconItem Label="Settings" Tag="UserControlView">
-                        <Controls:HamburgerMenuIconItem.Icon>
-                            <Icons:PackIconMaterial Width="22"
-                                                    Height="22"
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"
-                                                    Kind="PowerSettings"/>
-                        </Controls:HamburgerMenuIconItem.Icon>
-                    </Controls:HamburgerMenuIconItem>
-                </Controls:HamburgerMenuItemCollection>
-            </Controls:HamburgerMenu.OptionsItemsSource>-->
+                    <controls:HamburgerMenuIconItem Tag="UCAvailableUsers" Label="All Chatrooms">
+                        <controls:HamburgerMenuIconItem.Icon>
+                            <icons:PackIconMaterial  Kind="AccountMultiple" Width="25" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        </controls:HamburgerMenuIconItem.Icon>
+                    </controls:HamburgerMenuIconItem>
+
+                    <controls:HamburgerMenuIconItem Tag="UCAddUser" Label="Add User">
+                        <controls:HamburgerMenuIconItem.Icon>
+                            <icons:PackIconMaterial  Kind="AccountPlus" Width="25" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        </controls:HamburgerMenuIconItem.Icon>
+                    </controls:HamburgerMenuIconItem>
+
+                    <controls:HamburgerMenuIconItem Tag="UCSettings" Label="Settings">
+                        <controls:HamburgerMenuIconItem.Icon>
+                            <icons:PackIconMaterial  Kind="Shield" Width="25" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        </controls:HamburgerMenuIconItem.Icon>
+                    </controls:HamburgerMenuIconItem>
+
+                </controls:HamburgerMenuItemCollection>
+            </controls:HamburgerMenu.OptionsItemsSource>
 
             <controls:HamburgerMenu.HamburgerMenuHeaderTemplate>
                 <DataTemplate>
@@ -100,18 +155,18 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button Margin="10, 2" Grid.Column="0" Style="{StaticResource ButtonEllipseStyle}"/>
+                        <Button Grid.Column="0" Margin="10, 2" Style="{StaticResource ButtonEllipseStyle}"/>
 
                         <TextBlock Grid.Column="1" 
                                 HorizontalAlignment="Center" VerticalAlignment="Center"
                                 FontSize="16"
                                 Foreground="Gray"
-                                Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.A}"/>
+                                Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ClientUserInfo.UserName}"/>
                     </Grid>
                 </DataTemplate>
             </controls:HamburgerMenu.HamburgerMenuHeaderTemplate>
 
-            <controls:HamburgerMenu.ContentTemplate>
+            <!--<controls:HamburgerMenu.ContentTemplate>
                 <DataTemplate>
                     <Grid>
                         <Grid.RowDefinitions>
@@ -127,7 +182,19 @@
                         </Border>
                     </Grid>
                 </DataTemplate>
-            </controls:HamburgerMenu.ContentTemplate>
+            </controls:HamburgerMenu.ContentTemplate>-->
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="OptionsItemClick">
+                    <i:InvokeCommandAction Command="{Binding SelectedHambugerOptionItemCommand}"
+                                           CommandParameter="{Binding ElementName=hamburgerMenu, Path=SelectedOptionsItem}"/>
+                </i:EventTrigger>
+
+                <i:EventTrigger EventName="ItemClick">
+                    <i:InvokeCommandAction Command="{Binding SelectedChatChangedCommand}"
+                                           CommandParameter="{Binding ElementName=hamburgerMenu, Path=SelectedItem}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
         </controls:HamburgerMenu>
 
     </Grid>
