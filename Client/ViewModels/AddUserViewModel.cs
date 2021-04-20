@@ -1,4 +1,5 @@
-﻿using Client.Models;
+﻿using Client.ChatService;
+using Client.Models;
 using Client.Utility;
 using System;
 using System.Collections.Generic;
@@ -15,20 +16,21 @@ namespace Client.ViewModels
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 
         private ClientUserInfo client;
+        private ChatClient chatClient;
 
         private ObservableCollection<AvailableUser> allUsers;
 
         private int offset;
         private int count;
 
-        public AddUserViewModel()
+        public AddUserViewModel(ChatClient chatClient)
         {
+            this.chatClient = chatClient;
             client = ClientUserInfo.getInstance();
 
             SearchChangedCommand = new Command(SearchChanged);
             ShowMoreCommand = new Command(ShowMore);
             AddUserCommand = new Command(AddUser);
-
 
             AllUsers = new ObservableCollection<AvailableUser>();
 
@@ -44,8 +46,7 @@ namespace Client.ViewModels
 
         public void ShowMore(object param)
         {
-            Dictionary<int, string> users = new Dictionary<int, string>();
-            users = client.ChatClient.GetRegisteredUsers(count, offset, client.SqlId);
+            Dictionary<int, string> users = chatClient.GetRegisteredUsers(count, offset, client.SqlId);
 
             var it = users.GetEnumerator();
             for (int i = 0; i < users.Count; i++)
@@ -72,12 +73,12 @@ namespace Client.ViewModels
 
         private async void LoadUserAvatarAsync(int index)
         {
-            ChatService.DownloadRequest downloadRequest = new ChatService.DownloadRequest(AllUsers[index].SqlId);
+            DownloadRequest downloadRequest = new DownloadRequest(AllUsers[index].SqlId);
             System.IO.Stream stream = null;
             System.IO.MemoryStream memoryStream = null;
             try
             {
-                var avatarClient = new ChatService.AvatarClient();
+                var avatarClient = new AvatarClient();
                 long lenght;
 
                 await System.Threading.Tasks.Task.Run(() =>
@@ -100,7 +101,7 @@ namespace Client.ViewModels
                     }
                 });
             }
-            catch (FaultException<ChatService.ConnectionExceptionFault> ex)
+            catch (FaultException<ConnectionExceptionFault> ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -134,7 +135,7 @@ namespace Client.ViewModels
 
     class CreateGroupViewModel : AddUserViewModel
     {
-        public CreateGroupViewModel()
+        public CreateGroupViewModel(ChatClient chatClient) : base(chatClient)
         {
 
         }

@@ -7,10 +7,10 @@ namespace Client.Views
     /// </summary>
     public partial class UC2 : UserControl
     {
-        public UC2()
+        public UC2(ChatService.ChatClient chatClient)
         {
             InitializeComponent();
-            DataContext = new ViewModels.AddUserViewModel();
+            DataContext = new ViewModels.AddUserViewModel(chatClient);
         }
     }
 }

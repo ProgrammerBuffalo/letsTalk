@@ -17,6 +17,12 @@
   <wsdl:message name="Chat_SendMessageText_OutputMessage">
     <wsdl:part name="parameters" element="tns:SendMessageTextResponse" />
   </wsdl:message>
+  <wsdl:message name="Chat_GetRegisteredUsers_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetRegisteredUsers" />
+  </wsdl:message>
+  <wsdl:message name="Chat_GetRegisteredUsers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetRegisteredUsersResponse" />
+  </wsdl:message>
   <wsdl:message name="Chat_CreateChatroom_InputMessage">
     <wsdl:part name="parameters" element="tns:CreateChatroom" />
   </wsdl:message>
@@ -90,6 +96,10 @@
     <wsdl:operation name="SendMessageText">
       <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/SendMessageText" message="tns:Chat_SendMessageText_InputMessage" />
       <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/SendMessageTextResponse" message="tns:Chat_SendMessageText_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRegisteredUsers">
+      <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/GetRegisteredUsers" message="tns:Chat_GetRegisteredUsers_InputMessage" />
+      <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/GetRegisteredUsersResponse" message="tns:Chat_GetRegisteredUsers_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="CreateChatroom">
       <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/CreateChatroom" message="tns:Chat_CreateChatroom_InputMessage" />

@@ -479,12 +479,6 @@ namespace Client.ChatService {
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/Registration", ReplyAction="letsTalk.IUnitService/Unit/RegistrationResponse")]
         System.Threading.Tasks.Task<int> RegistrationAsync(Client.ChatService.ServerUserInfo serverUserInfo);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/GetRegisteredUsers", ReplyAction="letsTalk.IUnitService/Unit/GetRegisteredUsersResponse")]
-        System.Collections.Generic.Dictionary<int, string> GetRegisteredUsers(int count, int offset, int callerId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/GetRegisteredUsers", ReplyAction="letsTalk.IUnitService/Unit/GetRegisteredUsersResponse")]
-        System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> GetRegisteredUsersAsync(int count, int offset, int callerId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -529,14 +523,6 @@ namespace Client.ChatService {
         public System.Threading.Tasks.Task<int> RegistrationAsync(Client.ChatService.ServerUserInfo serverUserInfo) {
             return base.Channel.RegistrationAsync(serverUserInfo);
         }
-        
-        public System.Collections.Generic.Dictionary<int, string> GetRegisteredUsers(int count, int offset, int callerId) {
-            return base.Channel.GetRegisteredUsers(count, offset, callerId);
-        }
-        
-        public System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> GetRegisteredUsersAsync(int count, int offset, int callerId) {
-            return base.Channel.GetRegisteredUsersAsync(count, offset, callerId);
-        }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -554,6 +540,12 @@ namespace Client.ChatService {
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/SendMessageText", ReplyAction="letsTalk.IChatService/Chat/SendMessageTextResponse")]
         System.Threading.Tasks.Task SendMessageTextAsync(Client.ChatService.ServiceMessageText message, int chatroomId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/GetRegisteredUsers", ReplyAction="letsTalk.IChatService/Chat/GetRegisteredUsersResponse")]
+        System.Collections.Generic.Dictionary<int, string> GetRegisteredUsers(int count, int offset, int callerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/GetRegisteredUsers", ReplyAction="letsTalk.IChatService/Chat/GetRegisteredUsersResponse")]
+        System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> GetRegisteredUsersAsync(int count, int offset, int callerId);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/CreateChatroom")]
         void CreateChatroom(string chatName, int[] users);
@@ -672,6 +664,14 @@ namespace Client.ChatService {
         
         public System.Threading.Tasks.Task SendMessageTextAsync(Client.ChatService.ServiceMessageText message, int chatroomId) {
             return base.Channel.SendMessageTextAsync(message, chatroomId);
+        }
+        
+        public System.Collections.Generic.Dictionary<int, string> GetRegisteredUsers(int count, int offset, int callerId) {
+            return base.Channel.GetRegisteredUsers(count, offset, callerId);
+        }
+        
+        public System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> GetRegisteredUsersAsync(int count, int offset, int callerId) {
+            return base.Channel.GetRegisteredUsersAsync(count, offset, callerId);
         }
         
         public void CreateChatroom(string chatName, int[] users) {

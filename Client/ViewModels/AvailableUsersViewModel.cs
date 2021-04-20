@@ -83,7 +83,7 @@ namespace Client.ViewModels
         {
             var unitService = new ChatService.UnitClient();
             Dictionary<int, string> keyValuePairs = new Dictionary<int, string>();
-            keyValuePairs = unitService.GetRegisteredUsers(count, offset, ClientUserInfo.getInstance().SqlId);
+            //keyValuePairs = unitService.GetRegisteredUsers(count, offset, ClientUserInfo.getInstance().SqlId);
 
             foreach (var item in keyValuePairs)
             {

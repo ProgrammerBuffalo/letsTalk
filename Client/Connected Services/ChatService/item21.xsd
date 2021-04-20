@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="letsTalk.IUnitService" elementFormDefault="qualified" targetNamespace="letsTalk.IUnitService" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://localhost:8301/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/letsTalk" />
-  <xs:import schemaLocation="http://localhost:8301/?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:element name="Authorization">
     <xs:complexType>
       <xs:sequence>
@@ -27,22 +26,6 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="RegistrationResult" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetRegisteredUsers">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="count" type="xs:int" />
-        <xs:element minOccurs="0" name="offset" type="xs:int" />
-        <xs:element minOccurs="0" name="callerId" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetRegisteredUsersResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetRegisteredUsersResult" nillable="true" type="q4:ArrayOfKeyValueOfintstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
