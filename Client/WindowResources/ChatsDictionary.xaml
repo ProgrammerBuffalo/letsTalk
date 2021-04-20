@@ -1,0 +1,55 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:uc="clr-namespace:Client.UserControls"
+                    xmlns:utility="clr-namespace:Client.Utility">
+
+    <Style x:Key="ChatListViewItemStyle" TargetType="ListViewItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border Margin="0,5" Cursor="Hand">
+                        <ContentPresenter/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <DataTemplate x:Key="ActivityChatDataTemplate">
+        <uc:ChatItem
+            UserName="{Binding Path=aaa}"
+            Description="{Binding Path=bbb}"
+            Avatar="{Binding Path=ccc}"
+            ActivityVisibility="Visible">
+        </uc:ChatItem>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ChatDataTemplate">
+        <uc:ChatItem
+            UserName="{Binding Path=aaa}"
+            Description="{Binding Path=bbb}"
+            Avatar="{Binding Path=ccc}"
+            ActivityVisibility="Hidden">
+        </uc:ChatItem>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ChatOneDataTemplate">
+        <uc:ChatItem 
+                    UserName="{Binding Path=ClientUserInfo.UserName}"
+                    Description="{Binding Path=ClientUserInfo.UserDesc}"
+                    Avatar="{Binding Path=ClientUserInfo.UserImage}"
+                    Count="{Binding Path=Count}"
+                    Activity="{Binding Path=ClientUserInfo.Activity}">
+        </uc:ChatItem>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ChatGroupDataTemplate">
+        <uc:ChatItem UserName="{Binding Path=ClientUserInfo.UserName}"/>
+    </DataTemplate>
+
+    <utility:ChatDataTemplateSelector
+                x:Key="ChatDataTemplateSelector"
+                ChatOneDataTemplate="{StaticResource ChatOneDataTemplate}"
+                ChatGroupDataTemplate="{StaticResource ChatGroupDataTemplate}">
+    </utility:ChatDataTemplateSelector>
+</ResourceDictionary>

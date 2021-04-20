@@ -7,6 +7,17 @@
         private System.Windows.Media.Imaging.BitmapImage image;
         private bool isOnline;
 
+        public AvailableUser()
+        {
+
+        }
+
+        public AvailableUser(string name, int sqlId)
+        {
+            Name = name;
+            SqlId = sqlId;
+        }
+
         public bool IsOnline { get => isOnline; set => Set(ref isOnline, value); }
 
         public int SqlId { get => sqlId; set => Set(ref sqlId, value); }

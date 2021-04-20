@@ -35,6 +35,7 @@ namespace Client.ViewModels
             SendCommand = new Command(Send);
             OpenSmileCommand = new Command(OpenSmile);
             OpenFileCommand = new Command(OpenFile);
+            UnloadCommand = new Command(Unload);
 
             sendType = SendText;
 
@@ -74,6 +75,7 @@ namespace Client.ViewModels
         public ICommand SendCommand { get; }
         public ICommand OpenFileCommand { get; }
         public ICommand OpenSmileCommand { get; }
+        public ICommand UnloadCommand { get; }
 
         public string Text { get => text; set => Set(ref text, value); }
 
@@ -155,6 +157,17 @@ namespace Client.ViewModels
             MediaMessage message = (MediaMessage)((SourceMessage)param).Message;
             if (message == curMediaMessage)
                 player.Position = TimeSpan.FromTicks(message.CurrentLength);
+        }
+
+        private void Unload(object param)
+        {
+            if (curMediaMessage != null)
+            {
+                curMediaMessage.IsPlaying = false;
+                curMediaMessage.CurrentLength = 0;
+                curMediaMessage = null;
+                player.Close();
+            }
         }
 
         public void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
