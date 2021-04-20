@@ -53,9 +53,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChatService.cs" />
+    <Compile Include="ConnectedUser.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="IChatService.cs" />
     <Compile Include="IFileService.cs" />
+    <Compile Include="ServiceMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerUserInfo.cs" />
   </ItemGroup>

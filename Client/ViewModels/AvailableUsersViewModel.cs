@@ -73,7 +73,7 @@ namespace Client.ViewModels
             AvailableUser selectedUser = selectedUsers.Where(u => u.SqlId == int.Parse(sender.ToString())).FirstOrDefault();
             selectedUsers.Remove(selectedUser);
             users.Add(selectedUser);
-            users.Move(users.Count - 1, users.IndexOf(users.Where(u => u.SqlId > selectedUser.SqlId).FirstOrDefault()));
+            users.Move(users.Count - 1, users.IndexOf(users.Where(u => u.SqlId >= selectedUser.SqlId).FirstOrDefault()));
         }
 
         // Подгрузка пользователей 
