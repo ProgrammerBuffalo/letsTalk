@@ -26,17 +26,5 @@ namespace letsTalk
         [DataMember(IsRequired = true)]
         public string Name { get; set; }
 
-    }
-    
-    [DataContract]
-    public class ConnectedServerUser
-    {
-        [DataMember]
-        public int SqlId { get; set; }
-
-        [DataMember]
-        public OperationContext OperationContext { get; set; }
-
-    }
-
+    }  
 }

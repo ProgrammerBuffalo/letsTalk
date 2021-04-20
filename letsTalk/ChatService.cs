@@ -6,6 +6,10 @@ using System.Data.SqlTypes;
 using System.IO;
 using System.ServiceModel;
 using System.Transactions;
+using System.Linq;
+using Microsoft.SqlServer.Server;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace letsTalk
 {
@@ -13,11 +17,26 @@ namespace letsTalk
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, // Single -> Объект ChatService является синглтоном
                     IncludeExceptionDetailInFaults = true, // Faults == Exceptions
                     ConcurrencyMode = ConcurrencyMode.Multiple)] // Multiple => Сервер должен держать нескольких пользователей себе (Под каждого юзера свой поток)
-   public class ChatService : IChatService, IFileService
-   {
+    public class ChatService : IChatService, IFileService
+    {
+        //Строка для подключения к БД
         private static string connection_string = @"Server=(local);Database=MessengerDB;Integrated Security=true;";
-        // Сервер хранит подключенных пользователей в Dictionary, задавая каждому уникальный ID-подключения (GUID)
-        private Dictionary<Guid, ConnectedServerUser> connectedUsers = new Dictionary<Guid, ConnectedServerUser>();
+
+        // Все подключенные пользователи, и чатрумы в них
+        private Dictionary<ConnectedUser, List<int>> chatroomsInUsers = new Dictionary<ConnectedUser, List<int>>();
+
+        //Определение текущего пользователя, который вызвал у сервера метод
+        public IChatCallback CurrentCallback
+        {
+            get
+            {
+                return OperationContext.Current.GetCallbackChannel<IChatCallback>();
+            }
+        }
+
+        //Нужен для синхронизации
+        private object lockerSyncObj;
+
         // Авторизация на сервер, метод ищет пользователя в БД
         public ServerUserInfo Authorization(AuthenticationUserInfo authenticationUserInfo)
         {
@@ -163,7 +182,7 @@ namespace letsTalk
                         return downloadFileInfo;
                     }
 
-                    SqlCommand sqlCommandTakeAvatar = new SqlCommand($@"SELECT* FROM GetAvatar(@stream_id)", sqlConnection);
+                    SqlCommand sqlCommandTakeAvatar = new SqlCommand($@"SELECT* FROM GetFile(@stream_id)", sqlConnection);
                     sqlCommandTakeAvatar.Parameters.Add("@stream_id", SqlDbType.UniqueIdentifier).Value = (Guid)stream_id;
 
                     using (SqlDataReader reader = sqlCommandTakeAvatar.ExecuteReader())
@@ -205,7 +224,8 @@ namespace letsTalk
 
                         sqlCommandAddAvatar.CommandType = CommandType.Text;
 
-                        sqlCommandAddAvatar.Parameters.Add("@name", SqlDbType.NVarChar).Value = "AVATAR" + uploadResponse.Responsed_UserSqlId + $".{uploadResponse.FileExtension}";
+                        string fileName = uploadResponse.FileName;
+                        sqlCommandAddAvatar.Parameters.Add("@name", SqlDbType.NVarChar).Value = "AVATAR" + uploadResponse.Responsed_UserSqlId + $".{fileName.Substring(fileName.LastIndexOf(".") + 1)}";
 
                         Guid stream_id;
                         byte[] transaction_context;
@@ -257,31 +277,8 @@ namespace letsTalk
             }
         }
 
-        // Захват пользователя на сервере, и выдача ему уникального ID (сеансовый ID, не путать с SQL)
-        public Guid Connect(int sqlId)
-        {
-            Guid uniqueId = Guid.NewGuid();
-
-            ConnectedServerUser serverUser = new ConnectedServerUser()
-            {
-                SqlId = sqlId,
-                OperationContext = OperationContext.Current
-            };
-
-            connectedUsers.Add(uniqueId, serverUser);
-            Console.WriteLine($"User: {uniqueId} is Connected");
-
-            return uniqueId;
-        }
-
-        // Процесс обратный Connect
-        public void Disconnect(Guid uniqueId)
-        {
-            connectedUsers.Remove(uniqueId);
-            Console.WriteLine($"User: {uniqueId} is Disconnected");
-        }
-
-        public Dictionary<int, string> GetUsers(int count, int offset, int callerId)
+        // Получает список всех существующий пользователей в Базе Данных
+        public Dictionary<int, string> GetRegisteredUsers(int count, int offset, int callerId)
         {
             Dictionary<int, string> users = new Dictionary<int, string>();
             try
@@ -313,17 +310,672 @@ namespace letsTalk
             return users;
         }
 
+        // Создает чатрум с выбранными пользователями
         public void CreateChatroom(string chatName, List<int> users)
         {
-            Console.WriteLine("chat: " + chatName);
-            foreach(var item in users)
-                Console.WriteLine("User:" + item);
+            try
+            {
+                using (TransactionScope trScope = new TransactionScope())
+                {
+                    using (SqlConnection sqlConnection = new SqlConnection(connection_string))
+                    {
+                        sqlConnection.Open();
+
+                        SqlCommand sqlCommandAddChatroom = new SqlCommand($@" INSERT INTO Chatrooms(Name)
+                                                                              OUTPUT INSERTED.Id
+                                                                              VALUES(@chatName)", sqlConnection);
+
+                        sqlCommandAddChatroom.CommandType = CommandType.Text;
+                        sqlCommandAddChatroom.Parameters.Add("@chatName", SqlDbType.NVarChar).Value = chatName;
+
+                        int chat_id = 0;
+                        using (SqlDataReader sqlDataReader = sqlCommandAddChatroom.ExecuteReader())
+                        {
+                            if (sqlDataReader.HasRows)
+                                chat_id = sqlDataReader.GetInt32(0);
+                        }
+
+                        SqlCommand sqlCommandAddUsersToChatroom = new SqlCommand("AddUsersToChat", sqlConnection);
+                        sqlCommandAddChatroom.CommandType = CommandType.StoredProcedure;
+
+                        SqlMetaData sqlMetaData = new SqlMetaData("UserId", SqlDbType.Int);
+                        List<SqlDataRecord> usersRecords = new List<SqlDataRecord>(users.Count);
+
+                        foreach (var user in users)
+                        {
+                            SqlDataRecord sqlDataRecord = new SqlDataRecord(sqlMetaData);
+                            sqlDataRecord.SetInt32(0, user);
+
+                            usersRecords.Add(sqlDataRecord);
+                        }
+
+                        var parameter = new SqlParameter("@Users", SqlDbType.Structured);
+                        parameter.TypeName = "UsersTableType";
+                        parameter.Value = usersRecords;
+
+                        sqlCommandAddChatroom.Parameters.Add(parameter);
+                        sqlCommandAddChatroom.Parameters.Add("@ChatID", SqlDbType.Int).Value = chat_id;
+
+                        sqlCommandAddChatroom.ExecuteNonQuery();
+
+                        SqlCommand sqlCommandAddFileForContentXML = new SqlCommand(@"INSERT INTO DataFT(name)                                                                                  
+                                                                                     OUTPUT INSERTED.file_stream.PathName(),
+                                                                                            INSERTED.stream_id
+                                                                                     VALUES(@name)", sqlConnection);
+
+                        sqlCommandAddFileForContentXML.CommandType = CommandType.Text;
+
+                        sqlCommandAddFileForContentXML.Parameters.Add("@name", SqlDbType.NVarChar).Value = "CHAT" + chat_id.ToString() + ".xml";
+
+                        string full_path;
+                        Guid stream_id;
+
+                        using (SqlDataReader sqlDataReader = sqlCommandAddFileForContentXML.ExecuteReader())
+                        {
+                            sqlDataReader.Read();
+                            full_path = sqlDataReader.GetSqlString(0).Value;
+                            stream_id = sqlDataReader.GetSqlGuid(1).Value;
+                        }
+
+                        SqlCommand sqlCommandMergeContentWithXML = new SqlCommand(@"INSERT INTO Contents 
+                                                                                    OUTPUT INSERTED.Id
+                                                                                    VALUES(@stream_id)", sqlConnection);
+
+                        sqlCommandMergeContentWithXML.CommandType = CommandType.Text;
+
+                        sqlCommandMergeContentWithXML.Parameters.Add("@stream_id", SqlDbType.UniqueIdentifier).Value = stream_id;
+
+                        int content_id = 0;
+                        using (SqlDataReader sqlDataReader = sqlCommandMergeContentWithXML.ExecuteReader())
+                        {
+                            sqlDataReader.Read();
+                            content_id = sqlDataReader.GetSqlInt32(0).Value;
+                        }
+
+                        SqlCommand sqlCommandMergeContentWithChatroom = new SqlCommand(@"INSERT INTO Chatroom_Content VALUES(@IdChat, @IdContent)", sqlConnection);
+                        sqlCommandMergeContentWithChatroom.CommandType = CommandType.Text;
+
+                        sqlCommandMergeContentWithChatroom.Parameters.Add("@IdChat", SqlDbType.Int).Value = chat_id;
+                        sqlCommandMergeContentWithChatroom.Parameters.Add("@IdContent", SqlDbType.Int).Value = content_id;
+
+                        sqlCommandMergeContentWithChatroom.ExecuteNonQuery();
+
+                        lock (lockerSyncObj) {
+
+                            XmlCreation(full_path);
+                            foreach (ConnectedUser connectedUser in chatroomsInUsers.Keys)
+                            {
+                                foreach (var user in users)
+                                {
+                                    if (connectedUser.SqlID == user)
+                                    {
+                                        chatroomsInUsers[connectedUser].Add(chat_id);
+                                        if(connectedUser.ChatCallback != CurrentCallback)
+                                            connectedUser.ChatCallback.NotifyUserIsAddedToChat(chat_id, users);
+                                    }
+                                    
+                                }
+                            }
+                        }
+
+                        trScope.Complete();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
-        public bool SendMessage(string message)
+        //Создание Xml-файла для чатрума
+        private void XmlCreation(string path)
         {
-            throw new NotImplementedException();
+            if (!File.Exists(path))
+            {
+                XmlDocument document = new XmlDocument();
+                XmlDeclaration declaration = document.CreateXmlDeclaration("1.0", "UTF-8", null);
+                document.AppendChild(declaration);
+                XmlElement root = document.CreateElement("Messages");
+                document.AppendChild(root);
+                document.Save(path);
+            }
+            else
+            {
+                throw new Exception("XmlFileIsExist");
+            }
         }
 
+        //Отправка текстового сообщения с чатрума
+        public void SendMessageText(ServiceMessageText message, int chatroomId)
+        {
+            List<ConnectedUser> users = chatroomsInUsers.Where(chatrooms => chatrooms.Value
+                                                        .Contains(chatroomId))
+                                                        .Select(u => u.Key).ToList();
+
+            string fullpath;
+
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(connection_string))
+                {
+                    sqlConnection.Open();
+                    SqlCommand sqlCommandFindXMLFromContentsTable = new SqlCommand(@"SELECT dbo.GetXMLFile(@chatId)", sqlConnection);
+
+                    sqlCommandFindXMLFromContentsTable.Parameters.Add("@chatId", SqlDbType.Int).Value = chatroomId;
+                    fullpath = sqlCommandFindXMLFromContentsTable.ExecuteScalar().ToString();
+                }
+
+                lock (lockerSyncObj)
+                {
+                    AddToXML(fullpath, message);
+                    foreach (IChatCallback chatCallback in users)
+                    {
+                        if (chatCallback != CurrentCallback)
+                            chatCallback.ReplyMessage(message, chatroomId);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        //Добавление узла в XML-файл
+        private void AddToXML(string full_path, ServiceMessage serviceMessage)
+        {
+            if (!File.Exists(full_path))
+            {
+                throw new Exception("File xml doesnt exsists!");
+            }
+            XDocument xDoc = XDocument.Load(full_path);
+
+            XElement xMessageEl = new XElement("Message");
+            XAttribute xNameAttr;
+            XElement xDateEl;
+            XElement xSenderEl;
+
+            if (serviceMessage is ServiceMessageText)
+            {
+                ServiceMessageText serviceMessageText = serviceMessage as ServiceMessageText;
+                xNameAttr = new XAttribute("type", "text");
+                xSenderEl = new XElement("Sender", serviceMessageText.Sender);
+                xDateEl = new XElement("Date", serviceMessageText.DateTime.ToString());
+                XElement xTextEl = new XElement("Text", serviceMessageText.Text);
+                xMessageEl.Add(xTextEl);
+            }
+            else
+            {
+                ServiceMessageFile serviceMessageFile = serviceMessage as ServiceMessageFile;
+                xNameAttr = new XAttribute("type", "file");
+                xSenderEl = new XElement("Sender", serviceMessageFile.Sender);
+                xDateEl = new XElement("Date", serviceMessageFile.DateTime.ToString());
+                XElement xStreamIdEl = new XElement("StreamId", serviceMessageFile.StreamId);
+                XElement xFileName = new XElement("FileName", serviceMessageFile.FileName);
+                xMessageEl.Add(xStreamIdEl);
+                xMessageEl.Add(xFileName);
+            }
+            xMessageEl.Add(xNameAttr);
+            xMessageEl.Add(xSenderEl);
+            xMessageEl.Add(xDateEl);
+
+            xDoc.Root.Add(xMessageEl);
+
+            xDoc.Save(full_path);
+        }
+
+        //Нахождение сообщений чатрума в XML-файле
+        List<ServiceMessage> FindXmlNodes(string fullpath)
+        {
+            XDocument xDocument = XDocument.Load(fullpath);
+            List<ServiceMessage> serviceMessages = new List<ServiceMessage>();
+
+            foreach (var xMessage in xDocument.Element("Messages").Elements("Message"))
+            {
+                if (xMessage.Attribute("type").Value.Equals("text"))
+                {
+                    serviceMessages.Add(new ServiceMessageText
+                    {
+                        Sender = int.Parse(xMessage.Element("Sender").Value),
+                        DateTime = DateTime.Parse(xMessage.Element("Date").Value),
+                        Text = xMessage.Element("Text").Value
+                    });
+                }
+                else
+                {
+                    serviceMessages.Add(new ServiceMessageFile
+                    {
+                        Sender = int.Parse(xMessage.Element("Sender").Value),
+                        DateTime = DateTime.Parse(xMessage.Element("Date").Value),
+                        StreamId = Guid.Parse(xMessage.Element("StreamId").Value),
+                        FileName = xMessage.Element("FileName").Value
+                    });
+                }
+            }
+
+            return serviceMessages;
+        }
+
+        //Оповещение серверу о том, что пишется на данный момент сообщение
+        public void MessageIsWriting(int chatroomId, int userSqlId)
+        {
+            List<ConnectedUser> users = chatroomsInUsers.Where(chatrooms => chatrooms.Value
+                                                        .Contains(chatroomId))
+                                                        .Select(u => u.Key).ToList();
+
+            foreach (IChatCallback chatCallback in users)
+            {
+                if (chatCallback != CurrentCallback)
+                {
+                    chatCallback.ReplyMessageIsWriting(userSqlId);
+                }
+            }
+        }
+
+        //Подключение клиента к серверу, получение списка чатрумов и пользователей в нем
+        public Dictionary<int, List<int>> Connect(int sqlId, string userName)
+        {
+            if (!chatroomsInUsers.Keys.Any(u => u.SqlID == sqlId))
+            {
+                lock (lockerSyncObj)
+                {
+                    chatroomsInUsers.Add(new ConnectedUser()
+                    {
+                        SqlID = sqlId,
+                        Name = userName,
+                        ChatCallback = CurrentCallback
+                    }, FindAllChatroomsForServer(sqlId));
+
+                    try
+                    {
+                        foreach (ConnectedUser user in chatroomsInUsers.Keys)
+                        {
+                            if (user.SqlID == sqlId)
+                                continue;
+
+                            IChatCallback chatCallback = user.ChatCallback;
+                            chatCallback.NotifyUserIsOnline(user.SqlID);
+                        }
+
+                        return FindAllChatroomsForClient(sqlId);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+
+                }
+            }
+            else
+            {
+                ConnectionExceptionFault connectionExceptionFault = new ConnectionExceptionFault();
+                throw new FaultException<ConnectionExceptionFault>(connectionExceptionFault, connectionExceptionFault.Message);
+            }
+            return null;
+        }
+
+        //Отключение пользователя
+        public void Disconnect()
+        {
+            ConnectedUser discUser = chatroomsInUsers.Keys.FirstOrDefault(u => u.ChatCallback == CurrentCallback);
+            if (discUser != null)
+            {
+                lock (lockerSyncObj)
+                {
+                    chatroomsInUsers.Remove(discUser);
+                    foreach (var user in chatroomsInUsers.Keys)
+                    {
+                        IChatCallback chatCallback = user.ChatCallback;
+                        chatCallback.NotifyUserIsOffline(discUser.SqlID);
+                    }
+                }
+            }
+        }
+
+        //Поиск всех чатрумов для клиента во время подключения к серверу
+        private Dictionary<int, List<int>> FindAllChatroomsForClient(int sqlId)
+        {
+            try
+            {
+                Dictionary<int, List<int>> usersInChatroom = new Dictionary<int, List<int>>();
+
+                using (SqlConnection sqlConnection = new SqlConnection(connection_string))
+                {
+                    sqlConnection.Open();
+
+                    SqlCommand sqlCommandFindChatrooms = new SqlCommand(@"SELECT* FROM User_Chatroom WHERE Id_Chat in 
+                                                                                  (SELECT Id_Chat FROM User_Chatroom WHERE Id_User = @Id)", sqlConnection);
+
+                    sqlCommandFindChatrooms.CommandType = CommandType.Text;
+                    sqlCommandFindChatrooms.Parameters.Add("@Id", SqlDbType.Int).Value = sqlId;
+
+                    using (SqlDataReader sqlDataReader = sqlCommandFindChatrooms.ExecuteReader())
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            int chatId = sqlDataReader.GetInt32(0);
+                            int userId = sqlDataReader.GetInt32(1);
+
+                            if (usersInChatroom.ContainsKey(chatId))
+                            {
+                                usersInChatroom.Add(chatId, new List<int>() { userId });
+                            }
+                            else
+                            {
+                                usersInChatroom[chatId].Add(userId);
+                            }
+                        }
+                    }
+                }
+                return usersInChatroom;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return null;
+        }
+
+        //Поиск всех чатрумов в которых находится подключенный клиент
+        private List<int> FindAllChatroomsForServer(int sqlId)
+        {
+            List<int> chatrooms = new List<int>();
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(connection_string))
+                {
+                    sqlConnection.Open();
+
+                    SqlCommand FindChatroomsCommand = new SqlCommand(@"SELECT Id_Chat FROM User_Chatroom WHERE Id_User = @Id_User");
+
+                    FindChatroomsCommand.Parameters.Add("@Id_User", SqlDbType.Int).Value = sqlId;
+
+                    using (SqlDataReader reader = FindChatroomsCommand.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            chatrooms.Add(reader.GetInt32(0));
+                        }
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                Console.WriteLine(sqlEx.Message);
+            }
+
+            return chatrooms;
+        }
+
+        //Добавление пользователя в чатрум
+        public void AddUserToChatroom(int userId, int chatId)
+        {
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(connection_string))
+                {
+                    sqlConnection.Open();
+
+                    SqlCommand sqlCommandAddUserToChat = new SqlCommand(@"INSERT INTO User_Chatroom VALUES(@ChatID, @UserID)", sqlConnection);
+                    sqlCommandAddUserToChat.CommandType = CommandType.Text;
+
+                    sqlCommandAddUserToChat.Parameters.Add("@ChatID", SqlDbType.Int).Value = chatId;
+                    sqlCommandAddUserToChat.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+
+                    sqlCommandAddUserToChat.ExecuteNonQuery();
+                }
+
+                if (chatroomsInUsers.Keys.Any(u => u.SqlID == userId))
+                {
+                    List<ConnectedUser> users = chatroomsInUsers.Where(chatrooms => chatrooms.Value
+                                                                .Contains(chatId))
+                                                                .Select(u => u.Key).ToList();
+
+                    ConnectedUser connectedUser = chatroomsInUsers.Keys.First(u => u.SqlID == userId);
+                    connectedUser.ChatCallback.NotifyUserIsAddedToChat(chatId, users.Select(u => u.SqlID).ToList());
+
+                    foreach (var user in users)
+                    {
+                        if (user.ChatCallback != CurrentCallback)
+                            user.ChatCallback.UserJoinedToChatroom(userId);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+        }
+
+        //Удаление пользователя из чатрума
+        public void RemoveUserFromChatroom(int userId, int chatId)
+        {
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(connection_string))
+                {
+                    sqlConnection.Open();
+                    SqlCommand sqlCommand = new SqlCommand(@"DELETE FROM User_Chatroom WHERE User Id_Chat = @IdChat AND Id_User = @IdUser", sqlConnection);
+
+                    sqlCommand.Parameters.Add("@IdChat", SqlDbType.Int).Value = chatId;
+                    sqlCommand.Parameters.Add("@IdUser", SqlDbType.Int).Value = userId;
+
+                    sqlCommand.ExecuteNonQuery();
+                }
+
+                ConnectedUser connectedUser = chatroomsInUsers.Keys.FirstOrDefault(u => u.SqlID == userId);
+
+                lock (lockerSyncObj)
+                {
+                    if (connectedUser != null)
+                    {
+                        connectedUser.ChatCallback.NotifyUserIsRemovedFromChat(chatId);
+                        chatroomsInUsers.Where(users => users.Key.SqlID == userId)
+                                        .Select(c => c.Value)
+                                        .First().Remove(chatId);
+                    }
+
+                    foreach (IChatCallback chatCallback in chatroomsInUsers.Keys)
+                    {
+                        if (chatCallback != CurrentCallback)
+                            chatCallback.UserLeftChatroom(userId);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        //Полное удаление чатрума
+        public void DeleteChatroom(int chatId)
+        {
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(connection_string))
+                {
+                    sqlConnection.Open();
+
+                    SqlCommand sqlCommandDeleteChatroom = new SqlCommand(@"DELETE FROM User_Chatroom WHERE ChatID = @ChatID", sqlConnection);
+                    sqlCommandDeleteChatroom.CommandType = CommandType.Text;
+
+                    sqlCommandDeleteChatroom.Parameters.Add("@ChatID", SqlDbType.Int).Value = chatId;
+                    sqlCommandDeleteChatroom.ExecuteNonQuery();
+
+                    lock (lockerSyncObj)
+                    {
+                        foreach (ConnectedUser user in chatroomsInUsers.Keys)
+                        {
+                            if (user.ChatCallback != CurrentCallback)
+                            {
+                                user.ChatCallback.NotifyUserIsRemovedFromChat(chatId);
+                            }
+                            chatroomsInUsers[user].Remove(chatId);
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        //Отправка файла с чатрума на сервер
+        public void FileUpload(UploadFileInfo uploadRequest, int chatroomId)
+        {
+            try
+            {
+                using(TransactionScope transactionScope = new TransactionScope())
+                {
+                    using(SqlConnection sqlConnection = new SqlConnection(connection_string))
+                    {
+                        SqlCommand sqlCommandAddFileToDataFT = new SqlCommand($@" INSERT INTO DataFT(file_stream, name, path_locator)
+                                                                                  OUTPUT INSERTED.stream_id, GET_FILESTREAM_TRANSACTION_CONTEXT(),
+                                                                                  INSERTED.file_stream.PathName()
+                                                                                  VALUES(CAST('' as varbinary(MAX)), @name, dbo.GetPathLocatorForChild('Avatars'))", sqlConnection);
+
+                        sqlCommandAddFileToDataFT.CommandType = CommandType.Text;
+
+                        string fileName = uploadRequest.FileName;
+                        Random random = new Random();
+                        sqlCommandAddFileToDataFT.Parameters.Add("@name", SqlDbType.NVarChar).Value = fileName.Substring(0, fileName.LastIndexOf("."))
+                                                                                                    + $"{random.Next(0, 2000000)}" + $".{fileName.Substring(fileName.LastIndexOf(".") + 1)}";
+
+                        Guid stream_id = new Guid();
+                        byte[] transaction_context = null;
+                        string full_path = null;
+                        try
+                        {
+                            using (SqlDataReader sqlDataReader = sqlCommandAddFileToDataFT.ExecuteReader())
+                            {
+                                sqlDataReader.Read();
+                                stream_id = sqlDataReader.GetSqlGuid(0).Value;
+                                transaction_context = sqlDataReader.GetSqlBinary(1).Value;
+                                full_path = sqlDataReader.GetSqlString(2).Value;
+                            }
+                        }
+                        catch(SqlException ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                            FileUpload(uploadRequest, chatroomId);
+                        }
+
+                        const int bufferSize = 2048;
+
+                        using (SqlFileStream sqlFileStream = new SqlFileStream(full_path, transaction_context, FileAccess.Write))
+                        {
+                            int bytesRead = 0;
+                            var buffer = new byte[bufferSize];
+
+                            while ((bytesRead = uploadRequest.FileStream.Read(buffer, 0, bufferSize)) > 0)
+                            {
+                                sqlFileStream.Write(buffer, 0, bytesRead);
+                                sqlFileStream.Flush();
+                            }
+
+                        }
+
+                        SqlCommand sqlCommandTakeXML = new SqlCommand(@"SELECT dbo.GetXMLFile(@chatId)", sqlConnection);
+
+                        sqlCommandTakeXML.Parameters.Add("@chatId", SqlDbType.Int).Value = chatroomId;
+                        string fullpathXML = sqlCommandTakeXML.ExecuteScalar().ToString();
+
+                        lock (lockerSyncObj)
+                        {
+                            ServiceMessageFile serviceMessageFile = new ServiceMessageFile
+                            {
+                                Sender = uploadRequest.Responsed_UserSqlId,
+                                StreamId = stream_id,
+                                DateTime = DateTime.Now,
+                                FileName = fileName
+                            };
+
+                            AddToXML(fullpathXML, serviceMessageFile);
+
+                            foreach(IChatCallback chatCallback in chatroomsInUsers.Keys)
+                            {
+                                if(chatCallback != CurrentCallback)
+                                {
+                                    chatCallback.NotifyUserFileSendedToChat(serviceMessageFile, chatroomId);
+                                }
+                                    
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                StreamExceptionFault streamExceptionFault = new StreamExceptionFault();
+
+                throw new FaultException<StreamExceptionFault>(streamExceptionFault, streamExceptionFault.Message);
+            }
+        }
+
+        //Загрузка файла с чатрума
+        public DownloadFileInfo FileDownload(FileFromChatDownloadRequest request)
+        {
+            DownloadFileInfo downloadFileInfo = new DownloadFileInfo();
+
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(connection_string))
+                {
+                    sqlConnection.Open();
+
+                    SqlCommand sqlCommandFindFile = new SqlCommand($@"SELECT* FROM GetFile(@stream_id)", sqlConnection);
+                    sqlCommandFindFile.Parameters.Add("@stream_id", SqlDbType.UniqueIdentifier).Value = request.StreamId;
+
+                    using (SqlDataReader reader = sqlCommandFindFile.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var stream = new FileStream(reader[0].ToString(), FileMode.Open, FileAccess.Read);
+
+                            downloadFileInfo.FileExtension = reader[1].ToString();
+                            downloadFileInfo.Length = long.Parse(reader[2].ToString());
+                            downloadFileInfo.FileStream = stream;
+                        }
+                    }
+                }
+            }
+            catch (SqlException sqlEx) { Console.WriteLine("SqlException: " + sqlEx.Message); }
+            catch (IOException ioEx) { Console.WriteLine("IOException: " + ioEx.Message); }
+            catch (Exception ex) { Console.WriteLine("Exception: " + ex.Message); }
+
+            return downloadFileInfo;
+        }
+
+        //Загрузка сообщений с одного чатрума
+        public List<ServiceMessage> MessagesFromOneChat(int chatroomId)
+        {
+            string fullpathXML;
+            try
+            {
+                using(SqlConnection sqlConnection = new SqlConnection(connection_string))
+                {
+                    sqlConnection.Open();
+                    SqlCommand sqlCommandTakeXML = new SqlCommand(@"SELECT dbo.GetXMLFile(@chatId)", sqlConnection);
+
+                    sqlCommandTakeXML.Parameters.Add("@chatId", SqlDbType.Int).Value = chatroomId;
+                    fullpathXML = sqlCommandTakeXML.ExecuteScalar().ToString();
+                }
+
+                return FindXmlNodes(fullpathXML);
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return null;
+        }
     }
 }

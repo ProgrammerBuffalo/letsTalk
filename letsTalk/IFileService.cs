@@ -24,7 +24,13 @@ namespace letsTalk
 
         [OperationContract]
         [FaultContract(typeof(StreamExceptionFault))]
-        void AvatarUpload(UploadFileInfo uploadRequest); // Отправка серверу от клиента аватарки
+        void AvatarUpload(UploadFileInfo uploadRequest); // Отправка серверу аватарки
+
+        [OperationContract]
+        void FileUpload(UploadFileInfo uploadRequest, int chatroomId); // Отправка серверу файла с чатрума
+
+        [OperationContract]
+        DownloadFileInfo FileDownload(FileFromChatDownloadRequest request); // Отправка клиенту файла
     }
 
     [MessageContract]
@@ -32,6 +38,13 @@ namespace letsTalk
     {
         [MessageBodyMember]
         public int Requested_UserSqlId;
+    }
+
+    [MessageContract]
+    public class FileFromChatDownloadRequest
+    {
+        [MessageBodyMember]
+        public Guid StreamId;
     }
 
     [MessageContract]
@@ -63,7 +76,7 @@ namespace letsTalk
         public int Responsed_UserSqlId;
 
         [MessageHeader(MustUnderstand = true)]
-        public string FileExtension;
+        public string FileName;
 
         [MessageBodyMember(Order = 1)]
         public Stream FileStream;

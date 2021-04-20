@@ -28,33 +28,89 @@ namespace letsTalk
 
     // Для общения с методами данного интерфейса используется адрес net.tcp://localhost:8302/
 
-    [ServiceContract(Name = "Chat", Namespace = "letsTalk.IChatService")]
+    [ServiceContract(Name = "Chat", Namespace = "letsTalk.IChatService",
+                     CallbackContract = typeof(IChatCallback))]
     public interface IChatService
     {
         [OperationContract(IsOneWay = false)]
         [FaultContract(typeof(LoginExceptionFault))]
         [FaultContract(typeof(NicknameExceptionFault))]
-        int Registration(ServerUserInfo serverUserInfo); 
+        int Registration(ServerUserInfo serverUserInfo);
 
         [OperationContract(IsOneWay = false)]
         [FaultContract(typeof(AuthorizationExceptionFault))]
         ServerUserInfo Authorization(AuthenticationUserInfo authenticationUserInfo);
 
-        [OperationContract(IsOneWay = false)]
-        [FaultContract(typeof(ConnectionExceptionFault))]
-        Guid Connect(int sqlId);
+        [OperationContract(IsOneWay = true)]
+        void MessageIsWriting(int chatroomId, int userSqlId);
 
         [OperationContract(IsOneWay = false)]
-        bool SendMessage(string message);
+        void SendMessageText(ServiceMessageText message, int chatroomId);
 
         [OperationContract(IsOneWay = false)]
-        Dictionary<int, string> GetUsers(int count, int offset, int callerId);
+        Dictionary<int, string> GetRegisteredUsers(int count, int offset, int callerId);
 
         [OperationContract(IsOneWay = true)]
         void CreateChatroom(string chatName, List<int> users);
 
+        [OperationContract(IsOneWay = true)]
+        void DeleteChatroom(int chatId);
+
+        [OperationContract(IsOneWay = false)]
+        void AddUserToChatroom(int userId, int chatId);
+
+        [OperationContract(IsOneWay = false)]
+        void RemoveUserFromChatroom(int userId, int chatId);
+
+        [OperationContract(IsOneWay = false)]
+        [FaultContract(typeof(ConnectionExceptionFault))]
+        Dictionary<int, List<int>> Connect(int sqlId, string userName);
+
+        [OperationContract(IsOneWay = false)]
+        List<ServiceMessage> MessagesFromOneChat(int chatroomId);
+
         [OperationContract]
-        void Disconnect(Guid UserId);
+        void Disconnect();
+    }
+
+    public interface IChatCallback
+    {
+        //Оповещение пользователей, что пользователь онлайн
+        [OperationContract(IsOneWay = true)]
+        void NotifyUserIsOnline(int sqlUserId);
+
+        //Оповещение пользователей, что пользователь оффлайн
+        [OperationContract(IsOneWay = true)]
+        void NotifyUserIsOffline(int sqlUserId);
+
+        //Оповещение пользователя, о том, что он был добавлен в чатрум
+        [OperationContract(IsOneWay = true)]
+        void NotifyUserIsAddedToChat(int chatId, List<int> usersInChat);
+
+        //Оповещение пользователя о его удалении с чатрума
+        [OperationContract(IsOneWay = true)]
+        void NotifyUserIsRemovedFromChat(int chatId);
+
+        //Оповещение пользователей, что пользователей присоединился/добавлен в чатрум
+        [OperationContract(IsOneWay = true)]
+        void UserJoinedToChatroom(int userId);
+
+        //Оповещение пользователей, что пользователь покинул группу
+        [OperationContract(IsOneWay = true)]
+        void UserLeftChatroom(int userId);
+
+        //Оповещение о добавлении текстового сообщения в чатрум
+        [OperationContract(IsOneWay = true)]
+        void ReplyMessage(ServiceMessageText message, int chatroomId);
+
+        //Оповещение о том, что пользователь пишет для чатрума сообщение
+        [OperationContract(IsOneWay = true)]
+        void ReplyMessageIsWriting(int sqlId);
+
+        //Оповещение пользователей, о добавлении в чатрум файла
+        [OperationContract(IsOneWay = true)]
+        void NotifyUserFileSendedToChat(ServiceMessageFile serviceMessageFile, int chatroomId);
+
     }
 
 }
