@@ -321,22 +321,15 @@ namespace letsTalk
                     {
                         sqlConnection.Open();
 
-                        SqlCommand sqlCommandAddChatroom = new SqlCommand($@" INSERT INTO Chatrooms(Name)
-                                                                              OUTPUT INSERTED.Id
-                                                                              VALUES(@chatName)", sqlConnection);
+                        SqlCommand sqlCommandAddChatroom = new SqlCommand(@"INSERT INTO Chatrooms([Name]) OUTPUT INSERTED.Id VALUES(@chatName)", sqlConnection);
 
                         sqlCommandAddChatroom.CommandType = CommandType.Text;
                         sqlCommandAddChatroom.Parameters.Add("@chatName", SqlDbType.NVarChar).Value = chatName;
 
-                        int chat_id = 0;
-                        using (SqlDataReader sqlDataReader = sqlCommandAddChatroom.ExecuteReader())
-                        {
-                            if (sqlDataReader.HasRows)
-                                chat_id = sqlDataReader.GetInt32(0);
-                        }
+                        int chat_id = int.Parse(sqlCommandAddChatroom.ExecuteScalar().ToString());
 
                         SqlCommand sqlCommandAddUsersToChatroom = new SqlCommand("AddUsersToChat", sqlConnection);
-                        sqlCommandAddChatroom.CommandType = CommandType.StoredProcedure;
+                        sqlCommandAddUsersToChatroom.CommandType = CommandType.StoredProcedure;
 
                         SqlMetaData sqlMetaData = new SqlMetaData("UserId", SqlDbType.Int);
                         List<SqlDataRecord> usersRecords = new List<SqlDataRecord>(users.Count);
@@ -353,28 +346,27 @@ namespace letsTalk
                         parameter.TypeName = "UsersTableType";
                         parameter.Value = usersRecords;
 
-                        sqlCommandAddChatroom.Parameters.Add(parameter);
-                        sqlCommandAddChatroom.Parameters.Add("@ChatID", SqlDbType.Int).Value = chat_id;
+                        sqlCommandAddUsersToChatroom.Parameters.Add(parameter);
+                        sqlCommandAddUsersToChatroom.Parameters.Add("@ChatID", SqlDbType.Int).Value = chat_id;
 
-                        sqlCommandAddChatroom.ExecuteNonQuery();
+                        sqlCommandAddUsersToChatroom.ExecuteNonQuery();
 
-                        SqlCommand sqlCommandAddFileForContentXML = new SqlCommand(@"INSERT INTO DataFT(name)                                                                                  
-                                                                                     OUTPUT INSERTED.file_stream.PathName(),
-                                                                                            INSERTED.stream_id
-                                                                                     VALUES(@name)", sqlConnection);
+                        SqlCommand sqlCommandAddFileForContentXML = new SqlCommand(@"INSERT INTO DataFT(file_stream, name, path_locator)                                                                                  
+                                                                                     OUTPUT INSERTED.stream_id
+                                                                                     VALUES(CAST('' as varbinary(MAX)), @name, dbo.GetPathLocatorForChild('Messages'))", sqlConnection);
 
                         sqlCommandAddFileForContentXML.CommandType = CommandType.Text;
 
                         sqlCommandAddFileForContentXML.Parameters.Add("@name", SqlDbType.NVarChar).Value = "CHAT" + chat_id.ToString() + ".xml";
-
-                        string full_path;
-                        Guid stream_id;
+                       
+                        Guid stream_id = new Guid();
 
                         using (SqlDataReader sqlDataReader = sqlCommandAddFileForContentXML.ExecuteReader())
                         {
-                            sqlDataReader.Read();
-                            full_path = sqlDataReader.GetSqlString(0).Value;
-                            stream_id = sqlDataReader.GetSqlGuid(1).Value;
+                            while (sqlDataReader.Read())
+                            {
+                                stream_id = sqlDataReader.GetSqlGuid(0).Value;
+                            }
                         }
 
                         SqlCommand sqlCommandMergeContentWithXML = new SqlCommand(@"INSERT INTO Contents 
@@ -400,9 +392,10 @@ namespace letsTalk
 
                         sqlCommandMergeContentWithChatroom.ExecuteNonQuery();
 
+                        trScope.Complete();
+
                         lock (lockerSyncObj) {
 
-                            XmlCreation(full_path);
                             foreach (ConnectedUser connectedUser in chatroomsInUsers.Keys)
                             {
                                 foreach (var user in users)
@@ -417,8 +410,6 @@ namespace letsTalk
                                 }
                             }
                         }
-
-                        trScope.Complete();
                     }
                 }
             }
@@ -431,18 +422,15 @@ namespace letsTalk
         //Создание Xml-файла для чатрума
         private void XmlCreation(string path)
         {
-            if (!File.Exists(path))
+            if (new FileInfo(path).Length <= 0)
             {
                 XmlDocument document = new XmlDocument();
+                document.Load(path);
                 XmlDeclaration declaration = document.CreateXmlDeclaration("1.0", "UTF-8", null);
                 document.AppendChild(declaration);
                 XmlElement root = document.CreateElement("Messages");
                 document.AppendChild(root);
                 document.Save(path);
-            }
-            else
-            {
-                throw new Exception("XmlFileIsExist");
             }
         }
 
@@ -464,6 +452,8 @@ namespace letsTalk
 
                     sqlCommandFindXMLFromContentsTable.Parameters.Add("@chatId", SqlDbType.Int).Value = chatroomId;
                     fullpath = sqlCommandFindXMLFromContentsTable.ExecuteScalar().ToString();
+
+                    XmlCreation(fullpath);
                 }
 
                 lock (lockerSyncObj)

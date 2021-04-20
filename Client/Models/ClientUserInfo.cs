@@ -34,16 +34,13 @@ namespace Client.Models
             Activity = activity;
         }
 
-        public ClientUserInfo(Dictionary<int, int[]> clients, int sqlId, ChatService.ChatClient chatClient, string userName)
+        public ClientUserInfo(Dictionary<int, int[]> clients, int sqlId, string userName)
         {
             Clients = clients;
             SqlId = sqlId;
-            ChatClient = chatClient;
             UserName = userName;
             instance = this;
         }
-
-        public ChatService.ChatClient ChatClient { private set; get; } // Сеанс
 
         public int SqlId { private set; get; } // Id в БД
 

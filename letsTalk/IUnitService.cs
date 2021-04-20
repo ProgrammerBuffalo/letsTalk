@@ -18,5 +18,8 @@ namespace letsTalk
         [FaultContract(typeof(LoginExceptionFault))]
         [FaultContract(typeof(NicknameExceptionFault))]
         int Registration(ServerUserInfo serverUserInfo);
+
+        [OperationContract(IsOneWay = false)]
+        Dictionary<int, string> GetRegisteredUsers(int count, int offset, int callerId);
     }
 }

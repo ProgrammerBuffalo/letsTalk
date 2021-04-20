@@ -19,6 +19,8 @@ namespace Client.ViewModels
 
         private ClientUserInfo clientUserInfo;
 
+        private ChatService.ChatClient ChatClient { set; get; } // Сеанс
+
         private ObservableCollection<Models.Chat> chats;
 
         private ContentControl currentView;
@@ -33,12 +35,12 @@ namespace Client.ViewModels
 
         public MainViewModel(string name, int sqlId) : this()
         {
-            ChatService.ChatClient chatClient = new ChatService.ChatClient(new InstanceContext(this));
-            Dictionary<int, int[]> usersInChatrooms = chatClient.Connect(sqlId, name);
+            ChatClient = new ChatService.ChatClient(new InstanceContext(this));
+            Dictionary<int, int[]> usersInChatrooms = ChatClient.Connect(sqlId, name);
 
-            ClientUserInfo = new ClientUserInfo(usersInChatrooms, sqlId, chatClient, name);
+            ClientUserInfo = new ClientUserInfo(usersInChatrooms, sqlId, name);
 
-            Demo();
+            //Demo();
         }
 
         public ICommand LoadedWindowCommand { get; }
@@ -57,7 +59,7 @@ namespace Client.ViewModels
             HamburgerMenuIconItem menuIconItem = sender as HamburgerMenuIconItem;
             Type userControl = Type.GetType("Client.Views." + menuIconItem.Tag);
 
-            CurrentView = Activator.CreateInstance(userControl) as ContentControl;
+            CurrentView = Activator.CreateInstance(userControl, ChatClient) as ContentControl;
         }
 
         public void SelectedChatChanged(object param)
@@ -87,7 +89,7 @@ namespace Client.ViewModels
 
         public void ClosedWindow(object sender)
         {
-            ClientUserInfo.ChatClient.Disconnect();
+            ChatClient.Disconnect();
         }
 
         public void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")

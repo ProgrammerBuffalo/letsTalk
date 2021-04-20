@@ -95,15 +95,6 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetRegisteredUsers">
-      <soap12:operation soapAction="letsTalk.IChatService/Chat/GetRegisteredUsers" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="CreateChatroom">
       <soap12:operation soapAction="letsTalk.IChatService/Chat/CreateChatroom" style="document" />
       <wsdl:input>
@@ -248,6 +239,15 @@
       <wsdl:fault name="NicknameExceptionFaultFault">
         <soap12:fault use="literal" name="NicknameExceptionFaultFault" namespace="" />
       </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetRegisteredUsers">
+      <soap12:operation soapAction="letsTalk.IUnitService/Unit/GetRegisteredUsers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="BasicHttpBinding_File" type="i2:File">

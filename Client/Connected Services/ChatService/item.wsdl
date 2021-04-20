@@ -30,6 +30,12 @@
   <wsdl:message name="Unit_Registration_NicknameExceptionFaultFault_FaultMessage">
     <wsdl:part xmlns:q3="http://schemas.datacontract.org/2004/07/letsTalk" name="detail" element="q3:NicknameExceptionFault" />
   </wsdl:message>
+  <wsdl:message name="Unit_GetRegisteredUsers_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetRegisteredUsers" />
+  </wsdl:message>
+  <wsdl:message name="Unit_GetRegisteredUsers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetRegisteredUsersResponse" />
+  </wsdl:message>
   <wsdl:portType name="Unit">
     <wsdl:operation name="Authorization">
       <wsdl:input wsaw:Action="letsTalk.IUnitService/Unit/Authorization" message="tns:Unit_Authorization_InputMessage" />
@@ -41,6 +47,10 @@
       <wsdl:output wsaw:Action="letsTalk.IUnitService/Unit/RegistrationResponse" message="tns:Unit_Registration_OutputMessage" />
       <wsdl:fault wsaw:Action="letsTalk.IUnitService/Unit/RegistrationLoginExceptionFaultFault" name="LoginExceptionFaultFault" message="tns:Unit_Registration_LoginExceptionFaultFault_FaultMessage" />
       <wsdl:fault wsaw:Action="letsTalk.IUnitService/Unit/RegistrationNicknameExceptionFaultFault" name="NicknameExceptionFaultFault" message="tns:Unit_Registration_NicknameExceptionFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRegisteredUsers">
+      <wsdl:input wsaw:Action="letsTalk.IUnitService/Unit/GetRegisteredUsers" message="tns:Unit_GetRegisteredUsers_InputMessage" />
+      <wsdl:output wsaw:Action="letsTalk.IUnitService/Unit/GetRegisteredUsersResponse" message="tns:Unit_GetRegisteredUsers_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

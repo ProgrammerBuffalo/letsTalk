@@ -20,6 +20,8 @@ namespace Client.ViewModels
 
         private string chatroomName;
 
+        private ChatService.ChatClient chatClient;
+
         public string ChatroomName { get => chatroomName; set => Set(ref chatroomName, value); } // Работает в связке с TextBox
 
         public ObservableCollection<AvailableUser> Users { get => users; set => Set(ref users, value); }
@@ -41,8 +43,9 @@ namespace Client.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop_name));
         }
 
-        public AvailableUsersViewModel()
+        public AvailableUsersViewModel(ChatService.ChatClient client)
         {
+            this.chatClient = client;
             ShowMoreCommand = new Command(ShowMoreUsers);
             AddToGroupCommand = new Command(AddToGroup);
             CreateChatroomCommand = new Command(CreateChatroom);
@@ -51,8 +54,7 @@ namespace Client.ViewModels
 
         public void CreateChatroom(object sender)
         {
-            ChatService.ChatClient client = ClientUserInfo.getInstance().ChatClient;
-            client.CreateChatroom(chatroomName, selectedUsers.Select(u => u.SqlId).ToArray());
+            chatClient.CreateChatroom(chatroomName, selectedUsers.Select(u => u.SqlId).ToArray());
         }
 
         // Добавление пользователя в группу, который в дальнейшем может стать потенциальным участником чата 
@@ -79,9 +81,9 @@ namespace Client.ViewModels
         // Подгрузка пользователей 
         public void ShowMoreUsers(object sender)
         {
-            ClientUserInfo client = ClientUserInfo.getInstance();
+            var unitService = new ChatService.UnitClient();
             Dictionary<int, string> keyValuePairs = new Dictionary<int, string>();
-            keyValuePairs = client.ChatClient.GetRegisteredUsers(count, offset, client.SqlId);
+            keyValuePairs = unitService.GetRegisteredUsers(count, offset, ClientUserInfo.getInstance().SqlId);
 
             foreach (var item in keyValuePairs)
             {
