@@ -114,7 +114,6 @@ namespace Client.ViewModels
 
         private async void MakeRegister(ChatService.ServerUserInfo registrationInfo)
         {
-
             var unitClient = new ChatService.UnitClient(); // Работает с net.tcp (регистрация)
             var avatarClient = new ChatService.AvatarClient(); // Работает с http (отправка аватарки)
 

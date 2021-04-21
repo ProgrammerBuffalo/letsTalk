@@ -24,6 +24,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/WindowResources/ButtonEllipseStyle.xaml"/>
+                <ResourceDictionary Source="/WindowResources/ChatsDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate x:Key="HamburgerMenuOptionsTemplate" DataType="{x:Type controls:HamburgerMenuIconItem}">
@@ -85,7 +86,7 @@
                 </Setter>
             </Style>
 
-            <DataTemplate x:Key="ChatOneDataTemplate">
+            <!--<DataTemplate x:Key="ChatOneDataTemplate">
                 <uc:ChatItem 
                     UserName="{Binding Path=ClientUserInfo.UserName}"
                     Description="{Binding Path=ClientUserInfo.UserDesc}"
@@ -103,7 +104,7 @@
                 x:Key="ChatDataTemplateSelector"
                 ChatOneDataTemplate="{StaticResource ChatOneDataTemplate}"
                 ChatGroupDataTemplate="{StaticResource ChatGroupDataTemplate}">
-            </utility:ChatDataTemplateSelector>
+            </utility:ChatDataTemplateSelector>-->
         </ResourceDictionary>
     </Window.Resources>
 
@@ -126,25 +127,25 @@
             <controls:HamburgerMenu.OptionsItemsSource>
                 <controls:HamburgerMenuItemCollection>
 
-                    <controls:HamburgerMenuIconItem Tag="UCAvailableUsers" Label="All Chatrooms">
+                    <controls:HamburgerMenuIconItem Tag="UCAvailableUsers" Label="All Chatrooms" Command="{Binding Path=TempCommand}">
                         <controls:HamburgerMenuIconItem.Icon>
                             <icons:PackIconMaterial  Kind="AccountMultiple" Width="25" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         </controls:HamburgerMenuIconItem.Icon>
                     </controls:HamburgerMenuIconItem>
 
-                    <controls:HamburgerMenuIconItem Tag="UC2" Label="All Chatrooms">
+                    <controls:HamburgerMenuIconItem Tag="UC2" Label="All Chatrooms" Command="{Binding CreateGroupCommand}">
                         <controls:HamburgerMenuIconItem.Icon>
-                            <icons:PackIconMaterial  Kind="AccountMultiple" Width="25" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <icons:PackIconMaterial  Kind="AccountMultiplePlus" Width="25" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         </controls:HamburgerMenuIconItem.Icon>
                     </controls:HamburgerMenuIconItem>
                     
-                    <controls:HamburgerMenuIconItem Tag="UCAddUser" Label="Add User">
+                    <controls:HamburgerMenuIconItem Tag="UCAddUser" Label="Add User" Command="{Binding AddUserCommand}">
                         <controls:HamburgerMenuIconItem.Icon>
                             <icons:PackIconMaterial  Kind="AccountPlus" Width="25" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         </controls:HamburgerMenuIconItem.Icon>
                     </controls:HamburgerMenuIconItem>
 
-                    <controls:HamburgerMenuIconItem Tag="UCSettings" Label="Settings">
+                    <controls:HamburgerMenuIconItem Tag="UCSettings" Label="Settings" Command="{Binding SettingsCommand}">
                         <controls:HamburgerMenuIconItem.Icon>
                             <icons:PackIconMaterial  Kind="Shield" Width="25" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         </controls:HamburgerMenuIconItem.Icon>

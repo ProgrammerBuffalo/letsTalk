@@ -1,0 +1,84 @@
+﻿<UserControl x:Class="Client.Views.CreateGroupUC"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary Source="/WindowResources\ChatsDictionary.xaml"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="0.8*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <TextBox Visibility="Hidden">
+
+        </TextBox>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Select users for adding to group" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+        <ListView 
+            Grid.Row="2" Grid.Column="0"
+            ItemsSource="{Binding Path=AllUsers}"
+            SelectedItem="{Binding Path=SelectedUser}"
+            ItemTemplate="{StaticResource ChatDataTemplate}"
+            ItemContainerStyle="{StaticResource ChatListViewItemStyle}"
+            Background="LightGreen"
+            Margin="20">
+        </ListView>
+
+        <Button 
+            Content="Show More"
+            Grid.Row="3" Grid.Column="0"
+            Width="150" Height="50"
+            VerticalAlignment="Center" HorizontalAlignment="Center"
+            Command="{Binding ShowMoreCommand}">
+        </Button>
+
+        <TextBox 
+            Text="{Binding Path=ChatName}"
+            Grid.Row="0" Grid.Column="1"
+            metro:TextBoxHelper.Watermark="Enter name of chat room"
+            metro:TextBoxHelper.ClearTextButton="True"
+            Width="300" Height="50" Background="LightGoldenrodYellow"
+            VerticalAlignment="Center" HorizontalAlignment="Center"
+            FontSize="20">
+        </TextBox>
+
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="Members of group" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+        <ListView 
+            Grid.Row="2" Grid.Column="1"
+            ItemsSource="{Binding Path=UsersToAdd}"
+            SelectedItem="{Binding Path=SelectedUser}"
+            ItemTemplate="{StaticResource ChatDataTemplate}"
+            ItemContainerStyle="{StaticResource ChatListViewItemStyle}"
+            Background="LightCyan" Margin="20">
+        </ListView>
+
+        <Grid Grid.Row="3" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Width="100" Height="50" Content="Add User" VerticalAlignment="Center" HorizontalAlignment="Center" Command="{Binding AddToGroupCommand}" />
+            <Button Grid.Column="1" Width="100" Height="50" Content="Remove User" VerticalAlignment="Center" HorizontalAlignment="Center" Command="{Binding RemoveFromGroupCommand}" />
+            <Button Grid.Column="2" Width="100" Height="50" Content="Create Group" VerticalAlignment="Center" HorizontalAlignment="Center" Command="{Binding CreateGroupCommand}"/>
+        </Grid>
+    </Grid>
+
+</UserControl>
