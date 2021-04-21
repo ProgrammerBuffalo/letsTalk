@@ -434,9 +434,8 @@ namespace letsTalk
         {
             if (new FileInfo(path).Length <= 0)
             {
-                Console.WriteLine("Creating declaration for XML" + CurrentCallback.GetHashCode() + ")");
+                Console.WriteLine("Creating declaration for XML (" + CurrentCallback.GetHashCode() + ")");
                 XmlDocument document = new XmlDocument();
-                document.Load(path);
                 XmlDeclaration declaration = document.CreateXmlDeclaration("1.0", "UTF-8", null);
                 document.AppendChild(declaration);
                 XmlElement root = document.CreateElement("Messages");
