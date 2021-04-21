@@ -97,10 +97,7 @@ namespace Client.ViewModels
                     return;
                 }
                 ChatOne chat = new ChatOne(chatId, selectedUser);
-                App.Current.Dispatcher.Invoke(() =>
-                {
-                    AddChat.Invoke(chat);
-                });
+                AddChat.Invoke(chat);
                 MessageBox.Show("friend added");
             }
             else
