@@ -10,27 +10,27 @@ namespace letsTalk
     [DataContract]
     public class ServiceMessage
     {
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public int Sender { get; set; }
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public DateTime DateTime { get; set; }
     }
 
     [DataContract]
     public class ServiceMessageText : ServiceMessage
     {
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string Text { get; set; }
     }
 
     [DataContract]
     public class ServiceMessageFile : ServiceMessage
     {
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public Guid StreamId { get; set; }
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string FileName { get; set; }
     }
 }

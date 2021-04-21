@@ -535,7 +535,7 @@ namespace letsTalk
         //Нахождение сообщений чатрума в XML-файле
         private List<ServiceMessage> FindXmlNodes(string fullpath)
         {
-            Console.WriteLine("Finding messages for all chatrooms (" + CurrentCallback.GetHashCode() + ")");
+            Console.WriteLine("Finding messages from chatroom... (" + CurrentCallback.GetHashCode() + ")");
 
             XDocument xDocument = XDocument.Load(fullpath);
             List<ServiceMessage> serviceMessages = new List<ServiceMessage>();
@@ -562,7 +562,7 @@ namespace letsTalk
                     });
                 }
             }
-            Console.WriteLine("Messages for all chatrooms are found (" + CurrentCallback.GetHashCode() + ")");
+            Console.WriteLine("Messages for chatroom are found (" + CurrentCallback.GetHashCode() + ")");
 
             return serviceMessages;
         }
@@ -992,6 +992,7 @@ namespace letsTalk
         //Загрузка сообщений с одного чатрума
         public List<ServiceMessage> MessagesFromOneChat(int chatroomId)
         {
+            List<ServiceMessage> messages = null;
             string fullpathXML;
             try
             {
@@ -1005,9 +1006,11 @@ namespace letsTalk
                     sqlCommandTakeXML.Parameters.Add("@chatId", SqlDbType.Int).Value = chatroomId;
                     fullpathXML = sqlCommandTakeXML.ExecuteScalar().ToString();
                 }
-                Console.WriteLine("Messages were found from chatroom " + chatroomId + " (" + CurrentCallback.GetHashCode() + ")");
 
-                return FindXmlNodes(fullpathXML);
+                messages = FindXmlNodes(fullpathXML);
+
+                Console.WriteLine("Messages were found from chatroom " + chatroomId + " (" + CurrentCallback.GetHashCode() + ")");
+                return messages;
 
             }
             catch(Exception ex)

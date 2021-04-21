@@ -5,7 +5,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ServiceMessage">
         <xs:sequence>
-          <xs:element minOccurs="0" name="Text" nillable="true" type="xs:string" />
+          <xs:element name="Text" nillable="true" type="xs:string" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -13,8 +13,8 @@
   <xs:element name="ServiceMessageText" nillable="true" type="tns:ServiceMessageText" />
   <xs:complexType name="ServiceMessage">
     <xs:sequence>
-      <xs:element minOccurs="0" name="DateTime" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="Sender" type="xs:int" />
+      <xs:element name="DateTime" type="xs:dateTime" />
+      <xs:element name="Sender" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ServiceMessage" nillable="true" type="tns:ServiceMessage" />
@@ -34,8 +34,8 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ServiceMessage">
         <xs:sequence>
-          <xs:element minOccurs="0" name="FileName" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="StreamId" type="ser:guid" />
+          <xs:element name="FileName" nillable="true" type="xs:string" />
+          <xs:element name="StreamId" type="ser:guid" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

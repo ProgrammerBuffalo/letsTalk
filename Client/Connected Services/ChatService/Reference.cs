@@ -24,10 +24,8 @@ namespace Client.ChatService {
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime DateTimeField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int SenderField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
@@ -40,7 +38,7 @@ namespace Client.ChatService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public System.DateTime DateTime {
             get {
                 return this.DateTimeField;
@@ -53,7 +51,7 @@ namespace Client.ChatService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public int Sender {
             get {
                 return this.SenderField;
@@ -82,13 +80,11 @@ namespace Client.ChatService {
     [System.SerializableAttribute()]
     public partial class ServiceMessageFile : Client.ChatService.ServiceMessage {
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string FileNameField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Guid StreamIdField;
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public string FileName {
             get {
                 return this.FileNameField;
@@ -101,7 +97,7 @@ namespace Client.ChatService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public System.Guid StreamId {
             get {
                 return this.StreamIdField;
@@ -121,10 +117,9 @@ namespace Client.ChatService {
     [System.SerializableAttribute()]
     public partial class ServiceMessageText : Client.ChatService.ServiceMessage {
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string TextField;
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public string Text {
             get {
                 return this.TextField;

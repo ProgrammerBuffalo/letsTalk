@@ -61,11 +61,11 @@ namespace Client.Models
 
             try
             {
-                avatarClient.AvatarDownload(SqlId, out lenght, out stream);
-                if (lenght <= 0)
-                    return;
                 await System.Threading.Tasks.Task.Run(() =>
                  {
+                     avatarClient.AvatarDownload(SqlId, out lenght, out stream);
+                     if (lenght <= 0)
+                         return;
                      MemoryStream memoryStream = FileHelper.ReadFileByPart(stream);
 
                      System.Windows.Application.Current.Dispatcher.Invoke(() =>
