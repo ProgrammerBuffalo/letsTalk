@@ -550,11 +550,11 @@ namespace Client.ChatService {
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/SendMessageText", ReplyAction="letsTalk.IChatService/Chat/SendMessageTextResponse")]
         System.Threading.Tasks.Task SendMessageTextAsync(Client.ChatService.ServiceMessageText message, int chatroomId);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/CreateChatroom")]
-        void CreateChatroom(string chatName, int[] users);
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/CreateChatroom", ReplyAction="letsTalk.IChatService/Chat/CreateChatroomResponse")]
+        int CreateChatroom(string chatName, int[] users);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/CreateChatroom")]
-        System.Threading.Tasks.Task CreateChatroomAsync(string chatName, int[] users);
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/CreateChatroom", ReplyAction="letsTalk.IChatService/Chat/CreateChatroomResponse")]
+        System.Threading.Tasks.Task<int> CreateChatroomAsync(string chatName, int[] users);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/DeleteChatroom")]
         void DeleteChatroom(int chatId);
@@ -669,11 +669,11 @@ namespace Client.ChatService {
             return base.Channel.SendMessageTextAsync(message, chatroomId);
         }
         
-        public void CreateChatroom(string chatName, int[] users) {
-            base.Channel.CreateChatroom(chatName, users);
+        public int CreateChatroom(string chatName, int[] users) {
+            return base.Channel.CreateChatroom(chatName, users);
         }
         
-        public System.Threading.Tasks.Task CreateChatroomAsync(string chatName, int[] users) {
+        public System.Threading.Tasks.Task<int> CreateChatroomAsync(string chatName, int[] users) {
             return base.Channel.CreateChatroomAsync(chatName, users);
         }
         

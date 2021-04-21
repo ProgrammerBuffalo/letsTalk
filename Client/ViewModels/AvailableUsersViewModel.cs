@@ -43,9 +43,9 @@ namespace Client.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop_name));
         }
 
-        public AvailableUsersViewModel(ChatService.ChatClient client)
+        public AvailableUsersViewModel(ChatService.ChatClient chatClient)
         {
-            this.chatClient = client;
+            this.chatClient = chatClient;
             ShowMoreCommand = new Command(ShowMoreUsers);
             AddToGroupCommand = new Command(AddToGroup);
             CreateChatroomCommand = new Command(CreateChatroom);
@@ -83,7 +83,7 @@ namespace Client.ViewModels
         {
             var unitService = new ChatService.UnitClient();
             Dictionary<int, string> keyValuePairs = new Dictionary<int, string>();
-            keyValuePairs = unitService.GetRegisteredUsers(count, offset, ClientUserInfo.getInstance().SqlId);
+            //keyValuePairs = unitService.GetRegisteredUsers(count, offset, ClientUserInfo.getInstance().SqlId);
 
             foreach (var item in keyValuePairs)
             {

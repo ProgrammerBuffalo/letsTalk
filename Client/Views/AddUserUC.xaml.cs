@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Client.Views
 {
     /// <summary>
-    /// Interaction logic for UCAddUser.xaml
+    /// Interaction logic for AddUserUC.xaml
     /// </summary>
-    public partial class UCAddUser : UserControl
+    public partial class AddUserUC : UserControl
     {
-        public UCAddUser()
+        public AddUserUC()
         {
             InitializeComponent();
         }

@@ -311,8 +311,9 @@ namespace letsTalk
         }
 
         // Создает чатрум с выбранными пользователями
-        public void CreateChatroom(string chatName, List<int> users)
+        public int CreateChatroom(string chatName, List<int> users)
         {
+            int chat_id;
             try
             {
                 Console.WriteLine("Creating chatroom (" + CurrentCallback.GetHashCode() + ")");
@@ -328,7 +329,7 @@ namespace letsTalk
                         sqlCommandAddChatroom.CommandType = CommandType.Text;
                         sqlCommandAddChatroom.Parameters.Add("@chatName", SqlDbType.NVarChar).Value = chatName;
 
-                        int chat_id = int.Parse(sqlCommandAddChatroom.ExecuteScalar().ToString());
+                        chat_id = int.Parse(sqlCommandAddChatroom.ExecuteScalar().ToString());
 
                         SqlCommand sqlCommandAddUsersToChatroom = new SqlCommand("AddUsersToChat", sqlConnection);
                         sqlCommandAddUsersToChatroom.CommandType = CommandType.StoredProcedure;
@@ -419,10 +420,12 @@ namespace letsTalk
                 }
 
                 Console.WriteLine("Chatroom has been created (" + CurrentCallback.GetHashCode() + ")");
+                return chat_id;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return 0;
             }
         }
 

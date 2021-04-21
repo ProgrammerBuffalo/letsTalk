@@ -16,6 +16,7 @@ namespace Client.UserControls
         static readonly DependencyProperty CountVisibilityProperty;
         static readonly DependencyProperty PathProperty;
         static readonly DependencyProperty AvatarProperty;
+        static readonly DependencyProperty ActivityVisibilityProperty;
 
         static ChatItem()
         {
@@ -32,6 +33,8 @@ namespace Client.UserControls
             PathProperty = DependencyProperty.Register("Path", typeof(string), typeof(ChatItem), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
             AvatarProperty = DependencyProperty.Register("Avatar", typeof(BitmapImage), typeof(ChatItem), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+            ActivityVisibilityProperty = DependencyProperty.Register("ActivityVisibility", typeof(Visibility), typeof(ChatItem), new FrameworkPropertyMetadata(Visibility.Visible, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault)); ; ;
         }
 
         public ChatItem() : base()
@@ -80,6 +83,13 @@ namespace Client.UserControls
             get => (string)GetValue(PathProperty);
             set => SetValue(PathProperty, value);
         }
+
+        public Visibility ActivityVisibility
+        {
+            get => (Visibility)GetValue(ActivityVisibilityProperty);
+            set => SetValue(ActivityVisibilityProperty, value);
+        }
+
 
         public override void OnApplyTemplate()
         {

@@ -72,7 +72,7 @@ namespace Client.ViewModels
                 ChatService.ServerUserInfo serverUserInfo = unitClient.Authorization(new ChatService.AuthenticationUserInfo() { Login = Login, Password = Password });
 
                 MainWindow mainWindow = new MainWindow();
-                mainWindow.DataContext = new ViewModels.MainViewModel(serverUserInfo.Name, serverUserInfo.SqlId);
+                mainWindow.DataContext = new MainViewModel(serverUserInfo.Name, serverUserInfo.SqlId);
                 mainWindow.Show();
                 entranceWindow.Close();
             }
@@ -114,7 +114,6 @@ namespace Client.ViewModels
 
         private async void MakeRegister(ChatService.ServerUserInfo registrationInfo)
         {
-
             var unitClient = new ChatService.UnitClient(); // Работает с net.tcp (регистрация)
             var avatarClient = new ChatService.AvatarClient(); // Работает с http (отправка аватарки)
 

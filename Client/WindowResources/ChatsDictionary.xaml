@@ -1,0 +1,70 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:uc="clr-namespace:Client.UserControls"
+                    xmlns:utility="clr-namespace:Client.Utility">
+
+    <Style x:Key="ChatListViewItemStyle" TargetType="ListViewItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border x:Name="border" Margin="0,5" Cursor="Hand">
+                        <ContentPresenter/>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#beca5c"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#ef8d32"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <DataTemplate x:Key="ActivityChatDataTemplate">
+        <uc:ChatItem
+            x:Name="chat"
+            UserName="{Binding Path=User.UserName}"
+            Description="{Binding Path=User.Description}"
+            Avatar="{Binding Path=User.Image}"
+            ActivityVisibility="Visible">
+        </uc:ChatItem>
+
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=User.IsOnline}" Value="True">
+                <Setter TargetName="chat" Property="Activity" Value="Online"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=User.IsOnline}" Value="False">
+                <Setter TargetName="chat" Property="Activity" Value="Offline"/>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ChatDataTemplate">
+        <uc:ChatItem
+            UserName="{Binding Path=Name}"
+            Description="{Binding Path=bbb}"
+            Avatar="{Binding Path=Image}"
+            ActivityVisibility="Hidden">
+        </uc:ChatItem>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ChatGroupDataTemplate">
+        <uc:ChatItem
+            UserName="{Binding Path=GroupName}"
+            Description="{Binding Path=GroupDescription}"
+            Avatar="{Binding Path=GroupImage}"
+            Count="{Binding Path=Count}"
+            ActivityVisibility="Hidden">
+        </uc:ChatItem>
+    </DataTemplate>
+
+    <utility:ChatDataTemplateSelector
+                x:Key="ChatDataTemplateSelector"
+                ChatOneDataTemplate="{StaticResource ActivityChatDataTemplate}"
+                ChatGroupDataTemplate="{StaticResource ChatGroupDataTemplate}">
+    </utility:ChatDataTemplateSelector>
+</ResourceDictionary>

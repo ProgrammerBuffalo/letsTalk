@@ -202,14 +202,20 @@
     <Compile Include="ViewModels\ChatViewModel.cs" />
     <Compile Include="ViewModels\EntranceViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="Views\AddUser.xaml.cs">
+      <DependentUpon>AddUser.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AddUserUC.xaml.cs">
+      <DependentUpon>AddUserUC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateGroupUC.xaml.cs">
+      <DependentUpon>CreateGroupUC.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EntranceWindow.xaml.cs">
       <DependentUpon>EntranceWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UCAddUser.xaml.cs">
-      <DependentUpon>UCAddUser.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UCChat.xaml.cs">
       <DependentUpon>UCChat.xaml</DependentUpon>
@@ -240,15 +246,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\AddUser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddUserUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CreateGroupUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\EntranceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UCAddUser.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -273,6 +287,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WindowResources\ButtonEllipseStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WindowResources\ChatsDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -100,6 +100,9 @@
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="DeleteChatroom">
       <soap12:operation soapAction="letsTalk.IChatService/Chat/DeleteChatroom" style="document" />
@@ -312,7 +315,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8302/Chat</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>HP-EliteBook\Elman</Upn>
+          <Upn>LAPTOP-39BIREFL\user</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
@@ -321,7 +324,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8302/Unit</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>HP-EliteBook\Elman</Upn>
+          <Upn>LAPTOP-39BIREFL\user</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

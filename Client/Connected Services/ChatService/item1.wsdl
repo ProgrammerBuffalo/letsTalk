@@ -20,6 +20,9 @@
   <wsdl:message name="Chat_CreateChatroom_InputMessage">
     <wsdl:part name="parameters" element="tns:CreateChatroom" />
   </wsdl:message>
+  <wsdl:message name="Chat_CreateChatroom_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateChatroomResponse" />
+  </wsdl:message>
   <wsdl:message name="Chat_DeleteChatroom_InputMessage">
     <wsdl:part name="parameters" element="tns:DeleteChatroom" />
   </wsdl:message>
@@ -93,6 +96,7 @@
     </wsdl:operation>
     <wsdl:operation name="CreateChatroom">
       <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/CreateChatroom" message="tns:Chat_CreateChatroom_InputMessage" />
+      <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/CreateChatroomResponse" message="tns:Chat_CreateChatroom_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="DeleteChatroom">
       <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/DeleteChatroom" message="tns:Chat_DeleteChatroom_InputMessage" />
