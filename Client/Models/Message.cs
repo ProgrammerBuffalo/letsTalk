@@ -55,6 +55,7 @@ namespace Client.Models
     {
         private static string root;
         private string path;
+        private bool isLoaded;
 
         static FileMessage()
         {
@@ -81,8 +82,9 @@ namespace Client.Models
             StreamId = streamId;
         }
 
-        public string Path { get => path; set => Set(ref path, value); }
         public Guid StreamId { get; set; }
+        public string Path { get => path; set => Set(ref path, value); }
+        public bool IsLoaded { get => isLoaded; set => Set(ref isLoaded, value); }
     }
 
     public class MediaMessage : FileMessage

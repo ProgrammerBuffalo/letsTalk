@@ -51,7 +51,8 @@
     public class GroupMessage : SourceMessage
     {
         //поверх сообщения будет видно какой именно член группы отправил сообшение
-        private string login;
+        private AvailableUser user;
+        private string color;
 
         public GroupMessage()
         {
@@ -63,12 +64,13 @@
 
         }
 
-        public GroupMessage(Message message, string login) : base(message)
+        public GroupMessage(Message message, AvailableUser user) : base(message)
         {
-            Login = login;
+            User = user;
         }
 
-        public string Login { get => login; set => Set(ref login, value); }
+        public AvailableUser User { get => user; set => Set(ref user, value); }
+        public string Color { get => color; set => Set(ref color, value); }
     }
 
     //системнные сообшение что типо пользователь покинул чат или кто стал админом чата
@@ -85,14 +87,24 @@
 
         }
 
-        public static SystemMessage UserExitedChat(string login)
+        public static SystemMessage UserLeavedChat(string login)
         {
-            return new SystemMessage(new TextMessage(login + " exited chat :("));
+            return new SystemMessage(new TextMessage(login + " leaved chat :("));
         }
 
         public static SystemMessage UserBecomeAdmin(string admin, string login)
         {
             return new SystemMessage(new TextMessage(admin + "gaved admin to" + login));
+        }
+
+        public static SystemMessage UserRemoved(string login)
+        {
+            return new SystemMessage(new TextMessage(login + " was removed from chat"));
+        }
+
+        public static SystemMessage UserAdded(string login)
+        {
+            return new SystemMessage(new TextMessage(login + "added to chat"));
         }
     }
 }

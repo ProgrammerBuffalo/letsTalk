@@ -1,7 +1,6 @@
 ﻿using Client.ChatService;
 using Client.Models;
 using Client.Utility;
-using MahApps.Metro.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,11 +16,13 @@ namespace Client.ViewModels
     {
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 
-        private ClientUserInfo clientUserInfo;
+        public delegate void ChatDelegate(Models.Chat chat);
 
+        private ClientUserInfo clientUserInfo;
         private ChatClient ChatClient { set; get; } // Сеанс
 
         private ObservableCollection<Models.Chat> chats;
+        private Models.Chat selectedChat;
 
         private ContentControl currentView;
 
@@ -31,7 +32,7 @@ namespace Client.ViewModels
         {
             LoadedWindowCommand = new Command(LoadedWindow);
             ClosedWindowCommand = new Command(ClosedWindow);
-            SelectedHambugerOptionItemCommand = new Command(SelectedHambugerOptionItem);
+            //SelectedHambugerOptionItemCommand = new Command(SelectedHambugerOptionItem);
             SelectedChatChangedCommand = new Command(SelectedChatChanged);
             AddUserCommand = new Command(AddUser);
             CreateGroupCommand = new Command(CreateGroup);
@@ -48,6 +49,8 @@ namespace Client.ViewModels
             ClientUserInfo = new ClientUserInfo(sqlId, name);
 
             UnitClient unitClient = new UnitClient();
+
+            Demo();
         }
 
         public ICommand LoadedWindowCommand { get; }
@@ -61,24 +64,9 @@ namespace Client.ViewModels
         public ClientUserInfo ClientUserInfo { get => clientUserInfo; set => Set(ref clientUserInfo, value); } // Вся информация о подключенном юзере
 
         public ObservableCollection<Models.Chat> Chats { get => chats; set => Set(ref chats, value); }
+        public Models.Chat SelectedChat { get => selectedChat; set => Set(ref selectedChat, value); }
 
         public ContentControl CurrentView { get => currentView; set => Set(ref currentView, value); }
-
-        public void SelectedHambugerOptionItem(object sender)
-        {
-            //HamburgerMenuIconItem menuIconItem = sender as HamburgerMenuIconItem;
-            //Type userControl = Type.GetType("Client.Views." + menuIconItem.Tag);
-
-            //CurrentView = Activator.CreateInstance(userControl, ChatClient) as ContentControl;
-        }
-
-        public void SelectedChatChanged(object param)
-        {
-            Models.Chat chat = (Models.Chat)param;
-            Views.UCChat chatView = new Views.UCChat();
-            chatView.DataContext = new ChatViewModel(chat, clientUserInfo);
-            CurrentView = chatView;
-        }
 
         // После того как окно полностью прогрузилось, у нас происходит вызов загрузки аватарки с сервера к пользователю
         public void LoadedWindow(object sender)
@@ -97,9 +85,25 @@ namespace Client.ViewModels
             }
         }
 
-        public void ClosedWindow(object sender)
+        //public void SelectedHambugerOptionItem(object sender)
+        //{
+        //    HamburgerMenuIconItem menuIconItem = sender as HamburgerMenuIconItem;
+        //    Type userControl = Type.GetType("Client.Views." + menuIconItem.Tag);
+
+        //    CurrentView = Activator.CreateInstance(userControl, ChatClient) as ContentControl;
+        //}
+
+        public void SelectedChatChanged(object param)
         {
-            ChatClient.Disconnect();
+            if (selectedChat != null)
+            {
+                //Models.Chat chat = (Models.Chat)param;
+                Views.UCChat chatView = new Views.UCChat();
+                ChatViewModel viewModel = new ChatViewModel();
+                viewModel.RemoveChat += RemoveChatFromChats;
+                chatView.DataContext = new ChatViewModel(selectedChat, clientUserInfo);
+                CurrentView = chatView;
+            }
         }
 
         private void AddUser(object param)
@@ -115,7 +119,7 @@ namespace Client.ViewModels
         {
             UserControl control = new Views.CreateGroupUC();
             CreateGroupViewModel viewModel = new CreateGroupViewModel(ChatClient);
-            viewModel.AddChat += AddGroupToChats;
+            viewModel.AddChat += AddChatToChats;
             control.DataContext = viewModel;
             CurrentView = control;
         }
@@ -127,30 +131,65 @@ namespace Client.ViewModels
             CurrentView = control;
         }
 
+        private void UserLeavedChatroom(int chatId, int userId)
+        {
+            var chat = FindChatroom(chatId);
+            chat.UserLeavedChatroom(userId);
+        }
+
+        private void UserOnlineState(int userId, bool state)
+        {
+            foreach (var chat in chats)
+            {
+                chat.SetOnlineState(userId, state);
+                break;
+            }
+        }
+
+        private void UserAddedToChat(int chatId, int userId)
+        {
+
+        }
+
+        private void UserRemovedFromChat(int chatId, int userId)
+        {
+            var chat = FindChatroom(chatId);
+            (chat as ChatGroup).RemoveMember(userId);
+        }
+
+        private Models.Chat FindChatroom(int chatId)
+        {
+            foreach (var chat in chats)
+                if (chat.SqlId == chatId)
+                    return chat;
+            return null;
+        }
+
         private void AddChatToChats(Models.Chat chat)
         {
             Chats.Add(chat);
-            Demo(chat);
         }
 
-        private void AddGroupToChats(Models.Chat chat)
+        private void RemoveChatFromChats(Models.Chat chat)
         {
-            Chats.Add(chat);
+            Chats.Remove(chat);
         }
 
-        public void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
+        private void ChatIsWriting(int chatId, int userId, bool state)
         {
-            prop = value;
-            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(prop_name));
+            var chat = FindChatroom(chatId);
+            chat.MessageIsWriting(userId, state);
         }
 
         public void NotifyUserIsOnline(int sqlUserId)
         {
+            //UserOnlineState(userId, true);
             throw new NotImplementedException();
         }
 
         public void NotifyUserIsOffline(int sqlUserId)
         {
+            //UserOnlineState(userId, false);
             throw new NotImplementedException();
         }
 
@@ -161,6 +200,7 @@ namespace Client.ViewModels
 
         public void NotifyUserIsRemovedFromChat(int chatId)
         {
+            //UserRemovedFromChat(chatId, userId);
             throw new NotImplementedException();
         }
 
@@ -171,6 +211,7 @@ namespace Client.ViewModels
 
         public void UserLeftChatroom(int userId)
         {
+            //UserLeavedChatroom(chatId, userId);
             throw new NotImplementedException();
         }
 
@@ -181,6 +222,7 @@ namespace Client.ViewModels
 
         public void ReplyMessageIsWriting(int sqlId)
         {
+            //ChatIsWriting(chatId, userId, state);
             throw new NotImplementedException();
         }
 
@@ -189,8 +231,19 @@ namespace Client.ViewModels
             throw new NotImplementedException();
         }
 
+        public void ClosedWindow(object sender)
+        {
+            ChatClient.Disconnect();
+        }
 
-        private void Demo(Models.Chat chat)
+        public void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
+        {
+            prop = value;
+            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(prop_name));
+        }
+
+
+        private void Demo()
         {
             //Chats = new ObservableCollection<Models.Chat>();
             ObservableCollection<SourceMessage> Messages = new ObservableCollection<SourceMessage>();
@@ -205,21 +258,14 @@ namespace Client.ViewModels
             Messages.Add(new UserMessage(new FileMessage("files/1.txt")));
             Messages.Add(new SourceMessage(new FileMessage("files/2.docx")));
             Messages.Add(new UserMessage(new FileMessage("files/3.pptx")));
-            Messages.Add(SystemMessage.UserExitedChat("kesha"));
-            Messages.Add(new GroupMessage(new TextMessage("Eldar gde Kahut!!!"), "Dmitriy"));
-            Messages.Add(new GroupMessage(new FileMessage("files/hall.png"), "Dmitriy"));
-            Messages.Add(new GroupMessage(new FileMessage("files/2.pptx"), "Eldar"));
-            Messages.Add(new GroupMessage(new MediaMessage("files/control.mp3"), "Emil"));
+            Messages.Add(SystemMessage.UserLeavedChat("someone"));
 
-            chat.Messages = Messages;
-
-            //Chats.Add(new ChatOne(Messages, new ava("Eldar", "Height Logic!!!", "files/user.png", Activity.Offline), 0));
-
-            //ObservableCollection<SourceMessage> Messages1 = new ObservableCollection<SourceMessage>();
-            //Messages1.Add(new SourceMessage(new TextMessage("Hello")));
-            //Messages1.Add(new UserMessage(new TextMessage("Bye")));
-
-            //Chats.Add(new ChatOne(Messages1, new ClientUserInfo("Kesha", "Fly Forever", "files/pexels-caio-56733.jpg", Activity.Online), 124));
+            Chats.Add(new ChatOne() { User = new AvailableUser() { Name = "eldar" }, Messages = Messages });
+            Chats.Add(new ChatGroup() { GroupName = "group1", Messages = Messages });
+            //Messages.Add(new GroupMessage(new TextMessage("Hello !!!!"), "User2"));
+            //Messages.Add(new GroupMessage(new FileMessage("files/hall.png"), "User3"));
+            //Messages.Add(new GroupMessage(new FileMessage("files/2.pptx"), "Eldar"));
+            //Messages.Add(new GroupMessage(new MediaMessage("files/control.mp3"), "Emil"));
         }
     }
 }

@@ -4,10 +4,37 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:utility="clr-namespace:Client.Utility"
+             xmlns:models="clr-namespace:Client.Models"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <ResourceDictionary Source="/WindowResources/MessageDicitionary.xaml"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/WindowResources/MessageDicitionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <utility:TypeConverter x:Key="TypeConverter"/>
+
+            <Style x:Key="AvatarImageStyle" TargetType="Image">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=Chat, Converter={StaticResource TypeConverter}}" Value="{x:Type models:ChatOne}">
+                        <Setter Property="Source" Value="{Binding Path=Chat.User.Avatar}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=Chat, Converter={StaticResource TypeConverter}}" Value="{x:Type models:ChatGroup}">
+                        <Setter Property="Source" Value="{Binding Path=Chat.GroupAvatar}"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="GroupButtons" TargetType="Button" BasedOn="{StaticResource MahApps.Styles.Button}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=Chat, Converter={StaticResource TypeConverter}}" Value="{x:Type models:ChatOne}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid>
@@ -15,11 +42,20 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="*" MaxHeight="100"/>
             <RowDefinition Height="6*"/>
             <RowDefinition Height="*" MaxHeight="150"/>
         </Grid.RowDefinitions>
 
-        <ListView Grid.Row="0"
+        <DockPanel Background="Yellow" LastChildFill="False">
+            <Image  DockPanel.Dock="Right" Style="{StaticResource AvatarImageStyle}"/>
+            <Button DockPanel.Dock="Right" Content="Add User" Margin="5" Command="{Binding Path=AddUserCommand}" Style="{StaticResource GroupButtons}"/>
+            <Button DockPanel.Dock="Right" Content="Remove User" Margin="5" Command="{Binding Path=RemoveUserCommand}" Style="{StaticResource GroupButtons}"/>
+            <Button DockPanel.Dock="Right" Content="Delete Chat" Margin="5" Command="{Binding Path=DeleteChatCommand}"/>
+            <Button DockPanel.Dock="Right" Content="Leave" Margin="5" Command="{Binding Path=LeaveChatCommand}"/>
+        </DockPanel>
+
+        <ListView Grid.Row="1"
                   ItemContainerStyle="{StaticResource ListViewItemStyle}"
                   ItemTemplateSelector="{StaticResource MessageSelector}"
                   ItemsSource="{Binding Path=Chat.Messages}"
@@ -28,13 +64,15 @@
                   Background="YellowGreen">
         </ListView>
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="8*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Path=IsWritingText, StringFormat={}{0} is writting...}" FontSize="25" Panel.ZIndex="1" Margin="10,-40"/>
 
             <TextBox x:Name="text"
                      Text="{Binding Path=Text, Mode=TwoWay}"

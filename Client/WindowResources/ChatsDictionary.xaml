@@ -27,18 +27,18 @@
     <DataTemplate x:Key="ActivityChatDataTemplate">
         <uc:ChatItem
             x:Name="chat"
-            UserName="{Binding Path=User.UserName}"
+            UserName="{Binding Path=User.Name}"
             Description="{Binding Path=User.Description}"
             Avatar="{Binding Path=User.Image}"
-            ActivityVisibility="Visible">
+            IsOnlineVisibility="Visible">
         </uc:ChatItem>
 
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding Path=User.IsOnline}" Value="True">
-                <Setter TargetName="chat" Property="Activity" Value="Online"/>
+                <Setter TargetName="chat" Property="IsOnline" Value="True"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding Path=User.IsOnline}" Value="False">
-                <Setter TargetName="chat" Property="Activity" Value="Offline"/>
+                <Setter TargetName="chat" Property="IsOnline" Value="False"/>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -48,7 +48,7 @@
             UserName="{Binding Path=Name}"
             Description="{Binding Path=bbb}"
             Avatar="{Binding Path=Image}"
-            ActivityVisibility="Hidden">
+            IsOnlineVisibility="Hidden">
         </uc:ChatItem>
     </DataTemplate>
 
@@ -58,7 +58,7 @@
             Description="{Binding Path=GroupDescription}"
             Avatar="{Binding Path=GroupImage}"
             Count="{Binding Path=Count}"
-            ActivityVisibility="Hidden">
+            IsOnlineVisibility="Hidden">
         </uc:ChatItem>
     </DataTemplate>
 

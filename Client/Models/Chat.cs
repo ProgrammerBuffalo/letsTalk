@@ -4,33 +4,33 @@ using System.Windows.Media.Imaging;
 
 namespace Client.Models
 {
-    // сюда идет реализация IChatCallback
-    // если надо сделай эти методы виртуальными
-    public class Chat : System.ComponentModel.INotifyPropertyChanged
+    public abstract class Chat : System.ComponentModel.INotifyPropertyChanged
     {
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 
         private ObservableCollection<SourceMessage> messages;
         private int count;
+        private bool isWriting;
+        private string isWritingName;
 
-        public Chat()
+        protected Chat()
         {
 
         }
 
-        public Chat(IEnumerable<SourceMessage> messages)
+        protected Chat(IEnumerable<SourceMessage> messages)
         {
             Messages = new ObservableCollection<SourceMessage>();
             foreach (var message in messages)
                 Messages.Add(message);
         }
 
-        public Chat(IEnumerable<SourceMessage> messages, int count) : this(messages)
+        protected Chat(IEnumerable<SourceMessage> messages, int count) : this(messages)
         {
             Count = count;
         }
 
-        public Chat(int sqlId)
+        protected Chat(int sqlId)
         {
             SqlId = sqlId;
         }
@@ -42,6 +42,16 @@ namespace Client.Models
         //количество не прочитанных смс
         public int Count { get => count; set => Set(ref count, value); }
 
+        public bool IsWriting { get => isWriting; set => Set(ref isWriting, value); }
+
+        public string IsWritingName { get => isWritingName; set => Set(ref isWritingName, value); }
+
+        public abstract void SetOnlineState(int userId, bool state);
+
+        public abstract void MessageIsWriting(int userId, bool state);
+
+        public abstract void UserLeavedChatroom(int userId);
+
         protected void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
         {
             prop = value;
@@ -49,10 +59,12 @@ namespace Client.Models
         }
     }
 
+
     public class ChatOne : Chat
     {
         AvailableUser user;
 
+        //убрать
         public ChatOne()
         {
 
@@ -79,14 +91,47 @@ namespace Client.Models
         }
 
         public AvailableUser User { get => user; set => Set(ref user, value); }
+
+        public override void SetOnlineState(int userId, bool state)
+        {
+            if (user.SqlId == userId) user.IsOnline = true;
+        }
+
+        public override void MessageIsWriting(int userId, bool state)
+        {
+            IsWriting = state;
+            IsWritingName = user.Name;
+        }
+
+        public override void UserLeavedChatroom(int userId)
+        {
+            Messages.Add(SystemMessage.UserLeavedChat(user.Name));
+        }
     }
 
     public class ChatGroup : Chat
     {
+        private static string[] allColors;
+
         private string groupName;
         private string groupDesc;
         private BitmapImage image;
         private ObservableCollection<AvailableUser> users;
+        private Dictionary<AvailableUser, string> colors;
+
+        static ChatGroup()
+        {
+            allColors = new string[20];
+            allColors[0] = "Blue";
+            allColors[1] = "Green";
+            allColors[2] = "Red";
+        }
+
+        //убрать
+        public ChatGroup()
+        {
+
+        }
 
         public ChatGroup(int sqlId, string groupName, IEnumerable<AvailableUser> users) : base(sqlId)
         {
@@ -105,5 +150,45 @@ namespace Client.Models
         public string GroupDesc { get => groupDesc; set => Set(ref groupDesc, value); }
         public BitmapImage Image { get => image; set => Set(ref image, value); }
         public ObservableCollection<AvailableUser> Users { get => users; set => Set(ref users, value); }
+
+        public void AddMember(AvailableUser user)
+        {
+            users.Add(user);
+            Messages.Add(SystemMessage.UserAdded(user.Name));
+        }
+
+        public void RemoveMember(int userId)
+        {
+            var user = FindUser(userId);
+            users.Remove(user);
+            Messages.Add(SystemMessage.UserRemoved(user.Name));
+        }
+
+        public override void SetOnlineState(int userId, bool state)
+        {
+            var user = FindUser(userId);
+            user.IsOnline = state;
+        }
+
+        public override void MessageIsWriting(int userId, bool state)
+        {
+            var user = FindUser(userId);
+            IsWriting = state;
+            IsWritingName = user.Name;
+        }
+
+        public override void UserLeavedChatroom(int userId)
+        {
+            var user = FindUser(userId);
+            Messages.Add(SystemMessage.UserLeavedChat(user.Name));
+        }
+
+        private AvailableUser FindUser(int userId)
+        {
+            foreach (var user in users)
+                if (user.SqlId == userId)
+                    return user;
+            return null;
+        }
     }
 }

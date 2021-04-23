@@ -48,11 +48,11 @@ namespace Client.Views
             Messages.Add(new UserMessage(new FileMessage("files/1.txt")));
             Messages.Add(new SourceMessage(new FileMessage("files/2.docx")));
             Messages.Add(new UserMessage(new FileMessage("files/3.pptx")));
-            Messages.Add(SystemMessage.UserExitedChat("kesha"));
-            Messages.Add(new GroupMessage(new TextMessage("Eldar gde Kahut!!!"), "Dmitriy"));
-            Messages.Add(new GroupMessage(new FileMessage("files/hall.png"), "Dmitriy"));
-            Messages.Add(new GroupMessage(new FileMessage("files/2.pptx"), "Eldar"));
-            Messages.Add(new GroupMessage(new MediaMessage("files/control.mp3"), "Emil"));
+            Messages.Add(SystemMessage.UserLeavedChat("kesha"));
+            //Messages.Add(new GroupMessage(new TextMessage("Eldar gde Kahut!!!"), "Dmitriy"));
+            //Messages.Add(new GroupMessage(new FileMessage("files/hall.png"), "Dmitriy"));
+            //Messages.Add(new GroupMessage(new FileMessage("files/2.pptx"), "Eldar"));
+            //Messages.Add(new GroupMessage(new MediaMessage("files/control.mp3"), "Emil"));
             player = new MediaPlayer();
             player.MediaEnded += MediaEnded;
 

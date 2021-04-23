@@ -11,12 +11,14 @@ namespace Client.UserControls
     {
         static readonly DependencyProperty UserNameProperty;
         static readonly DependencyProperty DescriptionProperty;
-        static readonly DependencyProperty ActivityProperty;
         static readonly DependencyProperty CountProperty;
         static readonly DependencyProperty CountVisibilityProperty;
         static readonly DependencyProperty PathProperty;
         static readonly DependencyProperty AvatarProperty;
-        static readonly DependencyProperty ActivityVisibilityProperty;
+        //static readonly DependencyProperty ActivityProperty;
+        //static readonly DependencyProperty ActivityVisibilityProperty;
+        static readonly DependencyProperty IsOnlineProperty;
+        static readonly DependencyProperty IsOnlineVisibilityProperty;
 
         static ChatItem()
         {
@@ -24,7 +26,13 @@ namespace Client.UserControls
 
             DescriptionProperty = DependencyProperty.Register("Description", typeof(string), typeof(ChatItem), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-            ActivityProperty = DependencyProperty.Register("Activity", typeof(Models.Activity), typeof(ChatItem), new FrameworkPropertyMetadata(Models.Activity.Offline, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+            //ActivityProperty = DependencyProperty.Register("Activity", typeof(Models.Activity), typeof(ChatItem), new FrameworkPropertyMetadata(Models.Activity.Offline, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+            //ActivityVisibilityProperty = DependencyProperty.Register("ActivityVisibility", typeof(Visibility), typeof(ChatItem), new FrameworkPropertyMetadata(Visibility.Visible, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+            IsOnlineProperty = DependencyProperty.Register("IsOnline", typeof(bool), typeof(ChatItem), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+            IsOnlineVisibilityProperty = DependencyProperty.Register("IsOnlineVisibility", typeof(Visibility), typeof(ChatItem), new FrameworkPropertyMetadata(Visibility.Visible, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
             CountProperty = DependencyProperty.Register("Count", typeof(short), typeof(ChatItem), new FrameworkPropertyMetadata((short)0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
@@ -33,8 +41,6 @@ namespace Client.UserControls
             PathProperty = DependencyProperty.Register("Path", typeof(string), typeof(ChatItem), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
             AvatarProperty = DependencyProperty.Register("Avatar", typeof(BitmapImage), typeof(ChatItem), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-
-            ActivityVisibilityProperty = DependencyProperty.Register("ActivityVisibility", typeof(Visibility), typeof(ChatItem), new FrameworkPropertyMetadata(Visibility.Visible, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault)); ; ;
         }
 
         public ChatItem() : base()
@@ -54,10 +60,28 @@ namespace Client.UserControls
             set => SetValue(DescriptionProperty, value);
         }
 
-        public Models.Activity Activity
+        //public Models.Activity Activity
+        //{
+        //    get => (Models.Activity)GetValue(ActivityProperty);
+        //    set => SetValue(ActivityProperty, value);
+        //}
+
+        //public Visibility ActivityVisibility
+        //{
+        //    get => (Visibility)GetValue(ActivityVisibilityProperty);
+        //    set => SetValue(ActivityVisibilityProperty, value);
+        //}
+
+        public bool IsOnline
         {
-            get => (Models.Activity)GetValue(ActivityProperty);
-            set => SetValue(ActivityProperty, value);
+            get => (bool)GetValue(IsOnlineProperty);
+            set => SetValue(IsOnlineProperty, value);
+        }
+
+        public Visibility IsOnlineVisibility
+        {
+            get => (Visibility)GetValue(IsOnlineVisibilityProperty);
+            set => SetValue(IsOnlineVisibilityProperty, value);
         }
 
         public short Count
@@ -83,13 +107,6 @@ namespace Client.UserControls
             get => (string)GetValue(PathProperty);
             set => SetValue(PathProperty, value);
         }
-
-        public Visibility ActivityVisibility
-        {
-            get => (Visibility)GetValue(ActivityVisibilityProperty);
-            set => SetValue(ActivityVisibilityProperty, value);
-        }
-
 
         public override void OnApplyTemplate()
         {

@@ -16,9 +16,7 @@ namespace Client.ViewModels
     {
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 
-        public delegate void AddChatDelegate(Models.Chat chat);
-
-        public AddChatDelegate AddChat { get; set; }
+        public MainViewModel.ChatDelegate AddChat { get; set; }
 
         protected ClientUserInfo client;
         protected ChatClient chatClient;

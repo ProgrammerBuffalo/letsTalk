@@ -85,26 +85,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-
-            <!--<DataTemplate x:Key="ChatOneDataTemplate">
-                <uc:ChatItem 
-                    UserName="{Binding Path=ClientUserInfo.UserName}"
-                    Description="{Binding Path=ClientUserInfo.UserDesc}"
-                    Avatar="{Binding Path=ClientUserInfo.UserImage}"
-                    Count="{Binding Path=Count}"
-                    Activity="{Binding Path=ClientUserInfo.Activity}"
-                    />
-            </DataTemplate>
-
-            <DataTemplate x:Key="ChatGroupDataTemplate">
-                <uc:ChatItem UserName="{Binding Path=ClientUserInfo.UserName}"/>
-            </DataTemplate>
-
-            <utility:ChatDataTemplateSelector
-                x:Key="ChatDataTemplateSelector"
-                ChatOneDataTemplate="{StaticResource ChatOneDataTemplate}"
-                ChatGroupDataTemplate="{StaticResource ChatGroupDataTemplate}">
-            </utility:ChatDataTemplateSelector>-->
+            
         </ResourceDictionary>
     </Window.Resources>
 
@@ -121,7 +102,8 @@
                                  OptionsItemContainerStyle="{StaticResource HamburgerOptionItemContainerStyle}"
                                  ItemContainerStyle="{StaticResource ChatListBoxItemStyle}"
                                  ItemTemplateSelector="{StaticResource ChatDataTemplateSelector}"
-                                 ItemsSource="{Binding Path=Chats}"                        
+                                 ItemsSource="{Binding Path=Chats}"
+                                 SelectedItem="{Binding Path=SelectedChat}"
                                  IsPaneOpen="False">
 
             <controls:HamburgerMenu.OptionsItemsSource>

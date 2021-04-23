@@ -16,6 +16,8 @@ namespace Client.ViewModels
         //нужен чтобы понять какой вид сообщения пошлет user;
         private delegate void MessageSendType(string message);
 
+        private ClientUserInfo client;
+
         private MessageSendType sendType;
 
         private Chat chat;
@@ -26,16 +28,25 @@ namespace Client.ViewModels
 
         private Timer timer;
 
-        private string text;
+        private string isWritingText;
 
         public ChatViewModel()
         {
+            client = ClientUserInfo.getInstance();
+
             MediaPlayCommand = new Command(MediaPlay);
             MediaPosChangedCommand = new Command(MediaPosChanged);
             SendCommand = new Command(Send);
             OpenSmileCommand = new Command(OpenSmile);
             OpenFileCommand = new Command(OpenFile);
             UnloadCommand = new Command(Unload);
+
+            AddUserCommand = new Command(AddMember);
+            RemoveUserCommand = new Command(RemoveMember);
+            LeaveChatCommand = new Command(LeaveChat);
+            DeleteChatCommand = new Command(DeleteChat);
+
+            DownloadFileCommand = new Command(DownloadFile);
 
             sendType = SendText;
 
@@ -51,6 +62,8 @@ namespace Client.ViewModels
         {
             Chat = chat;
         }
+
+        public MainViewModel.ChatDelegate RemoveChat { get; set; }
 
         private void MediaEnded(object sender, EventArgs e)
         {
@@ -68,7 +81,6 @@ namespace Client.ViewModels
             });
         }
 
-        public Chat Chat { get => chat; set => Set(ref chat, value); }
 
         public ICommand MediaPlayCommand { get; }
         public ICommand MediaPosChangedCommand { get; }
@@ -77,7 +89,45 @@ namespace Client.ViewModels
         public ICommand OpenSmileCommand { get; }
         public ICommand UnloadCommand { get; }
 
-        public string Text { get => text; set => Set(ref text, value); }
+        public ICommand AddUserCommand { get; }
+        public ICommand RemoveUserCommand { get; }
+        public ICommand LeaveChatCommand { get; }
+        public ICommand DeleteChatCommand { get; }
+
+        public ICommand DownloadFileCommand { get; }
+
+        public Chat Chat { get => chat; set => Set(ref chat, value); }
+        public string IsWritingText { get => isWritingText; set => Set(ref isWritingText, value); }
+
+        //тут должен быть твой метод для сообшения другим пользователям что добавлен новый узер
+        public void AddMember(object param)
+        {
+            //(chat as ChatGroup).AddMember(AvaibleUser user);
+        }
+
+        //тут должен быть метод для сообшения другим пользователям что узера удалили
+        public void RemoveMember(object param)
+        {
+            //(chat as ChatGroup).RemoveMember();
+        }
+
+        //тут должен быть твой метод для сообшения другим пользователям что узер покинул chat
+        public void LeaveChat(object param)
+        {
+            //chat.Messages.Add(SystemMessage.UserLeavedChat(client.UserName));
+        }
+
+        //тут должен быть твой метод для сообшения другим пользователям что узер покинул chat
+        public void DeleteChat(object param)
+        {
+            //RemoveChat.Invoke(Chat);
+        }
+
+        //тут метод для загрузки файла
+        public void DownloadFile(object param)
+        {
+            Guid streamId = (Guid)param;
+        }
 
         private void MediaPlay(object param)
         {
@@ -119,7 +169,7 @@ namespace Client.ViewModels
 
         private void Send(object param)
         {
-            sendType.Invoke(Text);
+            sendType.Invoke(IsWritingText);
         }
 
         private void OpenFile(object param)
@@ -133,7 +183,7 @@ namespace Client.ViewModels
             if (dialog.ShowDialog() == true)
             {
                 sendType = SendFile;
-                Text = dialog.FileName;
+                IsWritingText = dialog.FileName;
             }
         }
 

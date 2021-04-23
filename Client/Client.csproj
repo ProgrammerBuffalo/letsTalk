@@ -181,6 +181,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="EmilToDo.cs" />
     <Compile Include="Models\AvailableUser.cs" />
     <Compile Include="Models\Chat.cs" />
     <Compile Include="Models\ClientUserInfo.cs" />
@@ -192,11 +193,18 @@
     <Compile Include="UserControls\LoadingUserControl.xaml.cs">
       <DependentUpon>LoadingUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\LoginWarning.xaml.cs">
+      <DependentUpon>LoginWarning.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PasswordWarning.xaml.cs">
+      <DependentUpon>PasswordWarning.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utility\ChatDataTemplateSelector.cs" />
     <Compile Include="Utility\Command.cs" />
     <Compile Include="Utility\Converters.cs" />
     <Compile Include="Utility\FileHelper.cs" />
     <Compile Include="Utility\MessageTemplateSelector.cs" />
+    <Compile Include="Utility\ValidationRules.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
     <Compile Include="ViewModels\AvailableUsersViewModel.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
@@ -243,6 +251,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\LoadingUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\LoginWarning.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PasswordWarning.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -324,6 +340,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Connected Services\ChatService\ChatService.wsdl" />
     <None Include="Connected Services\ChatService\Client.ChatService.AvatarUploadResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>

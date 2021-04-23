@@ -32,22 +32,18 @@
             <Setter Property="Width" Value="15"/>
 
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=ActivityVisibility, ElementName=ui}" Value="Hidden">
+                <DataTrigger Binding="{Binding Path=IsOnlineVisibility, ElementName=ui}" Value="Hidden">
                     <Setter Property="Visibility" Value="Hidden"/>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Path=ActivityVisibility, ElementName=ui}" Value="Visible">
+                <DataTrigger Binding="{Binding Path=IsOnlineVisibility, ElementName=ui}" Value="Visible">
                     <Setter Property="Visibility" Value="Visible"/>
                 </DataTrigger>
-                
-                <DataTrigger Binding="{Binding Path=Activity, ElementName=ui}" Value="Online">
+
+                <DataTrigger Binding="{Binding Path=IsOnline, ElementName=ui}" Value="True">
                     <Setter Property="Fill" Value="Green"/>
                 </DataTrigger>
 
-                <DataTrigger Binding="{Binding Path=Activity, ElementName=ui}" Value="Busy">
-                    <Setter Property="Fill" Value="Yellow"/>
-                </DataTrigger>
-
-                <DataTrigger Binding="{Binding Path=Activity, ElementName=ui}" Value="Offline">
+                <DataTrigger Binding="{Binding Path=IsOnline, ElementName=ui}" Value="False">
                     <Setter Property="Fill" Value="Red"/>
                 </DataTrigger>
             </Style.Triggers>
