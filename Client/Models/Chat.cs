@@ -46,11 +46,14 @@ namespace Client.Models
 
         public string IsWritingName { get => isWritingName; set => Set(ref isWritingName, value); }
 
+        public virtual BitmapImage Avatar { set; get; }
+
         public abstract void SetOnlineState(int userId, bool state);
 
         public abstract void MessageIsWriting(int userId, bool state);
 
         public abstract void UserLeavedChatroom(int userId);
+
 
         protected void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
         {
@@ -67,7 +70,7 @@ namespace Client.Models
         //убрать
         public ChatOne()
         {
-
+            user = new AvailableUser();
         }
 
         public ChatOne(int sqlId) : base(sqlId)
@@ -92,6 +95,17 @@ namespace Client.Models
 
         public AvailableUser User { get => user; set => Set(ref user, value); }
 
+        public override BitmapImage Avatar
+        {
+            get => user.Image; 
+            set
+            {
+                var image = user.Image;
+                user.Image = value;
+                Set(ref image, value);
+            }
+        }
+
         public override void SetOnlineState(int userId, bool state)
         {
             if (user.SqlId == userId) user.IsOnline = true;
@@ -115,7 +129,7 @@ namespace Client.Models
 
         private string groupName;
         private string groupDesc;
-        private BitmapImage image;
+        private BitmapImage avatar;
         private ObservableCollection<AvailableUser> users;
         private Dictionary<AvailableUser, string> colors;
 
@@ -148,7 +162,7 @@ namespace Client.Models
 
         public string GroupName { get => groupName; set => Set(ref groupName, value); }
         public string GroupDesc { get => groupDesc; set => Set(ref groupDesc, value); }
-        public BitmapImage Image { get => image; set => Set(ref image, value); }
+        public override BitmapImage Avatar { get => avatar; set => Set(ref avatar, value); }
         public ObservableCollection<AvailableUser> Users { get => users; set => Set(ref users, value); }
 
         public void AddMember(AvailableUser user)

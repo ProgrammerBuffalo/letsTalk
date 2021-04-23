@@ -64,10 +64,10 @@ namespace Client.Models
 
         public FileMessage()
         {
-
+            IsLoaded = false;
         }
 
-        public FileMessage(string path)
+        public FileMessage(string path) : this()
         {
             Path = root + path;
         }

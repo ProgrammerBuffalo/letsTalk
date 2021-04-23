@@ -29,7 +29,7 @@
             x:Name="chat"
             UserName="{Binding Path=User.Name}"
             Description="{Binding Path=User.Description}"
-            Avatar="{Binding Path=User.Image}"
+            Avatar="{Binding Path=Avatar}"
             IsOnlineVisibility="Visible">
         </uc:ChatItem>
 
@@ -47,7 +47,7 @@
         <uc:ChatItem
             UserName="{Binding Path=Name}"
             Description="{Binding Path=bbb}"
-            Avatar="{Binding Path=Image}"
+            Avatar="{Binding Path=Avatar}"
             IsOnlineVisibility="Hidden">
         </uc:ChatItem>
     </DataTemplate>
@@ -56,7 +56,7 @@
         <uc:ChatItem
             UserName="{Binding Path=GroupName}"
             Description="{Binding Path=GroupDescription}"
-            Avatar="{Binding Path=GroupImage}"
+            Avatar="{Binding Path=Avatar}"
             Count="{Binding Path=Count}"
             IsOnlineVisibility="Hidden">
         </uc:ChatItem>
