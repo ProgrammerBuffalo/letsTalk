@@ -25,15 +25,6 @@ namespace letsTalk
         // Все подключенные пользователи, и чатрумы в них
         private Dictionary<ConnectedUser, List<int>> chatroomsInUsers = new Dictionary<ConnectedUser, List<int>>();
 
-        //Определение текущего пользователя, который вызвал у сервера метод
-        public IChatCallback CurrentCallback
-        {
-            get
-            {
-                return OperationContext.Current.GetCallbackChannel<IChatCallback>();
-            }
-        }
-
         //Нужен для синхронизации
         private object lockerSyncObj = new object();
 
@@ -159,21 +150,18 @@ namespace letsTalk
             return UserId;
         }
 
-        // Сервер отправляет аватарку зарегистированного пользователя в БД (Метод ищет аватарку пользователя, посредством связей в БД.
-        // После того, как аватарка была найдена в БД, у нас открывается поток под эту картинку для того чтобы клиентская часть сегментами подгрузила её)
-        public DownloadFileInfo AvatarDownload(DownloadRequest request)
+        private DownloadFileInfo AvatarDownload(string selector, int id)
         {
             DownloadFileInfo downloadFileInfo = new DownloadFileInfo();
-
             try
             {
                 using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                 {
                     sqlConnection.Open();
 
-                    SqlCommand sqlCommandFindAvatar = new SqlCommand(@"SELECT stream_id FROM Users WHERE Users.Id = @Id", sqlConnection);
+                    SqlCommand sqlCommandFindAvatar = new SqlCommand($@"SELECT stream_id FROM {selector} WHERE {selector}.Id = @Id", sqlConnection);
                     sqlCommandFindAvatar.CommandType = CommandType.Text;
-                    sqlCommandFindAvatar.Parameters.Add("@Id", SqlDbType.Int).Value = request.Requested_UserSqlId;
+                    sqlCommandFindAvatar.Parameters.Add("@Id", SqlDbType.Int).Value = id;
 
                     var stream_id = sqlCommandFindAvatar.ExecuteScalar();
 
@@ -205,10 +193,21 @@ namespace letsTalk
             return downloadFileInfo;
         }
 
-        // Здесь сервер заносит картинку в файловую таблицу, процесс обратный методу AvatarDownload
-        public void AvatarUpload(UploadFileInfo uploadResponse)
+        // Сервер отправляет аватарку зарегистированного пользователя в БД (Метод ищет аватарку пользователя, посредством связей в БД.
+        // После того, как аватарка была найдена в БД, у нас открывается поток под эту картинку для того чтобы клиентская часть сегментами подгрузила её)
+        public DownloadFileInfo UserAvatarDownload(DownloadRequest request)
         {
+            return AvatarDownload("Users", request.Requested_SqlId);
+        }
 
+        public DownloadFileInfo ChatAvatarDownload(DownloadRequest request)
+        {
+            return AvatarDownload("Chatrooms", request.Requested_SqlId);
+        }
+
+        // Здесь сервер заносит картинку в файловую таблицу, процесс обратный методу AvatarDownload
+        private void AvatarUpload(string selector, UploadFileInfo uploadRequest)
+        {
             try
             {
                 using (TransactionScope trScope = new TransactionScope())
@@ -220,12 +219,12 @@ namespace letsTalk
                         SqlCommand sqlCommandAddAvatar = new SqlCommand($@" INSERT INTO DataFT(file_stream, name, path_locator)
                                                                         OUTPUT INSERTED.stream_id, GET_FILESTREAM_TRANSACTION_CONTEXT(),
                                                                         INSERTED.file_stream.PathName()
-                                                                        VALUES(CAST('' as varbinary(MAX)), @name, dbo.GetPathLocatorForChild('Avatars'))", sqlConnection);
+                                                                        VALUES(CAST('' as varbinary(MAX)), @name, dbo.GetPathLocatorForChild('{selector}Avatars'))", sqlConnection);
 
                         sqlCommandAddAvatar.CommandType = CommandType.Text;
 
-                        string fileName = uploadResponse.FileName;
-                        sqlCommandAddAvatar.Parameters.Add("@name", SqlDbType.NVarChar).Value = "AVATAR" + uploadResponse.Responsed_UserSqlId + $".{fileName.Substring(fileName.LastIndexOf(".") + 1)}";
+                        string fileName = uploadRequest.FileName;
+                        sqlCommandAddAvatar.Parameters.Add("@name", SqlDbType.NVarChar).Value = "AVATAR" + uploadRequest.Responsed_SqlId + $".{fileName.Substring(fileName.LastIndexOf(".") + 1)}";
 
                         Guid stream_id;
                         byte[] transaction_context;
@@ -246,7 +245,7 @@ namespace letsTalk
                             int bytesRead = 0;
                             var buffer = new byte[bufferSize];
 
-                            while ((bytesRead = uploadResponse.FileStream.Read(buffer, 0, bufferSize)) > 0)
+                            while ((bytesRead = uploadRequest.FileStream.Read(buffer, 0, bufferSize)) > 0)
                             {
                                 sqlFileStream.Write(buffer, 0, bytesRead);
                                 sqlFileStream.Flush();
@@ -254,17 +253,17 @@ namespace letsTalk
 
                         }
 
-                        SqlCommand UpdateUserAvatar = new SqlCommand($@" UPDATE Users SET Users.stream_id = @stream_id WHERE Users.Id = @user_id", sqlConnection);
+                        SqlCommand UpdateUserAvatar = new SqlCommand($@" UPDATE {selector} SET stream_id = @stream_id WHERE Id = @Id", sqlConnection);
 
                         UpdateUserAvatar.CommandType = CommandType.Text;
                         UpdateUserAvatar.Parameters.Add("@stream_id", SqlDbType.UniqueIdentifier).Value = stream_id;
-                        UpdateUserAvatar.Parameters.Add("@user_id", SqlDbType.Int).Value = uploadResponse.Responsed_UserSqlId;
+                        UpdateUserAvatar.Parameters.Add("@Id", SqlDbType.Int).Value = uploadRequest.Responsed_SqlId;
 
                         UpdateUserAvatar.ExecuteNonQuery();
 
                         trScope.Complete();
 
-                        Console.WriteLine($"avatar for user {uploadResponse.Responsed_UserSqlId} is added");
+                        Console.WriteLine($"avatar for {selector} {uploadRequest.Responsed_SqlId} is added");
                     }
                 }
             }
@@ -275,6 +274,16 @@ namespace letsTalk
 
                 throw new FaultException<StreamExceptionFault>(streamExceptionFault, streamExceptionFault.Message);
             }
+        }
+
+        public void UserAvatarUpload(UploadFileInfo uploadRequest)
+        {
+            AvatarUpload("Users", uploadRequest);
+        }
+
+        public void ChatAvatarUpload(UploadFileInfo uploadRequest)
+        {
+            AvatarUpload("Chatrooms", uploadRequest);
         }
 
         // Получает список всех существующий пользователей в Базе Данных
@@ -316,7 +325,7 @@ namespace letsTalk
             int chat_id;
             try
             {
-                Console.WriteLine("Creating chatroom (" + CurrentCallback.GetHashCode() + ")");
+                Console.WriteLine("Creating chatroom (" + OperationContext.Current.Channel.GetHashCode() + ")");
 
                 using (TransactionScope trScope = new TransactionScope())
                 {
@@ -361,7 +370,7 @@ namespace letsTalk
                         sqlCommandAddFileForContentXML.CommandType = CommandType.Text;
 
                         sqlCommandAddFileForContentXML.Parameters.Add("@name", SqlDbType.NVarChar).Value = "CHAT" + chat_id.ToString() + ".xml";
-                       
+
                         Guid stream_id = new Guid();
 
                         using (SqlDataReader sqlDataReader = sqlCommandAddFileForContentXML.ExecuteReader())
@@ -397,7 +406,8 @@ namespace letsTalk
 
                         trScope.Complete();
 
-                        lock (lockerSyncObj) {
+                        lock (lockerSyncObj)
+                        {
 
                             Console.WriteLine("Users added to chat callbacks...");
 
@@ -409,17 +419,17 @@ namespace letsTalk
                                     {
 
                                         chatroomsInUsers[connectedUser].Add(chat_id);
-                                        if(connectedUser.ChatCallback != CurrentCallback)
-                                            connectedUser.ChatCallback.NotifyUserIsAddedToChat(chat_id, users);
+                                        if (connectedUser.UserContext != OperationContext.Current)
+                                            connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsAddedToChat(chat_id, users);
                                     }
-                                    
+
                                 }
                             }
                         }
                     }
                 }
 
-                Console.WriteLine("Chatroom has been created (" + CurrentCallback.GetHashCode() + ")");
+                Console.WriteLine("Chatroom has been created (" + OperationContext.Current.Channel.GetHashCode() + ")");
                 return chat_id;
             }
             catch (Exception ex)
@@ -434,21 +444,21 @@ namespace letsTalk
         {
             if (new FileInfo(path).Length <= 0)
             {
-                Console.WriteLine("Creating declaration for XML (" + CurrentCallback.GetHashCode() + ")");
+                Console.WriteLine("Creating declaration for XML (" + OperationContext.Current.Channel.GetHashCode() + ")");
                 XmlDocument document = new XmlDocument();
                 XmlDeclaration declaration = document.CreateXmlDeclaration("1.0", "UTF-8", null);
                 document.AppendChild(declaration);
                 XmlElement root = document.CreateElement("Messages");
                 document.AppendChild(root);
                 document.Save(path);
-                Console.WriteLine("Declaration has been created for XML" + CurrentCallback.GetHashCode() + ")");
+                Console.WriteLine("Declaration has been created for XML" + OperationContext.Current.Channel.GetHashCode() + ")");
             }
         }
 
         //Отправка текстового сообщения с чатрума
         public void SendMessageText(ServiceMessageText message, int chatroomId)
         {
-            Console.WriteLine("Sending message to server (" + CurrentCallback.GetHashCode() + ")");
+            Console.WriteLine("Sending message to server (" + OperationContext.Current.Channel.GetHashCode() + ")");
 
 
             List<ConnectedUser> users = chatroomsInUsers.Where(chatrooms => chatrooms.Value
@@ -474,14 +484,14 @@ namespace letsTalk
                 {
                     AddToXML(fullpath, message);
                     Console.WriteLine("Sending message callbacks...");
-                    foreach (IChatCallback chatCallback in users)
+                    foreach (ConnectedUser user in users)
                     {
-                        if (chatCallback != CurrentCallback)
-                            chatCallback.ReplyMessage(message, chatroomId);
+                        if (user.UserContext != OperationContext.Current)
+                            user.UserContext.GetCallbackChannel<IChatCallback>().ReplyMessage(message, chatroomId);
                     }
                 }
 
-                Console.WriteLine("Message has been sent (" + CurrentCallback.GetHashCode() + ")");
+                Console.WriteLine("Message has been sent (" + OperationContext.Current.Channel.GetHashCode() + ")");
 
             }
             catch (Exception ex)
@@ -493,7 +503,7 @@ namespace letsTalk
         //Добавление узла в XML-файл
         private void AddToXML(string full_path, ServiceMessage serviceMessage)
         {
-            Console.WriteLine("Adding message to XML (" + CurrentCallback.GetHashCode() + ")");
+            Console.WriteLine("Adding message to XML (" + OperationContext.Current.Channel.GetHashCode() + ")");
             if (!File.Exists(full_path))
             {
                 throw new Exception("File xml doesnt exsists!");
@@ -532,13 +542,13 @@ namespace letsTalk
             xDoc.Root.Add(xMessageEl);
 
             xDoc.Save(full_path);
-            Console.WriteLine("Message is added to XML (" + CurrentCallback.GetHashCode() + ")");
+            Console.WriteLine("Message is added to XML (" + OperationContext.Current.Channel.GetHashCode() + ")");
         }
 
         //Нахождение сообщений чатрума в XML-файле
         private List<ServiceMessage> FindXmlNodes(string fullpath)
         {
-            Console.WriteLine("Finding messages from chatroom... (" + CurrentCallback.GetHashCode() + ")");
+            Console.WriteLine("Finding messages from chatroom... (" + OperationContext.Current.Channel.GetHashCode() + ")");
 
             XDocument xDocument = XDocument.Load(fullpath);
             List<ServiceMessage> serviceMessages = new List<ServiceMessage>();
@@ -565,7 +575,7 @@ namespace letsTalk
                     });
                 }
             }
-            Console.WriteLine("Messages for chatroom are found (" + CurrentCallback.GetHashCode() + ")");
+            Console.WriteLine("Messages for chatroom are found (" + OperationContext.Current.Channel.GetHashCode() + ")");
 
             return serviceMessages;
         }
@@ -579,17 +589,17 @@ namespace letsTalk
 
             Console.WriteLine("Message is writing callbacks...");
 
-            foreach (IChatCallback chatCallback in users)
+            foreach (ConnectedUser user in users)
             {
-                if (chatCallback != CurrentCallback)
+                if (user.UserContext != OperationContext.Current)
                 {
-                    chatCallback.ReplyMessageIsWriting(userSqlId);
+                    user.UserContext.GetCallbackChannel<IChatCallback>().ReplyMessageIsWriting(userSqlId);
                 }
             }
         }
 
         //Подключение клиента к серверу, получение списка чатрумов и пользователей в нем
-        public Dictionary<int, List<int>> Connect(int sqlId, string userName)
+        public void Connect(int sqlId, string userName)
         {
             if (!chatroomsInUsers.Keys.Any(u => u.SqlID == sqlId))
             {
@@ -599,23 +609,26 @@ namespace letsTalk
                     {
                         SqlID = sqlId,
                         Name = userName,
-                        ChatCallback = CurrentCallback
+                        UserContext = OperationContext.Current
                     }, FindAllChatroomsForServer(sqlId));
+
+                    OperationContext.Current.Channel.Faulted += Channel_Closed;
 
                     try
                     {
                         Console.WriteLine("User in connected callbacks...");
 
-                        foreach (ConnectedUser user in chatroomsInUsers.Keys)
+                        lock (lockerSyncObj)
                         {
-                            if (user.SqlID == sqlId)
-                                continue;
+                            foreach (ConnectedUser user in chatroomsInUsers.Keys)
+                            {
+                                if (user.SqlID == sqlId)
+                                    continue;
 
-                            IChatCallback chatCallback = user.ChatCallback;
-                            chatCallback.NotifyUserIsOnline(user.SqlID);
+                                OperationContext userContext = user.UserContext;
+                                userContext.GetCallbackChannel<IChatCallback>().NotifyUserIsOnline(sqlId);
+                            }
                         }
-
-                        return FindAllChatroomsForClient(sqlId);
                     }
                     catch (Exception ex)
                     {
@@ -624,73 +637,95 @@ namespace letsTalk
 
                 }
 
-                Console.WriteLine("User is connected(" + CurrentCallback.GetHashCode() + ")");
+                Console.WriteLine("User is connected(" + OperationContext.Current.Channel.GetHashCode() + ")");
             }
             else
             {
                 ConnectionExceptionFault connectionExceptionFault = new ConnectionExceptionFault();
                 throw new FaultException<ConnectionExceptionFault>(connectionExceptionFault, connectionExceptionFault.Message);
             }
-            return null;
+        }
+
+        private void Channel_Closed(object sender, EventArgs e)
+        {
+            Disconnect(sender as IContextChannel);
         }
 
         //Отключение пользователя
-        public void Disconnect()
+        private void Disconnect(IContextChannel clientChannel)
         {
-            ConnectedUser discUser = chatroomsInUsers.Keys.FirstOrDefault(u => u.ChatCallback == CurrentCallback);
+            ConnectedUser discUser = chatroomsInUsers.Keys.FirstOrDefault(u => u.UserContext.Channel == clientChannel);
             if (discUser != null)
             {
                 lock (lockerSyncObj)
                 {
                     chatroomsInUsers.Remove(discUser);
                     Console.WriteLine("User is offline callbacks...");
-                    foreach (var user in chatroomsInUsers.Keys)
+                    lock (lockerSyncObj)
                     {
-                        IChatCallback chatCallback = user.ChatCallback;
-                        chatCallback.NotifyUserIsOffline(discUser.SqlID);
+                        foreach (var user in chatroomsInUsers.Keys)
+                        {
+                            OperationContext userContext = user.UserContext;
+                            userContext.GetCallbackChannel<IChatCallback>().NotifyUserIsOffline(discUser.SqlID);
+                        }
                     }
                 }
             }
-            Console.WriteLine("User is disconnected (" + CurrentCallback.GetHashCode() + ")");
+            Console.WriteLine("User is disconnected (" + clientChannel.GetHashCode() + ")");
         }
 
         //Поиск всех чатрумов для клиента во время подключения к серверу
-        private Dictionary<int, List<int>> FindAllChatroomsForClient(int sqlId)
+        public Dictionary<Chatroom, List<UserInChat>> FindAllChatroomsForClient(int userSqlId)
         {
             try
             {
-                Console.WriteLine("Finding chatrooms for user" + "(" + CurrentCallback.GetHashCode() + ")");
-                Dictionary<int, List<int>> usersInChatroom = new Dictionary<int, List<int>>();
+                Console.WriteLine("Finding chatrooms for user" + "(" + OperationContext.Current.Channel.GetHashCode() + ")");
+                Dictionary<Chatroom, List<UserInChat>> usersInChatroom = new Dictionary<Chatroom, List<UserInChat>>();
 
                 using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                 {
                     sqlConnection.Open();
 
-                    SqlCommand sqlCommandFindChatrooms = new SqlCommand(@"SELECT* FROM User_Chatroom WHERE Id_Chat in 
-                                                                                  (SELECT Id_Chat FROM User_Chatroom WHERE Id_User = @Id)", sqlConnection);
+                    SqlCommand sqlCommandFindChatrooms = new SqlCommand(@"SELECT* FROM GetChatroomsForUser(@userId)", sqlConnection);
 
                     sqlCommandFindChatrooms.CommandType = CommandType.Text;
-                    sqlCommandFindChatrooms.Parameters.Add("@Id", SqlDbType.Int).Value = sqlId;
+                    sqlCommandFindChatrooms.Parameters.Add("@userId", SqlDbType.Int).Value = userSqlId;
 
                     using (SqlDataReader sqlDataReader = sqlCommandFindChatrooms.ExecuteReader())
                     {
                         while (sqlDataReader.Read())
                         {
                             int chatId = sqlDataReader.GetInt32(0);
-                            int userId = sqlDataReader.GetInt32(1);
+                            string chatName = sqlDataReader.GetSqlString(1).Value;
+                            int userId = sqlDataReader.GetInt32(2);
+                            string userName = sqlDataReader.GetSqlString(3).Value;
 
-                            if (usersInChatroom.ContainsKey(chatId))
+                            Chatroom chat = usersInChatroom.Keys.FirstOrDefault(c => c.ChatSqlId == chatId);
+
+                            bool isOnline = chatroomsInUsers.Any(cU => cU.Key.SqlID == userId);
+
+                            if (chat == null)
                             {
-                                usersInChatroom.Add(chatId, new List<int>() { userId });
+                                usersInChatroom.Add(new Chatroom()
+                                {
+                                    ChatSqlId = chatId,
+                                    ChatName = chatName
+                                },
+                                new List<UserInChat>() { new UserInChat() {
+                                                          UserSqlId = userId,
+                                                          UserName = userName,
+                                                          IsOnline = isOnline } });
                             }
                             else
                             {
-                                usersInChatroom[chatId].Add(userId);
+                                usersInChatroom[chat].Add(new UserInChat { UserSqlId = userId,
+                                                                           UserName = userName,
+                                                                           IsOnline = isOnline});
                             }
                         }
                     }
                 }
-                Console.WriteLine("Chatrooms are found" + "(" + CurrentCallback.GetHashCode() + ")");
+                Console.WriteLine("Chatrooms are found" + "(" + OperationContext.Current.Channel.GetHashCode() + ")");
                 return usersInChatroom;
             }
             catch (Exception ex)
@@ -703,7 +738,7 @@ namespace letsTalk
         //Поиск всех чатрумов в которых находится подключенный клиент
         private List<int> FindAllChatroomsForServer(int sqlId)
         {
-            Console.WriteLine("Adding chatrooms to server (" + CurrentCallback.GetHashCode() + ")");
+            Console.WriteLine("Adding chatrooms to server (" + OperationContext.Current.Channel.GetHashCode() + ")");
             List<int> chatrooms = new List<int>();
             try
             {
@@ -723,7 +758,7 @@ namespace letsTalk
                         }
                     }
                 }
-                Console.WriteLine("Chatrooms were added to server (" + CurrentCallback.GetHashCode() + ")");
+                Console.WriteLine("Chatrooms were added to server (" + OperationContext.Current.Channel.GetHashCode() + ")");
             }
             catch (SqlException sqlEx)
             {
@@ -738,7 +773,7 @@ namespace letsTalk
         {
             try
             {
-                Console.WriteLine("Adding user to chatroom (" + CurrentCallback.GetHashCode() + ")");
+                Console.WriteLine("Adding user to chatroom (" + OperationContext.Current.Channel.GetHashCode() + ")");
                 using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                 {
                     sqlConnection.Open();
@@ -759,17 +794,17 @@ namespace letsTalk
                                                                 .Select(u => u.Key).ToList();
 
                     ConnectedUser connectedUser = chatroomsInUsers.Keys.First(u => u.SqlID == userId);
-                    connectedUser.ChatCallback.NotifyUserIsAddedToChat(chatId, users.Select(u => u.SqlID).ToList());
+                    connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsAddedToChat(chatId, users.Select(u => u.SqlID).ToList());
 
                     Console.WriteLine("User joined callbacks...");
 
                     foreach (var user in users)
                     {
-                        if (user.ChatCallback != CurrentCallback)
-                            user.ChatCallback.UserJoinedToChatroom(userId);
+                        if (user.UserContext != OperationContext.Current)
+                            user.UserContext.GetCallbackChannel<IChatCallback>().UserJoinedToChatroom(userId);
                     }
                 }
-                Console.WriteLine("User has been added to chatroom (" + CurrentCallback.GetHashCode() + ")");
+                Console.WriteLine("User has been added to chatroom (" + OperationContext.Current.Channel.GetHashCode() + ")");
 
             }
             catch (Exception ex)
@@ -784,7 +819,7 @@ namespace letsTalk
         {
             try
             {
-                Console.WriteLine("Removing user from chatroom (" + CurrentCallback.GetHashCode() + ")");
+                Console.WriteLine("Removing user from chatroom (" + OperationContext.Current.Channel.GetHashCode() + ")");
 
                 using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                 {
@@ -803,7 +838,7 @@ namespace letsTalk
                 {
                     if (connectedUser != null)
                     {
-                        connectedUser.ChatCallback.NotifyUserIsRemovedFromChat(chatId);
+                        connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsRemovedFromChat(chatId);
                         chatroomsInUsers.Where(users => users.Key.SqlID == userId)
                                         .Select(c => c.Value)
                                         .First().Remove(chatId);
@@ -811,13 +846,13 @@ namespace letsTalk
 
                     Console.WriteLine("User left callbacks...");
 
-                    foreach (IChatCallback chatCallback in chatroomsInUsers.Keys)
+                    foreach (var user in chatroomsInUsers.Keys)
                     {
-                        if (chatCallback != CurrentCallback)
-                            chatCallback.UserLeftChatroom(userId);
+                        if (user.UserContext != OperationContext.Current)
+                            user.UserContext.GetCallbackChannel<IChatCallback>().UserLeftChatroom(userId);
                     }
                 }
-                Console.WriteLine("User was removed from chatroom (" + CurrentCallback.GetHashCode() + ")");
+                Console.WriteLine("User was removed from chatroom (" + OperationContext.Current.Channel.GetHashCode() + ")");
 
             }
             catch (Exception ex)
@@ -831,7 +866,7 @@ namespace letsTalk
         {
             try
             {
-                Console.WriteLine("Deleting chatroom (" + CurrentCallback.GetHashCode() + ")");
+                Console.WriteLine("Deleting chatroom (" + OperationContext.Current.Channel.GetHashCode() + ")");
 
                 using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                 {
@@ -847,16 +882,16 @@ namespace letsTalk
                     {
                         foreach (ConnectedUser user in chatroomsInUsers.Keys)
                         {
-                            if (user.ChatCallback != CurrentCallback)
+                            if (user.UserContext != OperationContext.Current)
                             {
-                                user.ChatCallback.NotifyUserIsRemovedFromChat(chatId);
+                                user.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsRemovedFromChat(chatId);
                             }
                             chatroomsInUsers[user].Remove(chatId);
                         }
 
                     }
                 }
-                Console.WriteLine("Chatroom is deleted (" + CurrentCallback.GetHashCode() + ")");
+                Console.WriteLine("Chatroom is deleted (" + OperationContext.Current.Channel.GetHashCode() + ")");
 
             }
             catch (Exception ex)
@@ -870,9 +905,9 @@ namespace letsTalk
         {
             try
             {
-                using(TransactionScope transactionScope = new TransactionScope())
+                using (TransactionScope transactionScope = new TransactionScope())
                 {
-                    using(SqlConnection sqlConnection = new SqlConnection(connection_string))
+                    using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                     {
                         SqlCommand sqlCommandAddFileToDataFT = new SqlCommand($@" INSERT INTO DataFT(file_stream, name, path_locator)
                                                                                   OUTPUT INSERTED.stream_id, GET_FILESTREAM_TRANSACTION_CONTEXT(),
@@ -899,7 +934,7 @@ namespace letsTalk
                                 full_path = sqlDataReader.GetSqlString(2).Value;
                             }
                         }
-                        catch(SqlException ex)
+                        catch (SqlException ex)
                         {
                             Console.WriteLine(ex.Message);
                             FileUpload(chatToServer);
@@ -937,13 +972,13 @@ namespace letsTalk
 
                             AddToXML(fullpathXML, serviceMessageFile);
 
-                            foreach(IChatCallback chatCallback in chatroomsInUsers.Keys)
+                            foreach (var user in chatroomsInUsers.Keys)
                             {
-                                if(chatCallback != CurrentCallback)
+                                if (user.UserContext != OperationContext.Current)
                                 {
-                                    chatCallback.NotifyUserFileSendedToChat(serviceMessageFile, chatToServer.ChatroomId);
+                                    user.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserFileSendedToChat(serviceMessageFile, chatToServer.ChatroomId);
                                 }
-                                    
+
                             }
                         }
                     }
@@ -999,7 +1034,7 @@ namespace letsTalk
             string fullpathXML;
             try
             {
-                Console.WriteLine("Finding messages from chatroom " + chatroomId + " (" + CurrentCallback.GetHashCode() + ")");
+                Console.WriteLine("Finding messages from chatroom " + chatroomId + " (" + OperationContext.Current.Channel.GetHashCode() + ")");
 
                 using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                 {
@@ -1012,11 +1047,11 @@ namespace letsTalk
 
                 messages = FindXmlNodes(fullpathXML);
 
-                Console.WriteLine("Messages were found from chatroom " + chatroomId + " (" + CurrentCallback.GetHashCode() + ")");
+                Console.WriteLine("Messages were found from chatroom " + chatroomId + " (" + OperationContext.Current.Channel.GetHashCode() + ")");
                 return messages;
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }

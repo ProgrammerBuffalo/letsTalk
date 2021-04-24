@@ -47,17 +47,17 @@
   <wsdl:message name="Chat_Connect_ConnectionExceptionFaultFault_FaultMessage">
     <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/letsTalk" name="detail" element="q1:ConnectionExceptionFault" />
   </wsdl:message>
+  <wsdl:message name="Chat_FindAllChatroomsForClient_InputMessage">
+    <wsdl:part name="parameters" element="tns:FindAllChatroomsForClient" />
+  </wsdl:message>
+  <wsdl:message name="Chat_FindAllChatroomsForClient_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FindAllChatroomsForClientResponse" />
+  </wsdl:message>
   <wsdl:message name="Chat_MessagesFromOneChat_InputMessage">
     <wsdl:part name="parameters" element="tns:MessagesFromOneChat" />
   </wsdl:message>
   <wsdl:message name="Chat_MessagesFromOneChat_OutputMessage">
     <wsdl:part name="parameters" element="tns:MessagesFromOneChatResponse" />
-  </wsdl:message>
-  <wsdl:message name="Chat_Disconnect_InputMessage">
-    <wsdl:part name="parameters" element="tns:Disconnect" />
-  </wsdl:message>
-  <wsdl:message name="Chat_Disconnect_OutputMessage">
-    <wsdl:part name="parameters" element="tns:DisconnectResponse" />
   </wsdl:message>
   <wsdl:message name="Chat_NotifyUserIsOnline_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:NotifyUserIsOnline" />
@@ -114,13 +114,13 @@
       <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/ConnectResponse" message="tns:Chat_Connect_OutputMessage" />
       <wsdl:fault wsaw:Action="letsTalk.IChatService/Chat/ConnectConnectionExceptionFaultFault" name="ConnectionExceptionFaultFault" message="tns:Chat_Connect_ConnectionExceptionFaultFault_FaultMessage" />
     </wsdl:operation>
+    <wsdl:operation name="FindAllChatroomsForClient">
+      <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/FindAllChatroomsForClient" message="tns:Chat_FindAllChatroomsForClient_InputMessage" />
+      <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/FindAllChatroomsForClientResponse" message="tns:Chat_FindAllChatroomsForClient_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="MessagesFromOneChat">
       <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/MessagesFromOneChat" message="tns:Chat_MessagesFromOneChat_InputMessage" />
       <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/MessagesFromOneChatResponse" message="tns:Chat_MessagesFromOneChat_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="Disconnect">
-      <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/Disconnect" message="tns:Chat_Disconnect_InputMessage" />
-      <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/DisconnectResponse" message="tns:Chat_Disconnect_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="NotifyUserIsOnline">
       <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/NotifyUserIsOnline" message="tns:Chat_NotifyUserIsOnline_OutputCallbackMessage" />

@@ -52,13 +52,13 @@ namespace letsTalk
 
         [OperationContract(IsOneWay = false)]
         [FaultContract(typeof(ConnectionExceptionFault))]
-        Dictionary<int, List<int>> Connect(int sqlId, string userName);
+        void Connect(int sqlId, string userName);
+
+        [OperationContract(IsOneWay = false)]
+        Dictionary<Chatroom, List<UserInChat>> FindAllChatroomsForClient(int userSqlId);
 
         [OperationContract(IsOneWay = false)]
         List<ServiceMessage> MessagesFromOneChat(int chatroomId);
-
-        [OperationContract]
-        void Disconnect();
     }
 
     public interface IChatCallback

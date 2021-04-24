@@ -79,6 +79,17 @@
                      Grid.Column="0"
                      Background="DarkSlateGray" Foreground="White" FontSize="30" TextWrapping="Wrap"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding TextBox_EnterPressedCommand}"/>
+                </TextBox.InputBindings>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="KeyDown">
+                        <i:InvokeCommandAction Command="{Binding TextBox_KeyDownCommand}"></i:InvokeCommandAction>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="KeyUp">
+                        <i:InvokeCommandAction Command="{Binding TextBox_KeyUpCommand}"></i:InvokeCommandAction>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
             </TextBox>
 
             <Button Grid.Column="1" Content="File" FontSize="20" Command="{Binding OpenFileCommand}"></Button>

@@ -108,7 +108,7 @@ namespace Client.ViewModels
 
                 await System.Threading.Tasks.Task.Run(() =>
                 {
-                    avatarClient.AvatarDownload(downloadRequest.Requested_UserSqlId, out lenght, out stream);
+                    avatarClient.UserAvatarDownload(downloadRequest.Requested_SqlId, out lenght, out stream);
                     if (lenght != 0)
                     {
                         memoryStream = FileHelper.ReadFileByPart(stream);

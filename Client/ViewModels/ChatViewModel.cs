@@ -30,9 +30,18 @@ namespace Client.ViewModels
 
         private string isWritingText;
 
-        public ChatViewModel()
+        private string text;
+
+        public ChatService.ChatClient ChatClient { get; set; }
+
+        public ChatViewModel(ChatService.ChatClient chatClient)
         {
             client = ClientUserInfo.getInstance();
+            ChatClient = chatClient;
+
+            TextBox_KeyDownCommand = new Command(TextBox_KeyDown);
+            TextBox_KeyUpCommand = new Command(TextBox_KeyUp);
+            TextBox_EnterPressedCommand = new Command(TextBox_EnterPressed);
 
             MediaPlayCommand = new Command(MediaPlay);
             MediaPosChangedCommand = new Command(MediaPosChanged);
@@ -58,7 +67,21 @@ namespace Client.ViewModels
             timer.Interval = 500;
         }
 
-        public ChatViewModel(Chat chat, ClientUserInfo user) : this()
+        private void TextBox_EnterPressed(object obj)
+        {
+
+        }
+
+        private void TextBox_KeyUp(object obj)
+        {
+        }
+
+        private void TextBox_KeyDown(object obj)
+        {
+            ChatClient.MessageIsWriting(chat.SqlId, client.SqlId);
+        }
+
+        public ChatViewModel(Chat chat, ClientUserInfo user, ChatService.ChatClient chatClient) : this(chatClient)
         {
             Chat = chat;
         }
@@ -81,6 +104,9 @@ namespace Client.ViewModels
             });
         }
 
+        public ICommand TextBox_KeyDownCommand { get; }
+        public ICommand TextBox_KeyUpCommand { get; }
+        public ICommand TextBox_EnterPressedCommand { get; }
 
         public ICommand MediaPlayCommand { get; }
         public ICommand MediaPosChangedCommand { get; }
@@ -98,6 +124,8 @@ namespace Client.ViewModels
 
         public Chat Chat { get => chat; set => Set(ref chat, value); }
         public string IsWritingText { get => isWritingText; set => Set(ref isWritingText, value); }
+        public string Text { get => text; set => Set(ref text, value); }
+
 
         //тут должен быть твой метод для сообшения другим пользователям что добавлен новый узер
         public void AddMember(object param)

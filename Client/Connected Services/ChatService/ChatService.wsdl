@@ -140,8 +140,8 @@
         <soap12:fault use="literal" name="ConnectionExceptionFaultFault" namespace="" />
       </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="MessagesFromOneChat">
-      <soap12:operation soapAction="letsTalk.IChatService/Chat/MessagesFromOneChat" style="document" />
+    <wsdl:operation name="FindAllChatroomsForClient">
+      <soap12:operation soapAction="letsTalk.IChatService/Chat/FindAllChatroomsForClient" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -149,8 +149,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="Disconnect">
-      <soap12:operation soapAction="letsTalk.IChatService/Chat/Disconnect" style="document" />
+    <wsdl:operation name="MessagesFromOneChat">
+      <soap12:operation soapAction="letsTalk.IChatService/Chat/MessagesFromOneChat" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -283,8 +283,8 @@
   <wsdl:binding name="BasicHttpBinding_Avatar" type="i3:Avatar">
     <wsp:PolicyReference URI="#BasicHttpBinding_Avatar_policy" />
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="AvatarDownload">
-      <soap:operation soapAction="letsTalk.IAvatarService/Avatar/AvatarDownload" style="document" />
+    <wsdl:operation name="UserAvatarDownload">
+      <soap:operation soapAction="letsTalk.IAvatarService/Avatar/UserAvatarDownload" style="document" />
       <wsdl:input name="DownloadRequest">
         <soap:body use="literal" />
       </wsdl:input>
@@ -294,11 +294,36 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="AvatarUpload">
-      <soap:operation soapAction="letsTalk.IAvatarService/Avatar/AvatarUpload" style="document" />
+    <wsdl:operation name="ChatAvatarDownload">
+      <soap:operation soapAction="letsTalk.IAvatarService/Avatar/ChatAvatarDownload" style="document" />
+      <wsdl:input name="DownloadRequest">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="DownloadFileInfo">
+        <soap:header message="i3:DownloadFileInfo_Headers" part="FileExtension" use="literal" />
+        <soap:header message="i3:DownloadFileInfo_Headers" part="Length" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UserAvatarUpload">
+      <soap:operation soapAction="letsTalk.IAvatarService/Avatar/UserAvatarUpload" style="document" />
       <wsdl:input name="UploadFileInfo">
         <soap:header message="i3:UploadFileInfo_Headers" part="FileName" use="literal" />
-        <soap:header message="i3:UploadFileInfo_Headers" part="Responsed_UserSqlId" use="literal" />
+        <soap:header message="i3:UploadFileInfo_Headers" part="Responsed_SqlId" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="StreamExceptionFaultFault">
+        <soap:fault use="literal" name="StreamExceptionFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ChatAvatarUpload">
+      <soap:operation soapAction="letsTalk.IAvatarService/Avatar/ChatAvatarUpload" style="document" />
+      <wsdl:input name="UploadFileInfo">
+        <soap:header message="i3:UploadFileInfo_Headers" part="FileName" use="literal" />
+        <soap:header message="i3:UploadFileInfo_Headers" part="Responsed_SqlId" use="literal" />
         <soap:body use="literal" />
       </wsdl:input>
       <wsdl:output>
@@ -315,7 +340,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8302/Chat</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>LAPTOP-39BIREFL\user</Upn>
+          <Upn>HP-EliteBook\Elman</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
@@ -324,7 +349,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8302/Unit</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>LAPTOP-39BIREFL\user</Upn>
+          <Upn>HP-EliteBook\Elman</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

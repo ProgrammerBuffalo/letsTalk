@@ -52,6 +52,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Chat.cs" />
     <Compile Include="ChatService.cs" />
     <Compile Include="ConnectedUser.cs" />
     <Compile Include="Exceptions.cs" />

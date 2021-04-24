@@ -63,7 +63,7 @@ namespace Client.Models
             {
                 await System.Threading.Tasks.Task.Run(() =>
                  {
-                     avatarClient.AvatarDownload(SqlId, out lenght, out stream);
+                     avatarClient.UserAvatarDownload(SqlId, out lenght, out stream);
                      if (lenght <= 0)
                          return;
                      MemoryStream memoryStream = FileHelper.ReadFileByPart(stream);

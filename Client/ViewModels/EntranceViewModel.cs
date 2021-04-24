@@ -60,7 +60,6 @@ namespace Client.ViewModels
         // бывший main grid visibility
         public bool FormIsEnabled { get => formIsEnabled; set => Set(ref formIsEnabled, value); }
 
-        // статус и видимость супер крутой загрузки
         public LoaderState LoaderState { get => loaderState; set => Set(ref loaderState, value); }
         public System.Windows.Visibility LoaderVisibility { get => loaderVisbility; set => Set(ref loaderVisbility, value); }
 
@@ -128,7 +127,7 @@ namespace Client.ViewModels
                     uploadFileInfo.FileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read); ;
 
                     if (uploadFileInfo.FileStream.CanRead)
-                        await avatarClient.AvatarUploadAsync(uploadFileInfo.FileName, UserId, uploadFileInfo.FileStream);
+                        await avatarClient.UserAvatarUploadAsync(uploadFileInfo.FileName, UserId, uploadFileInfo.FileStream);
                 }
             }
             catch (FaultException<ChatService.LoginExceptionFault> ex)

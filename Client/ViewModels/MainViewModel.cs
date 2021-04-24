@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,31 +28,27 @@ namespace Client.ViewModels
 
         private ContentControl currentView;
 
-        public Dictionary<int, int[]> ChatroomsWithUsers { get; set; }
-
         public MainViewModel()
         {
             LoadedWindowCommand = new Command(LoadedWindow);
             ClosedWindowCommand = new Command(ClosedWindow);
-            //SelectedHambugerOptionItemCommand = new Command(SelectedHambugerOptionItem);
             SelectedChatChangedCommand = new Command(SelectedChatChanged);
             AddUserCommand = new Command(AddUser);
             CreateGroupCommand = new Command(CreateGroup);
             SettingsCommand = new Command(Settings);
 
             Chats = new ObservableCollection<Models.Chat>();
+
+            //SelectedHambugerOptionItemCommand = new Command(SelectedHambugerOptionItem);
         }
 
         public MainViewModel(string name, int sqlId) : this()
         {
             ChatClient = new ChatClient(new InstanceContext(this));
-            ChatroomsWithUsers = ChatClient.Connect(sqlId, name);
-
             ClientUserInfo = new ClientUserInfo(sqlId, name);
 
-            UnitClient unitClient = new UnitClient();
-
-            Demo();
+            ChatClient.Connect(sqlId, name);
+            //Demo();
         }
 
         public ICommand LoadedWindowCommand { get; }
@@ -75,6 +72,7 @@ namespace Client.ViewModels
             try
             {
                 clientUserInfo.DownloadAvatarAsync();
+                LoadChatroomsAsync();
             }
             catch (FaultException<ConnectionExceptionFault> ex)
             {
@@ -100,9 +98,9 @@ namespace Client.ViewModels
             {
                 //Models.Chat chat = (Models.Chat)param;
                 Views.UCChat chatView = new Views.UCChat();
-                ChatViewModel viewModel = new ChatViewModel();
+                ChatViewModel viewModel = new ChatViewModel(this.ChatClient);
                 viewModel.RemoveChat += RemoveChatFromChats;
-                chatView.DataContext = new ChatViewModel(selectedChat, clientUserInfo);
+                chatView.DataContext = new ChatViewModel(selectedChat, clientUserInfo, this.ChatClient);
                 CurrentView = chatView;
             }
         }
@@ -142,8 +140,8 @@ namespace Client.ViewModels
         {
             foreach (var chat in chats)
             {
-                chat.SetOnlineState(userId, state);
-                break;
+                if(chat.SetOnlineState(userId, state))
+                    break;
             }
         }
 
@@ -184,14 +182,12 @@ namespace Client.ViewModels
 
         public void NotifyUserIsOnline(int sqlUserId)
         {
-            //UserOnlineState(userId, true);
-            throw new NotImplementedException();
+            UserOnlineState(sqlUserId, true);
         }
 
         public void NotifyUserIsOffline(int sqlUserId)
         {
-            //UserOnlineState(userId, false);
-            throw new NotImplementedException();
+            UserOnlineState(sqlUserId, false);
         }
 
         public void NotifyUserIsAddedToChat(int chatId, int[] usersInChat)
@@ -234,7 +230,7 @@ namespace Client.ViewModels
 
         public void ClosedWindow(object sender)
         {
-            ChatClient.Disconnect();
+            //ChatClient.Disconnect();
         }
 
         public void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
@@ -243,6 +239,33 @@ namespace Client.ViewModels
             PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(prop_name));
         }
 
+        private async void LoadChatroomsAsync()
+        {
+            Dictionary<Chatroom, UserInChat[]> chatrooms = await ChatClient.FindAllChatroomsForClientAsync(clientUserInfo.SqlId);
+            Chats = new ObservableCollection<Models.Chat>
+                (await System.Threading.Tasks.Task<List<Models.Chat>>.Run(() =>
+            {
+                List<Models.Chat> clientChatrooms = new List<Models.Chat>();
+                foreach (Chatroom key in chatrooms.Keys)
+                {
+                    List<AvailableUser> availableUsers = new List<AvailableUser>();
+                    foreach (UserInChat userInChat in chatrooms[key])
+                    {
+                        availableUsers.Add(new AvailableUser { SqlId = userInChat.UserSqlId, Name = userInChat.UserName, IsOnline = userInChat.IsOnline });
+                    }
+
+                    clientChatrooms.Add(availableUsers.Count > 1 ? (Models.Chat)new ChatGroup(key.ChatSqlId, key.ChatName, availableUsers)
+                                                                 : new ChatOne(key.ChatSqlId, availableUsers.First()));
+                }
+                return clientChatrooms;
+            }));
+
+            foreach (Models.Chat chat in chats)
+            {
+                chat.DownloadAvatarAsync();
+            }
+
+        }
 
         private void Demo()
         {
