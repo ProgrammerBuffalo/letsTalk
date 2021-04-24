@@ -429,9 +429,7 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="files\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="images\bmp.png" />
     <Resource Include="images\doc.png" />
@@ -443,6 +441,16 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\file.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="files\avatar1.png" />
+    <Resource Include="files\avatar2.png" />
+    <Resource Include="files\avatar3.png" />
+    <Resource Include="files\avatar4.png" />
+    <Resource Include="files\avatar5.png" />
+    <Resource Include="files\avatar6.png" />
+    <Resource Include="files\avatar7.png" />
+    <Resource Include="files\avatar8.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

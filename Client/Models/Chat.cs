@@ -49,11 +49,14 @@ namespace Client.Models
 
         public string IsWritingName { get => isWritingName; set => Set(ref isWritingName, value); }
 
+        public virtual BitmapImage Avatar { set; get; }
+
         public abstract void SetOnlineState(int userId, bool state);
 
         public abstract void MessageIsWriting(int userId, bool state);
 
         public abstract void UserLeavedChatroom(int userId);
+
 
         protected void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
         {
@@ -70,7 +73,7 @@ namespace Client.Models
         //убрать
         public ChatOne()
         {
-
+            user = new AvailableUser();
         }
 
         public ChatOne(int sqlId) : base(sqlId)
@@ -94,6 +97,17 @@ namespace Client.Models
         }
 
         public AvailableUser User { get => user; set => Set(ref user, value); }
+
+        public override BitmapImage Avatar
+        {
+            get => user.Image; 
+            set
+            {
+                var image = user.Image;
+                user.Image = value;
+                Set(ref image, value);
+            }
+        }
 
         public override void SetOnlineState(int userId, bool state)
         {

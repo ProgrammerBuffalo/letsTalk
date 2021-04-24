@@ -10,6 +10,7 @@ using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace Client.ViewModels
 {
@@ -272,21 +273,34 @@ namespace Client.ViewModels
         {
             //Chats = new ObservableCollection<Models.Chat>();
             ObservableCollection<SourceMessage> Messages = new ObservableCollection<SourceMessage>();
-            Messages.Add(new SourceMessage(new TextMessage("files/hall.png")));
-            Messages.Add(new UserMessage(new MediaMessage("files/Animals.mp3")));
-            Messages.Add(new UserMessage(new MediaMessage("files/control.mp3")));
-            Messages.Add(new SourceMessage(new TextMessage("asda sdasd asda fas fasd asd asd asda sasd asd")));
-            Messages.Add(new UserMessage(new TextMessage("das dasd asda sd asd asda sd")));
-            Messages.Add(new SourceMessage(new TextMessage("das dasd asda sd asd asda sd asd asdasd asd asd as das asd as dadsasdfas f asfasf asdf afafasf aas fa saaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  fas fasf asf       asfasfasfasfaf")));
-            Messages.Add(new UserMessage(new FileMessage("files/hall.png")));
-            Messages.Add(new UserMessage(new TextMessage("dasdas das dasda sasif jasjf ajf ouiajdijfis jfiasfjos iajsoif jasf")));
-            Messages.Add(new UserMessage(new FileMessage("files/1.txt")));
-            Messages.Add(new SourceMessage(new FileMessage("files/2.docx")));
-            Messages.Add(new UserMessage(new FileMessage("files/3.pptx")));
+            //Messages.Add(new SourceMessage(new TextMessage("files/hall.png")));
+            //Messages.Add(new UserMessage(new MediaMessage("files/Animals.mp3")));
+            //Messages.Add(new UserMessage(new MediaMessage("files/control.mp3")));
+            //Messages.Add(new SourceMessage(new TextMessage("asda sdasd asda fas fasd asd asd asda sasd asd")));
+            //Messages.Add(new UserMessage(new TextMessage("das dasd asda sd asd asda sd")));
+            //Messages.Add(new SourceMessage(new TextMessage("das dasd asda sd asd asda sd asd asdasd asd asd as das asd as dadsasdfas f asfasf asdf afafasf aas fa saaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  fas fasf asf       asfasfasfasfaf")));
+            //Messages.Add(new UserMessage(new FileMessage("files/hall.png")));
+            //Messages.Add(new UserMessage(new TextMessage("dasdas das dasda sasif jasjf ajf ouiajdijfis jfiasfjos iajsoif jasf")));
+            //Messages.Add(new UserMessage(new FileMessage("files/1.txt")));
+            //Messages.Add(new SourceMessage(new FileMessage("files/2.docx")));
+            //Messages.Add(new UserMessage(new FileMessage("files/3.pptx")));
+            Messages.Add(new GroupMessage(new TextMessage("hello group asd asfas fasf asfas fasf asfpKJAOPSKfa")));
+            Messages.Add(new GroupMessage(new FileMessage("files/hall.png") { IsLoaded = true }));
+            Messages.Add(new GroupMessage(new MediaMessage("files/control.mp3")));
+            Messages.Add(new GroupMessage(new FileMessage("files/1.txt")));
             Messages.Add(SystemMessage.UserLeavedChat("someone"));
 
-            Chats.Add(new ChatOne() { User = new AvailableUser() { Name = "eldar" }, Messages = Messages });
-            Chats.Add(new ChatGroup() { GroupName = "group1", Messages = Messages });
+
+            //Chats.Add(new ChatOne() { User = new AvailableUser() { Name = "eldar" }, Messages = Messages });
+            //Chats.Add(new ChatGroup() { GroupName = "group1", Messages = Messages });
+
+            BitmapImage image = new BitmapImage(new Uri("files/avatar1.png", UriKind.Relative));
+            Chats.Add(new ChatOne() { Avatar = image });
+            image = new BitmapImage(new Uri("files/avatar2.png", UriKind.Relative));
+            Chats.Add(new ChatGroup() { Avatar = image });
+            image = new BitmapImage(new Uri("files/avatar3.png", UriKind.Relative));
+            Chats.Add(new ChatOne() { Avatar = image });
+
             //Messages.Add(new GroupMessage(new TextMessage("Hello !!!!"), "User2"));
             //Messages.Add(new GroupMessage(new FileMessage("files/hall.png"), "User3"));
             //Messages.Add(new GroupMessage(new FileMessage("files/2.pptx"), "Eldar"));
