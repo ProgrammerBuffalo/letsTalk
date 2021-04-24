@@ -59,9 +59,6 @@ namespace letsTalk
 
         [OperationContract(IsOneWay = false)]
         List<ServiceMessage> MessagesFromOneChat(int chatroomId);
-
-        [OperationContract]
-        void Disconnect();
     }
 
     public interface IChatCallback

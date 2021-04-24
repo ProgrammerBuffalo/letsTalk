@@ -98,9 +98,9 @@ namespace Client.ViewModels
             {
                 //Models.Chat chat = (Models.Chat)param;
                 Views.UCChat chatView = new Views.UCChat();
-                ChatViewModel viewModel = new ChatViewModel();
+                ChatViewModel viewModel = new ChatViewModel(this.ChatClient);
                 viewModel.RemoveChat += RemoveChatFromChats;
-                chatView.DataContext = new ChatViewModel(selectedChat, clientUserInfo);
+                chatView.DataContext = new ChatViewModel(selectedChat, clientUserInfo, this.ChatClient);
                 CurrentView = chatView;
             }
         }
@@ -187,8 +187,7 @@ namespace Client.ViewModels
 
         public void NotifyUserIsOffline(int sqlUserId)
         {
-            //UserOnlineState(userId, false);
-            throw new NotImplementedException();
+            UserOnlineState(sqlUserId, false);
         }
 
         public void NotifyUserIsAddedToChat(int chatId, int[] usersInChat)
@@ -231,7 +230,7 @@ namespace Client.ViewModels
 
         public void ClosedWindow(object sender)
         {
-            ChatClient.Disconnect();
+            //ChatClient.Disconnect();
         }
 
         public void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")

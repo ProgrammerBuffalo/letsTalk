@@ -59,12 +59,6 @@
   <wsdl:message name="Chat_MessagesFromOneChat_OutputMessage">
     <wsdl:part name="parameters" element="tns:MessagesFromOneChatResponse" />
   </wsdl:message>
-  <wsdl:message name="Chat_Disconnect_InputMessage">
-    <wsdl:part name="parameters" element="tns:Disconnect" />
-  </wsdl:message>
-  <wsdl:message name="Chat_Disconnect_OutputMessage">
-    <wsdl:part name="parameters" element="tns:DisconnectResponse" />
-  </wsdl:message>
   <wsdl:message name="Chat_NotifyUserIsOnline_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:NotifyUserIsOnline" />
   </wsdl:message>
@@ -127,10 +121,6 @@
     <wsdl:operation name="MessagesFromOneChat">
       <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/MessagesFromOneChat" message="tns:Chat_MessagesFromOneChat_InputMessage" />
       <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/MessagesFromOneChatResponse" message="tns:Chat_MessagesFromOneChat_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="Disconnect">
-      <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/Disconnect" message="tns:Chat_Disconnect_InputMessage" />
-      <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/DisconnectResponse" message="tns:Chat_Disconnect_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="NotifyUserIsOnline">
       <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/NotifyUserIsOnline" message="tns:Chat_NotifyUserIsOnline_OutputCallbackMessage" />

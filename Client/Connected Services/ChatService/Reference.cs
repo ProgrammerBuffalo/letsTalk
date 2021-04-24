@@ -730,12 +730,6 @@ namespace Client.ChatService {
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/MessagesFromOneChat", ReplyAction="letsTalk.IChatService/Chat/MessagesFromOneChatResponse")]
         System.Threading.Tasks.Task<Client.ChatService.ServiceMessage[]> MessagesFromOneChatAsync(int chatroomId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/Disconnect", ReplyAction="letsTalk.IChatService/Chat/DisconnectResponse")]
-        void Disconnect();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/Disconnect", ReplyAction="letsTalk.IChatService/Chat/DisconnectResponse")]
-        System.Threading.Tasks.Task DisconnectAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -867,14 +861,6 @@ namespace Client.ChatService {
         
         public System.Threading.Tasks.Task<Client.ChatService.ServiceMessage[]> MessagesFromOneChatAsync(int chatroomId) {
             return base.Channel.MessagesFromOneChatAsync(chatroomId);
-        }
-        
-        public void Disconnect() {
-            base.Channel.Disconnect();
-        }
-        
-        public System.Threading.Tasks.Task DisconnectAsync() {
-            return base.Channel.DisconnectAsync();
         }
     }
     

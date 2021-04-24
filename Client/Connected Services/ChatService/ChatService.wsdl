@@ -158,15 +158,6 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="Disconnect">
-      <soap12:operation soapAction="letsTalk.IChatService/Chat/Disconnect" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="NotifyUserIsOnline">
       <soap12:operation soapAction="letsTalk.IChatService/Chat/NotifyUserIsOnline" style="document" />
       <wsdl:output>
