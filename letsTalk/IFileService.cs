@@ -30,18 +30,25 @@ namespace letsTalk
     public interface IAvatarService
     {
         [OperationContract]
-        DownloadFileInfo AvatarDownload(DownloadRequest request); // Отправка клиенту аватарки
+        DownloadFileInfo UserAvatarDownload(DownloadRequest request); // Отправка клиенту аватарки
+
+        [OperationContract]
+        DownloadFileInfo ChatAvatarDownload(DownloadRequest request);
 
         [OperationContract]
         [FaultContract(typeof(StreamExceptionFault))]
-        void AvatarUpload(UploadFileInfo uploadRequest); // Отправка серверу аватарки
+        void UserAvatarUpload(UploadFileInfo uploadRequest); // Отправка серверу аватарки
+
+        [OperationContract]
+        [FaultContract(typeof(StreamExceptionFault))]
+        void ChatAvatarUpload(UploadFileInfo uploadRequest); // Отправка серверу аватарки
     }
 
     [MessageContract]
     public class DownloadRequest
     {
         [MessageBodyMember]
-        public int Requested_UserSqlId;
+        public int Requested_SqlId;
     }
 
     [MessageContract]
@@ -102,7 +109,7 @@ namespace letsTalk
     public class UploadFileInfo : IDisposable
     {
         [MessageHeader(MustUnderstand = true)]
-        public int Responsed_UserSqlId;
+        public int Responsed_SqlId;
 
         [MessageHeader(MustUnderstand = true)]
         public string FileName;

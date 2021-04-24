@@ -24,6 +24,26 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ConnectionExceptionFault" nillable="true" type="tns:ConnectionExceptionFault" />
+  <xs:complexType name="Chatroom">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ChatName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ChatSqlId" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Chatroom" nillable="true" type="tns:Chatroom" />
+  <xs:complexType name="ArrayOfUserInChat">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="UserInChat" nillable="true" type="tns:UserInChat" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfUserInChat" nillable="true" type="tns:ArrayOfUserInChat" />
+  <xs:complexType name="UserInChat">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="UserName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="UserSqlId" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="UserInChat" nillable="true" type="tns:UserInChat" />
   <xs:complexType name="ArrayOfServiceMessage">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="ServiceMessage" nillable="true" type="tns:ServiceMessage" />

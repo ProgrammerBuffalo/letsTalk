@@ -81,8 +81,20 @@
   </xs:element>
   <xs:element name="ConnectResponse">
     <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FindAllChatroomsForClient">
+    <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConnectResult" nillable="true" type="q3:ArrayOfKeyValueOfintArrayOfintty7Ep6D1" />
+        <xs:element minOccurs="0" name="userSqlId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FindAllChatroomsForClientResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="FindAllChatroomsForClientResult" nillable="true" type="q3:ArrayOfKeyValueOfChatroomArrayOfUserInChatOMw27L4J" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

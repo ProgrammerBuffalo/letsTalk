@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows.Media.Imaging;
 
 namespace Client.Models
@@ -34,6 +35,8 @@ namespace Client.Models
         {
             SqlId = sqlId;
         }
+
+        public virtual async void DownloadAvatarAsync() { }
 
         public int SqlId { get; set; }
 
@@ -107,6 +110,47 @@ namespace Client.Models
         {
             Messages.Add(SystemMessage.UserLeavedChat(user.Name));
         }
+
+        public override async void DownloadAvatarAsync()
+        {
+            ChatService.DownloadRequest request = new ChatService.DownloadRequest(SqlId);
+            var avatarClient = new ChatService.AvatarClient();
+
+            Stream stream = null;
+            long lenght = 0;
+
+            try
+            {
+                await System.Threading.Tasks.Task.Run(() =>
+                {
+                    avatarClient.UserAvatarDownload(user.SqlId, out lenght, out stream);
+                    if (lenght <= 0)
+                        return;
+                    MemoryStream memoryStream = Utility.FileHelper.ReadFileByPart(stream);
+
+                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        var bitmapImage = new BitmapImage();
+                        bitmapImage.BeginInit();
+                        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmapImage.StreamSource = memoryStream;
+                        bitmapImage.EndInit();
+
+                        user.Image = bitmapImage;
+                    });
+                    memoryStream.Close();
+                    memoryStream.Dispose();
+                    stream.Close();
+                    stream.Dispose();
+                });
+
+            }
+            catch (System.ServiceModel.FaultException<ChatService.ConnectionExceptionFault> ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 
     public class ChatGroup : Chat
@@ -115,9 +159,12 @@ namespace Client.Models
 
         private string groupName;
         private string groupDesc;
-        private BitmapImage image;
         private ObservableCollection<AvailableUser> users;
         private Dictionary<AvailableUser, string> colors;
+
+        private BitmapImage image;
+
+        public BitmapImage Image { get => image; set => Set(ref image, value); }
 
         static ChatGroup()
         {
@@ -148,7 +195,6 @@ namespace Client.Models
 
         public string GroupName { get => groupName; set => Set(ref groupName, value); }
         public string GroupDesc { get => groupDesc; set => Set(ref groupDesc, value); }
-        public BitmapImage Image { get => image; set => Set(ref image, value); }
         public ObservableCollection<AvailableUser> Users { get => users; set => Set(ref users, value); }
 
         public void AddMember(AvailableUser user)
@@ -189,6 +235,46 @@ namespace Client.Models
                 if (user.SqlId == userId)
                     return user;
             return null;
+        }
+
+        public override async void DownloadAvatarAsync()
+        {
+            ChatService.DownloadRequest request = new ChatService.DownloadRequest(SqlId);
+            var avatarClient = new ChatService.AvatarClient();
+
+            Stream stream = null;
+            long lenght = 0;
+
+            try
+            {
+                await System.Threading.Tasks.Task.Run(() =>
+                {
+                    avatarClient.ChatAvatarDownload(SqlId, out lenght, out stream);
+                    if (lenght <= 0)
+                        return;
+                    MemoryStream memoryStream = Utility.FileHelper.ReadFileByPart(stream);
+
+                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        var bitmapImage = new BitmapImage();
+                        bitmapImage.BeginInit();
+                        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmapImage.StreamSource = memoryStream;
+                        bitmapImage.EndInit();
+
+                        Image = bitmapImage;
+                    });
+                    memoryStream.Close();
+                    memoryStream.Dispose();
+                    stream.Close();
+                    stream.Dispose();
+                });
+
+            }
+            catch (System.ServiceModel.FaultException<ChatService.ConnectionExceptionFault> ex)
+            {
+                throw ex;
+            }
         }
     }
 }

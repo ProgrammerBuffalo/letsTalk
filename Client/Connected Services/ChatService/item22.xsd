@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/Arrays" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:8301/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/letsTalk" />
   <xs:complexType name="ArrayOfint">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="int" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfint" nillable="true" type="tns:ArrayOfint" />
-  <xs:complexType name="ArrayOfKeyValueOfintArrayOfintty7Ep6D1">
+  <xs:complexType name="ArrayOfKeyValueOfChatroomArrayOfUserInChatOMw27L4J">
     <xs:annotation>
       <xs:appinfo>
         <IsDictionary xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsDictionary>
       </xs:appinfo>
     </xs:annotation>
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValueOfintArrayOfintty7Ep6D1">
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValueOfChatroomArrayOfUserInChatOMw27L4J">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="Key" type="xs:int" />
-            <xs:element name="Value" nillable="true" type="tns:ArrayOfint" />
+            <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/letsTalk" name="Key" nillable="true" type="q1:Chatroom" />
+            <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/letsTalk" name="Value" nillable="true" type="q2:ArrayOfUserInChat" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfKeyValueOfintArrayOfintty7Ep6D1" nillable="true" type="tns:ArrayOfKeyValueOfintArrayOfintty7Ep6D1" />
+  <xs:element name="ArrayOfKeyValueOfChatroomArrayOfUserInChatOMw27L4J" nillable="true" type="tns:ArrayOfKeyValueOfChatroomArrayOfUserInChatOMw27L4J" />
   <xs:complexType name="ArrayOfKeyValueOfintstring">
     <xs:annotation>
       <xs:appinfo>

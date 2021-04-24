@@ -27,21 +27,34 @@
   </wsdl:message>
   <wsdl:message name="UploadFileInfo_Headers">
     <wsdl:part name="FileName" element="tns:FileName" />
-    <wsdl:part name="Responsed_UserSqlId" element="tns:Responsed_UserSqlId" />
+    <wsdl:part name="Responsed_SqlId" element="tns:Responsed_SqlId" />
   </wsdl:message>
-  <wsdl:message name="Avatar_AvatarUpload_OutputMessage" />
-  <wsdl:message name="Avatar_AvatarUpload_StreamExceptionFaultFault_FaultMessage">
+  <wsdl:message name="Avatar_UserAvatarUpload_OutputMessage" />
+  <wsdl:message name="Avatar_UserAvatarUpload_StreamExceptionFaultFault_FaultMessage">
     <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/letsTalk" name="detail" element="q1:StreamExceptionFault" />
   </wsdl:message>
+  <wsdl:message name="Avatar_ChatAvatarUpload_OutputMessage" />
+  <wsdl:message name="Avatar_ChatAvatarUpload_StreamExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/letsTalk" name="detail" element="q2:StreamExceptionFault" />
+  </wsdl:message>
   <wsdl:portType name="Avatar">
-    <wsdl:operation name="AvatarDownload">
-      <wsdl:input wsaw:Action="letsTalk.IAvatarService/Avatar/AvatarDownload" name="DownloadRequest" message="tns:DownloadRequest" />
-      <wsdl:output wsaw:Action="letsTalk.IAvatarService/Avatar/AvatarDownloadResponse" name="DownloadFileInfo" message="tns:DownloadFileInfo" />
+    <wsdl:operation name="UserAvatarDownload">
+      <wsdl:input wsaw:Action="letsTalk.IAvatarService/Avatar/UserAvatarDownload" name="DownloadRequest" message="tns:DownloadRequest" />
+      <wsdl:output wsaw:Action="letsTalk.IAvatarService/Avatar/UserAvatarDownloadResponse" name="DownloadFileInfo" message="tns:DownloadFileInfo" />
     </wsdl:operation>
-    <wsdl:operation name="AvatarUpload">
-      <wsdl:input wsaw:Action="letsTalk.IAvatarService/Avatar/AvatarUpload" name="UploadFileInfo" message="tns:UploadFileInfo" />
-      <wsdl:output wsaw:Action="letsTalk.IAvatarService/Avatar/AvatarUploadResponse" message="tns:Avatar_AvatarUpload_OutputMessage" />
-      <wsdl:fault wsaw:Action="letsTalk.IAvatarService/Avatar/AvatarUploadStreamExceptionFaultFault" name="StreamExceptionFaultFault" message="tns:Avatar_AvatarUpload_StreamExceptionFaultFault_FaultMessage" />
+    <wsdl:operation name="ChatAvatarDownload">
+      <wsdl:input wsaw:Action="letsTalk.IAvatarService/Avatar/ChatAvatarDownload" name="DownloadRequest" message="tns:DownloadRequest" />
+      <wsdl:output wsaw:Action="letsTalk.IAvatarService/Avatar/ChatAvatarDownloadResponse" name="DownloadFileInfo" message="tns:DownloadFileInfo" />
+    </wsdl:operation>
+    <wsdl:operation name="UserAvatarUpload">
+      <wsdl:input wsaw:Action="letsTalk.IAvatarService/Avatar/UserAvatarUpload" name="UploadFileInfo" message="tns:UploadFileInfo" />
+      <wsdl:output wsaw:Action="letsTalk.IAvatarService/Avatar/UserAvatarUploadResponse" message="tns:Avatar_UserAvatarUpload_OutputMessage" />
+      <wsdl:fault wsaw:Action="letsTalk.IAvatarService/Avatar/UserAvatarUploadStreamExceptionFaultFault" name="StreamExceptionFaultFault" message="tns:Avatar_UserAvatarUpload_StreamExceptionFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ChatAvatarUpload">
+      <wsdl:input wsaw:Action="letsTalk.IAvatarService/Avatar/ChatAvatarUpload" name="UploadFileInfo" message="tns:UploadFileInfo" />
+      <wsdl:output wsaw:Action="letsTalk.IAvatarService/Avatar/ChatAvatarUploadResponse" message="tns:Avatar_ChatAvatarUpload_OutputMessage" />
+      <wsdl:fault wsaw:Action="letsTalk.IAvatarService/Avatar/ChatAvatarUploadStreamExceptionFaultFault" name="StreamExceptionFaultFault" message="tns:Avatar_ChatAvatarUpload_StreamExceptionFaultFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

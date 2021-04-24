@@ -159,21 +159,18 @@ namespace letsTalk
             return UserId;
         }
 
-        // Сервер отправляет аватарку зарегистированного пользователя в БД (Метод ищет аватарку пользователя, посредством связей в БД.
-        // После того, как аватарка была найдена в БД, у нас открывается поток под эту картинку для того чтобы клиентская часть сегментами подгрузила её)
-        public DownloadFileInfo AvatarDownload(DownloadRequest request)
+        private DownloadFileInfo AvatarDownload(string selector, int id)
         {
             DownloadFileInfo downloadFileInfo = new DownloadFileInfo();
-
             try
             {
                 using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                 {
                     sqlConnection.Open();
 
-                    SqlCommand sqlCommandFindAvatar = new SqlCommand(@"SELECT stream_id FROM Users WHERE Users.Id = @Id", sqlConnection);
+                    SqlCommand sqlCommandFindAvatar = new SqlCommand($@"SELECT stream_id FROM {selector} WHERE {selector}.Id = @Id", sqlConnection);
                     sqlCommandFindAvatar.CommandType = CommandType.Text;
-                    sqlCommandFindAvatar.Parameters.Add("@Id", SqlDbType.Int).Value = request.Requested_UserSqlId;
+                    sqlCommandFindAvatar.Parameters.Add("@Id", SqlDbType.Int).Value = id;
 
                     var stream_id = sqlCommandFindAvatar.ExecuteScalar();
 
@@ -205,10 +202,21 @@ namespace letsTalk
             return downloadFileInfo;
         }
 
-        // Здесь сервер заносит картинку в файловую таблицу, процесс обратный методу AvatarDownload
-        public void AvatarUpload(UploadFileInfo uploadResponse)
+        // Сервер отправляет аватарку зарегистированного пользователя в БД (Метод ищет аватарку пользователя, посредством связей в БД.
+        // После того, как аватарка была найдена в БД, у нас открывается поток под эту картинку для того чтобы клиентская часть сегментами подгрузила её)
+        public DownloadFileInfo UserAvatarDownload(DownloadRequest request)
         {
+            return AvatarDownload("Users", request.Requested_SqlId);
+        }
 
+        public DownloadFileInfo ChatAvatarDownload(DownloadRequest request)
+        {
+            return AvatarDownload("Chatrooms", request.Requested_SqlId);
+        }
+
+        // Здесь сервер заносит картинку в файловую таблицу, процесс обратный методу AvatarDownload
+        private void AvatarUpload(string selector, UploadFileInfo uploadRequest)
+        {
             try
             {
                 using (TransactionScope trScope = new TransactionScope())
@@ -220,12 +228,12 @@ namespace letsTalk
                         SqlCommand sqlCommandAddAvatar = new SqlCommand($@" INSERT INTO DataFT(file_stream, name, path_locator)
                                                                         OUTPUT INSERTED.stream_id, GET_FILESTREAM_TRANSACTION_CONTEXT(),
                                                                         INSERTED.file_stream.PathName()
-                                                                        VALUES(CAST('' as varbinary(MAX)), @name, dbo.GetPathLocatorForChild('Avatars'))", sqlConnection);
+                                                                        VALUES(CAST('' as varbinary(MAX)), @name, dbo.GetPathLocatorForChild('{selector}Avatars'))", sqlConnection);
 
                         sqlCommandAddAvatar.CommandType = CommandType.Text;
 
-                        string fileName = uploadResponse.FileName;
-                        sqlCommandAddAvatar.Parameters.Add("@name", SqlDbType.NVarChar).Value = "AVATAR" + uploadResponse.Responsed_UserSqlId + $".{fileName.Substring(fileName.LastIndexOf(".") + 1)}";
+                        string fileName = uploadRequest.FileName;
+                        sqlCommandAddAvatar.Parameters.Add("@name", SqlDbType.NVarChar).Value = "AVATAR" + uploadRequest.Responsed_SqlId + $".{fileName.Substring(fileName.LastIndexOf(".") + 1)}";
 
                         Guid stream_id;
                         byte[] transaction_context;
@@ -246,7 +254,7 @@ namespace letsTalk
                             int bytesRead = 0;
                             var buffer = new byte[bufferSize];
 
-                            while ((bytesRead = uploadResponse.FileStream.Read(buffer, 0, bufferSize)) > 0)
+                            while ((bytesRead = uploadRequest.FileStream.Read(buffer, 0, bufferSize)) > 0)
                             {
                                 sqlFileStream.Write(buffer, 0, bytesRead);
                                 sqlFileStream.Flush();
@@ -254,17 +262,17 @@ namespace letsTalk
 
                         }
 
-                        SqlCommand UpdateUserAvatar = new SqlCommand($@" UPDATE Users SET Users.stream_id = @stream_id WHERE Users.Id = @user_id", sqlConnection);
+                        SqlCommand UpdateUserAvatar = new SqlCommand($@" UPDATE {selector} SET stream_id = @stream_id WHERE Id = @Id", sqlConnection);
 
                         UpdateUserAvatar.CommandType = CommandType.Text;
                         UpdateUserAvatar.Parameters.Add("@stream_id", SqlDbType.UniqueIdentifier).Value = stream_id;
-                        UpdateUserAvatar.Parameters.Add("@user_id", SqlDbType.Int).Value = uploadResponse.Responsed_UserSqlId;
+                        UpdateUserAvatar.Parameters.Add("@Id", SqlDbType.Int).Value = uploadRequest.Responsed_SqlId;
 
                         UpdateUserAvatar.ExecuteNonQuery();
 
                         trScope.Complete();
 
-                        Console.WriteLine($"avatar for user {uploadResponse.Responsed_UserSqlId} is added");
+                        Console.WriteLine($"avatar for {selector} {uploadRequest.Responsed_SqlId} is added");
                     }
                 }
             }
@@ -275,6 +283,16 @@ namespace letsTalk
 
                 throw new FaultException<StreamExceptionFault>(streamExceptionFault, streamExceptionFault.Message);
             }
+        }
+
+        public void UserAvatarUpload(UploadFileInfo uploadRequest)
+        {
+            AvatarUpload("Users", uploadRequest);
+        }
+
+        public void ChatAvatarUpload(UploadFileInfo uploadRequest)
+        {
+            AvatarUpload("Chatrooms", uploadRequest);
         }
 
         // Получает список всех существующий пользователей в Базе Данных
@@ -361,7 +379,7 @@ namespace letsTalk
                         sqlCommandAddFileForContentXML.CommandType = CommandType.Text;
 
                         sqlCommandAddFileForContentXML.Parameters.Add("@name", SqlDbType.NVarChar).Value = "CHAT" + chat_id.ToString() + ".xml";
-                       
+
                         Guid stream_id = new Guid();
 
                         using (SqlDataReader sqlDataReader = sqlCommandAddFileForContentXML.ExecuteReader())
@@ -397,7 +415,8 @@ namespace letsTalk
 
                         trScope.Complete();
 
-                        lock (lockerSyncObj) {
+                        lock (lockerSyncObj)
+                        {
 
                             Console.WriteLine("Users added to chat callbacks...");
 
@@ -409,10 +428,10 @@ namespace letsTalk
                                     {
 
                                         chatroomsInUsers[connectedUser].Add(chat_id);
-                                        if(connectedUser.ChatCallback != CurrentCallback)
+                                        if (connectedUser.ChatCallback != CurrentCallback)
                                             connectedUser.ChatCallback.NotifyUserIsAddedToChat(chat_id, users);
                                     }
-                                    
+
                                 }
                             }
                         }
@@ -589,7 +608,7 @@ namespace letsTalk
         }
 
         //Подключение клиента к серверу, получение списка чатрумов и пользователей в нем
-        public Dictionary<int, List<int>> Connect(int sqlId, string userName)
+        public void Connect(int sqlId, string userName)
         {
             if (!chatroomsInUsers.Keys.Any(u => u.SqlID == sqlId))
             {
@@ -614,8 +633,6 @@ namespace letsTalk
                             IChatCallback chatCallback = user.ChatCallback;
                             chatCallback.NotifyUserIsOnline(user.SqlID);
                         }
-
-                        return FindAllChatroomsForClient(sqlId);
                     }
                     catch (Exception ex)
                     {
@@ -631,7 +648,6 @@ namespace letsTalk
                 ConnectionExceptionFault connectionExceptionFault = new ConnectionExceptionFault();
                 throw new FaultException<ConnectionExceptionFault>(connectionExceptionFault, connectionExceptionFault.Message);
             }
-            return null;
         }
 
         //Отключение пользователя
@@ -655,37 +671,48 @@ namespace letsTalk
         }
 
         //Поиск всех чатрумов для клиента во время подключения к серверу
-        private Dictionary<int, List<int>> FindAllChatroomsForClient(int sqlId)
+        public Dictionary<Chatroom, List<UserInChat>> FindAllChatroomsForClient(int userSqlId)
         {
             try
             {
                 Console.WriteLine("Finding chatrooms for user" + "(" + CurrentCallback.GetHashCode() + ")");
-                Dictionary<int, List<int>> usersInChatroom = new Dictionary<int, List<int>>();
+                Dictionary<Chatroom, List<UserInChat>> usersInChatroom = new Dictionary<Chatroom, List<UserInChat>>();
 
                 using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                 {
                     sqlConnection.Open();
 
-                    SqlCommand sqlCommandFindChatrooms = new SqlCommand(@"SELECT* FROM User_Chatroom WHERE Id_Chat in 
-                                                                                  (SELECT Id_Chat FROM User_Chatroom WHERE Id_User = @Id)", sqlConnection);
+                    SqlCommand sqlCommandFindChatrooms = new SqlCommand(@"SELECT* FROM GetChatroomsForUser(@userId)", sqlConnection);
 
                     sqlCommandFindChatrooms.CommandType = CommandType.Text;
-                    sqlCommandFindChatrooms.Parameters.Add("@Id", SqlDbType.Int).Value = sqlId;
+                    sqlCommandFindChatrooms.Parameters.Add("@userId", SqlDbType.Int).Value = userSqlId;
 
                     using (SqlDataReader sqlDataReader = sqlCommandFindChatrooms.ExecuteReader())
                     {
                         while (sqlDataReader.Read())
                         {
                             int chatId = sqlDataReader.GetInt32(0);
-                            int userId = sqlDataReader.GetInt32(1);
+                            string chatName = sqlDataReader.GetSqlString(1).Value;
+                            int userId = sqlDataReader.GetInt32(2);
+                            string userName = sqlDataReader.GetSqlString(3).Value;
 
-                            if (usersInChatroom.ContainsKey(chatId))
+                            Chatroom chat = usersInChatroom.Keys.FirstOrDefault(c => c.ChatSqlId == chatId);
+
+                            if (chat == null)
                             {
-                                usersInChatroom.Add(chatId, new List<int>() { userId });
+                                usersInChatroom.Add(new Chatroom()
+                                {
+                                    ChatSqlId = chatId,
+                                    ChatName = chatName
+                                },
+                                new List<UserInChat>() { new UserInChat() {
+                                                          UserSqlId = userId,
+                                                          UserName = userName
+                                                                 } });
                             }
                             else
                             {
-                                usersInChatroom[chatId].Add(userId);
+                                usersInChatroom[chat].Add(new UserInChat { UserSqlId = userId, UserName = userName });
                             }
                         }
                     }
@@ -870,9 +897,9 @@ namespace letsTalk
         {
             try
             {
-                using(TransactionScope transactionScope = new TransactionScope())
+                using (TransactionScope transactionScope = new TransactionScope())
                 {
-                    using(SqlConnection sqlConnection = new SqlConnection(connection_string))
+                    using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                     {
                         SqlCommand sqlCommandAddFileToDataFT = new SqlCommand($@" INSERT INTO DataFT(file_stream, name, path_locator)
                                                                                   OUTPUT INSERTED.stream_id, GET_FILESTREAM_TRANSACTION_CONTEXT(),
@@ -899,7 +926,7 @@ namespace letsTalk
                                 full_path = sqlDataReader.GetSqlString(2).Value;
                             }
                         }
-                        catch(SqlException ex)
+                        catch (SqlException ex)
                         {
                             Console.WriteLine(ex.Message);
                             FileUpload(chatToServer);
@@ -937,13 +964,13 @@ namespace letsTalk
 
                             AddToXML(fullpathXML, serviceMessageFile);
 
-                            foreach(IChatCallback chatCallback in chatroomsInUsers.Keys)
+                            foreach (IChatCallback chatCallback in chatroomsInUsers.Keys)
                             {
-                                if(chatCallback != CurrentCallback)
+                                if (chatCallback != CurrentCallback)
                                 {
                                     chatCallback.NotifyUserFileSendedToChat(serviceMessageFile, chatToServer.ChatroomId);
                                 }
-                                    
+
                             }
                         }
                     }
@@ -1016,7 +1043,7 @@ namespace letsTalk
                 return messages;
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
