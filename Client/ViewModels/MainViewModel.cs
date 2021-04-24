@@ -140,8 +140,8 @@ namespace Client.ViewModels
         {
             foreach (var chat in chats)
             {
-                chat.SetOnlineState(userId, state);
-                break;
+                if(chat.SetOnlineState(userId, state))
+                    break;
             }
         }
 
@@ -182,8 +182,7 @@ namespace Client.ViewModels
 
         public void NotifyUserIsOnline(int sqlUserId)
         {
-            //UserOnlineState(userId, true);
-            throw new NotImplementedException();
+            UserOnlineState(sqlUserId, true);
         }
 
         public void NotifyUserIsOffline(int sqlUserId)
@@ -253,7 +252,7 @@ namespace Client.ViewModels
                     List<AvailableUser> availableUsers = new List<AvailableUser>();
                     foreach (UserInChat userInChat in chatrooms[key])
                     {
-                        availableUsers.Add(new AvailableUser { SqlId = userInChat.UserSqlId, Name = userInChat.UserName });
+                        availableUsers.Add(new AvailableUser { SqlId = userInChat.UserSqlId, Name = userInChat.UserName, IsOnline = userInChat.IsOnline });
                     }
 
                     clientChatrooms.Add(availableUsers.Count > 1 ? (Models.Chat)new ChatGroup(key.ChatSqlId, key.ChatName, availableUsers)

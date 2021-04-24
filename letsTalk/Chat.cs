@@ -24,5 +24,8 @@ namespace letsTalk
 
         [DataMember]
         public string UserName { get; set; }
+
+        [DataMember]
+        public bool IsOnline { get; set; }
     }
 }

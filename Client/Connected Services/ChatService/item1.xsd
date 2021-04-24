@@ -39,6 +39,7 @@
   <xs:element name="ArrayOfUserInChat" nillable="true" type="tns:ArrayOfUserInChat" />
   <xs:complexType name="UserInChat">
     <xs:sequence>
+      <xs:element minOccurs="0" name="IsOnline" type="xs:boolean" />
       <xs:element minOccurs="0" name="UserName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="UserSqlId" type="xs:int" />
     </xs:sequence>

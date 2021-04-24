@@ -631,7 +631,7 @@ namespace letsTalk
                                 continue;
 
                             IChatCallback chatCallback = user.ChatCallback;
-                            chatCallback.NotifyUserIsOnline(user.SqlID);
+                            chatCallback.NotifyUserIsOnline(sqlId);
                         }
                     }
                     catch (Exception ex)
@@ -698,6 +698,8 @@ namespace letsTalk
 
                             Chatroom chat = usersInChatroom.Keys.FirstOrDefault(c => c.ChatSqlId == chatId);
 
+                            bool isOnline = chatroomsInUsers.Any(cU => cU.Key.SqlID == userId);
+
                             if (chat == null)
                             {
                                 usersInChatroom.Add(new Chatroom()
@@ -707,12 +709,14 @@ namespace letsTalk
                                 },
                                 new List<UserInChat>() { new UserInChat() {
                                                           UserSqlId = userId,
-                                                          UserName = userName
-                                                                 } });
+                                                          UserName = userName,
+                                                          IsOnline = isOnline } });
                             }
                             else
                             {
-                                usersInChatroom[chat].Add(new UserInChat { UserSqlId = userId, UserName = userName });
+                                usersInChatroom[chat].Add(new UserInChat { UserSqlId = userId,
+                                                                           UserName = userName,
+                                                                           IsOnline = isOnline});
                             }
                         }
                     }
