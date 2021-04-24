@@ -126,7 +126,8 @@ namespace Client.ViewModels
         //тут метод для загрузки файла
         public void DownloadFile(object param)
         {
-            Guid streamId = (Guid)param;
+            //FileMessage message = (FileMessage)((SourceMessage)param).Message;
+            //message.IsLoaded = true;
         }
 
         private void MediaPlay(object param)

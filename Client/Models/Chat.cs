@@ -108,7 +108,7 @@ namespace Client.Models
 
         public override void SetOnlineState(int userId, bool state)
         {
-            if (user.SqlId == userId) user.IsOnline = true;
+            if (user.SqlId == userId) user.IsOnline = state;
         }
 
         public override void MessageIsWriting(int userId, bool state)
