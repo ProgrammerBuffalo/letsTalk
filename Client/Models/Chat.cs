@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Media.Imaging;
@@ -11,8 +12,7 @@ namespace Client.Models
 
         private ObservableCollection<SourceMessage> messages;
         private int count;
-        private bool isWriting;
-        private string isWritingName;
+        private bool isWriting = false;
 
         protected Chat()
         {
@@ -47,13 +47,11 @@ namespace Client.Models
 
         public bool IsWriting { get => isWriting; set => Set(ref isWriting, value); }
 
-        public string IsWritingName { get => isWritingName; set => Set(ref isWritingName, value); }
-
         public virtual BitmapImage Avatar { set; get; }
 
         public abstract bool SetOnlineState(int userId, bool state);
 
-        public abstract void MessageIsWriting(int userId, bool state);
+        public abstract void MessageIsWriting(Nullable<int> userId);
 
         public abstract void UserLeavedChatroom(int userId);
 
@@ -119,10 +117,9 @@ namespace Client.Models
             return false;
         }
 
-        public override void MessageIsWriting(int userId, bool state)
+        public override void MessageIsWriting(Nullable<int> userId)
         {
-            IsWriting = state;
-            IsWritingName = user.Name;
+            IsWriting = userId == null ? false : true;
         }
 
         public override void UserLeavedChatroom(int userId)
@@ -180,6 +177,7 @@ namespace Client.Models
         private string groupDesc;
         private ObservableCollection<AvailableUser> users;
         private Dictionary<AvailableUser, string> colors;
+        private string isWritingName;
 
         private BitmapImage image;
 
@@ -214,6 +212,8 @@ namespace Client.Models
 
         public string GroupName { get => groupName; set => Set(ref groupName, value); }
         public string GroupDesc { get => groupDesc; set => Set(ref groupDesc, value); }
+        public string IsWritingName { get => isWritingName; set => Set(ref isWritingName, value); }
+
         public ObservableCollection<AvailableUser> Users { get => users; set => Set(ref users, value); }
 
         public void AddMember(AvailableUser user)
@@ -240,10 +240,15 @@ namespace Client.Models
             return false;
         }
 
-        public override void MessageIsWriting(int userId, bool state)
+        public override void MessageIsWriting(Nullable<int> userId)
         {
             var user = FindUser(userId);
-            IsWriting = state;
+            if (user == null)
+            {
+                IsWriting = false;
+                return;
+            }
+            IsWriting = true;
             IsWritingName = user.Name;
         }
 
@@ -253,8 +258,10 @@ namespace Client.Models
             Messages.Add(SystemMessage.UserLeavedChat(user.Name));
         }
 
-        private AvailableUser FindUser(int userId)
+        private AvailableUser FindUser(Nullable<int> userId)
         {
+            if (userId == null)
+                return null;
             foreach (var user in users)
                 if (user.SqlId == userId)
                     return user;

@@ -33,7 +33,7 @@ namespace letsTalk
     public interface IChatService
     {
         [OperationContract(IsOneWay = true)]
-        void MessageIsWriting(int chatroomId, int userSqlId);
+        void MessageIsWriting(int chatroomId, Nullable<int> userSqlId);
 
         [OperationContract(IsOneWay = false)]
         void SendMessageText(ServiceMessageText message, int chatroomId);
@@ -93,7 +93,7 @@ namespace letsTalk
 
         //Оповещение о том, что пользователь пишет для чатрума сообщение
         [OperationContract(IsOneWay = true)]
-        void ReplyMessageIsWriting(int sqlId);
+        void ReplyMessageIsWriting(Nullable<int> userId, int chatroomId);
 
         //Оповещение пользователей, о добавлении в чатрум файла
         [OperationContract(IsOneWay = true)]
