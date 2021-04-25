@@ -581,7 +581,7 @@ namespace letsTalk
         }
 
         //Оповещение серверу о том, что пишется на данный момент сообщение
-        public void MessageIsWriting(int chatroomId, int userSqlId)
+        public void MessageIsWriting(int chatroomId, Nullable<int> userSqlId)
         {
             List<ConnectedUser> users = chatroomsInUsers.Where(chatrooms => chatrooms.Value
                                                         .Contains(chatroomId))
@@ -593,7 +593,7 @@ namespace letsTalk
             {
                 if (user.UserContext != OperationContext.Current)
                 {
-                    user.UserContext.GetCallbackChannel<IChatCallback>().ReplyMessageIsWriting(userSqlId);
+                    user.UserContext.GetCallbackChannel<IChatCallback>().ReplyMessageIsWriting(userSqlId, chatroomId);
                 }
             }
         }
@@ -677,10 +677,10 @@ namespace letsTalk
         //Поиск всех чатрумов для клиента во время подключения к серверу
         public Dictionary<Chatroom, List<UserInChat>> FindAllChatroomsForClient(int userSqlId)
         {
+            Dictionary<Chatroom, List<UserInChat>> usersInChatroom = new Dictionary<Chatroom, List<UserInChat>>();
             try
             {
                 Console.WriteLine("Finding chatrooms for user" + "(" + OperationContext.Current.Channel.GetHashCode() + ")");
-                Dictionary<Chatroom, List<UserInChat>> usersInChatroom = new Dictionary<Chatroom, List<UserInChat>>();
 
                 using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                 {
@@ -732,7 +732,7 @@ namespace letsTalk
             {
                 Console.WriteLine(ex.Message);
             }
-            return null;
+            return usersInChatroom;
         }
 
         //Поиск всех чатрумов в которых находится подключенный клиент

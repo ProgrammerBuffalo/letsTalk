@@ -30,7 +30,7 @@ namespace Client.ViewModels
 
         private string isWritingText;
 
-        private string text;
+        private string messageText = "";
 
         public ChatService.ChatClient ChatClient { get; set; }
 
@@ -69,19 +69,25 @@ namespace Client.ViewModels
 
         private void TextBox_EnterPressed(object obj)
         {
-
+            if (MessageText.Length < 1)
+                return;
+            //ChatClient.SendMessageTextAsync();
         }
 
         private void TextBox_KeyUp(object obj)
         {
+            if (MessageText.Length < 1)
+                ChatClient.MessageIsWritingAsync(Chat.SqlId, null);
         }
 
         private void TextBox_KeyDown(object obj)
         {
-            ChatClient.MessageIsWriting(chat.SqlId, client.SqlId);
+            if(MessageText.Length > 1)
+                ChatClient.MessageIsWritingAsync(chat.SqlId, client.SqlId);
+            System.Windows.MessageBox.Show(MessageText);
         }
 
-        public ChatViewModel(Chat chat, ClientUserInfo user, ChatService.ChatClient chatClient) : this(chatClient)
+        public ChatViewModel(Chat chat, ChatService.ChatClient chatClient) : this(chatClient)
         {
             Chat = chat;
         }
@@ -124,7 +130,7 @@ namespace Client.ViewModels
 
         public Chat Chat { get => chat; set => Set(ref chat, value); }
         public string IsWritingText { get => isWritingText; set => Set(ref isWritingText, value); }
-        public string Text { get => text; set => Set(ref text, value); }
+        public string MessageText { get => messageText; set => Set(ref messageText, value); }
 
 
         //тут должен быть твой метод для сообшения другим пользователям что добавлен новый узер
@@ -256,3 +262,4 @@ namespace Client.ViewModels
         }
     }
 }
+

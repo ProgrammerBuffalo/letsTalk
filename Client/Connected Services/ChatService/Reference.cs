@@ -677,10 +677,10 @@ namespace Client.ChatService {
     public interface Chat {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/MessageIsWriting")]
-        void MessageIsWriting(int chatroomId, int userSqlId);
+        void MessageIsWriting(int chatroomId, System.Nullable<int> userSqlId);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/MessageIsWriting")]
-        System.Threading.Tasks.Task MessageIsWritingAsync(int chatroomId, int userSqlId);
+        System.Threading.Tasks.Task MessageIsWritingAsync(int chatroomId, System.Nullable<int> userSqlId);
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/SendMessageText", ReplyAction="letsTalk.IChatService/Chat/SendMessageTextResponse")]
         void SendMessageText(Client.ChatService.ServiceMessageText message, int chatroomId);
@@ -757,7 +757,7 @@ namespace Client.ChatService {
         void ReplyMessage(Client.ChatService.ServiceMessageText message, int chatroomId);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/ReplyMessageIsWriting")]
-        void ReplyMessageIsWriting(int sqlId);
+        void ReplyMessageIsWriting(System.Nullable<int> userId, int chatroomId);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/NotifyUserFileSendedToChat")]
         void NotifyUserFileSendedToChat(Client.ChatService.ServiceMessageFile serviceMessageFile, int chatroomId);
@@ -791,11 +791,11 @@ namespace Client.ChatService {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public void MessageIsWriting(int chatroomId, int userSqlId) {
+        public void MessageIsWriting(int chatroomId, System.Nullable<int> userSqlId) {
             base.Channel.MessageIsWriting(chatroomId, userSqlId);
         }
         
-        public System.Threading.Tasks.Task MessageIsWritingAsync(int chatroomId, int userSqlId) {
+        public System.Threading.Tasks.Task MessageIsWritingAsync(int chatroomId, System.Nullable<int> userSqlId) {
             return base.Channel.MessageIsWritingAsync(chatroomId, userSqlId);
         }
         

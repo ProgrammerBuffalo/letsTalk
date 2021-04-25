@@ -98,9 +98,9 @@ namespace Client.ViewModels
             {
                 //Models.Chat chat = (Models.Chat)param;
                 Views.UCChat chatView = new Views.UCChat();
-                ChatViewModel viewModel = new ChatViewModel(this.ChatClient);
+                ChatViewModel viewModel = new ChatViewModel(selectedChat, this.ChatClient);
                 viewModel.RemoveChat += RemoveChatFromChats;
-                chatView.DataContext = new ChatViewModel(selectedChat, clientUserInfo, this.ChatClient);
+                chatView.DataContext = viewModel;
                 CurrentView = chatView;
             }
         }
@@ -174,10 +174,10 @@ namespace Client.ViewModels
             Chats.Remove(chat);
         }
 
-        private void ChatIsWriting(int chatId, int userId, bool state)
+        private void ChatIsWriting(int chatId, int? userId)
         {
             var chat = FindChatroom(chatId);
-            chat.MessageIsWriting(userId, state);
+            chat.MessageIsWriting(userId);
         }
 
         public void NotifyUserIsOnline(int sqlUserId)
@@ -217,10 +217,9 @@ namespace Client.ViewModels
             throw new NotImplementedException();
         }
 
-        public void ReplyMessageIsWriting(int sqlId)
+        public void ReplyMessageIsWriting(Nullable<int> userSqlId, int chatSqlId)
         {
-            //ChatIsWriting(chatId, userId, state);
-            throw new NotImplementedException();
+            ChatIsWriting(chatSqlId, userSqlId);
         }
 
         public void NotifyUserFileSendedToChat(ServiceMessageFile serviceMessageFile, int chatroomId)
