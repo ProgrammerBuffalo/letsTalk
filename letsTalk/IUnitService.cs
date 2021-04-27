@@ -21,5 +21,8 @@ namespace letsTalk
 
         [OperationContract(IsOneWay = false)]
         Dictionary<int, string> GetRegisteredUsers(int count, int offset, int callerId);
+
+        [OperationContract(IsOneWay = false)]
+        List<ServiceMessage> MessagesFromOneChat(int chatroomId);
     }
 }

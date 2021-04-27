@@ -19,7 +19,6 @@
     <wsdl:part name="FileName" element="tns:FileName" />
     <wsdl:part name="Responsed_UserSqlId" element="tns:Responsed_UserSqlId" />
   </wsdl:message>
-  <wsdl:message name="File_FileUpload_OutputMessage" />
   <wsdl:message name="FileFromChatDownloadRequest">
     <wsdl:part name="parameters" element="tns:FileFromChatDownloadRequest" />
   </wsdl:message>
@@ -33,7 +32,7 @@
   <wsdl:portType name="File">
     <wsdl:operation name="FileUpload">
       <wsdl:input wsaw:Action="letsTalk.IFileService/File/FileUpload" name="UploadFromChatToServer" message="tns:UploadFromChatToServer" />
-      <wsdl:output wsaw:Action="letsTalk.IFileService/File/FileUploadResponse" message="tns:File_FileUpload_OutputMessage" />
+      <wsdl:output wsaw:Action="letsTalk.IFileService/File/FileUploadResponse" name="FileFromChatDownloadRequest" message="tns:FileFromChatDownloadRequest" />
     </wsdl:operation>
     <wsdl:operation name="FileDownload">
       <wsdl:input wsaw:Action="letsTalk.IFileService/File/FileDownload" name="FileFromChatDownloadRequest" message="tns:FileFromChatDownloadRequest" />

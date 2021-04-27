@@ -10,16 +10,52 @@ namespace Client.Models
     {
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 
-        private ObservableCollection<SourceMessage> messages;
+        private ObservableCollection<SourceMessage> messages = new ObservableCollection<SourceMessage>();
         private int count;
-        private bool isWriting = false;
+
+        private string userIsWriting;
 
         protected Chat()
         {
+            Messages.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(
+               async delegate (object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+                {
+                    if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+                    {
+                        if (e.NewItems[0] is SystemMessage)
+                            return;
 
+                        await System.Threading.Tasks.Task.Run(() =>
+                        {
+                            SourceMessage sourceMessage = e.NewItems[0] as SourceMessage;
+                            if (sourceMessage.Message is FileMessage)
+                            {
+                                FileMessage fileMessage = sourceMessage.Message as FileMessage;
+                                string extension = fileMessage.FileName.Substring(fileMessage.FileName.LastIndexOf('.'));
+                                switch (extension)
+                                {                                    
+                                    case ".jpg":
+                                    case ".png":
+                                    case ".jpeg":
+                                        if(sourceMessage is SessionSendedMessage)
+                                        {
+                                            sourceMessage.Message = LoadImageFromClient(fileMessage);
+                                            break;
+                                        }
+                                        sourceMessage.Message = LoadImageFromServer(fileMessage);
+                                        break;
+                                    default:
+                                        fileMessage.IsLoaded = false;
+                                        break;
+                                }
+                            }
+                        });
+                    }
+                }
+            );
         }
 
-        protected Chat(IEnumerable<SourceMessage> messages)
+        protected Chat(IEnumerable<SourceMessage> messages) : this()
         {
             Messages = new ObservableCollection<SourceMessage>();
             foreach (var message in messages)
@@ -31,9 +67,74 @@ namespace Client.Models
             Count = count;
         }
 
-        protected Chat(int sqlId)
+        protected Chat(int sqlId) : this()
         {
             SqlId = sqlId;
+        }
+
+        private ImageMessage LoadImageFromClient(FileMessage fileMessage)
+        {
+            ImageMessage imageMessage = new ImageMessage(fileMessage.FileName, fileMessage.Date, fileMessage.StreamId);
+
+            MemoryStream memoryStream = new MemoryStream();
+            using(FileStream fileStream = new FileStream(fileMessage.FileName, FileMode.Open, FileAccess.Read))
+            {
+                fileStream.CopyTo(memoryStream);
+            }
+
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                var bitmapImage = new BitmapImage();
+
+                bitmapImage.BeginInit();
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.StreamSource = memoryStream;
+                bitmapImage.EndInit();
+
+                imageMessage.Bitmap = bitmapImage;
+            });
+            imageMessage.FileName = imageMessage.FileName.Substring(imageMessage.FileName.LastIndexOf("\\") + 1);
+            imageMessage.IsLoaded = false;
+            return imageMessage;
+        }
+
+        private ImageMessage LoadImageFromServer(FileMessage fileMessage)
+        {
+            ImageMessage imageMessage = new ImageMessage(fileMessage.FileName, fileMessage.Date, fileMessage.StreamId, new BitmapImage());
+
+            Stream stream = null;
+            MemoryStream memoryStream = null;
+            long lenght = 0;
+
+            ChatService.FileClient fileClient = new ChatService.FileClient();
+            try
+            {
+                string name = fileClient.FileDownload(fileMessage.StreamId, out lenght, out stream);
+                if (lenght <= 0)
+                    return null;
+                memoryStream = Utility.FileHelper.ReadFileByPart(stream);
+
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var bitmapImage = new BitmapImage();
+                    bitmapImage.BeginInit();
+                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmapImage.StreamSource = memoryStream;
+                    bitmapImage.EndInit();
+
+                    imageMessage.Bitmap = bitmapImage;
+                });
+
+                imageMessage.IsLoaded = false;
+            }
+            catch (Exception ex) { System.Windows.MessageBox.Show(ex.Message); }
+            finally
+            {
+                if (memoryStream != null) memoryStream.Close();
+                if (stream != null) stream.Close();
+            }
+
+            return imageMessage;
         }
 
         public virtual async void DownloadAvatarAsync() { }
@@ -42,10 +143,11 @@ namespace Client.Models
 
         public ObservableCollection<SourceMessage> Messages { get => messages; set => Set(ref messages, value); }
 
-        //количество не прочитанных смс
         public int Count { get => count; set => Set(ref count, value); }
 
-        public bool IsWriting { get => isWriting; set => Set(ref isWriting, value); }
+
+        //количество не прочитанных смс
+        public string UserIsWriting { get => userIsWriting; set => Set(ref userIsWriting, value); }
 
         public virtual BitmapImage Avatar { set; get; }
 
@@ -53,8 +155,9 @@ namespace Client.Models
 
         public abstract void MessageIsWriting(Nullable<int> userId);
 
-        public abstract void UserLeavedChatroom(int userId);
+        public abstract SourceMessage GetMessageType(int senderId, Message message);
 
+        public abstract void UserLeavedChatroom(int userId);
 
         protected void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
         {
@@ -84,7 +187,7 @@ namespace Client.Models
 
         }
 
-        public ChatOne(int sqlId, AvailableUser user)
+        public ChatOne(int sqlId, AvailableUser user) : this(sqlId)
         {
             User = user;
         }
@@ -98,7 +201,7 @@ namespace Client.Models
 
         public override BitmapImage Avatar
         {
-            get => user.Image; 
+            get => user.Image;
             set
             {
                 var image = user.Image;
@@ -111,15 +214,15 @@ namespace Client.Models
         {
             if (user.SqlId == userId)
             {
-              user.IsOnline = state;
-              return true;
+                user.IsOnline = state;
+                return true;
             }
             return false;
         }
 
         public override void MessageIsWriting(Nullable<int> userId)
         {
-            IsWriting = userId == null ? false : true;
+            UserIsWriting = User.SqlId == userId ? User.Name + " is writing..." : "";
         }
 
         public override void UserLeavedChatroom(int userId)
@@ -167,6 +270,12 @@ namespace Client.Models
             }
         }
 
+        public override SourceMessage GetMessageType(int senderId, Message message)
+        {
+            if (senderId == ClientUserInfo.getInstance().SqlId)
+                return new UserMessage(message);
+            return new SourceMessage(message);
+        }
     }
 
     public class ChatGroup : Chat
@@ -175,9 +284,8 @@ namespace Client.Models
 
         private string groupName;
         private string groupDesc;
-        private ObservableCollection<AvailableUser> users;
+        private ObservableCollection<AvailableUser> users = new ObservableCollection<AvailableUser>();
         private Dictionary<AvailableUser, string> colors;
-        private string isWritingName;
 
         private BitmapImage image;
 
@@ -200,7 +308,6 @@ namespace Client.Models
         public ChatGroup(int sqlId, string groupName, IEnumerable<AvailableUser> users) : base(sqlId)
         {
             GroupName = groupName;
-            users = new ObservableCollection<AvailableUser>();
             foreach (var user in users)
                 Users.Add(user);
         }
@@ -212,7 +319,6 @@ namespace Client.Models
 
         public string GroupName { get => groupName; set => Set(ref groupName, value); }
         public string GroupDesc { get => groupDesc; set => Set(ref groupDesc, value); }
-        public string IsWritingName { get => isWritingName; set => Set(ref isWritingName, value); }
 
         public ObservableCollection<AvailableUser> Users { get => users; set => Set(ref users, value); }
 
@@ -245,11 +351,10 @@ namespace Client.Models
             var user = FindUser(userId);
             if (user == null)
             {
-                IsWriting = false;
+                UserIsWriting = "";
                 return;
             }
-            IsWriting = true;
-            IsWritingName = user.Name;
+            UserIsWriting = user.Name + " is writing...";
         }
 
         public override void UserLeavedChatroom(int userId)
@@ -306,6 +411,13 @@ namespace Client.Models
             {
                 throw ex;
             }
+        }
+
+        public override SourceMessage GetMessageType(int senderId, Message message)
+        {
+            if (senderId == ClientUserInfo.getInstance().SqlId)
+                return new GroupMessage(message);
+            return new SourceMessage(message);
         }
     }
 }

@@ -149,15 +149,6 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="MessagesFromOneChat">
-      <soap12:operation soapAction="letsTalk.IChatService/Chat/MessagesFromOneChat" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="NotifyUserIsOnline">
       <soap12:operation soapAction="letsTalk.IChatService/Chat/NotifyUserIsOnline" style="document" />
       <wsdl:output>
@@ -252,6 +243,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="MessagesFromOneChat">
+      <soap12:operation soapAction="letsTalk.IUnitService/Unit/MessagesFromOneChat" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="BasicHttpBinding_File" type="i2:File">
     <wsp:PolicyReference URI="#BasicHttpBinding_File_policy" />
@@ -264,7 +264,7 @@
         <soap:header message="i2:UploadFromChatToServer_Headers" part="Responsed_UserSqlId" use="literal" />
         <soap:body use="literal" />
       </wsdl:input>
-      <wsdl:output>
+      <wsdl:output name="FileFromChatDownloadRequest">
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>

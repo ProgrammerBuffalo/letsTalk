@@ -84,19 +84,10 @@ namespace Client.ViewModels
             }
         }
 
-        //public void SelectedHambugerOptionItem(object sender)
-        //{
-        //    HamburgerMenuIconItem menuIconItem = sender as HamburgerMenuIconItem;
-        //    Type userControl = Type.GetType("Client.Views." + menuIconItem.Tag);
-
-        //    CurrentView = Activator.CreateInstance(userControl, ChatClient) as ContentControl;
-        //}
-
         public void SelectedChatChanged(object param)
         {
             if (selectedChat != null)
             {
-                //Models.Chat chat = (Models.Chat)param;
                 Views.UCChat chatView = new Views.UCChat();
                 ChatViewModel viewModel = new ChatViewModel(selectedChat, this.ChatClient);
                 viewModel.RemoveChat += RemoveChatFromChats;
@@ -141,7 +132,9 @@ namespace Client.ViewModels
             foreach (var chat in chats)
             {
                 if(chat.SetOnlineState(userId, state))
-                    break;
+                {
+                    chat.UserIsWriting = "";
+                }
             }
         }
 
@@ -214,7 +207,9 @@ namespace Client.ViewModels
 
         public void ReplyMessage(ServiceMessageText message, int chatroomId)
         {
-            throw new NotImplementedException();
+            var chat = FindChatroom(chatroomId);
+            if (chat != null)
+                chat.Messages.Add(chat.GetMessageType(message.Sender, new TextMessage(message.Text, message.DateTime)));
         }
 
         public void ReplyMessageIsWriting(Nullable<int> userSqlId, int chatSqlId)
@@ -224,7 +219,9 @@ namespace Client.ViewModels
 
         public void NotifyUserFileSendedToChat(ServiceMessageFile serviceMessageFile, int chatroomId)
         {
-            throw new NotImplementedException();
+            var chat = FindChatroom(chatroomId);
+            if (chat != null)
+                chat.Messages.Add(chat.GetMessageType(serviceMessageFile.Sender, new FileMessage(serviceMessageFile.FileName, serviceMessageFile.DateTime, serviceMessageFile.StreamId)));
         }
 
         public void ClosedWindow(object sender)
@@ -253,8 +250,8 @@ namespace Client.ViewModels
                         availableUsers.Add(new AvailableUser { SqlId = userInChat.UserSqlId, Name = userInChat.UserName, IsOnline = userInChat.IsOnline });
                     }
 
-                    clientChatrooms.Add(availableUsers.Count > 1 ? (Models.Chat)new ChatGroup(key.ChatSqlId, key.ChatName, availableUsers)
-                                                                 : new ChatOne(key.ChatSqlId, availableUsers.First()));
+                    clientChatrooms.Add(availableUsers.Count > 1 ? new ChatGroup(key.ChatSqlId, key.ChatName, availableUsers)
+                                                                 : (Models.Chat)new ChatOne(key.ChatSqlId, availableUsers.First()));
                 }
                 return clientChatrooms;
             }));

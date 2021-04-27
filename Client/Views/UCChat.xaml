@@ -72,9 +72,9 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" Visibility="{Binding Path=Chat.IsWriting}" Text="{Binding Path=IsWritingText, StringFormat={}{0} is writting...}" FontSize="25" Panel.ZIndex="1" Margin="0,-41,20,70"/>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Path=Chat.UserIsWriting}" FontSize="25" Panel.ZIndex="1" Margin="0,-41,20,70"/>
 
-            <TextBox Text="{Binding Path=DataContext.MessageText}"
+            <TextBox Text="{Binding MessageText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      Grid.Column="0"
                      Background="DarkSlateGray" Foreground="White" FontSize="30" TextWrapping="Wrap"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
@@ -100,6 +100,9 @@
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Unloaded">
             <i:InvokeCommandAction Command="{Binding UnloadCommand}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadCommand}"></i:InvokeCommandAction>
         </i:EventTrigger>
     </i:Interaction.Triggers>
 </UserControl>

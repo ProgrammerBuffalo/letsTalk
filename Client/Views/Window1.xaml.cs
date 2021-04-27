@@ -90,7 +90,7 @@ namespace Client.Views
             if (player.Source == null)
             {
                 curMediaMessage = message;
-                player.Open(new Uri(message.Path, UriKind.Absolute));
+                player.Open(new Uri(message.FileName, UriKind.Absolute));
                 player.Position = TimeSpan.FromTicks(message.CurrentLength);
                 player.Play();
                 timer.Start();
@@ -101,7 +101,7 @@ namespace Client.Views
                 curMediaMessage.IsPlaying = false;
                 curMediaMessage.CurrentLength = 0;
                 player.Close();
-                player.Open(new Uri(message.Path, UriKind.Absolute));
+                player.Open(new Uri(message.FileName, UriKind.Absolute));
                 player.Position = TimeSpan.FromTicks(message.CurrentLength);
                 player.Play();
                 timer.Start();

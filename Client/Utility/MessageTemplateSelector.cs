@@ -50,7 +50,7 @@ namespace Client.Utility
             else
             {
                 FileMessage fileMessage = (FileMessage)message;
-                string extn = fileMessage.Path.Substring(fileMessage.Path.LastIndexOf('.'));
+                string extn = fileMessage.FileName.Substring(fileMessage.FileName.LastIndexOf('.'));
                 if (extn == ".png" || extn == ".jpg") return ImageDataTemplate;
                 else if (extn == ".mp3" || extn == ".wave") return AudioDataTemplate;
                 else return FileDataTemplate;

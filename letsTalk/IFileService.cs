@@ -20,7 +20,7 @@ namespace letsTalk
     public interface IFileService
     {
         [OperationContract]
-        void FileUpload(UploadFromChatToServer chatToServer); // Отправка серверу файла с чатрума
+        FileFromChatDownloadRequest FileUpload(UploadFromChatToServer chatToServer); // Отправка серверу файла с чатрума
 
         [OperationContract]
         DownloadFileInfo FileDownload(FileFromChatDownloadRequest request); // Отправка клиенту файла

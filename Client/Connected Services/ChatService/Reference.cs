@@ -618,6 +618,12 @@ namespace Client.ChatService {
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/GetRegisteredUsers", ReplyAction="letsTalk.IUnitService/Unit/GetRegisteredUsersResponse")]
         System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> GetRegisteredUsersAsync(int count, int offset, int callerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/MessagesFromOneChat", ReplyAction="letsTalk.IUnitService/Unit/MessagesFromOneChatResponse")]
+        Client.ChatService.ServiceMessage[] MessagesFromOneChat(int chatroomId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/MessagesFromOneChat", ReplyAction="letsTalk.IUnitService/Unit/MessagesFromOneChatResponse")]
+        System.Threading.Tasks.Task<Client.ChatService.ServiceMessage[]> MessagesFromOneChatAsync(int chatroomId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -669,6 +675,14 @@ namespace Client.ChatService {
         
         public System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> GetRegisteredUsersAsync(int count, int offset, int callerId) {
             return base.Channel.GetRegisteredUsersAsync(count, offset, callerId);
+        }
+        
+        public Client.ChatService.ServiceMessage[] MessagesFromOneChat(int chatroomId) {
+            return base.Channel.MessagesFromOneChat(chatroomId);
+        }
+        
+        public System.Threading.Tasks.Task<Client.ChatService.ServiceMessage[]> MessagesFromOneChatAsync(int chatroomId) {
+            return base.Channel.MessagesFromOneChatAsync(chatroomId);
         }
     }
     
@@ -724,12 +738,6 @@ namespace Client.ChatService {
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/FindAllChatroomsForClient", ReplyAction="letsTalk.IChatService/Chat/FindAllChatroomsForClientResponse")]
         System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<Client.ChatService.Chatroom, Client.ChatService.UserInChat[]>> FindAllChatroomsForClientAsync(int userSqlId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/MessagesFromOneChat", ReplyAction="letsTalk.IChatService/Chat/MessagesFromOneChatResponse")]
-        Client.ChatService.ServiceMessage[] MessagesFromOneChat(int chatroomId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/MessagesFromOneChat", ReplyAction="letsTalk.IChatService/Chat/MessagesFromOneChatResponse")]
-        System.Threading.Tasks.Task<Client.ChatService.ServiceMessage[]> MessagesFromOneChatAsync(int chatroomId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -853,14 +861,6 @@ namespace Client.ChatService {
         
         public System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<Client.ChatService.Chatroom, Client.ChatService.UserInChat[]>> FindAllChatroomsForClientAsync(int userSqlId) {
             return base.Channel.FindAllChatroomsForClientAsync(userSqlId);
-        }
-        
-        public Client.ChatService.ServiceMessage[] MessagesFromOneChat(int chatroomId) {
-            return base.Channel.MessagesFromOneChat(chatroomId);
-        }
-        
-        public System.Threading.Tasks.Task<Client.ChatService.ServiceMessage[]> MessagesFromOneChatAsync(int chatroomId) {
-            return base.Channel.MessagesFromOneChatAsync(chatroomId);
         }
     }
     
@@ -1120,12 +1120,12 @@ namespace Client.ChatService {
     [System.ServiceModel.ServiceContractAttribute(Namespace="letsTalk.IFileService", ConfigurationName="ChatService.File")]
     public interface File {
         
-        // CODEGEN: Generating message contract since the operation FileUpload is neither RPC nor document wrapped.
+        // CODEGEN: Generating message contract since the wrapper name (UploadFromChatToServer) of message UploadFromChatToServer does not match the default value (FileUpload)
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IFileService/File/FileUpload", ReplyAction="letsTalk.IFileService/File/FileUploadResponse")]
-        Client.ChatService.FileUploadResponse FileUpload(Client.ChatService.UploadFromChatToServer request);
+        Client.ChatService.FileFromChatDownloadRequest FileUpload(Client.ChatService.UploadFromChatToServer request);
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IFileService/File/FileUpload", ReplyAction="letsTalk.IFileService/File/FileUploadResponse")]
-        System.Threading.Tasks.Task<Client.ChatService.FileUploadResponse> FileUploadAsync(Client.ChatService.UploadFromChatToServer request);
+        System.Threading.Tasks.Task<Client.ChatService.FileFromChatDownloadRequest> FileUploadAsync(Client.ChatService.UploadFromChatToServer request);
         
         // CODEGEN: Generating message contract since the wrapper name (FileFromChatDownloadRequest) of message FileFromChatDownloadRequest does not match the default value (FileDownload)
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IFileService/File/FileDownload", ReplyAction="letsTalk.IFileService/File/FileDownloadResponse")]
@@ -1161,16 +1161,6 @@ namespace Client.ChatService {
             this.FileName = FileName;
             this.Responsed_UserSqlId = Responsed_UserSqlId;
             this.FileStream = FileStream;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class FileUploadResponse {
-        
-        public FileUploadResponse() {
         }
     }
     
@@ -1244,25 +1234,26 @@ namespace Client.ChatService {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        Client.ChatService.FileUploadResponse Client.ChatService.File.FileUpload(Client.ChatService.UploadFromChatToServer request) {
+        Client.ChatService.FileFromChatDownloadRequest Client.ChatService.File.FileUpload(Client.ChatService.UploadFromChatToServer request) {
             return base.Channel.FileUpload(request);
         }
         
-        public void FileUpload(int ChatroomId, string FileName, int Responsed_UserSqlId, System.IO.Stream FileStream) {
+        public System.Guid FileUpload(int ChatroomId, string FileName, int Responsed_UserSqlId, System.IO.Stream FileStream) {
             Client.ChatService.UploadFromChatToServer inValue = new Client.ChatService.UploadFromChatToServer();
             inValue.ChatroomId = ChatroomId;
             inValue.FileName = FileName;
             inValue.Responsed_UserSqlId = Responsed_UserSqlId;
             inValue.FileStream = FileStream;
-            Client.ChatService.FileUploadResponse retVal = ((Client.ChatService.File)(this)).FileUpload(inValue);
+            Client.ChatService.FileFromChatDownloadRequest retVal = ((Client.ChatService.File)(this)).FileUpload(inValue);
+            return retVal.StreamId;
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<Client.ChatService.FileUploadResponse> Client.ChatService.File.FileUploadAsync(Client.ChatService.UploadFromChatToServer request) {
+        System.Threading.Tasks.Task<Client.ChatService.FileFromChatDownloadRequest> Client.ChatService.File.FileUploadAsync(Client.ChatService.UploadFromChatToServer request) {
             return base.Channel.FileUploadAsync(request);
         }
         
-        public System.Threading.Tasks.Task<Client.ChatService.FileUploadResponse> FileUploadAsync(int ChatroomId, string FileName, int Responsed_UserSqlId, System.IO.Stream FileStream) {
+        public System.Threading.Tasks.Task<Client.ChatService.FileFromChatDownloadRequest> FileUploadAsync(int ChatroomId, string FileName, int Responsed_UserSqlId, System.IO.Stream FileStream) {
             Client.ChatService.UploadFromChatToServer inValue = new Client.ChatService.UploadFromChatToServer();
             inValue.ChatroomId = ChatroomId;
             inValue.FileName = FileName;

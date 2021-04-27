@@ -28,6 +28,14 @@
         }
     }
 
+    public class SessionSendedMessage : SourceMessage
+    {
+        public SessionSendedMessage(Message message) : base(message)
+        {
+
+        }
+    }
+
     // тут храниться сообшение которые послал клиент
     public class UserMessage : SourceMessage
     {
