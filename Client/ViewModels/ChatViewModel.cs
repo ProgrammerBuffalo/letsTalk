@@ -4,6 +4,7 @@ using Microsoft.Win32;
 using System;
 using System.ComponentModel;
 using System.Timers;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -12,32 +13,32 @@ namespace Client.ViewModels
     class ChatViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-
-        //нужен чтобы понять какой вид сообщения пошлет user;
         private delegate void MessageSendType(string message);
+        private MessageSendType sendType;
+        public MainViewModel.ChatDelegate RemoveChat { get; set; }
+
+        public ChatService.ChatClient ChatClient { get; set; }
 
         private ClientUserInfo client;
-
-        private MessageSendType sendType;
-
         private Chat chat;
+        private Settings settings;
 
         private MediaMessage curMediaMessage;
-
         private MediaPlayer player;
 
         private Timer timer;
 
         private string isWritingText;
-
         private string messageText = "";
 
-        public ChatService.ChatClient ChatClient { get; set; }
+        private Visibility loaderVisibility;
 
         public ChatViewModel(ChatService.ChatClient chatClient)
         {
             client = ClientUserInfo.getInstance();
             ChatClient = chatClient;
+            settings = Settings.Instance;
+            Scroll.ScrollChanged += ScrollScrollChanged;
 
             TextBox_KeyDownCommand = new Command(TextBox_KeyDown);
             TextBox_KeyUpCommand = new Command(TextBox_KeyUp);
@@ -67,47 +68,9 @@ namespace Client.ViewModels
             timer.Interval = 500;
         }
 
-        private void TextBox_EnterPressed(object obj)
-        {
-            if (MessageText.Length < 1)
-                return;
-            //ChatClient.SendMessageTextAsync();
-        }
-
-        private void TextBox_KeyUp(object obj)
-        {
-            if (MessageText.Length < 1)
-                ChatClient.MessageIsWritingAsync(Chat.SqlId, null);
-        }
-
-        private void TextBox_KeyDown(object obj)
-        {
-            if(MessageText.Length > 1)
-                ChatClient.MessageIsWritingAsync(chat.SqlId, client.SqlId);
-            System.Windows.MessageBox.Show(MessageText);
-        }
-
         public ChatViewModel(Chat chat, ChatService.ChatClient chatClient) : this(chatClient)
         {
             Chat = chat;
-        }
-
-        public MainViewModel.ChatDelegate RemoveChat { get; set; }
-
-        private void MediaEnded(object sender, EventArgs e)
-        {
-            player.Close();
-            timer.Stop();
-            curMediaMessage.CurrentLength = 0;
-            curMediaMessage.IsPlaying = false;
-        }
-
-        private void MediaPosTimer(object sender, EventArgs e)
-        {
-            App.Current.Dispatcher.Invoke(() =>
-            {
-                curMediaMessage.CurrentLength = player.Position.Ticks;
-            });
         }
 
         public ICommand TextBox_KeyDownCommand { get; }
@@ -131,7 +94,57 @@ namespace Client.ViewModels
         public Chat Chat { get => chat; set => Set(ref chat, value); }
         public string IsWritingText { get => isWritingText; set => Set(ref isWritingText, value); }
         public string MessageText { get => messageText; set => Set(ref messageText, value); }
+        public System.Windows.Controls.ScrollViewer Scroll { get; set; }
 
+        public Visibility LoaderVisibility { get => loaderVisibility; set => Set(ref loaderVisibility, value); }
+
+        private void ScrollScrollChanged(object sender, System.Windows.Controls.ScrollChangedEventArgs e)
+        {
+            if (Scroll.VerticalOffset == Scroll.ScrollableHeight)
+            {
+                LoaderVisibility = Visibility.Visible;
+                //тут твой метод для загрузки доп сообшений (в параметр идет эта переменная settings.MessageLoadCount)
+
+                //в конце твоего асинхроного методв 
+                App.Current.Dispatcher.Invoke(() => { loaderVisibility = Visibility.Hidden; });
+            }
+        }
+
+        private void TextBox_EnterPressed(object obj)
+        {
+            if (MessageText.Length < 1)
+                return;
+            //ChatClient.SendMessageTextAsync();
+        }
+
+        private void TextBox_KeyUp(object obj)
+        {
+            if (MessageText.Length < 1)
+                ChatClient.MessageIsWritingAsync(Chat.SqlId, null);
+        }
+
+        private void TextBox_KeyDown(object obj)
+        {
+            if (MessageText.Length > 1)
+                ChatClient.MessageIsWritingAsync(chat.SqlId, client.SqlId);
+            System.Windows.MessageBox.Show(MessageText);
+        }
+
+        private void MediaEnded(object sender, EventArgs e)
+        {
+            player.Close();
+            timer.Stop();
+            curMediaMessage.CurrentLength = 0;
+            curMediaMessage.IsPlaying = false;
+        }
+
+        private void MediaPosTimer(object sender, EventArgs e)
+        {
+            App.Current.Dispatcher.Invoke(() =>
+            {
+                curMediaMessage.CurrentLength = player.Position.Ticks;
+            });
+        }
 
         //тут должен быть твой метод для сообшения другим пользователям что добавлен новый узер
         public void AddMember(object param)

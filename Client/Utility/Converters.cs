@@ -52,6 +52,20 @@ namespace Client.Utility
         }
     }
 
+    //получени полного пути файла 
+    class FullPathConverter : System.Windows.Data.IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return AppDomain.CurrentDomain.BaseDirectory + value.ToString();
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return value;
+        }
+    }
+
     //для зеленого кружка в ChatItem если значение count больше чем 99 то получаем "99+" 
     class CountConverter : System.Windows.Data.IValueConverter
     {
@@ -94,4 +108,19 @@ namespace Client.Utility
             return value;
         }
     }
+
+    //надо убрать
+    class TempConverter : System.Windows.Data.IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return value;
+        }
+    }
+
 }

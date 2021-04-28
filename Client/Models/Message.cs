@@ -53,14 +53,14 @@ namespace Client.Models
 
     public class FileMessage : Message
     {
-        private static string root;
+        //private static string root;
         private string path;
         private bool isLoaded;
 
-        static FileMessage()
-        {
-            root = AppDomain.CurrentDomain.BaseDirectory;
-        }
+        //static FileMessage()
+        //{
+        //    root = AppDomain.CurrentDomain.BaseDirectory;
+        //}
 
         public FileMessage()
         {
@@ -69,7 +69,7 @@ namespace Client.Models
 
         public FileMessage(string path) : this()
         {
-            Path = root + path;
+            Path = AppDomain.CurrentDomain.BaseDirectory + path;
         }
 
         public FileMessage(string path, DateTime date) : this(path)

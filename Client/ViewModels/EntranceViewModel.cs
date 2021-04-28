@@ -20,12 +20,16 @@ namespace Client.ViewModels
 
         private bool isSectionShown;
 
+        private string info;
+        private bool formIsEnabled;
+
         private string name;
         private string login;
         private string password;
-        private string info;
 
-        private bool formIsEnabled;
+        private bool nameIsWarning;
+        private bool loginIsWarning;
+        private bool passwordIsWarning;
 
         private System.Windows.Visibility loaderVisbility;
         private LoaderState loaderState;
@@ -52,10 +56,15 @@ namespace Client.ViewModels
 
         public bool IsSectionShown { get => isSectionShown; set => Set(ref isSectionShown, value); }
 
+        public string Info { get => info; set => Set(ref info, value); }
+
         public string Name { get => name; set => Set(ref name, value); }
         public string Login { get => login; set => Set(ref login, value); }
         public string Password { get => password; set => Set(ref password, value); }
-        public string Info { get => info; set => Set(ref info, value); }
+
+        public bool NameIsWarning { get => nameIsWarning; set => Set(ref nameIsWarning, value); }
+        public bool LoginIsWarning { get => loginIsWarning; set => Set(ref loginIsWarning, value); }
+        public bool PasswordIsWarning { get => passwordIsWarning; set => Set(ref passwordIsWarning, value); }
 
         // бывший main grid visibility
         public bool FormIsEnabled { get => formIsEnabled; set => Set(ref formIsEnabled, value); }
@@ -65,20 +74,27 @@ namespace Client.ViewModels
 
         private void SignIn(object param)
         {
-            var unitClient = new ChatService.UnitClient();
-            try
+            if (login != null && password != null)
             {
-                ChatService.ServerUserInfo serverUserInfo = unitClient.Authorization(new ChatService.AuthenticationUserInfo() { Login = Login, Password = Password });
+                var unitClient = new ChatService.UnitClient();
+                try
+                {
+                    ChatService.ServerUserInfo serverUserInfo = unitClient.Authorization(new ChatService.AuthenticationUserInfo() { Login = Login, Password = Password });
 
-                MainWindow mainWindow = new MainWindow();
-                mainWindow.DataContext = new MainViewModel(serverUserInfo.Name, serverUserInfo.SqlId);
-                mainWindow.Show();
-                entranceWindow.Close();
+                    MainWindow mainWindow = new MainWindow();
+                    mainWindow.DataContext = new MainViewModel(serverUserInfo.Name, serverUserInfo.SqlId);
+                    mainWindow.Show();
+                    entranceWindow.Close();
+                }
+                catch (FaultException<ChatService.AuthorizationExceptionFault> ex)
+                {
+                    System.Windows.MessageBox.Show(ex.Message);
+                    Info = ex.Message;
+                }
             }
-            catch (FaultException<ChatService.AuthorizationExceptionFault> ex)
+            else
             {
-                System.Windows.MessageBox.Show(ex.Message);
-                Info = ex.Message;
+                System.Windows.MessageBox.Show("all fields must be entered");
             }
         }
 

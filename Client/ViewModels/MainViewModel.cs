@@ -97,9 +97,10 @@ namespace Client.ViewModels
             if (selectedChat != null)
             {
                 //Models.Chat chat = (Models.Chat)param;
-                Views.UCChat chatView = new Views.UCChat();
+                Views.ChatUC chatView = new Views.ChatUC();
                 ChatViewModel viewModel = new ChatViewModel(selectedChat, this.ChatClient);
                 viewModel.RemoveChat += RemoveChatFromChats;
+                viewModel.Scroll = chatView.scroll;
                 chatView.DataContext = viewModel;
                 CurrentView = chatView;
             }

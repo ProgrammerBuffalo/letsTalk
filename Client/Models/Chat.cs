@@ -61,6 +61,11 @@ namespace Client.Models
             prop = value;
             PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(prop_name));
         }
+
+        protected void Set(string prop_name)
+        {
+            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(prop_name));
+        }
     }
 
 
@@ -98,12 +103,11 @@ namespace Client.Models
 
         public override BitmapImage Avatar
         {
-            get => user.Image; 
+            get => user.Image;
             set
             {
-                var image = user.Image;
                 user.Image = value;
-                Set(ref image, value);
+                Set("Avatar");
             }
         }
 
@@ -111,8 +115,8 @@ namespace Client.Models
         {
             if (user.SqlId == userId)
             {
-              user.IsOnline = state;
-              return true;
+                user.IsOnline = state;
+                return true;
             }
             return false;
         }
