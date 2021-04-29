@@ -145,7 +145,6 @@ namespace Client.Models
 
         public int Count { get => count; set => Set(ref count, value); }
 
-
         //количество не прочитанных смс
         public string UserIsWriting { get => userIsWriting; set => Set(ref userIsWriting, value); }
 
@@ -158,6 +157,8 @@ namespace Client.Models
         public abstract SourceMessage GetMessageType(int senderId, Message message);
 
         public abstract void UserLeavedChatroom(int userId);
+
+        public abstract void RemoveUser(AvailableUser user);
 
         protected void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
         {
@@ -232,6 +233,11 @@ namespace Client.Models
         public override void UserLeavedChatroom(int userId)
         {
             Messages.Add(SystemMessage.UserLeavedChat(user.Name));
+        }
+
+        public override void RemoveUser(AvailableUser user)
+        {
+            if (this.user.SqlId == user.SqlId) this.user = null;
         }
 
         public override async void DownloadAvatarAsync()
@@ -365,6 +371,11 @@ namespace Client.Models
         {
             var user = FindUser(userId);
             Messages.Add(SystemMessage.UserLeavedChat(user.Name));
+        }
+
+        public override void RemoveUser(AvailableUser user)
+        {
+            Users.Remove(user);
         }
 
         private AvailableUser FindUser(Nullable<int> userId)

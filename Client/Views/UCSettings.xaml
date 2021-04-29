@@ -3,13 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:Icons ="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:icons ="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="500">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/WindowResources/SlideRadioButton.xaml"/>
+                <ResourceDictionary Source="/WindowResources/SliderCheckBox.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <Style x:Key="HeaderStyle" TargetType="TextBlock">
@@ -82,9 +83,9 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <RadioButton Grid.Row="0" Grid.Column="0" IsChecked="True" Template="{StaticResource SlideRadioButtonTemplate}" Command="{Binding MessageCountLoadChangedCommand}" CommandParameter="{Binding ElementName=messageLoadCount1, Path=Text}"/>
-                    <RadioButton Grid.Row="0" Grid.Column="1" Template="{StaticResource SlideRadioButtonTemplate}" Command="{Binding MessageCountLoadChangedCommand}" CommandParameter="{Binding ElementName=messageLoadCount2, Path=Text}"/>
-                    <RadioButton Grid.Row="0" Grid.Column="2" Template="{StaticResource SlideRadioButtonTemplate}" Command="{Binding MessageCountLoadChangedCommand}" CommandParameter="{Binding ElementName=messageLoadCount3, Path=Text}"/>
+                    <RadioButton Grid.Row="0" Grid.Column="0" IsChecked="{Binding Path=LoadCount1IsChecked}" Template="{StaticResource SlideRadioButtonTemplate}" Command="{Binding MessageLoadCountChangedCommand}" CommandParameter="{Binding ElementName=messageLoadCount1, Path=Text}"/>
+                    <RadioButton Grid.Row="0" Grid.Column="1" IsChecked="{Binding Path=LoadCount2IsChecked}" Template="{StaticResource SlideRadioButtonTemplate}" Command="{Binding MessageLoadCountChangedCommand}" CommandParameter="{Binding ElementName=messageLoadCount2, Path=Text}"/>
+                    <RadioButton Grid.Row="0" Grid.Column="2" IsChecked="{Binding Path=LoadCount3IsChecked}" Template="{StaticResource SlideRadioButtonTemplate}" Command="{Binding MessageLoadCountChangedCommand}" CommandParameter="{Binding ElementName=messageLoadCount3, Path=Text}"/>
 
                     <TextBlock x:Name="messageLoadCount1" Grid.Row="1" Grid.Column="0" Text="30"/>
                     <TextBlock x:Name="messageLoadCount2" Grid.Row="1" Grid.Column="1" Text="50"/>
@@ -110,28 +111,30 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition Height="1.5*"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Notify is on"/>
-                <RadioButton Grid.Row="1" Grid.Column="0" Template="{StaticResource SlideRadioButtonTemplate}"/>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="Choose notify rington" />
-                <Button Grid.Column="1" Grid.Row="1" Content="Select from device" Command="{Binding DefaultRingtonShowCommand}"/>
-                <TextBlock Text="{Binding Path=Settings.SelectedRington, StringFormat={}Selected rington: {0}}"/>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Notify?"/>
+                <CheckBox Grid.Row="1" Grid.Column="0" Template="{StaticResource SliderCheckBoxTemplate}"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Margin="0,0,20,0" Text="{Binding Path=Settings.SelectedRington.Name, StringFormat={}Selected rington: {0}}"/>
+
+                <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Text="Choose notify rington" />
+                <Button Grid.Column="1" Grid.Row="1" Content="Default ringtons" Command="{Binding DefaultRingtonShowCommand}"/>
+
+                <Button Grid.Column="2" Grid.Row="1" Content="Select from device" Command="{Binding DeviceRingtonShowCommand}"/>
             </Grid>
 
             <TextBlock Grid.Row="8" Text="About" Style="{StaticResource HeaderStyle}"/>
 
             <Grid Grid.Row="9">
-                
+
             </Grid>
 
-            
-
-            <Icons:PackIconFontAwesome Width="48"
+            <icons:PackIconFontAwesome Width="48"
                                        Height="48"
                                        Margin="10"                                       
                                        HorizontalAlignment="Right"

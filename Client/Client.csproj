@@ -214,6 +214,7 @@
     <Compile Include="ViewModels\AvailableUsersViewModel.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
     <Compile Include="ViewModels\EntranceViewModel.cs" />
+    <Compile Include="ViewModels\EditGroupViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="Views\AddUserUC.xaml.cs">
@@ -224,6 +225,9 @@
     </Compile>
     <Compile Include="Views\DefaultWallpaperWindow.xaml.cs">
       <DependentUpon>DefaultWallpaperWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditGroupWindow.xaml.cs">
+      <DependentUpon>EditGroupWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntranceWindow.xaml.cs">
       <DependentUpon>EntranceWindow.xaml</DependentUpon>
@@ -283,6 +287,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\EditGroupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\EntranceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -327,7 +335,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WindowResources\MessageDicitionary.xaml">
+    <Page Include="WindowResources\MessageDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

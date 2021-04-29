@@ -3,6 +3,23 @@
                     xmlns:uc="clr-namespace:Client.UserControls"
                     xmlns:utility="clr-namespace:Client.Utility">
 
+    <Style x:Key="OnlineEllipseStyle" TargetType="Ellipse">
+        <Setter Property="Height" Value="15"/>
+        <Setter Property="Width" Value="15"/>
+        <Setter Property="VerticalAlignment" Value="Bottom"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="Stroke" Value="Black"/>
+        <Setter Property="StrokeThickness" Value="2"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Path=IsOnline}" Value="True">
+                <Setter Property="Fill" Value="Green"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=IsOnline}" Value="False">
+                <Setter Property="Fill" Value="Red"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="ChatListViewItemStyle" TargetType="ListViewItem">
         <Setter Property="Template">
             <Setter.Value>
@@ -47,7 +64,7 @@
         <uc:ChatItem
             UserName="{Binding Path=Name}"
             Description="{Binding Path=bbb}"
-            Avatar="{Binding Path=Avatar}"
+            Avatar="{Binding Path=Image}"
             IsOnlineVisibility="Hidden">
         </uc:ChatItem>
     </DataTemplate>

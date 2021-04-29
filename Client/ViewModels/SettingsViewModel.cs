@@ -17,18 +17,18 @@ namespace Client.ViewModels
         private Views.PreviewWallpaperWindow previewWallpaperWindow;
         private string selectedWallpaper;
         private MediaPlayer player;
+        private bool loadCount1IsChecked;
+        private bool loadCount2IsChecked;
+        private bool loadCount3IsChecked;
+
 
         public SettingsViewModel()
         {
             Client = ClientUserInfo.getInstance();
-            Client = new ClientUserInfo(1, "");
-            Client.UserName = "Emil";
-            Client.UserDesc = "Best programmer";
-            Client.UserImage = new System.Windows.Media.Imaging.BitmapImage(new System.Uri("files/avatar3.png", System.UriKind.Relative));
             settings = Settings.Instance;
             player = new MediaPlayer();
 
-            MessageCountLoadChangedCommand = new Command(MessageLoadCountChanged);
+            MessageLoadCountChangedCommand = new Command(MessageLoadCountChanged);
             DefaultWallpaperShowCommand = new Command(DefaultWallpaperShow);
             DeviceWallpaperShowCommand = new Command(DeviceWallpaperShow);
             DefaultWallpaperChangedCommand = new Command(DefaultWallpaperChanged);
@@ -42,42 +42,13 @@ namespace Client.ViewModels
             Messages.Add(new SourceMessage(new TextMessage("Hello")));
             Messages.Add(new UserMessage(new TextMessage("Hi how are you")));
             Messages.Add(new SourceMessage(new TextMessage("I am okey thanks ;)")));
-            Messages.Add(new SourceMessage(new TextMessage("Hello")));
-            Messages.Add(new UserMessage(new TextMessage("Hi how are you")));
-            Messages.Add(new SourceMessage(new TextMessage("I am okey thanks ;)")));
-            Messages.Add(new SourceMessage(new TextMessage("Hello")));
-            Messages.Add(new UserMessage(new TextMessage("Hi how are you")));
-            Messages.Add(new SourceMessage(new TextMessage("I am okey thanks ;)")));
-            Messages.Add(new SourceMessage(new TextMessage("Hello")));
-            Messages.Add(new UserMessage(new TextMessage("Hi how are you")));
-            Messages.Add(new SourceMessage(new TextMessage("I am okey thanks ;)")));
-            Messages.Add(new SourceMessage(new TextMessage("Hello")));
-            Messages.Add(new UserMessage(new TextMessage("Hi how are you")));
-            Messages.Add(new SourceMessage(new TextMessage("I am okey thanks ;)")));
-            Messages.Add(new SourceMessage(new TextMessage("Hello")));
-            Messages.Add(new UserMessage(new TextMessage("Hi how are you")));
-            Messages.Add(new SourceMessage(new TextMessage("I am okey thanks ;)")));
-            Messages.Add(new SourceMessage(new TextMessage("Hello")));
-            Messages.Add(new UserMessage(new TextMessage("Hi how are you")));
-            Messages.Add(new SourceMessage(new TextMessage("I am okey thanks ;)")));
-            Messages.Add(new SourceMessage(new TextMessage("Hello")));
-            Messages.Add(new UserMessage(new TextMessage("Hi how are you")));
-            Messages.Add(new SourceMessage(new TextMessage("I am okey thanks ;)")));
-            Messages.Add(new SourceMessage(new TextMessage("Hello")));
-            Messages.Add(new UserMessage(new TextMessage("Hi how are you")));
-            Messages.Add(new SourceMessage(new TextMessage("I am okey thanks ;)")));
-            Messages.Add(new SourceMessage(new TextMessage("Hello")));
-            Messages.Add(new UserMessage(new TextMessage("Hi how are you")));
-            Messages.Add(new SourceMessage(new TextMessage("I am okey thanks ;)")));
-            Messages.Add(new SourceMessage(new TextMessage("Hello")));
-            Messages.Add(new UserMessage(new TextMessage("Hi how are you")));
-            Messages.Add(new SourceMessage(new TextMessage("I am okey thanks ;)")));
-            Messages.Add(new SourceMessage(new TextMessage("Hello")));
-            Messages.Add(new UserMessage(new TextMessage("Hi how are you")));
-            Messages.Add(new SourceMessage(new TextMessage("I am okey thanks ;)")));
+
+            if (settings.MessageLoadCount == 30) LoadCount1IsChecked = true;
+            else if (settings.MessageLoadCount == 50) LoadCount2IsChecked = true;
+            else LoadCount3IsChecked = true;
         }
 
-        public ICommand MessageCountLoadChangedCommand { get; }
+        public ICommand MessageLoadCountChangedCommand { get; }
         public ICommand DefaultWallpaperShowCommand { get; }
         public ICommand DeviceWallpaperShowCommand { get; }
         public ICommand DefaultWallpaperChangedCommand { get; }
@@ -94,6 +65,11 @@ namespace Client.ViewModels
         public string[] DefaultRingtonNames { get; }
         public ObservableCollection<SourceMessage> Messages { get; }
         public string SelectedWallpaper { get => selectedWallpaper; set => Set(ref selectedWallpaper, value); }
+
+        public bool LoadCount1IsChecked { get => loadCount1IsChecked; set => Set(ref loadCount1IsChecked, value); }
+        public bool LoadCount2IsChecked { get => loadCount2IsChecked; set => Set(ref loadCount2IsChecked, value); }
+        public bool LoadCount3IsChecked { get => loadCount3IsChecked; set => Set(ref loadCount3IsChecked, value); }
+
 
         private void MessageLoadCountChanged(object param)
         {

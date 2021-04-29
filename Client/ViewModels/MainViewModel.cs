@@ -53,7 +53,7 @@ namespace Client.ViewModels
 
         public ICommand LoadedWindowCommand { get; }
         public ICommand ClosedWindowCommand { get; }
-        public ICommand SelectedHambugerOptionItemCommand { get; }
+        //public ICommand SelectedHambugerOptionItemCommand { get; }
         public ICommand SelectedChatChangedCommand { get; }
         public ICommand AddUserCommand { get; }
         public ICommand CreateGroupCommand { get; }
@@ -88,11 +88,10 @@ namespace Client.ViewModels
         {
             if (selectedChat != null)
             {
-                //Models.Chat chat = (Models.Chat)param;
                 Views.ChatUC chatView = new Views.ChatUC();
-                ChatViewModel viewModel = new ChatViewModel(selectedChat, this.ChatClient);
-                viewModel.RemoveChat += RemoveChatFromChats;
-                viewModel.Scroll = chatView.scroll;
+                ChatViewModel viewModel = new ChatViewModel(ChatClient, this);
+                chatView.getControl = new Views.ChatUC.GetControlDelegate(viewModel.SetScrollViewer);
+                //viewModel.RemoveChat += RemoveChatFromChats;
                 chatView.DataContext = viewModel;
                 CurrentView = chatView;
             }
@@ -119,7 +118,7 @@ namespace Client.ViewModels
         private void Settings(object param)
         {
             UserControl control = new Views.UCSettings();
-            control.DataContext = new AddUserViewModel();
+            control.DataContext = new SettingsViewModel();
             CurrentView = control;
         }
 
@@ -133,7 +132,7 @@ namespace Client.ViewModels
         {
             foreach (var chat in chats)
             {
-                if(chat.SetOnlineState(userId, state))
+                if (chat.SetOnlineState(userId, state))
                 {
                     chat.UserIsWriting = "";
                 }
@@ -164,10 +163,10 @@ namespace Client.ViewModels
             Chats.Add(chat);
         }
 
-        private void RemoveChatFromChats(Models.Chat chat)
-        {
-            Chats.Remove(chat);
-        }
+        //private void RemoveChatFromChats(Models.Chat chat)
+        //{
+        //    Chats.Remove(chat);
+        //}
 
         private void ChatIsWriting(int chatId, int? userId)
         {
@@ -187,24 +186,24 @@ namespace Client.ViewModels
 
         public void NotifyUserIsAddedToChat(int chatId, int[] usersInChat)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void NotifyUserIsRemovedFromChat(int chatId)
         {
             //UserRemovedFromChat(chatId, userId);
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void UserJoinedToChatroom(int userId)
         {
-            throw new NotImplementedException();
+           //throw new NotImplementedException();
         }
 
         public void UserLeftChatroom(int userId)
         {
             //UserLeavedChatroom(chatId, userId);
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void ReplyMessage(ServiceMessageText message, int chatroomId)

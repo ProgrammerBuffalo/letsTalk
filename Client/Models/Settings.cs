@@ -17,7 +17,7 @@ namespace Client.Models
         {
             XmlDocument document = new XmlDocument();
             document.Load("Settings/user-settings.xml");
-            
+
             messageLoadCount = int.Parse(document.DocumentElement["MessageLoadCount"].InnerText);
             selectedWallpaper = document.DocumentElement["Wallpaper"].InnerText;
             notify = bool.Parse(document.DocumentElement["Notify"].InnerText);
@@ -55,7 +55,18 @@ namespace Client.Models
             }
         }
 
-        public int MessageLoadCount { get => messageLoadCount; set => Set(ref messageLoadCount, value); }
+        public int MessageLoadCount
+        {
+            get => messageLoadCount;
+            set
+            {
+                Set(ref messageLoadCount, value);
+                XmlDocument document = new XmlDocument();
+                document.Load("Settings/user-settings.xml");
+                document.DocumentElement["MessageLoadCount"].InnerText = messageLoadCount.ToString();
+                document.Save("Settings/user-settings.xml");
+            }
+        }
         public string[] Wallpapers { get; }
         public Rington[] Ringtons { get; }
 
@@ -64,11 +75,11 @@ namespace Client.Models
             get => selectedWallpaper;
             set
             {
+                Set(ref selectedWallpaper, value);
                 XmlDocument document = new XmlDocument();
                 document.Load("Settings/user-settings.xml");
                 document.DocumentElement["Wallpaper"].InnerText = selectedWallpaper;
                 document.Save("Settings/user-settings.xml");
-                Set(ref selectedWallpaper, value);
             }
         }
 

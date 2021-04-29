@@ -1,6 +1,7 @@
 ﻿using Client.ChatService;
 using Client.Models;
 using Client.Utility;
+using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,16 +24,17 @@ namespace Client.ViewModels
 
         private ObservableCollection<AvailableUser> allUsers;
         private AvailableUser selectedUser;
-        private string chatName;
 
         private int offset;
         private int count;
+
+        private string searchText;
 
         public AddUserViewModel()
         {
             client = ClientUserInfo.getInstance();
 
-            SearchChangedCommand = new Command(SearchChanged);
+            SearchCommand = new Command(Search);
             ShowMoreCommand = new Command(ShowMore);
             AddUserCommand = new Command(AddUser);
 
@@ -48,12 +50,12 @@ namespace Client.ViewModels
         }
 
         public ICommand ShowMoreCommand { get; }
-        public ICommand SearchChangedCommand { get; }
         public ICommand AddUserCommand { get; }
+        public ICommand SearchCommand { get; }
 
         public ObservableCollection<AvailableUser> AllUsers { get => allUsers; set => Set(ref allUsers, value); }
         public AvailableUser SelectedUser { get => selectedUser; set => Set(ref selectedUser, value); }
-        public string ChatName { get => chatName; set => Set(ref chatName, value); }
+        public string SearchText { get => searchText; set => Set(ref searchText, value); }
 
         public void ShowMore(object param)
         {
@@ -70,10 +72,10 @@ namespace Client.ViewModels
             offset += count;
         }
 
-        public void SearchChanged(object param)
+        //метод для поиска новых пользователй (использовать SearchText для поиска по имени)
+        public void Search(object param)
         {
-            string name = param.ToString();
-            if (!String.IsNullOrWhiteSpace(name))
+            if (!String.IsNullOrWhiteSpace(searchText))
             {
                 AllUsers.Clear();
             }
@@ -86,8 +88,8 @@ namespace Client.ViewModels
                 int chatId;
                 try
                 {
-                    chatId = chatClient.CreateChatroom(chatName, new int[] { client.SqlId, selectedUser.SqlId });
-                    chatClient.AddUserToChatroom(client.SqlId, chatId);
+                    chatId = chatClient.CreateChatroom(selectedUser.Name, new int[] { client.SqlId, selectedUser.SqlId });
+                    //chatClient.AddUserToChatroom(client.SqlId, chatId);
                 }
                 catch (Exception)
                 {
@@ -166,15 +168,28 @@ namespace Client.ViewModels
         }
     }
 
-    class CreateGroupViewModel : AddUserViewModel
+    class CreateGroupViewModel : AddUserViewModel, IDropTarget
     {
         private ObservableCollection<AvailableUser> usersToAdd;
+        private string chatName;
+
+        private bool canDrop;
+        private bool allUsersIsDropSource;
+        private bool usersToAddIsDropSource;
 
         public CreateGroupViewModel(ChatClient chatClient) : base(chatClient)
         {
             AddToGroupCommand = new Command(AddToGroup);
             RemoveFromGroupCommand = new Command(RemoveFromGroup);
             CreateGroupCommand = new Command(CreateGroup);
+
+            AllUsers_MouseLeaveCommand = new Command(AllUsers_MouseLeave);
+            AllUsers_PreviewDragEnterCommand = new Command(AllUsers_PreviewDragEnter);
+            AllUsers_DragLeaveCommand = new Command(AllUsers_DragLeave);
+
+            UsersToAdd_MouseLeaveCommand = new Command(UsersToadd_MouseLeave);
+            UsersToAdd_PreviewDragEnterCommand = new Command(UsersToAdd_PreviewDragEnter);
+            UsersToAdd_DragLeaveCommand = new Command(UsersToAdd_DragLeave);
 
             UsersToAdd = new ObservableCollection<AvailableUser>();
         }
@@ -183,7 +198,16 @@ namespace Client.ViewModels
         public ICommand RemoveFromGroupCommand { get; }
         public ICommand CreateGroupCommand { get; }
 
+        public ICommand AllUsers_MouseLeaveCommand { get; }
+        public ICommand AllUsers_PreviewDragEnterCommand { get; }
+        public ICommand AllUsers_DragLeaveCommand { get; }
+
+        public ICommand UsersToAdd_MouseLeaveCommand { get; }
+        public ICommand UsersToAdd_PreviewDragEnterCommand { get; }
+        public ICommand UsersToAdd_DragLeaveCommand { get; }
+
         public ObservableCollection<AvailableUser> UsersToAdd { get => usersToAdd; set => Set(ref usersToAdd, value); }
+        public string ChatName { get => chatName; set => Set(ref chatName, value); }
 
         private void AddToGroup(object param)
         {
@@ -220,6 +244,70 @@ namespace Client.ViewModels
             else
             {
                 MessageBox.Show("Please enter chat room name");
+            }
+        }
+
+        private void UsersToAdd_PreviewDragEnter(object param)
+        {
+            canDrop = true;
+            allUsersIsDropSource = true;
+        }
+
+        private void UsersToAdd_DragLeave(object param)
+        {
+            canDrop = false;
+            allUsersIsDropSource = false;
+        }
+
+        private void UsersToadd_MouseLeave(object param)
+        {
+            canDrop = false;
+            allUsersIsDropSource = false;
+        }
+
+        private void AllUsers_PreviewDragEnter(object param)
+        {
+            canDrop = true;
+            usersToAddIsDropSource = true;
+        }
+
+        private void AllUsers_DragLeave(object param)
+        {
+            canDrop = false;
+            usersToAddIsDropSource = false;
+        }
+
+        private void AllUsers_MouseLeave(object param)
+        {
+            canDrop = false;
+            usersToAddIsDropSource = false;
+        }
+
+        public void DragOver(IDropInfo dropInfo)
+        {
+            AvailableUser sourceItem = dropInfo.Data as AvailableUser;
+            if (sourceItem != null)
+            {
+                dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+                dropInfo.Effects = DragDropEffects.Copy;
+            }
+        }
+
+        public void Drop(IDropInfo dropInfo)
+        {
+            AvailableUser sourceItem = dropInfo.Data as AvailableUser;
+            if (sourceItem != null && canDrop)
+            {
+                if (allUsersIsDropSource)
+                {
+                    usersToAdd.Add(sourceItem);
+                    AllUsers.Remove(sourceItem);
+                }
+                else if (usersToAddIsDropSource)
+                {
+                    AllUsers.Add(sourceItem);
+                    UsersToAdd.Remove(sourceItem);
+                }
             }
         }
     }

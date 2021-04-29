@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         Title="PreviewWallpaperWindow" Height="450" Width="800">
     <Window.Resources>
-        <ResourceDictionary Source="/WindowResources/MessageDicitionary.xaml"/>
+        <ResourceDictionary Source="/WindowResources/MessageDictionary.xaml"/>
     </Window.Resources>
 
     <Grid>
