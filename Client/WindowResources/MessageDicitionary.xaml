@@ -129,6 +129,14 @@
                 <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
             </DataTrigger>
+            <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:SessionSendedMessage}">
+                <Setter TargetName="mainGrid" Property="Grid.Column" Value="1"/>
+                <Setter TargetName="mainGridCol1" Property="Width" Value="0"/>
+                <Setter TargetName="mainGridRow1" Property="Height" Value="0"/>
+                <Setter TargetName="border" Property="Background" Value="#EF44F2"/>
+                <Setter TargetName="ellipseGrid" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="border" Property="HorizontalAlignment" Value="Right"/>
+            </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:GroupMessage}">
                 <Setter TargetName="mainGrid" Property="Grid.Column" Value="0"/>
                 <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
@@ -174,7 +182,7 @@
 
                 <Border x:Name="border" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Margin="10,20,0,0" HorizontalAlignment="Left" MaxHeight="300" MaxWidth="300" Width="{Binding ElementName=border, Path=Height}" BorderBrush="AliceBlue" BorderThickness="3">
                     <Grid>
-                        <Image Source="{Binding Path=Message.Path}" Stretch="Fill"/>
+                        <Image Source="{Binding Path=Message.Bitmap}" Stretch="Fill"/>
                         <Button x:Name="loader"
                                 Width="50" Height="50"
                                 VerticalAlignment="Center" HorizontalAlignment="Center"
@@ -204,6 +212,14 @@
                 <Setter TargetName="mainGridRow1" Property="Height" Value="0"/>
                 <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:SessionSendedMessage}">
+                <Setter TargetName="mainGrid" Property="Grid.Column" Value="1"/>
+                <Setter TargetName="mainGridCol1" Property="Width" Value="0"/>
+                <Setter TargetName="mainGridRow1" Property="Height" Value="0"/>
+                <Setter TargetName="border" Property="Background" Value="#EF44F2"/>
+                <Setter TargetName="ellipseGrid" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="border" Property="HorizontalAlignment" Value="Right"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:GroupMessage}">
                 <Setter TargetName="mainGrid" Property="Grid.Column" Value="0"/>
@@ -250,9 +266,9 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button x:Name="loader" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Width="35" Height="35" HorizontalContentAlignment="Center" Cursor="Hand" Template="{StaticResource DownloadButton}"/>
+                        <Button x:Name="loader" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Width="35" Height="35" HorizontalContentAlignment="Center" Cursor="Hand" Template="{StaticResource DownloadButton}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.DownloadFileCommand}" CommandParameter="{Binding Path=Message}"/>
                         <Image Grid.Column="1" x:Name="icon" Source="/Resources/Extensions/file.png" Width="40" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                        <TextBlock Grid.Column="2" Text="{Binding Path=Message.Path, Converter={StaticResource PathToName}}" FontSize="20" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="2" Text="{Binding Path=Message.FileName}" FontSize="20" Margin="5,0,0,0" VerticalAlignment="Center"/>
                         <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Path=Message.Date, StringFormat={}{0:hh:mm}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,15,0" Foreground="DarkSlateGray" FontSize="12"/>
                     </Grid>
                 </Border>
@@ -275,6 +291,14 @@
                 <Setter TargetName="mainGridRow1" Property="Height" Value="0"/>
                 <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:SessionSendedMessage}">
+                <Setter TargetName="mainGrid" Property="Grid.Column" Value="1"/>
+                <Setter TargetName="mainGridCol1" Property="Width" Value="0"/>
+                <Setter TargetName="mainGridRow1" Property="Height" Value="0"/>
+                <Setter TargetName="border" Property="Background" Value="#EF44F2"/>
+                <Setter TargetName="ellipseGrid" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="border" Property="HorizontalAlignment" Value="Right"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:GroupMessage}">
                 <Setter TargetName="mainGrid" Property="Grid.Column" Value="0"/>
@@ -398,6 +422,14 @@
                 <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
                 <Setter TargetName="group" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:SessionSendedMessage}">
+                <Setter TargetName="mainGrid" Property="Grid.Column" Value="1"/>
+                <Setter TargetName="mainGridCol1" Property="Width" Value="0"/>
+                <Setter TargetName="mainGridRow1" Property="Height" Value="0"/>
+                <Setter TargetName="border" Property="Background" Value="#EF44F2"/>
+                <Setter TargetName="ellipseGrid" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="border" Property="HorizontalAlignment" Value="Right"/>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>

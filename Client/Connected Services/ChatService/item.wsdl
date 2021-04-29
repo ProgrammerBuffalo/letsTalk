@@ -36,6 +36,12 @@
   <wsdl:message name="Unit_GetRegisteredUsers_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetRegisteredUsersResponse" />
   </wsdl:message>
+  <wsdl:message name="Unit_MessagesFromOneChat_InputMessage">
+    <wsdl:part name="parameters" element="tns:MessagesFromOneChat" />
+  </wsdl:message>
+  <wsdl:message name="Unit_MessagesFromOneChat_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MessagesFromOneChatResponse" />
+  </wsdl:message>
   <wsdl:portType name="Unit">
     <wsdl:operation name="Authorization">
       <wsdl:input wsaw:Action="letsTalk.IUnitService/Unit/Authorization" message="tns:Unit_Authorization_InputMessage" />
@@ -51,6 +57,10 @@
     <wsdl:operation name="GetRegisteredUsers">
       <wsdl:input wsaw:Action="letsTalk.IUnitService/Unit/GetRegisteredUsers" message="tns:Unit_GetRegisteredUsers_InputMessage" />
       <wsdl:output wsaw:Action="letsTalk.IUnitService/Unit/GetRegisteredUsersResponse" message="tns:Unit_GetRegisteredUsers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MessagesFromOneChat">
+      <wsdl:input wsaw:Action="letsTalk.IUnitService/Unit/MessagesFromOneChat" message="tns:Unit_MessagesFromOneChat_InputMessage" />
+      <wsdl:output wsaw:Action="letsTalk.IUnitService/Unit/MessagesFromOneChatResponse" message="tns:Unit_MessagesFromOneChat_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

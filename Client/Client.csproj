@@ -379,7 +379,7 @@
     <None Include="Connected Services\ChatService\Client.ChatService.DownloadFileInfo1.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\ChatService\Client.ChatService.FileUploadResponse1.datasource">
+    <None Include="Connected Services\ChatService\Client.ChatService.FileFromChatDownloadRequest.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\ChatService\Client.ChatService.ServerUserInfo.datasource">

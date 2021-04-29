@@ -18,6 +18,17 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ServiceMessage" nillable="true" type="tns:ServiceMessage" />
+  <xs:complexType name="ServiceMessageFile">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ServiceMessage">
+        <xs:sequence>
+          <xs:element name="FileName" nillable="true" type="xs:string" />
+          <xs:element name="StreamId" type="ser:guid" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ServiceMessageFile" nillable="true" type="tns:ServiceMessageFile" />
   <xs:complexType name="ConnectionExceptionFault">
     <xs:sequence>
       <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
@@ -45,23 +56,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="UserInChat" nillable="true" type="tns:UserInChat" />
-  <xs:complexType name="ArrayOfServiceMessage">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="ServiceMessage" nillable="true" type="tns:ServiceMessage" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfServiceMessage" nillable="true" type="tns:ArrayOfServiceMessage" />
-  <xs:complexType name="ServiceMessageFile">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ServiceMessage">
-        <xs:sequence>
-          <xs:element name="FileName" nillable="true" type="xs:string" />
-          <xs:element name="StreamId" type="ser:guid" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ServiceMessageFile" nillable="true" type="tns:ServiceMessageFile" />
   <xs:complexType name="AuthenticationUserInfo">
     <xs:sequence>
       <xs:element name="Login" nillable="true" type="xs:string" />
@@ -98,6 +92,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="NicknameExceptionFault" nillable="true" type="tns:NicknameExceptionFault" />
+  <xs:complexType name="ArrayOfServiceMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ServiceMessage" nillable="true" type="tns:ServiceMessage" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfServiceMessage" nillable="true" type="tns:ArrayOfServiceMessage" />
   <xs:complexType name="StreamExceptionFault">
     <xs:sequence>
       <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />

@@ -56,9 +56,6 @@ namespace letsTalk
 
         [OperationContract(IsOneWay = false)]
         Dictionary<Chatroom, List<UserInChat>> FindAllChatroomsForClient(int userSqlId);
-
-        [OperationContract(IsOneWay = false)]
-        List<ServiceMessage> MessagesFromOneChat(int chatroomId);
     }
 
     public interface IChatCallback

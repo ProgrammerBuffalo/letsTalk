@@ -2,11 +2,17 @@
 using Client.Utility;
 using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+
 
 namespace Client.ViewModels
 {
@@ -50,6 +56,7 @@ namespace Client.ViewModels
             OpenSmileCommand = new Command(OpenSmile);
             OpenFileCommand = new Command(OpenFile);
             UnloadCommand = new Command(Unload);
+            LoadCommand = new Command(Load);
 
             AddUserCommand = new Command(AddMember);
             RemoveUserCommand = new Command(RemoveMember);
@@ -66,6 +73,7 @@ namespace Client.ViewModels
             timer = new Timer();
             timer.Elapsed += MediaPosTimer;
             timer.Interval = 500;
+
         }
 
         public ChatViewModel(Chat chat, ChatService.ChatClient chatClient) : this(chatClient)
@@ -110,11 +118,48 @@ namespace Client.ViewModels
             }
         }
 
+        private async void Load(object obj)
+        {
+            LoadMore();
+        }
+
+        private async void LoadMore()
+        {
+            ChatService.UnitClient unitClient = new ChatService.UnitClient();
+            ChatService.ServiceMessage[] serviceMessages = await unitClient.MessagesFromOneChatAsync(chat.SqlId);
+
+            ObservableCollection<Models.SourceMessage> messages =
+                new ObservableCollection<Models.SourceMessage>(await System.Threading.Tasks.Task<List<SourceMessage>>.Run(() =>
+                {
+                    List<SourceMessage> messagesFromChat = new List<SourceMessage>();
+                    foreach (var message in serviceMessages)
+                    {
+                        if (message is ChatService.ServiceMessageText)
+                        {
+                            var textmessage = message as ChatService.ServiceMessageText;
+                            messagesFromChat.Add(chat.GetMessageType(textmessage.Sender, new TextMessage(textmessage.Text, textmessage.DateTime)));
+                        }
+                        else
+                        {
+                            var filemessage = message as ChatService.ServiceMessageFile;
+                            messagesFromChat.Add(chat.GetMessageType(filemessage.Sender, new FileMessage(filemessage.FileName, filemessage.DateTime, filemessage.StreamId) { IsLoaded = true }));
+                        }
+                    }
+
+                    return messagesFromChat;
+                }));
+
+            foreach (var message in messages.Reverse())
+                chat.Messages.Insert(0, message);            
+        }
+
         private void TextBox_EnterPressed(object obj)
         {
             if (MessageText.Length < 1)
                 return;
-            //ChatClient.SendMessageTextAsync();
+            ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = MessageText, Sender = client.SqlId }, chat.SqlId);
+            chat.Messages.Add(chat.GetMessageType(client.SqlId, new TextMessage(MessageText, DateTime.Now)));
+            MessageText = "";
         }
 
         private void TextBox_KeyUp(object obj)
@@ -127,7 +172,6 @@ namespace Client.ViewModels
         {
             if (MessageText.Length > 1)
                 ChatClient.MessageIsWritingAsync(chat.SqlId, client.SqlId);
-            System.Windows.MessageBox.Show(MessageText);
         }
 
         private void MediaEnded(object sender, EventArgs e)
@@ -171,10 +215,60 @@ namespace Client.ViewModels
         }
 
         //тут метод для загрузки файла
-        public void DownloadFile(object param)
+        public async void DownloadFile(object param)
         {
-            //FileMessage message = (FileMessage)((SourceMessage)param).Message;
-            //message.IsLoaded = true;
+
+            FileMessage message = (FileMessage)param;
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            string extension = message.FileName.Substring(message.FileName.LastIndexOf('.'));
+            saveFileDialog.Filter = $"(*{extension}*)|*{extension}*";
+            saveFileDialog.FileName = message.FileName;
+            if (saveFileDialog.ShowDialog() != true)
+                return;
+
+            string filename = saveFileDialog.FileName;
+            if(message is ImageMessage)
+            {
+                BitmapImage imageMessage = (message as ImageMessage).Bitmap;
+
+                BitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(imageMessage));
+
+                using (var filestream = new System.IO.FileStream(filename, System.IO.FileMode.Create))
+                {
+                    encoder.Save(filestream);
+                }
+            }
+
+            Stream stream = null;
+            MemoryStream memoryStream = null;
+            FileStream fileStream = null;
+            long lenght = 0;
+
+            ChatService.FileClient fileClient = new ChatService.FileClient();
+            try
+            {
+                await System.Threading.Tasks.Task.Run(() =>
+                {
+                    string name = fileClient.FileDownload(message.StreamId, out lenght, out stream);
+                    if (lenght <= 0)
+                        return;
+                    memoryStream = FileHelper.ReadFileByPart(stream);
+
+                    fileStream = new FileStream(filename, FileMode.Create);
+                    memoryStream.CopyTo(fileStream);
+                });
+            }
+            catch (Exception ex) { System.Windows.MessageBox.Show(ex.Message); }
+            finally
+            {
+                if (fileStream != null) fileStream.Close();
+                if (memoryStream != null) memoryStream.Close();
+                if (stream != null) stream.Close();
+            }
+
+
         }
 
         private void MediaPlay(object param)
@@ -183,7 +277,7 @@ namespace Client.ViewModels
             if (player.Source == null)
             {
                 curMediaMessage = message;
-                player.Open(new Uri(message.Path, UriKind.Absolute));
+                player.Open(new Uri(message.FileName, UriKind.Absolute));
                 player.Position = TimeSpan.FromTicks(message.CurrentLength);
                 player.Play();
                 timer.Start();
@@ -194,7 +288,7 @@ namespace Client.ViewModels
                 curMediaMessage.IsPlaying = false;
                 curMediaMessage.CurrentLength = 0;
                 player.Close();
-                player.Open(new Uri(message.Path, UriKind.Absolute));
+                player.Open(new Uri(message.FileName, UriKind.Absolute));
                 player.Position = TimeSpan.FromTicks(message.CurrentLength);
                 player.Play();
                 timer.Start();
@@ -247,7 +341,31 @@ namespace Client.ViewModels
 
         private void SendFile(string path)
         {
-            sendType = SendText;
+            string extn = path.Substring(path.LastIndexOf('.'));
+            if (extn == ".mp3" || extn == ".wave")
+            {
+                chat.Messages.Add(chat.GetMessageType(client.SqlId, new MediaMessage(path, DateTime.Now)));
+                return;
+            }
+
+            ChatService.FileClient fileClient = new ChatService.FileClient();
+
+            FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
+            Guid stream_id = Guid.Empty;
+            try
+            {
+                if (fileStream.CanRead)
+                    stream_id = fileClient.FileUpload(chat.SqlId, path, client.SqlId, fileStream);
+            }
+            catch (Exception ex) { }
+            finally
+            {
+                if (fileStream != null)
+                {
+                    fileStream.Close();
+                }
+            }
+            chat.Messages.Add(new SessionSendedMessage(new FileMessage(path, DateTime.Now, stream_id)));
         }
 
         private void MediaPosChanged(object param)
@@ -259,6 +377,7 @@ namespace Client.ViewModels
 
         private void Unload(object param)
         {
+            ChatClient.MessageIsWriting(Chat.SqlId, null);
             if (curMediaMessage != null)
             {
                 curMediaMessage.IsPlaying = false;

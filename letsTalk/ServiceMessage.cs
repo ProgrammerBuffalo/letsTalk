@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 namespace letsTalk
 {
     [DataContract]
+    [KnownType(typeof(ServiceMessageText))]
+    [KnownType(typeof(ServiceMessageFile))]
     public class ServiceMessage
     {
         [DataMember(IsRequired = true)]

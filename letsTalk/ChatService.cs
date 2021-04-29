@@ -323,6 +323,7 @@ namespace letsTalk
         public int CreateChatroom(string chatName, List<int> users)
         {
             int chat_id;
+            string fullpathXML = "";
             try
             {
                 Console.WriteLine("Creating chatroom (" + OperationContext.Current.Channel.GetHashCode() + ")");
@@ -404,30 +405,37 @@ namespace letsTalk
 
                         sqlCommandMergeContentWithChatroom.ExecuteNonQuery();
 
-                        trScope.Complete();
+                        SqlCommand sqlCommandTakeXML = new SqlCommand(@"SELECT dbo.GetXMLFile(@chatId)", sqlConnection);
 
-                        lock (lockerSyncObj)
+                        sqlCommandTakeXML.Parameters.Add("@chatId", SqlDbType.Int).Value = chat_id;
+                        fullpathXML = sqlCommandTakeXML.ExecuteScalar().ToString();
+
+                    }
+                    trScope.Complete();
+                }
+                lock (lockerSyncObj)
+                {
+                    XmlCreation(fullpathXML);
+
+                    Console.WriteLine("Users added to chat callbacks...");
+
+                    foreach (ConnectedUser connectedUser in chatroomsInUsers.Keys)
+                    {
+                        foreach (var user in users)
                         {
-
-                            Console.WriteLine("Users added to chat callbacks...");
-
-                            foreach (ConnectedUser connectedUser in chatroomsInUsers.Keys)
+                            if (connectedUser.SqlID == user)
                             {
-                                foreach (var user in users)
-                                {
-                                    if (connectedUser.SqlID == user)
-                                    {
 
-                                        chatroomsInUsers[connectedUser].Add(chat_id);
-                                        if (connectedUser.UserContext != OperationContext.Current)
-                                            connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsAddedToChat(chat_id, users);
-                                    }
-
-                                }
+                                chatroomsInUsers[connectedUser].Add(chat_id);
+                                if (connectedUser.UserContext != OperationContext.Current)
+                                    connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsAddedToChat(chat_id, users);
                             }
+
                         }
                     }
                 }
+
+
 
                 Console.WriteLine("Chatroom has been created (" + OperationContext.Current.Channel.GetHashCode() + ")");
                 return chat_id;
@@ -444,14 +452,14 @@ namespace letsTalk
         {
             if (new FileInfo(path).Length <= 0)
             {
-                Console.WriteLine("Creating declaration for XML (" + OperationContext.Current.Channel.GetHashCode() + ")");
+                Console.WriteLine("Creating declaration for XML");
                 XmlDocument document = new XmlDocument();
                 XmlDeclaration declaration = document.CreateXmlDeclaration("1.0", "UTF-8", null);
                 document.AppendChild(declaration);
                 XmlElement root = document.CreateElement("Messages");
                 document.AppendChild(root);
                 document.Save(path);
-                Console.WriteLine("Declaration has been created for XML" + OperationContext.Current.Channel.GetHashCode() + ")");
+                Console.WriteLine("Declaration has been created for XML");
             }
         }
 
@@ -477,7 +485,6 @@ namespace letsTalk
                     sqlCommandFindXMLFromContentsTable.Parameters.Add("@chatId", SqlDbType.Int).Value = chatroomId;
                     fullpath = sqlCommandFindXMLFromContentsTable.ExecuteScalar().ToString();
 
-                    XmlCreation(fullpath);
                 }
 
                 lock (lockerSyncObj)
@@ -486,7 +493,7 @@ namespace letsTalk
                     Console.WriteLine("Sending message callbacks...");
                     foreach (ConnectedUser user in users)
                     {
-                        if (user.UserContext != OperationContext.Current)
+                        if (user.UserContext.Channel != OperationContext.Current.Channel)
                             user.UserContext.GetCallbackChannel<IChatCallback>().ReplyMessage(message, chatroomId);
                     }
                 }
@@ -520,7 +527,7 @@ namespace letsTalk
                 ServiceMessageText serviceMessageText = serviceMessage as ServiceMessageText;
                 xNameAttr = new XAttribute("type", "text");
                 xSenderEl = new XElement("Sender", serviceMessageText.Sender);
-                xDateEl = new XElement("Date", serviceMessageText.DateTime.ToString());
+                xDateEl = new XElement("Date", DateTime.Now.ToString());
                 XElement xTextEl = new XElement("Text", serviceMessageText.Text);
                 xMessageEl.Add(xTextEl);
             }
@@ -529,7 +536,7 @@ namespace letsTalk
                 ServiceMessageFile serviceMessageFile = serviceMessage as ServiceMessageFile;
                 xNameAttr = new XAttribute("type", "file");
                 xSenderEl = new XElement("Sender", serviceMessageFile.Sender);
-                xDateEl = new XElement("Date", serviceMessageFile.DateTime.ToString());
+                xDateEl = new XElement("Date", DateTime.Now.ToString());
                 XElement xStreamIdEl = new XElement("StreamId", serviceMessageFile.StreamId);
                 XElement xFileName = new XElement("FileName", serviceMessageFile.FileName);
                 xMessageEl.Add(xStreamIdEl);
@@ -548,8 +555,6 @@ namespace letsTalk
         //Нахождение сообщений чатрума в XML-файле
         private List<ServiceMessage> FindXmlNodes(string fullpath)
         {
-            Console.WriteLine("Finding messages from chatroom... (" + OperationContext.Current.Channel.GetHashCode() + ")");
-
             XDocument xDocument = XDocument.Load(fullpath);
             List<ServiceMessage> serviceMessages = new List<ServiceMessage>();
 
@@ -575,8 +580,6 @@ namespace letsTalk
                     });
                 }
             }
-            Console.WriteLine("Messages for chatroom are found (" + OperationContext.Current.Channel.GetHashCode() + ")");
-
             return serviceMessages;
         }
 
@@ -591,7 +594,7 @@ namespace letsTalk
 
             foreach (ConnectedUser user in users)
             {
-                if (user.UserContext != OperationContext.Current)
+                if (user.UserContext.Channel != OperationContext.Current.Channel)
                 {
                     user.UserContext.GetCallbackChannel<IChatCallback>().ReplyMessageIsWriting(userSqlId, chatroomId);
                 }
@@ -718,9 +721,12 @@ namespace letsTalk
                             }
                             else
                             {
-                                usersInChatroom[chat].Add(new UserInChat { UserSqlId = userId,
-                                                                           UserName = userName,
-                                                                           IsOnline = isOnline});
+                                usersInChatroom[chat].Add(new UserInChat
+                                {
+                                    UserSqlId = userId,
+                                    UserName = userName,
+                                    IsOnline = isOnline
+                                });
                             }
                         }
                     }
@@ -800,7 +806,7 @@ namespace letsTalk
 
                     foreach (var user in users)
                     {
-                        if (user.UserContext != OperationContext.Current)
+                        if (user.UserContext.Channel != OperationContext.Current.Channel)
                             user.UserContext.GetCallbackChannel<IChatCallback>().UserJoinedToChatroom(userId);
                     }
                 }
@@ -848,7 +854,7 @@ namespace letsTalk
 
                     foreach (var user in chatroomsInUsers.Keys)
                     {
-                        if (user.UserContext != OperationContext.Current)
+                        if (user.UserContext.Channel != OperationContext.Current.Channel)
                             user.UserContext.GetCallbackChannel<IChatCallback>().UserLeftChatroom(userId);
                     }
                 }
@@ -882,7 +888,7 @@ namespace letsTalk
                     {
                         foreach (ConnectedUser user in chatroomsInUsers.Keys)
                         {
-                            if (user.UserContext != OperationContext.Current)
+                            if (user.UserContext.Channel != OperationContext.Current.Channel)
                             {
                                 user.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsRemovedFromChat(chatId);
                             }
@@ -901,29 +907,35 @@ namespace letsTalk
         }
 
         //Отправка файла с чатрума на сервер
-        public void FileUpload(UploadFromChatToServer chatToServer)
+        public FileFromChatDownloadRequest FileUpload(UploadFromChatToServer chatToServer)
         {
+            Guid stream_id = new Guid();
+            string fullpathXML = "";
+            string fileName = "";
+
+            FileFromChatDownloadRequest fileFromChatDownloadRequest = new FileFromChatDownloadRequest();
+
             try
             {
                 using (TransactionScope transactionScope = new TransactionScope())
                 {
                     using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                     {
+                        sqlConnection.Open();
+
                         SqlCommand sqlCommandAddFileToDataFT = new SqlCommand($@" INSERT INTO DataFT(file_stream, name, path_locator)
                                                                                   OUTPUT INSERTED.stream_id, GET_FILESTREAM_TRANSACTION_CONTEXT(),
                                                                                   INSERTED.file_stream.PathName()
-                                                                                  VALUES(CAST('' as varbinary(MAX)), @name, dbo.GetPathLocatorForChild('Avatars'))", sqlConnection);
+                                                                                  VALUES(CAST('' as varbinary(MAX)), @name, dbo.GetPathLocatorForChild('MessageFiles'))", sqlConnection);
 
                         sqlCommandAddFileToDataFT.CommandType = CommandType.Text;
 
-                        string fileName = chatToServer.FileName;
-                        Random random = new Random();
-                        sqlCommandAddFileToDataFT.Parameters.Add("@name", SqlDbType.NVarChar).Value = fileName.Substring(0, fileName.LastIndexOf("."))
-                                                                                                    + $"{random.Next(0, 2000000)}" + $".{fileName.Substring(fileName.LastIndexOf(".") + 1)}";
+                        fileName = chatToServer.FileName.Substring(chatToServer.FileName.LastIndexOf(@"\") + 1);
+                        string full_path = "";
 
-                        Guid stream_id = new Guid();
+                        sqlCommandAddFileToDataFT.Parameters.Add("@name", SqlDbType.NVarChar).Value = fileName.Substring(fileName.LastIndexOf("\\") + 1);
+
                         byte[] transaction_context = null;
-                        string full_path = null;
                         try
                         {
                             using (SqlDataReader sqlDataReader = sqlCommandAddFileToDataFT.ExecuteReader())
@@ -937,7 +949,6 @@ namespace letsTalk
                         catch (SqlException ex)
                         {
                             Console.WriteLine(ex.Message);
-                            FileUpload(chatToServer);
                         }
 
                         const int bufferSize = 2048;
@@ -955,35 +966,43 @@ namespace letsTalk
 
                         }
 
+                        SqlCommand updateFileName = new SqlCommand($@"UPDATE DataFT SET name = '{stream_id}' + '_' + name WHERE stream_id = @stream_id", sqlConnection);
+                        updateFileName.CommandType = CommandType.Text;
+                        updateFileName.Parameters.Add("@stream_id", SqlDbType.UniqueIdentifier).Value = stream_id;
+                        updateFileName.ExecuteNonQuery();
+
                         SqlCommand sqlCommandTakeXML = new SqlCommand(@"SELECT dbo.GetXMLFile(@chatId)", sqlConnection);
 
                         sqlCommandTakeXML.Parameters.Add("@chatId", SqlDbType.Int).Value = chatToServer.ChatroomId;
-                        string fullpathXML = sqlCommandTakeXML.ExecuteScalar().ToString();
+                        fullpathXML = sqlCommandTakeXML.ExecuteScalar().ToString();
+                        
+                    }
+                    transactionScope.Complete();
+                }
 
-                        lock (lockerSyncObj)
+                lock (lockerSyncObj)
+                {
+                    ServiceMessageFile serviceMessageFile = new ServiceMessageFile
+                    {
+                        Sender = chatToServer.Responsed_UserSqlId,
+                        StreamId = stream_id,
+                        DateTime = DateTime.Now,
+                        FileName = fileName
+                    };
+
+                    AddToXML(fullpathXML, serviceMessageFile);
+
+                    foreach (ConnectedUser user in chatroomsInUsers.Keys)
+                    {
+                        if (user.SqlID != chatToServer.Responsed_UserSqlId)
                         {
-                            ServiceMessageFile serviceMessageFile = new ServiceMessageFile
-                            {
-                                Sender = chatToServer.Responsed_UserSqlId,
-                                StreamId = stream_id,
-                                DateTime = DateTime.Now,
-                                FileName = fileName
-                            };
-
-                            AddToXML(fullpathXML, serviceMessageFile);
-
-                            foreach (var user in chatroomsInUsers.Keys)
-                            {
-                                if (user.UserContext != OperationContext.Current)
-                                {
-                                    user.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserFileSendedToChat(serviceMessageFile, chatToServer.ChatroomId);
-                                }
-
-                            }
+                            user.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserFileSendedToChat(serviceMessageFile, chatToServer.ChatroomId);
                         }
+
                     }
                 }
             }
+
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
@@ -991,6 +1010,9 @@ namespace letsTalk
 
                 throw new FaultException<StreamExceptionFault>(streamExceptionFault, streamExceptionFault.Message);
             }
+            fileFromChatDownloadRequest.StreamId = stream_id;
+
+            return fileFromChatDownloadRequest;
         }
 
         //Загрузка файла с чатрума
@@ -1034,7 +1056,7 @@ namespace letsTalk
             string fullpathXML;
             try
             {
-                Console.WriteLine("Finding messages from chatroom " + chatroomId + " (" + OperationContext.Current.Channel.GetHashCode() + ")");
+                Console.WriteLine("Finding messages from chatroom " + chatroomId);
 
                 using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                 {
@@ -1047,16 +1069,14 @@ namespace letsTalk
 
                 messages = FindXmlNodes(fullpathXML);
 
-                Console.WriteLine("Messages were found from chatroom " + chatroomId + " (" + OperationContext.Current.Channel.GetHashCode() + ")");
-                return messages;
-
+                Console.WriteLine("Messages were found from chatroom " + chatroomId);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
 
-            return null;
+            return messages;
         }
     }
 }

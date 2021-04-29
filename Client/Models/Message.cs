@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Windows.Media.Imaging;
 
 namespace Client.Models
 {
@@ -53,8 +54,8 @@ namespace Client.Models
 
     public class FileMessage : Message
     {
-        //private static string root;
-        private string path;
+        private static string root;
+        private string fileName;        
         private bool isLoaded;
 
         //static FileMessage()
@@ -67,24 +68,38 @@ namespace Client.Models
             IsLoaded = false;
         }
 
-        public FileMessage(string path) : this()
+        public FileMessage(string fileName) : this()
         {
-            Path = AppDomain.CurrentDomain.BaseDirectory + path;
+            FileName = fileName;
         }
 
-        public FileMessage(string path, DateTime date) : this(path)
+        public FileMessage(string fileName, DateTime date) : this(fileName)
         {
             Date = date;
         }
 
-        public FileMessage(string path, DateTime date, Guid streamId) : this(path, date)
+        public FileMessage(string fileName, DateTime date, Guid streamId) : this(fileName, date)
         {
             StreamId = streamId;
         }
 
         public Guid StreamId { get; set; }
-        public string Path { get => path; set => Set(ref path, value); }
+        public string FileName { get => fileName; set => Set(ref fileName, value); }
         public bool IsLoaded { get => isLoaded; set => Set(ref isLoaded, value); }
+    }
+
+    public class ImageMessage : FileMessage
+    {
+        private BitmapImage bitmap;
+        public BitmapImage Bitmap { get => bitmap; set => Set(ref bitmap, value); }
+
+        public ImageMessage(string fileName, DateTime date, Guid streamId) : base(fileName, date, streamId) { }
+
+        public ImageMessage(string fileName, DateTime date, Guid streamId, BitmapImage bitmap) : this(fileName, date, streamId)
+        {
+            Bitmap = bitmap;
+        }
+
     }
 
     public class MediaMessage : FileMessage

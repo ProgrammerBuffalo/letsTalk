@@ -15,6 +15,7 @@
                 if (bytesRead == 0) break;
 
                 memoryStream.Write(buffer, 0, bytesRead);
+                //System.Threading.Thread.Sleep(150);
             } while (true);
             memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
             return memoryStream;
