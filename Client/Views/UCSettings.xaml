@@ -3,17 +3,144 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Client.Views"
+             xmlns:icons ="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
-             xmlns:Icons ="http://metro.mahapps.com/winfx/xaml/iconpacks"
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="Green">
-        <Icons:PackIconFontAwesome     Width="48"
+             d:DesignHeight="700" d:DesignWidth="500">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/WindowResources/SlideRadioButton.xaml"/>
+                <ResourceDictionary Source="/WindowResources/SliderCheckBox.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="HeaderStyle" TargetType="TextBlock">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="FontSize" Value="30"/>
+                <Setter Property="Foreground" Value="DarkSlateBlue"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Border Background="Green">
+        <Grid Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Text="User profile" Style="{StaticResource HeaderStyle}"/>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <TextBlock Text="User name:"/>
+                    <TextBox Text="{Binding Path=Client.UserName}" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Text="User description:"/>
+                    <TextBox Text="{Binding Path=Client.UserDesc}" />
+                </StackPanel>
+                <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                    <TextBlock Text="User avatar:"/>
+                    <Ellipse Width="50" Height="50" StrokeThickness="3" Stroke="Black">
+                        <Ellipse.Fill>
+                            <ImageBrush ImageSource="{Binding Path=Client.UserImage}"/>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Button Content="Change" Command="{Binding ChangeAvatarCommand}"/>
+                </StackPanel>
+            </Grid>
+
+            <TextBlock Grid.Row="2" Text="Choose message download step" Style="{StaticResource HeaderStyle}"/>
+
+            <GroupBox Grid.Row="3" Style="{x:Null}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <RadioButton Grid.Row="0" Grid.Column="0" IsChecked="{Binding Path=LoadCount1IsChecked}" Template="{StaticResource SlideRadioButtonTemplate}" Command="{Binding MessageLoadCountChangedCommand}" CommandParameter="{Binding ElementName=messageLoadCount1, Path=Text}"/>
+                    <RadioButton Grid.Row="0" Grid.Column="1" IsChecked="{Binding Path=LoadCount2IsChecked}" Template="{StaticResource SlideRadioButtonTemplate}" Command="{Binding MessageLoadCountChangedCommand}" CommandParameter="{Binding ElementName=messageLoadCount2, Path=Text}"/>
+                    <RadioButton Grid.Row="0" Grid.Column="2" IsChecked="{Binding Path=LoadCount3IsChecked}" Template="{StaticResource SlideRadioButtonTemplate}" Command="{Binding MessageLoadCountChangedCommand}" CommandParameter="{Binding ElementName=messageLoadCount3, Path=Text}"/>
+
+                    <TextBlock x:Name="messageLoadCount1" Grid.Row="1" Grid.Column="0" Text="30"/>
+                    <TextBlock x:Name="messageLoadCount2" Grid.Row="1" Grid.Column="1" Text="50"/>
+                    <TextBlock x:Name="messageLoadCount3" Grid.Row="1" Grid.Column="2" Text="100"/>
+                </Grid>
+            </GroupBox>
+
+            <TextBlock Grid.Row="4" Text="Choose wallpaper" Style="{StaticResource HeaderStyle}"/>
+
+            <Grid Grid.Row="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" Content="Default wallpapers" Command="{Binding DefaultWallpaperShowCommand}"/>
+                <Button Grid.Column="1" Content="Select from device" Command="{Binding DeviceWallpaperShowCommand}"/>
+            </Grid>
+
+            <TextBlock Grid.Row="6" Text="Notify rington" Style="{StaticResource HeaderStyle}"/>
+
+            <Grid Grid.Row="7">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="1.5*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Notify?"/>
+                <CheckBox Grid.Row="1" Grid.Column="0" Template="{StaticResource SliderCheckBoxTemplate}"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Margin="0,0,20,0" Text="{Binding Path=Settings.SelectedRington.Name, StringFormat={}Selected rington: {0}}"/>
+
+                <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Text="Choose notify rington" />
+                <Button Grid.Column="1" Grid.Row="1" Content="Default ringtons" Command="{Binding DefaultRingtonShowCommand}"/>
+
+                <Button Grid.Column="2" Grid.Row="1" Content="Select from device" Command="{Binding DeviceRingtonShowCommand}"/>
+            </Grid>
+
+            <TextBlock Grid.Row="8" Text="About" Style="{StaticResource HeaderStyle}"/>
+
+            <Grid Grid.Row="9">
+
+            </Grid>
+
+            <icons:PackIconFontAwesome Width="48"
                                        Height="48"
                                        Margin="10"                                       
                                        HorizontalAlignment="Right"
                                        VerticalAlignment="Top"
-                                       Kind="HeadsetSolid" />
-
-    </Grid>
+                                       Kind="HeadsetSolid"
+                                       Grid.RowSpan="2"/>
+        </Grid>
+    </Border>
 </UserControl>

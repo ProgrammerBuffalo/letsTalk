@@ -75,8 +75,6 @@
     </ControlTemplate>
 
     
-    
-    
     <DataTemplate x:Key="TextDataTemplate">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -269,7 +267,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Button x:Name="loader" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Width="35" Height="35" HorizontalContentAlignment="Center" Cursor="Hand" Template="{StaticResource DownloadButton}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.DownloadFileCommand}" CommandParameter="{Binding Path=Message}"/>
-                        <Image Grid.Column="1" x:Name="icon" Source="/images/file.png" Width="40" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <Image Grid.Column="1" x:Name="icon" Source="/Resources/Extensions/file.png" Width="40" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <TextBlock Grid.Column="2" Text="{Binding Path=Message.FileName}" FontSize="20" Margin="5,0,0,0" VerticalAlignment="Center"/>
                         <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Path=Message.Date, StringFormat={}{0:hh:mm}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,15,0" Foreground="DarkSlateGray" FontSize="12"/>
                     </Grid>
@@ -313,29 +311,29 @@
                 <Setter TargetName="col1" Property="Width" Value="0"/>
             </DataTrigger>
 
-            <DataTrigger Binding="{Binding Path=Message.FileName, Converter={StaticResource PathToExtension}}" Value=".txt">
-                <Setter TargetName="icon" Property="Source" Value="/images/txt.png"/>
+            <DataTrigger Binding="{Binding Path=Message.Path, Converter={StaticResource PathToExtension}}" Value=".txt">
+                <Setter TargetName="icon" Property="Source" Value="/Resources/Extensions/txt.png"/>
             </DataTrigger>
-            <DataTrigger Binding="{Binding Path=Message.FileName, Converter={StaticResource PathToExtension}}" Value=".pdf">
-                <Setter TargetName="icon" Property="Source" Value="/images/pdf.png"/>
+            <DataTrigger Binding="{Binding Path=Message.Path, Converter={StaticResource PathToExtension}}" Value=".pdf">
+                <Setter TargetName="icon" Property="Source" Value="/Resources/Extensions/pdf.png"/>
             </DataTrigger>
-            <DataTrigger Binding="{Binding Path=Message.FileName, Converter={StaticResource PathToExtension}}" Value=".pptx">
-                <Setter TargetName="icon" Property="Source" Value="/images/ppt.png"/>
+            <DataTrigger Binding="{Binding Path=Message.Path, Converter={StaticResource PathToExtension}}" Value=".pptx">
+                <Setter TargetName="icon" Property="Source" Value="/Resources/Extensions/ppt.png"/>
             </DataTrigger>
-            <DataTrigger Binding="{Binding Path=Message.FileName, Converter={StaticResource PathToExtension}}" Value=".ppt">
-                <Setter TargetName="icon" Property="Source" Value="/images/ppt.png"/>
+            <DataTrigger Binding="{Binding Path=Message.Path, Converter={StaticResource PathToExtension}}" Value=".ppt">
+                <Setter TargetName="icon" Property="Source" Value="/Resources/Extensions/ppt.png"/>
             </DataTrigger>
-            <DataTrigger Binding="{Binding Path=Message.FileName, Converter={StaticResource PathToExtension}}" Value=".doc">
-                <Setter TargetName="icon" Property="Source" Value="/images/doc.png"/>
+            <DataTrigger Binding="{Binding Path=Message.Path, Converter={StaticResource PathToExtension}}" Value=".doc">
+                <Setter TargetName="icon" Property="Source" Value="/Resources/Extensions/doc.png"/>
             </DataTrigger>
-            <DataTrigger Binding="{Binding Path=Message.FileName, Converter={StaticResource PathToExtension}}" Value=".docx">
-                <Setter TargetName="icon" Property="Source" Value="/images/doc.png"/>
+            <DataTrigger Binding="{Binding Path=Message.Path, Converter={StaticResource PathToExtension}}" Value=".docx">
+                <Setter TargetName="icon" Property="Source" Value="/Resources/Extensions/doc.png"/>
             </DataTrigger>
-            <DataTrigger Binding="{Binding Path=Message.FileName, Converter={StaticResource PathToExtension}}" Value=".xls">
-                <Setter TargetName="icon" Property="Source" Value="/images/xls.png"/>
+            <DataTrigger Binding="{Binding Path=Message.Path, Converter={StaticResource PathToExtension}}" Value=".xls">
+                <Setter TargetName="icon" Property="Source" Value="/Resources/Extensions/xls.png"/>
             </DataTrigger>
-            <DataTrigger Binding="{Binding Path=Message.FileName, Converter={StaticResource PathToExtension}}" Value=".zip">
-                <Setter TargetName="icon" Property="Source" Value="/images/zip.png"/>
+            <DataTrigger Binding="{Binding Path=Message.Path, Converter={StaticResource PathToExtension}}" Value=".zip">
+                <Setter TargetName="icon" Property="Source" Value="/Resources/Extensions/zip.png"/>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -454,13 +452,12 @@
         </Setter>
     </Style>
 
-    <Style x:Key="ListViewStyle" TargetType="ListView">
+    <!--<Style x:Key="ListViewStyle" TargetType="ListView">
         <Setter Property="SelectedItem" Value="{Binding Path=SelectedMessage}"/>
         <Setter Property="ItemContainerStyle" Value="{StaticResource ListViewItemStyle}"/>
         <Setter Property="ItemTemplateSelector" Value="{StaticResource MessageSelector}"/>
         <Setter Property="ItemsSource" Value="{Binding Path=Messages}"/>
         <Setter Property="Background" Value="YellowGreen"/>
         <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
-    </Style>
-
+    </Style>-->
 </ResourceDictionary>

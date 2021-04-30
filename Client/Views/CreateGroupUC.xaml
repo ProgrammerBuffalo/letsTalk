@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -23,20 +24,52 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <TextBox Visibility="Hidden">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+           
+            <TextBox Text="{Binding Path=SearchText}"
+                metro:TextBoxHelper.Watermark="Search users"
+                metro:TextBoxHelper.ClearTextButton="True"
+                Width="300" Height="50" Background="LightGoldenrodYellow"
+                VerticalAlignment="Center" HorizontalAlignment="Center"
+                FontSize="20">
+            </TextBox>
 
-        </TextBox>
+            <Button Grid.Column="1" 
+                    Content="Search"
+                    Margin="10" MaxHeight="50" MaxWidth="200"
+                    Command="{Binding SearchCommand}">
+            </Button>
+        </Grid>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Select users for adding to group" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Drag users for adding to group" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
         <ListView 
             Grid.Row="2" Grid.Column="0"
+            dd:DragDrop.IsDragSource="True"
+            dd:DragDrop.IsDropTarget="True"
+            dd:DragDrop.DragHandler="{Binding}"
+            dd:DragDrop.DropHandler="{Binding}"
             ItemsSource="{Binding Path=AllUsers}"
             SelectedItem="{Binding Path=SelectedUser}"
             ItemTemplate="{StaticResource ChatDataTemplate}"
             ItemContainerStyle="{StaticResource ChatListViewItemStyle}"
             Background="LightGreen"
             Margin="20">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseLeave">
+                    <i:InvokeCommandAction Command="{Binding AllUsers_MouseLeaveCommand}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="PreviewDragEnter">
+                    <i:InvokeCommandAction Command="{Binding AllUsers_PreviewDragEnterCommand}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="DragLeave">
+                    <i:InvokeCommandAction Command="{Binding AllUsers_DragLeaveCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
         </ListView>
 
         <Button 
@@ -61,24 +94,29 @@
 
         <ListView 
             Grid.Row="2" Grid.Column="1"
+            dd:DragDrop.IsDropTarget="True"
+            dd:DragDrop.IsDragSource="True"
+            dd:DragDrop.DragHandler="{Binding}"
+            dd:DragDrop.DropHandler="{Binding}"
             ItemsSource="{Binding Path=UsersToAdd}"
             SelectedItem="{Binding Path=SelectedUser}"
             ItemTemplate="{StaticResource ChatDataTemplate}"
             ItemContainerStyle="{StaticResource ChatListViewItemStyle}"
             Background="LightCyan" Margin="20">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseLeave">
+                    <i:InvokeCommandAction Command="{Binding UsersToAdd_MouseLeaveCommand}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="PreviewDragEnter">
+                    <i:InvokeCommandAction Command="{Binding UsersToAdd_PreviewDragEnterCommand}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="DragLeave">
+                    <i:InvokeCommandAction Command="{Binding UsersToAdd_DragLeaveCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
         </ListView>
 
-        <Grid Grid.Row="3" Grid.Column="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-
-            <Button Grid.Column="0" Width="100" Height="50" Content="Add User" VerticalAlignment="Center" HorizontalAlignment="Center" Command="{Binding AddToGroupCommand}" />
-            <Button Grid.Column="1" Width="100" Height="50" Content="Remove User" VerticalAlignment="Center" HorizontalAlignment="Center" Command="{Binding RemoveFromGroupCommand}" />
-            <Button Grid.Column="2" Width="100" Height="50" Content="Create Group" VerticalAlignment="Center" HorizontalAlignment="Center" Command="{Binding CreateGroupCommand}"/>
-        </Grid>
+        <Button Grid.Row="3" Grid.Column="1" Width="100" Height="50" Content="Create Group" VerticalAlignment="Center" HorizontalAlignment="Center" Command="{Binding CreateGroupCommand}"/>
     </Grid>
 
 </UserControl>

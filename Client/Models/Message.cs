@@ -58,10 +58,10 @@ namespace Client.Models
         private string fileName;        
         private bool isLoaded;
 
-        static FileMessage()
-        {
-            root = AppDomain.CurrentDomain.BaseDirectory;
-        }
+        //static FileMessage()
+        //{
+        //    root = AppDomain.CurrentDomain.BaseDirectory;
+        //}
 
         public FileMessage()
         {

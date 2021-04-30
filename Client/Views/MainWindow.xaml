@@ -109,11 +109,11 @@
             <controls:HamburgerMenu.OptionsItemsSource>
                 <controls:HamburgerMenuItemCollection>
 
-                    <controls:HamburgerMenuIconItem Tag="UCAvailableUsers" Label="All Chatrooms" Command="{Binding Path=TempCommand}">
+                    <!--<controls:HamburgerMenuIconItem Tag="UCAvailableUsers" Label="All Chatrooms">
                         <controls:HamburgerMenuIconItem.Icon>
                             <icons:PackIconMaterial  Kind="AccountMultiple" Width="25" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         </controls:HamburgerMenuIconItem.Icon>
-                    </controls:HamburgerMenuIconItem>
+                    </controls:HamburgerMenuIconItem>-->
 
                     <controls:HamburgerMenuIconItem Tag="UC2" Label="All Chatrooms" Command="{Binding CreateGroupCommand}">
                         <controls:HamburgerMenuIconItem.Icon>
@@ -174,10 +174,10 @@
             </controls:HamburgerMenu.ContentTemplate>-->
 
             <i:Interaction.Triggers>
-                <i:EventTrigger EventName="OptionsItemClick">
+                <!--<i:EventTrigger EventName="OptionsItemClick">
                     <i:InvokeCommandAction Command="{Binding SelectedHambugerOptionItemCommand}"
                                            CommandParameter="{Binding ElementName=hamburgerMenu, Path=SelectedOptionsItem}"/>
-                </i:EventTrigger>
+                </i:EventTrigger>-->
 
                 <i:EventTrigger EventName="ItemClick">
                     <i:InvokeCommandAction Command="{Binding SelectedChatChangedCommand}"

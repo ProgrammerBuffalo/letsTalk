@@ -1,0 +1,105 @@
+﻿<Window x:Class="Client.Views.EditGroupWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dd="urn:gong-wpf-dragdrop"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        mc:Ignorable="d"
+        Title="EditGroupWindow" Height="450" Width="800">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/WindowResources/ChatsDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate x:Key="MembersDataTemplate">
+                <Grid Background="Bisque">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Ellipse Grid.Column="0" Width="50" Height="50" StrokeThickness="3" Stroke="Black">
+                        <Ellipse.Fill>
+                            <ImageBrush ImageSource="{Binding Path=Image}"/>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Ellipse Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Style="{StaticResource OnlineEllipseStyle}"/>
+                    <TextBlock Grid.Column="1" Text="{Binding Path=Name}" FontSize="15" FontWeight="DemiBold"/>
+                    <Button Grid.Column="2" Content="Remove" Width="100" Height="25" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.RemoveMemberCommand}" CommandParameter="{Binding BindsDirectlyToSource=True}"/>
+                </Grid>
+            </DataTemplate>
+
+            <ControlTemplate x:Key="EllipseButton" TargetType="Button">
+                <Ellipse Width="{TemplateBinding Width}"
+                         Height="{TemplateBinding Height}"
+                         Cursor="{TemplateBinding Cursor}"
+                         Stroke="{TemplateBinding Foreground}"
+                         StrokeThickness="3">
+                    <Ellipse.Fill>
+                        <ImageBrush ImageSource="{Binding Path=Chat.Image}"/>
+                    </Ellipse.Fill>
+                </Ellipse>
+            </ControlTemplate>
+
+        </ResourceDictionary>
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=Chat.GroupName}"/>
+
+        <Button Width="50" Height="50" 
+                Cursor="Hand"
+                Template="{StaticResource EllipseButton}"
+                Command="{Binding ChangeImageCommand}"
+                Foreground="Black"
+                HorizontalAlignment="Left" Margin="20,0,0,0">
+        </Button>
+
+        <ListView Grid.Row="1" Grid.Column="0" 
+                  dd:DragDrop.DropHandler="{Binding}"
+                  dd:DragDrop.IsDropTarget="True"
+                  Margin="10"
+                  ItemsSource="{Binding Path=Chat.Users}"
+                  ItemTemplate="{StaticResource MembersDataTemplate}"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseLeave">
+                    <i:InvokeCommandAction Command="{Binding Users_MouseLeaveCommand}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="PreviewDragEnter">
+                    <i:InvokeCommandAction Command="{Binding Users_PreviewDragEnterCommand}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="PreviewDragLeave">
+                    <i:InvokeCommandAction Command="{Binding Users_DragLeaveCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ListView>
+
+        <ListView Grid.Row="1" Grid.Column="1"
+                  dd:DragDrop.DragHandler="{Binding}"
+                  dd:DragDrop.IsDragSource="True"
+                  Margin="10"
+                  ItemsSource="{Binding Path=AllUsers}"
+                  ItemTemplate="{StaticResource ChatDataTemplate}">            
+        </ListView>
+
+        <!--<Button Grid.Row="2" Grid.Column="0" Content="Add member" Width="200" Height="30" Command="{Binding Path=AddMemberCommand}"/>-->
+        <Button Grid.Row="2" Grid.Column="0" Content="Delete chat" Width="200" Height="30" Command="{Binding DeleteChatCommand}"/>
+        <Button Grid.Row="2" Grid.Column="1" Content="Show more" Width="200" Height="30" Command="{Binding ShowMoreCommand}"/>
+    </Grid>
+</Window>

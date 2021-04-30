@@ -68,7 +68,7 @@ namespace letsTalk
             catch (SqlException ex)
             {
                 Console.WriteLine(ex.Message);
-            }
+            }   
             catch (Exception ex)
             {
                 throw ex;

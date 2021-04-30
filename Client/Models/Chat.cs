@@ -162,9 +162,16 @@ namespace Client.Models
 
         public abstract void UserLeavedChatroom(int userId);
 
+        public abstract void RemoveUser(AvailableUser user);
+
         protected void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
         {
             prop = value;
+            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(prop_name));
+        }
+
+        protected void Set(string prop_name)
+        {
             PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(prop_name));
         }
     }
@@ -207,9 +214,8 @@ namespace Client.Models
             get => user.Image;
             set
             {
-                var image = user.Image;
                 user.Image = value;
-                Set(ref image, value);
+                Set("Avatar");
             }
         }
 
@@ -231,6 +237,11 @@ namespace Client.Models
         public override void UserLeavedChatroom(int userId)
         {
             Messages.Add(SystemMessage.UserLeavedChat(user.Name));
+        }
+
+        public override void RemoveUser(AvailableUser user)
+        {
+            if (this.user.SqlId == user.SqlId) this.user = null;
         }
 
         public override async void DownloadAvatarAsync()
@@ -364,6 +375,11 @@ namespace Client.Models
         {
             var user = FindUser(userId);
             Messages.Add(SystemMessage.UserLeavedChat(user.Name));
+        }
+
+        public override void RemoveUser(AvailableUser user)
+        {
+            Users.Remove(user);
         }
 
         private AvailableUser FindUser(Nullable<int> userId)

@@ -6,6 +6,7 @@
         xmlns:Controls ="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:Icons ="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:uc="clr-namespace:Client.UserControls"
+        xmlns:utility="clr-namespace:Client.Utility"
         mc:Ignorable="d"
         Title="Entrance" Height="450" Width="350">
 
@@ -33,8 +34,37 @@
             </Style.Triggers>
         </Style>
 
+        <Style x:Key="LoginStyle" TargetType="uc:LoginWarning">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Margin" Value="15, 0, 5, 0"/>
+
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="IsWarning" Value="True"/>
+                    <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/>
+                    <Setter Property="ErrorText" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="PasswordStyle" TargetType="uc:PasswordWarning">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Margin" Value="15, 0, 5, 0"/>
+
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="IsWarning" Value="True"/>
+                    <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/>
+                    <Setter Property="ErrorText" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
         <Style x:Key="ButtonSignInStyle" TargetType="Button" BasedOn="{StaticResource MahApps.Styles.Button}">
-            <Setter Property="Visibility" Value="Visible"></Setter>
+            <Setter Property="Visibility" Value="Visible"/>
+            <Setter Property="IsEnabled" Value="False"/>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="false">
                     <Setter Property="Visibility" Value="Visible" />
@@ -42,6 +72,21 @@
                 <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="true">
                     <Setter Property="Visibility" Value="Collapsed" />
                 </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=login, Path=IsWarning}" Value="True">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=password, Path=IsWarning}" Value="True">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding ElementName=login, Path=IsWarning}" Value="False"/>
+                        <Condition Binding="{Binding ElementName=password, Path=IsWarning}" Value="False"/>
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.Setters>
+                        <Setter Property="IsEnabled" Value="True"/>
+                    </MultiDataTrigger.Setters>
+                </MultiDataTrigger>
             </Style.Triggers>
         </Style>
 
@@ -55,6 +100,25 @@
                     <Setter Property="Grid.Column" Value="0" />
                     <Setter Property="Grid.ColumnSpan" Value="2"/>
                 </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=name, Path=IsWarning}" Value="True">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=login, Path=IsWarning}" Value="True">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=password, Path=IsWarning}" Value="True">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding ElementName=name, Path=IsWarning}" Value="False"/>
+                        <Condition Binding="{Binding ElementName=login, Path=IsWarning}" Value="False"/>
+                        <Condition Binding="{Binding ElementName=password, Path=IsWarning}" Value="False"/>
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.Setters>
+                        <Setter Property="IsEnabled" Value="True"/>
+                    </MultiDataTrigger.Setters>
+                </MultiDataTrigger>
             </Style.Triggers>
         </Style>
 
@@ -83,17 +147,32 @@
                  Margin="15" FontSize="18"
                  Style="{StaticResource TextBoxStyle}" />
 
-        <TextBox Text="{Binding Path=Login}"
+
+        <!--<TextBox Text="{Binding Path=Login}"
                  Grid.Row="1" Grid.Column="0"
                  Controls:TextBoxHelper.Watermark="Login"
                  Controls:TextBoxHelper.ClearTextButton="True"
-                 Margin="15" FontSize="18"/>
+                 Margin="15" FontSize="18"/>-->
 
-        <TextBox Text="{Binding Path=Password}"
-                 Grid.Row="2" Grid.Column="0"
-                 Controls:TextBoxHelper.Watermark="Password"
-                 Controls:TextBoxHelper.ClearTextButton="True"
-                 Margin="15" FontSize="18"/>
+        <uc:LoginWarning x:Name="login" Grid.Row="1" Style="{StaticResource LoginStyle}">
+            <uc:LoginWarning.Text>
+                <Binding Path="Login">
+                    <Binding.ValidationRules>
+                        <utility:AuthorizationRules/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </uc:LoginWarning.Text>
+        </uc:LoginWarning>
+
+        <uc:PasswordWarning x:Name="password" Grid.Row="2" Style="{StaticResource PasswordStyle}">
+            <uc:PasswordWarning.Text>
+                <Binding Path="Password">
+                    <Binding.ValidationRules>
+                        <utility:AuthorizationRules/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </uc:PasswordWarning.Text>
+        </uc:PasswordWarning>
 
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
@@ -101,7 +180,7 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Content="Sign In" Grid.Column="0" Margin="10, 50, 10, 100" Style="{StaticResource ButtonSignInStyle}" Command="{Binding SignInCommand}"/>
+            <Button x:Name="signIn" Content="Sign In" Grid.Column="0" Margin="10, 50, 10, 100" Style="{StaticResource ButtonSignInStyle}" Command="{Binding SignInCommand}"/>
 
             <Button Content="Registrate" Margin="10, 50, 10, 100" Style="{StaticResource ButtonRegistrateStyle}" Command="{Binding RegistrateCommand}"/>
         </Grid>

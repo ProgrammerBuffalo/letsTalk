@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Timers;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -18,32 +19,34 @@ namespace Client.ViewModels
     class ChatViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-
-        //нужен чтобы понять какой вид сообщения пошлет user;
         private delegate void MessageSendType(string message);
-
-        private ClientUserInfo client;
-
         private MessageSendType sendType;
 
-        private Chat chat;
+        //public MainViewModel.ChatDelegate RemoveChat { get; set; }
+        private MainViewModel mainVM;
+
+        public ChatService.ChatClient ChatClient { get; set; }
+
+        private ClientUserInfo client;
+        //private Chat chat;
 
         private MediaMessage curMediaMessage;
-
         private MediaPlayer player;
 
         private Timer timer;
 
         private string isWritingText;
-
         private string messageText = "";
 
-        public ChatService.ChatClient ChatClient { get; set; }
+        private Visibility loaderVisibility;
 
-        public ChatViewModel(ChatService.ChatClient chatClient)
+        public ChatViewModel(ChatService.ChatClient chatClient, MainViewModel mainVM)
         {
+            this.mainVM = mainVM;
+
             client = ClientUserInfo.getInstance();
             ChatClient = chatClient;
+            Settings = Settings.Instance;
 
             TextBox_KeyDownCommand = new Command(TextBox_KeyDown);
             TextBox_KeyUpCommand = new Command(TextBox_KeyUp);
@@ -57,10 +60,11 @@ namespace Client.ViewModels
             UnloadCommand = new Command(Unload);
             LoadCommand = new Command(Load);
 
-            AddUserCommand = new Command(AddMember);
-            RemoveUserCommand = new Command(RemoveMember);
+            //AddUserCommand = new Command(AddMember);
+            //RemoveUserCommand = new Command(RemoveMember);
+            EditChatCommand = new Command(EditChat);
             LeaveChatCommand = new Command(LeaveChat);
-            DeleteChatCommand = new Command(DeleteChat);
+            //DeleteChatCommand = new Command(DeleteChat);
 
             DownloadFileCommand = new Command(DownloadFile);
 
@@ -73,9 +77,63 @@ namespace Client.ViewModels
             timer.Elapsed += MediaPosTimer;
             timer.Interval = 500;
 
+            LoaderVisibility = Visibility.Hidden;
         }
 
-        private void Load(object obj)
+        public ICommand TextBox_KeyDownCommand { get; }
+        public ICommand TextBox_KeyUpCommand { get; }
+        public ICommand TextBox_EnterPressedCommand { get; }
+
+        public ICommand MediaPlayCommand { get; }
+        public ICommand MediaPosChangedCommand { get; }
+        public ICommand SendCommand { get; }
+        public ICommand OpenFileCommand { get; }
+        public ICommand OpenSmileCommand { get; }
+        public ICommand UnloadCommand { get; }
+
+        public ICommand EditChatCommand { get; }
+        //public ICommand AddUserCommand { get; }
+        //public ICommand RemoveUserCommand { get; }
+        public ICommand LeaveChatCommand { get; }
+
+        //public ICommand DeleteChatCommand { get; }
+
+        public ICommand LoadCommand { get; }
+        public ICommand DownloadFileCommand { get; }
+
+        public Chat Chat { get => mainVM.SelectedChat; }
+        //public Chat Chat { get => chat; set => Set(ref chat, value); }
+        public string IsWritingText { get => isWritingText; set => Set(ref isWritingText, value); }
+        public string MessageText { get => messageText; set => Set(ref messageText, value); }
+        public System.Windows.Controls.ScrollViewer Scroll { get; set; }
+        public Settings Settings { get; }
+
+        public Visibility LoaderVisibility { get => loaderVisibility; set => Set(ref loaderVisibility, value); }
+
+        public void SetScrollViewer(ref System.Windows.Controls.ScrollViewer scroll)
+        {
+            Scroll = scroll;
+            Scroll.ScrollChanged += ScrollScrollChanged;
+        }
+
+        private void ScrollScrollChanged(object sender, System.Windows.Controls.ScrollChangedEventArgs e)
+        {
+            //если чем выше значение тем раньше произойдет загрузка
+            if (Scroll.VerticalOffset >= 80)
+            {
+                LoaderVisibility = Visibility.Visible;
+
+                //вкл выкл вертикального скроллбара
+                //Scroll.VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Disabled;
+
+                //тут твой метод для загрузки доп сообшений (в параметр идет эта переменная settings.MessageLoadCount)
+
+                //в конце твоего асинхроного метода (не забывай про это App.Current.Dispatcher.Invoke(() => {  });)
+                //LoaderVisibility = Visibility.Hidden;
+            }
+        }
+
+        private async void Load(object obj)
         {
             LoadMore();
         }
@@ -87,7 +145,9 @@ namespace Client.ViewModels
             if (serviceMessages == null)
                 return;
 
-            ObservableCollection<Models.SourceMessage> messages =
+            if (serviceMessages != null)
+            {
+                ObservableCollection<Models.SourceMessage> messages =
                 new ObservableCollection<Models.SourceMessage>(await System.Threading.Tasks.Task<List<SourceMessage>>.Run(() =>
                 {
                     List<SourceMessage> messagesFromChat = new List<SourceMessage>();
@@ -127,21 +187,14 @@ namespace Client.ViewModels
         private void TextBox_KeyUp(object obj)
         {
             if (MessageText.Length < 1)
-                ChatClient.MessageIsWritingAsync(Chat.SqlId, null);
+                ChatClient.MessageIsWritingAsync(mainVM.SelectedChat.SqlId, null);
         }
 
         private void TextBox_KeyDown(object obj)
         {
             if (MessageText.Length > 1)
-                ChatClient.MessageIsWritingAsync(chat.SqlId, client.SqlId);
+                ChatClient.MessageIsWritingAsync(mainVM.SelectedChat.SqlId, client.SqlId);
         }
-
-        public ChatViewModel(Chat chat, ChatService.ChatClient chatClient) : this(chatClient)
-        {
-            Chat = chat;
-        }
-
-        public MainViewModel.ChatDelegate RemoveChat { get; set; }
 
         private void MediaEnded(object sender, EventArgs e)
         {
@@ -159,40 +212,23 @@ namespace Client.ViewModels
             });
         }
 
-        public ICommand TextBox_KeyDownCommand { get; }
-        public ICommand TextBox_KeyUpCommand { get; }
-        public ICommand TextBox_EnterPressedCommand { get; }
-
-        public ICommand MediaPlayCommand { get; }
-        public ICommand MediaPosChangedCommand { get; }
-        public ICommand SendCommand { get; }
-        public ICommand OpenFileCommand { get; }
-        public ICommand ShowMoreCommand { get; }
-        public ICommand UnloadCommand { get; }
-        public ICommand LoadCommand { get; }
-
-        public ICommand AddUserCommand { get; }
-        public ICommand RemoveUserCommand { get; }
-        public ICommand LeaveChatCommand { get; }
-        public ICommand DeleteChatCommand { get; }
-
-        public ICommand DownloadFileCommand { get; }
-
-        public Chat Chat { get => chat; set => Set(ref chat, value); }
-        public string IsWritingText { get => isWritingText; set => Set(ref isWritingText, value); }
-        public string MessageText { get => messageText; set => Set(ref messageText, value); }
-
-
         //тут должен быть твой метод для сообшения другим пользователям что добавлен новый узер
-        public void AddMember(object param)
-        {
-            //(chat as ChatGroup).AddMember(AvaibleUser user);
-        }
+        //public void AddMember(object param)
+        //{
+        //    (chat as ChatGroup).AddMember(AvaibleUser user);
+        //}
 
         //тут должен быть метод для сообшения другим пользователям что узера удалили
-        public void RemoveMember(object param)
+        //public void RemoveMember(object param)
+        //{
+        //    (chat as ChatGroup).RemoveMember();
+        //}
+
+        private void EditChat(object param)
         {
-            //(chat as ChatGroup).RemoveMember();
+            Views.EditGroupWindow window = new Views.EditGroupWindow();
+            window.DataContext = new EditGroupViewModel(mainVM);
+            window.ShowDialog();
         }
 
         //тут должен быть твой метод для сообшения другим пользователям что узер покинул chat
@@ -202,10 +238,10 @@ namespace Client.ViewModels
         }
 
         //тут должен быть твой метод для сообшения другим пользователям что узер покинул chat
-        public void DeleteChat(object param)
-        {
-            //RemoveChat.Invoke(Chat);
-        }
+        //public void DeleteChat(object param)
+        //{
+        //    RemoveChat.Invoke(Chat);
+        //}
 
         //тут метод для загрузки файла
         public async void DownloadFile(object param)
@@ -221,14 +257,14 @@ namespace Client.ViewModels
                 return;
 
             string filename = saveFileDialog.FileName;
-            if(message is ImageMessage)
+            if (message is ImageMessage)
             {
                 BitmapImage imageMessage = (message as ImageMessage).Bitmap;
 
                 BitmapEncoder encoder = new PngBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create(imageMessage));
 
-                using (var filestream = new System.IO.FileStream(filename, System.IO.FileMode.Create))
+                using (var filestream = new FileStream(filename, System.IO.FileMode.Create))
                 {
                     encoder.Save(filestream);
                 }
@@ -260,8 +296,6 @@ namespace Client.ViewModels
                 if (memoryStream != null) memoryStream.Close();
                 if (stream != null) stream.Close();
             }
-
-
         }
 
         private void MediaPlay(object param)
@@ -337,7 +371,7 @@ namespace Client.ViewModels
             string extn = path.Substring(path.LastIndexOf('.'));
             if (extn == ".mp3" || extn == ".wave")
             {
-                chat.Messages.Add(chat.GetMessageType(client.SqlId, new MediaMessage(path, DateTime.Now)));
+                mainVM.SelectedChat.Messages.Add(mainVM.SelectedChat.GetMessageType(client.SqlId, new MediaMessage(path, DateTime.Now)));
                 return;
             }
 
@@ -348,7 +382,7 @@ namespace Client.ViewModels
             try
             {
                 if (fileStream.CanRead)
-                    stream_id = fileClient.FileUpload(chat.SqlId, path, client.SqlId, fileStream);
+                    stream_id = fileClient.FileUpload(mainVM.SelectedChat.SqlId, path, client.SqlId, fileStream);
             }
             catch (Exception ex) { }
             finally
@@ -358,7 +392,7 @@ namespace Client.ViewModels
                     fileStream.Close();
                 }
             }
-            chat.Messages.Add(new SessionSendedMessage(new FileMessage(path, DateTime.Now, stream_id)));
+            mainVM.SelectedChat.Messages.Add(new SessionSendedMessage(new FileMessage(path, DateTime.Now, stream_id)));
         }
 
         private void MediaPosChanged(object param)
@@ -370,7 +404,7 @@ namespace Client.ViewModels
 
         private void Unload(object param)
         {
-            ChatClient.MessageIsWriting(Chat.SqlId, null);
+            ChatClient.MessageIsWriting(mainVM.SelectedChat.SqlId, null);
             if (curMediaMessage != null)
             {
                 curMediaMessage.IsPlaying = false;

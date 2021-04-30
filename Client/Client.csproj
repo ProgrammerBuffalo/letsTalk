@@ -40,6 +40,9 @@
     <Reference Include="ControlzEx, Version=5.0.0.0, Culture=neutral, PublicKeyToken=69f1c32f803d307e, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.5.0.0\lib\net462\ControlzEx.dll</HintPath>
     </Reference>
+    <Reference Include="GongSolutions.WPF.DragDrop, Version=2.0.0.0, Culture=neutral, PublicKeyToken=91f1945125b7a587, processorArchitecture=MSIL">
+      <HintPath>..\packages\gong-wpf-dragdrop.2.3.2\lib\net47\GongSolutions.WPF.DragDrop.dll</HintPath>
+    </Reference>
     <Reference Include="MahApps.Metro, Version=2.0.0.0, Culture=neutral, PublicKeyToken=51482d6f650b2b3f, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.2.4.4\lib\net47\MahApps.Metro.dll</HintPath>
     </Reference>
@@ -186,6 +189,8 @@
     <Compile Include="Models\Chat.cs" />
     <Compile Include="Models\ClientUserInfo.cs" />
     <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\Rington.cs" />
+    <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\SourceMessage.cs" />
     <Compile Include="UserControls\ChatItem.xaml.cs">
       <DependentUpon>ChatItem.xaml</DependentUpon>
@@ -209,15 +214,20 @@
     <Compile Include="ViewModels\AvailableUsersViewModel.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
     <Compile Include="ViewModels\EntranceViewModel.cs" />
+    <Compile Include="ViewModels\EditGroupViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="Views\AddUser.xaml.cs">
-      <DependentUpon>AddUser.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="Views\AddUserUC.xaml.cs">
       <DependentUpon>AddUserUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CreateGroupUC.xaml.cs">
       <DependentUpon>CreateGroupUC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DefaultWallpaperWindow.xaml.cs">
+      <DependentUpon>DefaultWallpaperWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditGroupWindow.xaml.cs">
+      <DependentUpon>EditGroupWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntranceWindow.xaml.cs">
       <DependentUpon>EntranceWindow.xaml</DependentUpon>
@@ -225,8 +235,17 @@
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UCChat.xaml.cs">
-      <DependentUpon>UCChat.xaml</DependentUpon>
+    <Compile Include="Views\ChatUC.xaml.cs">
+      <DependentUpon>ChatUC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PreviewWallpaperWindow.xaml.cs">
+      <DependentUpon>PreviewWallpaperWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RingtonWindow.xaml.cs">
+      <DependentUpon>RingtonWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UCSettings.xaml.cs">
       <DependentUpon>UCSettings.xaml</DependentUpon>
@@ -239,12 +258,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Window1.xaml.cs">
-      <DependentUpon>Window1.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Window2.xaml.cs">
-      <DependentUpon>Window2.xaml</DependentUpon>
     </Compile>
     <Page Include="UserControls\ChatItem.xaml">
       <SubType>Designer</SubType>
@@ -262,15 +275,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\AddUser.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\AddUserUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CreateGroupUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DefaultWallpaperWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EditGroupWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -282,23 +299,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\PreviewWallpaperWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RingtonWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UCAvailableUsers.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UCChat.xaml">
+    <Page Include="Views\ChatUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UCSettings.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Window1.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Window2.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -314,7 +335,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WindowResources\MessageDicitionary.xaml">
+    <Page Include="WindowResources\MessageDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WindowResources\SlideRadioButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WindowResources\SliderCheckBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WindowResources\WallpaperDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -429,18 +462,21 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Resource Include="images\bmp.png" />
-    <Resource Include="images\doc.png" />
-    <Resource Include="images\pdf.png" />
-    <Resource Include="images\ppt.png" />
-    <Resource Include="images\txt.png" />
-    <Resource Include="images\xls.png" />
-    <Resource Include="images\zip.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="images\file.png" />
+    <Resource Include="Resources\loader.png" />
+    <Content Include="Resources\Ringtons\alcatel_success.wav" />
+    <Content Include="Resources\Ringtons\basic_whistle.wav" />
+    <Content Include="Resources\Ringtons\doorslam.wav" />
+    <Content Include="Resources\Ringtons\drum_and_plucks.wav" />
+    <Content Include="Resources\Ringtons\hello.wav" />
+    <Content Include="Resources\Ringtons\hero.wav" />
+    <Content Include="Resources\Ringtons\idea.wav" />
+    <Content Include="Resources\Ringtons\iphone_text.wav" />
+    <Content Include="Resources\Ringtons\moonlit.wav" />
+    <Content Include="Resources\Ringtons\simple_b.wav" />
+    <Content Include="Resources\Ringtons\simple_c.wav" />
+    <Content Include="Resources\Ringtons\sunny.wav" />
+    <Resource Include="Resources\Wallpapers\skin.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="files\avatar1.png" />
@@ -451,6 +487,39 @@
     <Resource Include="files\avatar6.png" />
     <Resource Include="files\avatar7.png" />
     <Resource Include="files\avatar8.png" />
+    <Resource Include="Resources\Extensions\bmp.png" />
+    <Resource Include="Resources\Extensions\doc.png" />
+    <Resource Include="Resources\Extensions\file.png" />
+    <Resource Include="Resources\Extensions\pdf.png" />
+    <Resource Include="Resources\Extensions\ppt.png" />
+    <Resource Include="Resources\Extensions\txt.png" />
+    <Resource Include="Resources\Extensions\xls.png" />
+    <Resource Include="Resources\Extensions\zip.png" />
+    <Resource Include="Resources\Wallpapers\black-white.jpg" />
+    <Resource Include="Resources\Wallpapers\blue-red.jpg" />
+    <Resource Include="Resources\Wallpapers\brown.jpg" />
+    <Resource Include="Resources\Wallpapers\castle-river.jpg" />
+    <Resource Include="Resources\Wallpapers\city.jpg" />
+    <Resource Include="Resources\Wallpapers\dark-forest.jpg" />
+    <Resource Include="Resources\Wallpapers\flowers.jpg" />
+    <Resource Include="Resources\Wallpapers\grass.jpg" />
+    <Resource Include="Resources\Wallpapers\green.jpg" />
+    <Resource Include="Resources\Wallpapers\horizont.jpg" />
+    <Resource Include="Resources\Wallpapers\leaves.jpg" />
+    <Resource Include="Resources\Wallpapers\mix-color.jpg" />
+    <Resource Include="Resources\Wallpapers\mountain1.jpg" />
+    <Resource Include="Resources\Wallpapers\mountain2.jpg" />
+    <Resource Include="Resources\Wallpapers\north-light.jpg" />
+    <Resource Include="Resources\Wallpapers\red.jpg" />
+    <Resource Include="Resources\Wallpapers\sky.jpg" />
+    <Resource Include="Resources\Wallpapers\snow1.jpg" />
+    <Resource Include="Resources\Wallpapers\snow2.jpg" />
+    <Resource Include="Resources\Wallpapers\space1.jpg" />
+    <Resource Include="Resources\Wallpapers\space2.jpg" />
+    <Resource Include="Resources\Wallpapers\volcano.jpg" />
+    <Resource Include="Resources\Wallpapers\water-light.jpg" />
+    <Resource Include="Resources\Wallpapers\waterfall.jpg" />
+    <Resource Include="Resources\Wallpapers\yellow.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
