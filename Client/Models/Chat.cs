@@ -13,6 +13,10 @@ namespace Client.Models
         private ObservableCollection<SourceMessage> messages = new ObservableCollection<SourceMessage>();
         private int count;
 
+        public int _messageCount = 30;
+        public int _messageOffset = 0;
+
+
         private string userIsWriting;
 
         protected Chat()
@@ -86,15 +90,16 @@ namespace Client.Models
             {
                 var bitmapImage = new BitmapImage();
 
+                memoryStream.Seek(0, SeekOrigin.Begin);
                 bitmapImage.BeginInit();
                 bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                 bitmapImage.StreamSource = memoryStream;
+                bitmapImage.DecodePixelWidth = 400;
                 bitmapImage.EndInit();
 
                 imageMessage.Bitmap = bitmapImage;
             });
             imageMessage.FileName = imageMessage.FileName.Substring(imageMessage.FileName.LastIndexOf("\\") + 1);
-            imageMessage.IsLoaded = false;
             return imageMessage;
         }
 
@@ -145,8 +150,6 @@ namespace Client.Models
 
         public int Count { get => count; set => Set(ref count, value); }
 
-
-        //количество не прочитанных смс
         public string UserIsWriting { get => userIsWriting; set => Set(ref userIsWriting, value); }
 
         public virtual BitmapImage Avatar { set; get; }

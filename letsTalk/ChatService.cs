@@ -425,7 +425,6 @@ namespace letsTalk
                         {
                             if (connectedUser.SqlID == user)
                             {
-
                                 chatroomsInUsers[connectedUser].Add(chat_id);
                                 if (connectedUser.UserContext != OperationContext.Current)
                                     connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsAddedToChat(chat_id, users);
@@ -455,8 +454,10 @@ namespace letsTalk
                 Console.WriteLine("Creating declaration for XML");
                 XmlDocument document = new XmlDocument();
                 XmlDeclaration declaration = document.CreateXmlDeclaration("1.0", "UTF-8", null);
-                document.AppendChild(declaration);
-                XmlElement root = document.CreateElement("Messages");
+                XmlElement root = document.CreateElement("AllMessages");
+                XmlElement messagesEl = document.CreateElement("Messages");
+                messagesEl.SetAttribute("shortdate", DateTime.Now.ToShortDateString());
+                root.AppendChild(messagesEl);
                 document.AppendChild(root);
                 document.Save(path);
                 Console.WriteLine("Declaration has been created for XML");
@@ -516,70 +517,199 @@ namespace letsTalk
                 throw new Exception("File xml doesnt exsists!");
             }
             XDocument xDoc = XDocument.Load(full_path);
+            XElement xMessagesEl = xDoc.Root.LastNode as XElement;
+
+            bool createNewDate = DateTime.Parse(xMessagesEl.FirstAttribute.Value).Date < DateTime.Now.Date ? true : false;
+            if (createNewDate)
+            {
+                xMessagesEl = new XElement("Messages");
+                xMessagesEl.Add(new XAttribute("shortdate", DateTime.Now.ToShortDateString()));
+            }
 
             XElement xMessageEl = new XElement("Message");
+
             XAttribute xNameAttr;
-            XElement xDateEl;
-            XElement xSenderEl;
+            XElement xDateEl = serviceMessage.DateTime == null ? new XElement("Date", DateTime.Now.TimeOfDay) : new XElement("Date", serviceMessage.DateTime.Value.TimeOfDay);
+            XElement xUserEl;
 
             if (serviceMessage is ServiceMessageText)
             {
                 ServiceMessageText serviceMessageText = serviceMessage as ServiceMessageText;
                 xNameAttr = new XAttribute("type", "text");
-                xSenderEl = new XElement("Sender", serviceMessageText.Sender);
-                xDateEl = new XElement("Date", DateTime.Now.ToString());
+                xUserEl = new XElement("Sender", serviceMessageText.UserId);
                 XElement xTextEl = new XElement("Text", serviceMessageText.Text);
                 xMessageEl.Add(xTextEl);
             }
-            else
+            else if (serviceMessage is ServiceMessageFile)
             {
                 ServiceMessageFile serviceMessageFile = serviceMessage as ServiceMessageFile;
                 xNameAttr = new XAttribute("type", "file");
-                xSenderEl = new XElement("Sender", serviceMessageFile.Sender);
-                xDateEl = new XElement("Date", DateTime.Now.ToString());
+                xUserEl = new XElement("Sender", serviceMessageFile.UserId);
                 XElement xStreamIdEl = new XElement("StreamId", serviceMessageFile.StreamId);
                 XElement xFileName = new XElement("FileName", serviceMessageFile.FileName);
                 xMessageEl.Add(xStreamIdEl);
                 xMessageEl.Add(xFileName);
             }
+            else
+            {
+                ServiceMessageManage serviceMessageManage = serviceMessage as ServiceMessageManage;
+                xNameAttr = new XAttribute("type", "rule");
+                xUserEl = new XElement("UserId", serviceMessageManage.UserId);
+                XElement xRuleEl = new XElement("Rule", serviceMessageManage.RulingMessage);
+                xMessageEl.Add(xRuleEl);
+            }
             xMessageEl.Add(xNameAttr);
-            xMessageEl.Add(xSenderEl);
+            xMessageEl.Add(xUserEl);
             xMessageEl.Add(xDateEl);
 
-            xDoc.Root.Add(xMessageEl);
+            if (createNewDate)
+            {
+                xMessagesEl.Add(xMessageEl);
+                xDoc.Root.Add(xMessagesEl);
+            }
+            else
+                (xDoc.Root.LastNode as XElement).Add(xMessageEl);
 
             xDoc.Save(full_path);
             Console.WriteLine("Message is added to XML (" + OperationContext.Current.Channel.GetHashCode() + ")");
         }
 
         //Нахождение сообщений чатрума в XML-файле
-        private List<ServiceMessage> FindXmlNodes(string fullpath)
+        private List<ServiceMessage> FindXmlNodes(string fullpath, int offset, int count, DateTime joinDate, object leaveDate, DateTime offsetDate)
         {
             XDocument xDocument = XDocument.Load(fullpath);
             List<ServiceMessage> serviceMessages = new List<ServiceMessage>();
+            List<XElement> xElements = new List<XElement>();
+            XElement xMessagesEl = xDocument.Root.LastNode as XElement;
 
-            foreach (var xMessage in xDocument.Element("Messages").Elements("Message"))
+            DateTime _leaveDate;
+            if (leaveDate != null)
+                _leaveDate = DateTime.Parse(leaveDate.ToString());
+            else
+                _leaveDate = DateTime.Now.AddYears(1);
+
+            while (xMessagesEl != null)
+            {
+                DateTime dateMessages = DateTime.Parse(xMessagesEl.FirstAttribute.Value);
+                if (dateMessages.Date == offsetDate.Date)
+                {
+                    if (dateMessages.Date < _leaveDate.Date && dateMessages.Date > joinDate.Date)
+                    {
+                        xElements = xMessagesEl.Elements("Message").Reverse().ToList();
+                        if (xElements.Count <= offset)
+                            return null;
+
+                        if (xElements.Count < count + offset)
+                            xElements = xElements.GetRange(offset, xElements.Count - offset);
+                        else
+                            xElements = xElements.GetRange(offset, count - offset);
+                    }
+                    else if (dateMessages.Date <= _leaveDate.Date && dateMessages.Date > joinDate.Date)
+                    {
+                        int inner_offset = 0;
+                        XElement xMessageEl = xMessagesEl.Elements("Message").Last();
+                        while (xMessageEl != null)
+                        {
+                            if (DateTime.Parse(xMessageEl.Element("Date").Value).TimeOfDay < _leaveDate.TimeOfDay)
+                            {
+                                while (inner_offset < offset && xMessageEl != null)
+                                {
+                                    inner_offset++;
+                                    xMessageEl = xMessageEl.PreviousNode as XElement;
+                                }
+                                break;
+                            }
+                            xMessageEl = xMessageEl.PreviousNode as XElement;
+                        }
+
+                        for (int i = 0; i < count && xMessageEl != null; i++, xMessageEl = xMessageEl.PreviousNode as XElement)
+                        {
+                            xElements.Add(xMessageEl);
+                        }
+                        break;
+                    }
+                    else if (dateMessages.Date >= joinDate.Date && dateMessages.Date < _leaveDate.Date)
+                    {
+                        int inner_offset = 0;
+                        XElement xMessageEl = xMessagesEl.Elements("Message").Last();
+
+                        while (inner_offset < offset && xMessageEl != null)
+                        {
+                            inner_offset++;
+                            xMessageEl = xMessageEl.PreviousNode as XElement;
+                        }
+
+                        for (int i = 0; i < count && xMessageEl != null
+                            && DateTime.Parse(xMessageEl.Element("Date").Value).TimeOfDay > joinDate.TimeOfDay; i++, xMessageEl = xMessageEl.PreviousNode as XElement)
+                        {
+                            xElements.Add(xMessageEl);
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        int inner_offset = 0;
+                        XElement xMessageEl = xMessagesEl.Elements("Message").Last();
+                        while (xMessageEl != null)
+                        {
+                            if (DateTime.Parse(xMessageEl.Element("Date").Value).TimeOfDay < _leaveDate.TimeOfDay)
+                            {
+                                while (inner_offset < offset && xMessageEl != null)
+                                {
+                                    inner_offset++;
+                                    xMessageEl = xMessageEl.PreviousNode as XElement;
+                                }
+                                break;
+                            }
+                            xMessageEl = xMessageEl.PreviousNode as XElement;
+                        }
+
+                        for (int i = 0; i < count && xMessageEl != null
+                             && DateTime.Parse(xMessageEl.Element("Date").Value).TimeOfDay > joinDate.TimeOfDay; i++, xMessageEl = xMessageEl.PreviousNode as XElement)
+                        {
+                            xElements.Add(xMessageEl);
+                        }
+                        break;
+                    }
+                }
+                xMessagesEl = xMessagesEl.PreviousNode as XElement;
+            }
+
+            if (xElements.Count < 1)
+                return null;
+
+            foreach (var xMessage in xElements)
             {
                 if (xMessage.Attribute("type").Value.Equals("text"))
                 {
                     serviceMessages.Add(new ServiceMessageText
                     {
-                        Sender = int.Parse(xMessage.Element("Sender").Value),
-                        DateTime = DateTime.Parse(xMessage.Element("Date").Value),
+                        UserId = int.Parse(xMessage.Element("Sender").Value),
+                        DateTime = DateTime.Parse(xMessage.Parent.FirstAttribute.Value + " " + xMessage.Element("Date").Value),
                         Text = xMessage.Element("Text").Value
                     });
                 }
-                else
+                else if (xMessage.Attribute("type").Value.Equals("file"))
                 {
                     serviceMessages.Add(new ServiceMessageFile
                     {
-                        Sender = int.Parse(xMessage.Element("Sender").Value),
-                        DateTime = DateTime.Parse(xMessage.Element("Date").Value),
+                        UserId = int.Parse(xMessage.Element("Sender").Value),
+                        DateTime = DateTime.Parse(xMessage.Parent.FirstAttribute.Value + " " + xMessage.Element("Date").Value),
                         StreamId = Guid.Parse(xMessage.Element("StreamId").Value),
                         FileName = xMessage.Element("FileName").Value
                     });
                 }
+                else
+                {
+                    serviceMessages.Add(new ServiceMessageManage
+                    {
+                        UserId = int.Parse(xMessage.Element("UserId").Value),
+                        DateTime = DateTime.Parse(xMessage.Parent.FirstAttribute.Value + " " + xMessage.Element("Date").Value),
+                        RulingMessage = (RulingMessage)Enum.Parse(typeof(RulingMessage), xMessage.Element("Rule").Value)
+                    });
+                }
             }
+
             return serviceMessages;
         }
 
@@ -780,34 +910,51 @@ namespace letsTalk
             try
             {
                 Console.WriteLine("Adding user to chatroom (" + OperationContext.Current.Channel.GetHashCode() + ")");
+                string fullpathXML;
+                DateTime joinDate;
                 using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                 {
                     sqlConnection.Open();
 
-                    SqlCommand sqlCommandAddUserToChat = new SqlCommand(@"INSERT INTO User_Chatroom VALUES(@ChatID, @UserID)", sqlConnection);
+                    SqlCommand sqlCommandAddUserToChat = new SqlCommand(@"INSERT INTO User_Chatroom VALUES(@ChatID, @UserID) OUTPUT INSERTED.JoinDate", sqlConnection);
                     sqlCommandAddUserToChat.CommandType = CommandType.Text;
 
                     sqlCommandAddUserToChat.Parameters.Add("@ChatID", SqlDbType.Int).Value = chatId;
                     sqlCommandAddUserToChat.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
 
-                    sqlCommandAddUserToChat.ExecuteNonQuery();
+                    using (SqlDataReader reader = sqlCommandAddUserToChat.ExecuteReader())
+                    {
+                        reader.Read();
+                        joinDate = reader.GetSqlDateTime(0).Value;
+                    }
+
+                    SqlCommand sqlCommandTakeXML = new SqlCommand(@"SELECT dbo.GetXMLFile(@chatId)", sqlConnection);
+
+                    sqlCommandTakeXML.Parameters.Add("@chatId", SqlDbType.Int).Value = chatId;
+                    fullpathXML = sqlCommandTakeXML.ExecuteScalar().ToString();
                 }
 
-                if (chatroomsInUsers.Keys.Any(u => u.SqlID == userId))
+                lock (lockerSyncObj)
                 {
-                    List<ConnectedUser> users = chatroomsInUsers.Where(chatrooms => chatrooms.Value
-                                                                .Contains(chatId))
-                                                                .Select(u => u.Key).ToList();
+                    ServiceMessageManage serviceMessageManage = new ServiceMessageManage { UserId = userId, DateTime = joinDate, RulingMessage = RulingMessage.UserJoined };
+                    AddToXML(fullpathXML, serviceMessageManage);
 
-                    ConnectedUser connectedUser = chatroomsInUsers.Keys.First(u => u.SqlID == userId);
-                    connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsAddedToChat(chatId, users.Select(u => u.SqlID).ToList());
-
-                    Console.WriteLine("User joined callbacks...");
-
-                    foreach (var user in users)
+                    if (chatroomsInUsers.Keys.Any(u => u.SqlID == userId))
                     {
-                        if (user.UserContext.Channel != OperationContext.Current.Channel)
-                            user.UserContext.GetCallbackChannel<IChatCallback>().UserJoinedToChatroom(userId);
+                        List<ConnectedUser> users = chatroomsInUsers.Where(chatrooms => chatrooms.Value
+                                                                    .Contains(chatId))
+                                                                    .Select(u => u.Key).ToList();
+
+                        ConnectedUser connectedUser = chatroomsInUsers.Keys.First(u => u.SqlID == userId);
+                        connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsAddedToChat(chatId, users.Select(u => u.SqlID).ToList());
+
+                        Console.WriteLine("User joined callbacks...");
+
+                        foreach (var user in users)
+                        {
+                            if (user.UserContext.Channel != OperationContext.Current.Channel)
+                                user.UserContext.GetCallbackChannel<IChatCallback>().UserJoinedToChatroom(userId);
+                        }
                     }
                 }
                 Console.WriteLine("User has been added to chatroom (" + OperationContext.Current.Channel.GetHashCode() + ")");
@@ -820,31 +967,49 @@ namespace letsTalk
 
         }
 
-        //Удаление пользователя из чатрума
-        public void RemoveUserFromChatroom(int userId, int chatId)
+        private void RemoveUser(int userId, int chatId, RulingMessage rulingMessage)
         {
             try
             {
                 Console.WriteLine("Removing user from chatroom (" + OperationContext.Current.Channel.GetHashCode() + ")");
 
-                using (SqlConnection sqlConnection = new SqlConnection(connection_string))
+                string fullpathXML = null;
+                DateTime leaveDate;
+
+                using (TransactionScope transactionScope = new TransactionScope())
                 {
-                    sqlConnection.Open();
-                    SqlCommand sqlCommand = new SqlCommand(@"DELETE FROM User_Chatroom WHERE User Id_Chat = @IdChat AND Id_User = @IdUser", sqlConnection);
+                    using (SqlConnection sqlConnection = new SqlConnection(connection_string))
+                    {
+                        sqlConnection.Open();
+                        SqlCommand sqlCommand = new SqlCommand(@"UPDATE User_Chatroom SET [LeaveDate] = GETDATE() OUTPUT INSERTED.LeaveDate WHERE Id_Chat = @IdChat AND Id_User = @IdUser", sqlConnection);
 
-                    sqlCommand.Parameters.Add("@IdChat", SqlDbType.Int).Value = chatId;
-                    sqlCommand.Parameters.Add("@IdUser", SqlDbType.Int).Value = userId;
+                        sqlCommand.Parameters.Add("@IdChat", SqlDbType.Int).Value = chatId;
+                        sqlCommand.Parameters.Add("@IdUser", SqlDbType.Int).Value = userId;
 
-                    sqlCommand.ExecuteNonQuery();
+                        using (SqlDataReader reader = sqlCommand.ExecuteReader())
+                        {
+                            reader.Read();
+                            leaveDate = reader.GetSqlDateTime(0).Value;
+                        }
+
+                        SqlCommand sqlCommandTakeXML = new SqlCommand(@"SELECT dbo.GetXMLFile(@chatId)", sqlConnection);
+
+                        sqlCommandTakeXML.Parameters.Add("@chatId", SqlDbType.Int).Value = chatId;
+                        fullpathXML = sqlCommandTakeXML.ExecuteScalar().ToString();
+                    }
+
                 }
-
                 ConnectedUser connectedUser = chatroomsInUsers.Keys.FirstOrDefault(u => u.SqlID == userId);
 
                 lock (lockerSyncObj)
                 {
+                    ServiceMessageManage serviceMessageManage = new ServiceMessageManage { UserId = userId, DateTime = leaveDate, RulingMessage = rulingMessage };
+                    AddToXML(fullpathXML, serviceMessageManage);
+
                     if (connectedUser != null)
                     {
-                        connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsRemovedFromChat(chatId);
+                        connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsRemovedFromChat(serviceMessageManage, chatId);
+
                         chatroomsInUsers.Where(users => users.Key.SqlID == userId)
                                         .Select(c => c.Value)
                                         .First().Remove(chatId);
@@ -867,8 +1032,20 @@ namespace letsTalk
             }
         }
 
+        //Удаление пользователя из чатрума
+        public void RemoveUserFromChatroom(int userId, int chatId)
+        {
+            RemoveUser(userId, chatId, RulingMessage.UserRemoved);
+        }
+
+        // Покинуть чатрум
+        public void LeaveFromChatroom(int userId, int chatId)
+        {
+            RemoveUser(userId, chatId, RulingMessage.UserLeft);
+        }
+
         //Полное удаление чатрума
-        public void DeleteChatroom(int chatId)
+        public void DeleteChatroom(int chatId, int userId)
         {
             try
             {
@@ -878,11 +1055,17 @@ namespace letsTalk
                 {
                     sqlConnection.Open();
 
-                    SqlCommand sqlCommandDeleteChatroom = new SqlCommand(@"DELETE FROM User_Chatroom WHERE ChatID = @ChatID", sqlConnection);
+                    DateTime leaveDate;
+
+                    SqlCommand sqlCommandDeleteChatroom = new SqlCommand(@"UPDATE User_Chatroom WHERE ChatID = @ChatID SET LeaveDate = GETDATE() OUTPUT INSERTED.LeaveDate", sqlConnection);
                     sqlCommandDeleteChatroom.CommandType = CommandType.Text;
 
                     sqlCommandDeleteChatroom.Parameters.Add("@ChatID", SqlDbType.Int).Value = chatId;
-                    sqlCommandDeleteChatroom.ExecuteNonQuery();
+                    using(SqlDataReader sqlDataReader = sqlCommandDeleteChatroom.ExecuteReader())
+                    {
+                        sqlDataReader.Read();
+                        leaveDate = sqlDataReader.GetDateTime(0);
+                    }
 
                     lock (lockerSyncObj)
                     {
@@ -890,7 +1073,7 @@ namespace letsTalk
                         {
                             if (user.UserContext.Channel != OperationContext.Current.Channel)
                             {
-                                user.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsRemovedFromChat(chatId);
+                                user.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsRemovedFromChat(new ServiceMessageManage { RulingMessage = RulingMessage.ChatroomDelete, DateTime = leaveDate, UserId = userId }, chatId);
                             }
                             chatroomsInUsers[user].Remove(chatId);
                         }
@@ -975,7 +1158,7 @@ namespace letsTalk
 
                         sqlCommandTakeXML.Parameters.Add("@chatId", SqlDbType.Int).Value = chatToServer.ChatroomId;
                         fullpathXML = sqlCommandTakeXML.ExecuteScalar().ToString();
-                        
+
                     }
                     transactionScope.Complete();
                 }
@@ -984,7 +1167,7 @@ namespace letsTalk
                 {
                     ServiceMessageFile serviceMessageFile = new ServiceMessageFile
                     {
-                        Sender = chatToServer.Responsed_UserSqlId,
+                        UserId = chatToServer.Responsed_UserSqlId,
                         StreamId = stream_id,
                         DateTime = DateTime.Now,
                         FileName = fileName
@@ -1050,13 +1233,16 @@ namespace letsTalk
         }
 
         //Загрузка сообщений с одного чатрума
-        public List<ServiceMessage> MessagesFromOneChat(int chatroomId)
+        public List<ServiceMessage> MessagesFromOneChat(int chatroomId, int userId, int offset, int count, DateTime offsetDate)
         {
             List<ServiceMessage> messages = null;
             string fullpathXML;
             try
             {
                 Console.WriteLine("Finding messages from chatroom " + chatroomId);
+
+                DateTime joinDate;
+                DateTime leaveDate;
 
                 using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                 {
@@ -1065,9 +1251,21 @@ namespace letsTalk
 
                     sqlCommandTakeXML.Parameters.Add("@chatId", SqlDbType.Int).Value = chatroomId;
                     fullpathXML = sqlCommandTakeXML.ExecuteScalar().ToString();
+
+                    SqlCommand sqlCommandGetUserDates = new SqlCommand(@"SELECT [JoinDate], [LeaveDate] FROM User_Chatroom WHERE Id_Chat = @chatroomId AND Id_User = @userId", sqlConnection);
+
+                    sqlCommandGetUserDates.Parameters.Add("@chatroomId", SqlDbType.Int).Value = chatroomId;
+                    sqlCommandGetUserDates.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+
+                    using (SqlDataReader reader = sqlCommandGetUserDates.ExecuteReader())
+                    {
+                        reader.Read();
+                        joinDate = reader.GetDateTime(0);
+                        leaveDate = reader.GetDateTime(1);
+                    }
                 }
 
-                messages = FindXmlNodes(fullpathXML);
+                messages = FindXmlNodes(fullpathXML, offset, count, joinDate, leaveDate, offsetDate);
 
                 Console.WriteLine("Messages were found from chatroom " + chatroomId);
             }

@@ -52,7 +52,7 @@ namespace Client.ViewModels
             MediaPlayCommand = new Command(MediaPlay);
             MediaPosChangedCommand = new Command(MediaPosChanged);
             SendCommand = new Command(Send);
-            OpenSmileCommand = new Command(OpenSmile);
+            ShowMoreCommand = new Command(ShowMore);
             OpenFileCommand = new Command(OpenFile);
             UnloadCommand = new Command(Unload);
             LoadCommand = new Command(Load);
@@ -75,7 +75,7 @@ namespace Client.ViewModels
 
         }
 
-        private async void Load(object obj)
+        private void Load(object obj)
         {
             LoadMore();
         }
@@ -83,7 +83,9 @@ namespace Client.ViewModels
         private async void LoadMore()
         {
             ChatService.UnitClient unitClient = new ChatService.UnitClient();
-            ChatService.ServiceMessage[] serviceMessages = await unitClient.MessagesFromOneChatAsync(chat.SqlId);
+            ChatService.ServiceMessage[] serviceMessages = await unitClient.MessagesFromOneChatAsync(chat.SqlId, chat._messageOffset, chat._messageCount);
+            if (serviceMessages == null)
+                return;
 
             ObservableCollection<Models.SourceMessage> messages =
                 new ObservableCollection<Models.SourceMessage>(await System.Threading.Tasks.Task<List<SourceMessage>>.Run(() =>
@@ -94,27 +96,30 @@ namespace Client.ViewModels
                         if (message is ChatService.ServiceMessageText)
                         {
                             var textmessage = message as ChatService.ServiceMessageText;
-                            messagesFromChat.Add(chat.GetMessageType(textmessage.Sender, new TextMessage(textmessage.Text, textmessage.DateTime)));
+                            messagesFromChat.Add(chat.GetMessageType(textmessage.UserId, new TextMessage(textmessage.Text, textmessage.DateTime)));
                         }
                         else
                         {
                             var filemessage = message as ChatService.ServiceMessageFile;
-                            messagesFromChat.Add(chat.GetMessageType(filemessage.Sender, new FileMessage(filemessage.FileName, filemessage.DateTime, filemessage.StreamId) { IsLoaded = true }));
+                            messagesFromChat.Add(chat.GetMessageType(filemessage.UserId, new FileMessage(filemessage.FileName, filemessage.DateTime, filemessage.StreamId) { IsLoaded = true }));
                         }
+
                     }
 
                     return messagesFromChat;
                 }));
 
-            foreach (var message in messages.Reverse())
-                chat.Messages.Insert(0, message);            
+            foreach (var message in messages)
+                chat.Messages.Insert(0, message);
+
+            chat._messageOffset += chat._messageCount;
         }
 
         private void TextBox_EnterPressed(object obj)
         {
             if (MessageText.Length < 1)
                 return;
-            ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = MessageText, Sender = client.SqlId }, chat.SqlId);
+            ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = MessageText, UserId = client.SqlId }, chat.SqlId);
             chat.Messages.Add(chat.GetMessageType(client.SqlId, new TextMessage(MessageText, DateTime.Now)));
             MessageText = "";
         }
@@ -162,7 +167,7 @@ namespace Client.ViewModels
         public ICommand MediaPosChangedCommand { get; }
         public ICommand SendCommand { get; }
         public ICommand OpenFileCommand { get; }
-        public ICommand OpenSmileCommand { get; }
+        public ICommand ShowMoreCommand { get; }
         public ICommand UnloadCommand { get; }
         public ICommand LoadCommand { get; }
 
@@ -317,9 +322,9 @@ namespace Client.ViewModels
             }
         }
 
-        private void OpenSmile(object param)
+        private void ShowMore(object param)
         {
-
+            LoadMore();
         }
 
         private void SendText(string text)

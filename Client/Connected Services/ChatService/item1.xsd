@@ -14,7 +14,7 @@
   <xs:complexType name="ServiceMessage">
     <xs:sequence>
       <xs:element name="DateTime" type="xs:dateTime" />
-      <xs:element name="Sender" type="xs:int" />
+      <xs:element name="UserId" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ServiceMessage" nillable="true" type="tns:ServiceMessage" />
@@ -29,6 +29,42 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="ServiceMessageFile" nillable="true" type="tns:ServiceMessageFile" />
+  <xs:complexType name="ServiceMessageManage">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ServiceMessage">
+        <xs:sequence>
+          <xs:element name="RulingMessage" type="tns:RulingMessage" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ServiceMessageManage" nillable="true" type="tns:ServiceMessageManage" />
+  <xs:simpleType name="RulingMessage">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="UserJoined">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="UserLeft">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="UserRemoved">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="RulingMessage" nillable="true" type="tns:RulingMessage" />
   <xs:complexType name="ConnectionExceptionFault">
     <xs:sequence>
       <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />

@@ -23,6 +23,6 @@ namespace letsTalk
         Dictionary<int, string> GetRegisteredUsers(int count, int offset, int callerId);
 
         [OperationContract(IsOneWay = false)]
-        List<ServiceMessage> MessagesFromOneChat(int chatroomId);
+        List<ServiceMessage> MessagesFromOneChat(int chatroomId, int userId, int offset, int count, DateTime offsetDate);
     }
 }
