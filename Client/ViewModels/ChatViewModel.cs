@@ -104,8 +104,7 @@ namespace Client.ViewModels
         public ICommand LoadCommand { get; }
         public ICommand DownloadFileCommand { get; }
 
-        public Chat Chat { get => chat; set => chat = value; }
-        //public Chat Chat { get => chat; set => Set(ref chat, value); }
+        public Chat Chat { get => chat; set => Set(ref chat, value); }
         public string IsWritingText { get => isWritingText; set => Set(ref isWritingText, value); }
         public string MessageText { get => messageText; set => Set(ref messageText, value); }
         public System.Windows.Controls.ScrollViewer Scroll { get; set; }
@@ -173,7 +172,7 @@ namespace Client.ViewModels
                             var textMessage = message as ChatService.ServiceMessageText;
                             messagesFromChat.Add(mainVM.SelectedChat.GetMessageType(textMessage.UserId, new TextMessage(textMessage.Text, textMessage.DateTime)));
                         }
-                        else if(message is ChatService.ServiceMessageFile)
+                        else if (message is ChatService.ServiceMessageFile)
                         {
                             var fileMessage = message as ChatService.ServiceMessageFile;
                             messagesFromChat.Add(mainVM.SelectedChat.GetMessageType(fileMessage.UserId, new FileMessage(fileMessage.FileName, fileMessage.DateTime, fileMessage.StreamId) { IsLoaded = true }));

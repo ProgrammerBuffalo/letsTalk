@@ -303,9 +303,7 @@ namespace Client.Models
         private string groupName;
         private string groupDesc;
         private ObservableCollection<AvailableUser> users = new ObservableCollection<AvailableUser>();
-        private Dictionary<AvailableUser, string> colors;
-
-
+        private Dictionary<int, string> colors;
 
         static ChatGroup()
         {
@@ -351,6 +349,7 @@ namespace Client.Models
         public void AddMember(AvailableUser user)
         {
             users.Add(user);
+            colors.Add(user.SqlId, allColors[users.Count % allColors.Length]);
             Messages.Add(SystemMessage.UserAdded(DateTime.Now, user.Name));
         }
 
@@ -438,11 +437,20 @@ namespace Client.Models
             }
         }
 
+        public AvailableUser GetUserById(int sqlId)
+        {
+            foreach (var user in users)
+            {
+                if (user.SqlId == sqlId) return user;
+            }
+            return null;
+        }
+
         public override SourceMessage GetMessageType(int senderId, Message message)
         {
             if (senderId == ClientUserInfo.getInstance().SqlId)
                 return new UserMessage(message);
-            return new GroupMessage(message);
+            return new GroupMessage(message, GetUserById(senderId), colors[senderId]);
         }
     }
 }

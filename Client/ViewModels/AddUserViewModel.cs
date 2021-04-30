@@ -9,6 +9,7 @@ using System.ServiceModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using Chat = Client.Models.Chat;
 
 namespace Client.ViewModels
 {
@@ -126,7 +127,7 @@ namespace Client.ViewModels
                         Application.Current.Dispatcher.Invoke(() =>
                         {
                             var bitmapImage = new BitmapImage();
-                     
+
                             memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
                             bitmapImage.BeginInit();
                             bitmapImage.DecodePixelWidth = 400;
@@ -241,21 +242,32 @@ namespace Client.ViewModels
 
         private void CreateGroup(object param)
         {
-            if (!String.IsNullOrWhiteSpace(ChatName))
+            int sqlId;
+            Chat chat;
+            if (usersToAdd.Count == 1)
             {
-                int[] users = new int[usersToAdd.Count + 1];
-                users[0] = client.SqlId;
-                for (int i = 1; i < users.Length; i++)
-                    users[i] = usersToAdd[i - 1].SqlId;
-
-                int sqlId = chatClient.CreateChatroom(ChatName, users);
-
-                ChatGroup group = new ChatGroup(sqlId, ChatName, UsersToAdd);
-                AddChat.Invoke(group);
+                sqlId = chatClient.CreateChatroom(usersToAdd[0].Name, new int[] { client.SqlId, usersToAdd[0].SqlId });
+                chat = new ChatOne(sqlId, usersToAdd[0]);
+                AddChat.Invoke(chat);
             }
             else
             {
-                MessageBox.Show("Please enter chat room name");
+                if (!String.IsNullOrWhiteSpace(ChatName))
+                {
+                    int[] users = new int[usersToAdd.Count + 1];
+                    users[0] = client.SqlId;
+                    for (int i = 1; i < users.Length; i++)
+                        users[i] = usersToAdd[i - 1].SqlId;
+
+                    sqlId = chatClient.CreateChatroom(ChatName, users);
+
+                    chat = new ChatGroup(sqlId, ChatName, UsersToAdd);
+                    AddChat.Invoke(chat);
+                }
+                else
+                {
+                    MessageBox.Show("Please enter chat room name");
+                }
             }
         }
 

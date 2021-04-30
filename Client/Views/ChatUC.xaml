@@ -40,10 +40,20 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" MaxHeight="80"/>
+            <RowDefinition Height="*" MaxHeight="80">
+                <RowDefinition.Style>
+                    <Style TargetType="RowDefinition">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=Chat, Converter={StaticResource TypeConverter}}" Value="{x:Type models:ChatOne}">
+                                <Setter Property="Height" Value="0"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </RowDefinition.Style>
+            </RowDefinition>
             <RowDefinition Height="8*"/>
             <RowDefinition Height="*" MaxHeight="150"/>
         </Grid.RowDefinitions>
@@ -55,6 +65,15 @@
             <!--<Button DockPanel.Dock="Right" Content="Delete Chat" Margin="5" Command="{Binding Path=DeleteChatCommand}"/>-->
             <Button DockPanel.Dock="Right" Content="Edit chat" Margin="5" Command="{Binding EditChatCommand}"/>
             <Button DockPanel.Dock="Right" Content="Leave" Margin="5" Command="{Binding LeaveChatCommand}"/>
+            <DockPanel.Style>
+                <Style TargetType="DockPanel">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=Chat, Converter={StaticResource TypeConverter}}" Value="{x:Type models:ChatOne}">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DockPanel.Style>
         </DockPanel>
 
         <Image Grid.Row="1" VerticalAlignment="Top" Margin="0,10,0,0" Source="/Resources/loader.png" Visibility="{Binding Path=LoaderVisibility}" Width="50" Height="50" Panel.ZIndex="1">
