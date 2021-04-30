@@ -28,7 +28,7 @@ namespace Client.ViewModels
         public ChatService.ChatClient ChatClient { get; set; }
 
         private ClientUserInfo client;
-        //private Chat chat;
+        private Chat chat;
 
         private MediaMessage curMediaMessage;
         private MediaPlayer player;
@@ -43,6 +43,7 @@ namespace Client.ViewModels
         public ChatViewModel(ChatService.ChatClient chatClient, MainViewModel mainVM)
         {
             this.mainVM = mainVM;
+            Chat = mainVM.SelectedChat;
 
             client = ClientUserInfo.getInstance();
             ChatClient = chatClient;
@@ -101,7 +102,7 @@ namespace Client.ViewModels
         public ICommand LoadCommand { get; }
         public ICommand DownloadFileCommand { get; }
 
-        public Chat Chat { get => mainVM.SelectedChat; }
+        public Chat Chat { get => chat; set => chat = value; }
         //public Chat Chat { get => chat; set => Set(ref chat, value); }
         public string IsWritingText { get => isWritingText; set => Set(ref isWritingText, value); }
         public string MessageText { get => messageText; set => Set(ref messageText, value); }
@@ -113,10 +114,10 @@ namespace Client.ViewModels
         public void SetScrollViewer(ref System.Windows.Controls.ScrollViewer scroll)
         {
             Scroll = scroll;
-            Scroll.ScrollChanged += ScrollScrollChanged;
+            Scroll.ScrollChanged += ScrollChanged;
         }
 
-        private void ScrollScrollChanged(object sender, System.Windows.Controls.ScrollChangedEventArgs e)
+        private void ScrollChanged(object sender, System.Windows.Controls.ScrollChangedEventArgs e)
         {
             //если чем выше значение тем раньше произойдет загрузка
             if (Scroll.VerticalOffset >= 80)
@@ -141,12 +142,12 @@ namespace Client.ViewModels
         private async void LoadMore()
         {
             ChatService.UnitClient unitClient = new ChatService.UnitClient();
-            ChatService.ServiceMessage[] serviceMessages = await unitClient.MessagesFromOneChatAsync(mainVM.SelectedChat.SqlId);
+            ChatService.ServiceMessage[] serviceMessages = await unitClient.MessagesFromOneChatAsync(Chat.SqlId);
 
             if (serviceMessages != null)
             {
-                ObservableCollection<Models.SourceMessage> messages =
-                new ObservableCollection<Models.SourceMessage>(await System.Threading.Tasks.Task<List<SourceMessage>>.Run(() =>
+                ObservableCollection<SourceMessage> messages =
+                new ObservableCollection<SourceMessage>(await System.Threading.Tasks.Task.Run(() =>
                 {
                     List<SourceMessage> messagesFromChat = new List<SourceMessage>();
                     foreach (var message in serviceMessages)
@@ -154,12 +155,12 @@ namespace Client.ViewModels
                         if (message is ChatService.ServiceMessageText)
                         {
                             var textmessage = message as ChatService.ServiceMessageText;
-                            messagesFromChat.Add(mainVM.SelectedChat.GetMessageType(textmessage.Sender, new TextMessage(textmessage.Text, textmessage.DateTime)));
+                            messagesFromChat.Add(Chat.GetMessageType(textmessage.Sender, new TextMessage(textmessage.Text, textmessage.DateTime)));
                         }
                         else
                         {
                             var filemessage = message as ChatService.ServiceMessageFile;
-                            messagesFromChat.Add(mainVM.SelectedChat.GetMessageType(filemessage.Sender, new FileMessage(filemessage.FileName, filemessage.DateTime, filemessage.StreamId) { IsLoaded = true }));
+                            messagesFromChat.Add(Chat.GetMessageType(filemessage.Sender, new FileMessage(filemessage.FileName, filemessage.DateTime, filemessage.StreamId) { IsLoaded = true }));
                         }
                     }
 
@@ -167,7 +168,7 @@ namespace Client.ViewModels
                 }));
 
                 foreach (var message in messages.Reverse())
-                    mainVM.SelectedChat.Messages.Insert(0, message);
+                    Chat.Messages.Insert(0, message);
             }
         }
 
@@ -175,21 +176,21 @@ namespace Client.ViewModels
         {
             if (MessageText.Length < 1)
                 return;
-            ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = MessageText, Sender = client.SqlId }, mainVM.SelectedChat.SqlId);
-            mainVM.SelectedChat.Messages.Add(mainVM.SelectedChat.GetMessageType(client.SqlId, new TextMessage(MessageText, DateTime.Now)));
+            ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = MessageText, Sender = client.SqlId }, Chat.SqlId);
+            Chat.Messages.Add(Chat.GetMessageType(client.SqlId, new TextMessage(MessageText, DateTime.Now)));
             MessageText = "";
         }
 
         private void TextBox_KeyUp(object obj)
         {
             if (MessageText.Length < 1)
-                ChatClient.MessageIsWritingAsync(mainVM.SelectedChat.SqlId, null);
+                ChatClient.MessageIsWritingAsync(Chat.SqlId, null);
         }
 
         private void TextBox_KeyDown(object obj)
         {
             if (MessageText.Length > 1)
-                ChatClient.MessageIsWritingAsync(mainVM.SelectedChat.SqlId, client.SqlId);
+                ChatClient.MessageIsWritingAsync(Chat.SqlId, client.SqlId);
         }
 
         private void MediaEnded(object sender, EventArgs e)
@@ -367,7 +368,7 @@ namespace Client.ViewModels
             string extn = path.Substring(path.LastIndexOf('.'));
             if (extn == ".mp3" || extn == ".wave")
             {
-                mainVM.SelectedChat.Messages.Add(mainVM.SelectedChat.GetMessageType(client.SqlId, new MediaMessage(path, DateTime.Now)));
+                Chat.Messages.Add(Chat.GetMessageType(client.SqlId, new MediaMessage(path, DateTime.Now)));
                 return;
             }
 
@@ -378,7 +379,7 @@ namespace Client.ViewModels
             try
             {
                 if (fileStream.CanRead)
-                    stream_id = fileClient.FileUpload(mainVM.SelectedChat.SqlId, path, client.SqlId, fileStream);
+                    stream_id = fileClient.FileUpload(Chat.SqlId, path, client.SqlId, fileStream);
             }
             catch (Exception ex) { }
             finally
@@ -388,7 +389,7 @@ namespace Client.ViewModels
                     fileStream.Close();
                 }
             }
-            mainVM.SelectedChat.Messages.Add(new SessionSendedMessage(new FileMessage(path, DateTime.Now, stream_id)));
+            Chat.Messages.Add(new SessionSendedMessage(new FileMessage(path, DateTime.Now, stream_id)));
         }
 
         private void MediaPosChanged(object param)
@@ -400,7 +401,7 @@ namespace Client.ViewModels
 
         private void Unload(object param)
         {
-            ChatClient.MessageIsWriting(mainVM.SelectedChat.SqlId, null);
+            ChatClient.MessageIsWriting(Chat.SqlId, null);
             if (curMediaMessage != null)
             {
                 curMediaMessage.IsPlaying = false;

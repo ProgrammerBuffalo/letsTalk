@@ -1,4 +1,6 @@
-﻿namespace Client.Models
+﻿using System;
+
+namespace Client.Models
 {
     public enum MessageState { Readen, Recived, Send, NoInet };
 
@@ -113,6 +115,6 @@
         public static SystemMessage UserAdded(string login)
         {
             return new SystemMessage(new TextMessage(login + "added to chat"));
-        }
+        }        
     }
 }

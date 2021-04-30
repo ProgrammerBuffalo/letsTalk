@@ -176,6 +176,8 @@ namespace Client.ViewModels
         private bool canDrop;
         private bool allUsersIsDropSource;
         private bool usersToAddIsDropSource;
+        private bool allUsersIsDropTarget;
+        private bool usersToAddIsDropTarget;
 
         public CreateGroupViewModel(ChatClient chatClient) : base(chatClient)
         {
@@ -186,10 +188,12 @@ namespace Client.ViewModels
             AllUsers_MouseLeaveCommand = new Command(AllUsers_MouseLeave);
             AllUsers_PreviewDragEnterCommand = new Command(AllUsers_PreviewDragEnter);
             AllUsers_DragLeaveCommand = new Command(AllUsers_DragLeave);
+            AllUsers_MouseEnterCommand = new Command(AllUsers_MouseEnter);
 
             UsersToAdd_MouseLeaveCommand = new Command(UsersToadd_MouseLeave);
             UsersToAdd_PreviewDragEnterCommand = new Command(UsersToAdd_PreviewDragEnter);
             UsersToAdd_DragLeaveCommand = new Command(UsersToAdd_DragLeave);
+            UsersToAdd_MouseEnterCommand = new Command(UsersToAdd_MouseEnter);
 
             UsersToAdd = new ObservableCollection<AvailableUser>();
         }
@@ -201,13 +205,17 @@ namespace Client.ViewModels
         public ICommand AllUsers_MouseLeaveCommand { get; }
         public ICommand AllUsers_PreviewDragEnterCommand { get; }
         public ICommand AllUsers_DragLeaveCommand { get; }
+        public ICommand AllUsers_MouseEnterCommand { get; }
 
         public ICommand UsersToAdd_MouseLeaveCommand { get; }
         public ICommand UsersToAdd_PreviewDragEnterCommand { get; }
         public ICommand UsersToAdd_DragLeaveCommand { get; }
+        public ICommand UsersToAdd_MouseEnterCommand { get; }
 
         public ObservableCollection<AvailableUser> UsersToAdd { get => usersToAdd; set => Set(ref usersToAdd, value); }
         public string ChatName { get => chatName; set => Set(ref chatName, value); }
+        public bool AllUsersIsDropTarget { get => allUsersIsDropTarget; set => Set(ref allUsersIsDropTarget, value); }
+        public bool UsersToAddIsDropTarget { get => usersToAddIsDropTarget; set => Set(ref usersToAddIsDropTarget, value); }
 
         private void AddToGroup(object param)
         {
@@ -281,6 +289,18 @@ namespace Client.ViewModels
         {
             canDrop = false;
             usersToAddIsDropSource = false;
+        }
+
+        private void AllUsers_MouseEnter(object param)
+        {
+            AllUsersIsDropTarget = false;
+            UsersToAddIsDropTarget = true;
+        }
+
+        private void UsersToAdd_MouseEnter(object param)
+        {
+            UsersToAddIsDropTarget = false;
+            AllUsersIsDropTarget = true;
         }
 
         public void DragOver(IDropInfo dropInfo)

@@ -50,16 +50,18 @@
         <ListView 
             Grid.Row="2" Grid.Column="0"
             dd:DragDrop.IsDragSource="True"
-            dd:DragDrop.IsDropTarget="True"
+            dd:DragDrop.IsDropTarget="{Binding Path=AllUsersIsDropTarget}"
             dd:DragDrop.DragHandler="{Binding}"
             dd:DragDrop.DropHandler="{Binding}"
             ItemsSource="{Binding Path=AllUsers}"
             SelectedItem="{Binding Path=SelectedUser}"
             ItemTemplate="{StaticResource ChatDataTemplate}"
             ItemContainerStyle="{StaticResource ChatListViewItemStyle}"
-            Background="LightGreen"
-            Margin="20">
+            Background="LightGreen" Margin="20">
             <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseEnter">
+                    <i:InvokeCommandAction Command="{Binding AllUsers_MouseEnterCommand}"/>
+                </i:EventTrigger>
                 <i:EventTrigger EventName="MouseLeave">
                     <i:InvokeCommandAction Command="{Binding AllUsers_MouseLeaveCommand}"/>
                 </i:EventTrigger>
@@ -94,7 +96,7 @@
 
         <ListView 
             Grid.Row="2" Grid.Column="1"
-            dd:DragDrop.IsDropTarget="True"
+            dd:DragDrop.IsDropTarget="{Binding Path=UsersToAddIsDropTarget}"
             dd:DragDrop.IsDragSource="True"
             dd:DragDrop.DragHandler="{Binding}"
             dd:DragDrop.DropHandler="{Binding}"
@@ -104,6 +106,9 @@
             ItemContainerStyle="{StaticResource ChatListViewItemStyle}"
             Background="LightCyan" Margin="20">
             <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseEnter">
+                    <i:InvokeCommandAction Command="{Binding UsersToAdd_MouseEnterCommand}"/>
+                </i:EventTrigger>
                 <i:EventTrigger EventName="MouseLeave">
                     <i:InvokeCommandAction Command="{Binding UsersToAdd_MouseLeaveCommand}"/>
                 </i:EventTrigger>
