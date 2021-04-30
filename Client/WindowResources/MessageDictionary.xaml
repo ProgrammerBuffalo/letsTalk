@@ -76,10 +76,8 @@
             </MultiDataTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-
-
-
-
+    
+    
     <DataTemplate x:Key="TextDataTemplate">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -147,6 +145,7 @@
                 <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
                 <Setter TargetName="group" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="group" Property="Foreground" Value="{Binding Path=Color}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:SystemMessage}">
                 <Setter TargetName="mainGrid" Property="Grid.ColumnSpan" Value="2"/>
@@ -232,6 +231,7 @@
                 <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
                 <Setter TargetName="group" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="group" Property="Foreground" Value="{Binding Path=Color}"/>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -311,6 +311,7 @@
                 <Setter TargetName="group" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
+                <Setter TargetName="group" Property="Foreground" Value="{Binding Path=Color}"/>
             </DataTrigger>
 
             <DataTrigger Binding="{Binding Path=Message.IsLoaded}" Value="True">
@@ -428,6 +429,7 @@
                 <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
                 <Setter TargetName="group" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="group" Property="Foreground" Value="{Binding Path=Color}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:SessionSendedMessage}">
                 <Setter TargetName="mainGrid" Property="Grid.Column" Value="1"/>

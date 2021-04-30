@@ -74,9 +74,10 @@ namespace Client.Models
 
         }
 
-        public GroupMessage(Message message, AvailableUser user) : base(message)
+        public GroupMessage(Message message, AvailableUser user, string color) : base(message)
         {
             User = user;
+            Color = color;
         }
 
         public AvailableUser User { get => user; set => Set(ref user, value); }

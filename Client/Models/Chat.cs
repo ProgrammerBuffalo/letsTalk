@@ -41,11 +41,11 @@ namespace Client.Models
                                 FileMessage fileMessage = sourceMessage.Message as FileMessage;
                                 string extension = fileMessage.FileName.Substring(fileMessage.FileName.LastIndexOf('.'));
                                 switch (extension)
-                                {                                    
+                                {
                                     case ".jpg":
                                     case ".png":
                                     case ".jpeg":
-                                        if(sourceMessage is SessionSendedMessage)
+                                        if (sourceMessage is SessionSendedMessage)
                                         {
                                             sourceMessage.Message = LoadImageFromClient(fileMessage);
                                             break;
@@ -85,7 +85,7 @@ namespace Client.Models
             ImageMessage imageMessage = new ImageMessage(fileMessage.FileName, fileMessage.Date, fileMessage.StreamId);
 
             MemoryStream memoryStream = new MemoryStream();
-            using(FileStream fileStream = new FileStream(fileMessage.FileName, FileMode.Open, FileAccess.Read))
+            using (FileStream fileStream = new FileStream(fileMessage.FileName, FileMode.Open, FileAccess.Read))
             {
                 fileStream.CopyTo(memoryStream);
             }
@@ -303,16 +303,24 @@ namespace Client.Models
         private string groupName;
         private string groupDesc;
         private ObservableCollection<AvailableUser> users = new ObservableCollection<AvailableUser>();
-        private Dictionary<AvailableUser, string> colors;
-
-
+        private Dictionary<int, string> colors;
 
         static ChatGroup()
         {
-            allColors = new string[20];
-            allColors[0] = "Blue";
-            allColors[1] = "Green";
-            allColors[2] = "Red";
+            allColors = new string[13];
+            allColors[0] = "#945b3a";
+            allColors[1] = "#d95509";
+            allColors[2] = "#d99b09";
+            allColors[3] = "#6e8212";
+            allColors[4] = "#51c404";
+            allColors[5] = "#118515";
+            allColors[6] = "#2f736c";
+            allColors[7] = "#1978b3";
+            allColors[8] = "#5c75ed";
+            allColors[9] = "#7c1bc2";
+            allColors[10] = "#c21bb7";
+            allColors[11] = "#ed028b";
+            allColors[12] = "#8c0315";
         }
 
         //убрать
@@ -324,8 +332,12 @@ namespace Client.Models
         public ChatGroup(int sqlId, string groupName, IEnumerable<AvailableUser> users) : base(sqlId)
         {
             GroupName = groupName;
+            colors = new Dictionary<int, string>();
             foreach (var user in users)
+            {
                 Users.Add(user);
+                colors.Add(user.SqlId, allColors[Users.Count % allColors.Length]);
+            }
         }
 
         public ChatGroup(int sqlId, string groupName, string groupDesc, IEnumerable<AvailableUser> users) : this(sqlId, groupName, users)
@@ -341,6 +353,7 @@ namespace Client.Models
         public void AddMember(AvailableUser user)
         {
             users.Add(user);
+            colors.Add(user.SqlId, allColors[users.Count % allColors.Length]);
             Messages.Add(SystemMessage.UserAdded(DateTime.Now, user.Name));
         }
 
@@ -428,11 +441,20 @@ namespace Client.Models
             }
         }
 
+        public AvailableUser GetUserById(int sqlId)
+        {
+            foreach (var user in users)
+            {
+                if (user.SqlId == sqlId) return user;
+            }
+            return null;
+        }
+
         public override SourceMessage GetMessageType(int senderId, Message message)
         {
             if (senderId == ClientUserInfo.getInstance().SqlId)
                 return new UserMessage(message);
-            return new GroupMessage(message);
+            return new GroupMessage(message, GetUserById(senderId), colors[senderId]);
         }
     }
 }

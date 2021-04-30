@@ -108,8 +108,7 @@ namespace Client.ViewModels
         public ICommand LoadCommand { get; }
         public ICommand DownloadFileCommand { get; }
 
-        public Chat Chat { get => chat; set => chat = value; }
-        //public Chat Chat { get => chat; set => Set(ref chat, value); }
+        public Chat Chat { get => chat; set => Set(ref chat, value); }
         public string IsWritingText { get => isWritingText; set => Set(ref isWritingText, value); }
         public string MessageText { get => messageText; set => Set(ref messageText, value); }
         public System.Windows.Controls.ScrollViewer Scroll { get; set; }
