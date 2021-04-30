@@ -324,8 +324,8 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WindowResources\ButtonEllipseStyle.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="WindowResources\ChatsDictionary.xaml">
       <SubType>Designer</SubType>
@@ -463,6 +463,24 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="files\avatar1.png" />
+    <Resource Include="files\avatar2.png" />
+    <Resource Include="files\avatar3.png" />
+    <Resource Include="files\avatar4.png" />
+    <Resource Include="files\avatar5.png" />
+    <Resource Include="files\avatar6.png" />
+    <Resource Include="files\avatar7.png" />
+    <Resource Include="files\avatar8.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Extensions\bmp.png" />
+    <Resource Include="Resources\Extensions\doc.png" />
+    <Resource Include="Resources\Extensions\file.png" />
+    <Resource Include="Resources\Extensions\pdf.png" />
+    <Resource Include="Resources\Extensions\ppt.png" />
+    <Resource Include="Resources\Extensions\txt.png" />
+    <Resource Include="Resources\Extensions\xls.png" />
+    <Resource Include="Resources\Extensions\zip.png" />
     <Resource Include="Resources\loader.png" />
     <Content Include="Resources\Ringtons\alcatel_success.wav" />
     <Content Include="Resources\Ringtons\basic_whistle.wav" />
@@ -476,25 +494,6 @@
     <Content Include="Resources\Ringtons\simple_b.wav" />
     <Content Include="Resources\Ringtons\simple_c.wav" />
     <Content Include="Resources\Ringtons\sunny.wav" />
-    <Resource Include="Resources\Wallpapers\skin.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="files\avatar1.png" />
-    <Resource Include="files\avatar2.png" />
-    <Resource Include="files\avatar3.png" />
-    <Resource Include="files\avatar4.png" />
-    <Resource Include="files\avatar5.png" />
-    <Resource Include="files\avatar6.png" />
-    <Resource Include="files\avatar7.png" />
-    <Resource Include="files\avatar8.png" />
-    <Resource Include="Resources\Extensions\bmp.png" />
-    <Resource Include="Resources\Extensions\doc.png" />
-    <Resource Include="Resources\Extensions\file.png" />
-    <Resource Include="Resources\Extensions\pdf.png" />
-    <Resource Include="Resources\Extensions\ppt.png" />
-    <Resource Include="Resources\Extensions\txt.png" />
-    <Resource Include="Resources\Extensions\xls.png" />
-    <Resource Include="Resources\Extensions\zip.png" />
     <Resource Include="Resources\Wallpapers\black-white.jpg" />
     <Resource Include="Resources\Wallpapers\blue-red.jpg" />
     <Resource Include="Resources\Wallpapers\brown.jpg" />
@@ -511,6 +510,7 @@
     <Resource Include="Resources\Wallpapers\mountain2.jpg" />
     <Resource Include="Resources\Wallpapers\north-light.jpg" />
     <Resource Include="Resources\Wallpapers\red.jpg" />
+    <Resource Include="Resources\Wallpapers\skin.jpg" />
     <Resource Include="Resources\Wallpapers\sky.jpg" />
     <Resource Include="Resources\Wallpapers\snow1.jpg" />
     <Resource Include="Resources\Wallpapers\snow2.jpg" />

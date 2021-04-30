@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
@@ -21,6 +22,8 @@ namespace Client.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         private delegate void MessageSendType(string message);
         private MessageSendType sendType;
+
+        private double _previousScrollOffset;
 
         //public MainViewModel.ChatDelegate RemoveChat { get; set; }
         private MainViewModel mainVM;
@@ -47,7 +50,7 @@ namespace Client.ViewModels
 
             client = ClientUserInfo.getInstance();
             ChatClient = chatClient;
-            Settings = Settings.Instance;
+            //Settings = Settings.Instance;
 
             TextBox_KeyDownCommand = new Command(TextBox_KeyDown);
             TextBox_KeyUpCommand = new Command(TextBox_KeyUp);
@@ -113,36 +116,45 @@ namespace Client.ViewModels
         public void SetScrollViewer(ref System.Windows.Controls.ScrollViewer scroll)
         {
             Scroll = scroll;
-            Scroll.ScrollChanged += ScrollChanged;
+            Scroll.ScrollChanged += ScrollPositionChanged;
+            Scroll.VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Auto;
         }
 
-        private void ScrollChanged(object sender, System.Windows.Controls.ScrollChangedEventArgs e)
+        private async void ScrollPositionChanged(object sender, System.Windows.Controls.ScrollChangedEventArgs e)
         {
             //если чем выше значение тем раньше произойдет загрузка
-            if (Scroll.VerticalOffset >= 80)
+            if (Scroll.VerticalOffset == 0 && _previousScrollOffset != Scroll.VerticalOffset)
             {
+                _previousScrollOffset = Scroll.VerticalOffset;
                 LoaderVisibility = Visibility.Visible;
-
-                //вкл выкл вертикального скроллбара
-                //Scroll.VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Disabled;
-
-                //тут твой метод для загрузки доп сообшений (в параметр идет эта переменная settings.MessageLoadCount)
-
-                //в конце твоего асинхроного метода (не забывай про это App.Current.Dispatcher.Invoke(() => {  });)
-                //LoaderVisibility = Visibility.Hidden;
+                Scroll.VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Disabled;
+                await LoadMore();
+                Scroll.VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Auto;
+                LoaderVisibility = Visibility.Hidden;
             }
+            else
+                _previousScrollOffset = Scroll.VerticalOffset;
         }
 
         private async void Load(object obj)
         {
-            LoadMore();
+            await LoadMore();
+            Scroll.ScrollToEnd();
         }
 
-        private async void LoadMore()
+        private async Task LoadMore()
         {
             ChatService.UnitClient unitClient = new ChatService.UnitClient();
-            ChatService.ServiceMessage[] serviceMessages = await unitClient.MessagesFromOneChatAsync(chat.SqlId, chat._messageOffset, chat._messageCount);
+            ChatService.ServiceMessage[] serviceMessages = await unitClient.MessagesFromOneChatAsync(mainVM.SelectedChat.SqlId, mainVM.ClientUserInfo.SqlId, mainVM.SelectedChat._messageOffset, mainVM.SelectedChat._messageCount, mainVM.SelectedChat._offsetDate);
+
             if (serviceMessages == null)
+            {
+                mainVM.SelectedChat.Messages.Add(SystemMessage.ShiftDate(mainVM.SelectedChat._offsetDate));
+                mainVM.SelectedChat._offsetDate.AddDays(-1);
+                return;
+            }
+
+            if (serviceMessages.First().DateTime == DateTime.MinValue)
                 return;
 
             if (serviceMessages != null)
@@ -155,13 +167,29 @@ namespace Client.ViewModels
                     {
                         if (message is ChatService.ServiceMessageText)
                         {
-                            var textmessage = message as ChatService.ServiceMessageText;
-                            messagesFromChat.Add(chat.GetMessageType(textmessage.UserId, new TextMessage(textmessage.Text, textmessage.DateTime)));
+                            var textMessage = message as ChatService.ServiceMessageText;
+                            messagesFromChat.Add(mainVM.SelectedChat.GetMessageType(textMessage.UserId, new TextMessage(textMessage.Text, textMessage.DateTime)));
+                        }
+                        else if(message is ChatService.ServiceMessageFile)
+                        {
+                            var fileMessage = message as ChatService.ServiceMessageFile;
+                            messagesFromChat.Add(mainVM.SelectedChat.GetMessageType(fileMessage.UserId, new FileMessage(fileMessage.FileName, fileMessage.DateTime, fileMessage.StreamId) { IsLoaded = true }));
                         }
                         else
                         {
-                            var filemessage = message as ChatService.ServiceMessageFile;
-                            messagesFromChat.Add(chat.GetMessageType(filemessage.UserId, new FileMessage(filemessage.FileName, filemessage.DateTime, filemessage.StreamId) { IsLoaded = true }));
+                            var systemMessage = message as ChatService.ServiceMessageManage;
+                            switch (systemMessage.RulingMessage)
+                            {
+                                case ChatService.RulingMessage.UserJoined:
+                                    messagesFromChat.Add(SystemMessage.UserAdded(systemMessage.DateTime, systemMessage.UserNickname));
+                                    break;
+                                case ChatService.RulingMessage.UserLeft:
+                                    messagesFromChat.Add(SystemMessage.UserLeftChat(systemMessage.DateTime, systemMessage.UserNickname));
+                                    break;
+                                case ChatService.RulingMessage.UserRemoved:
+                                    messagesFromChat.Add(SystemMessage.UserRemoved(systemMessage.DateTime, systemMessage.UserNickname));
+                                    break;
+                            }
                         }
 
                     }
@@ -170,9 +198,9 @@ namespace Client.ViewModels
                 }));
 
                 foreach (var message in messages)
-                    chat.Messages.Insert(0, message);
+                    mainVM.SelectedChat.Messages.Insert(0, message);
 
-                chat._messageOffset += chat._messageCount;
+                mainVM.SelectedChat._messageOffset += mainVM.SelectedChat._messageCount;
             }
         }
 
@@ -180,8 +208,8 @@ namespace Client.ViewModels
         {
             if (MessageText.Length < 1)
                 return;
-            ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = MessageText, UserId = client.SqlId }, chat.SqlId);
-            chat.Messages.Add(chat.GetMessageType(client.SqlId, new TextMessage(MessageText, DateTime.Now)));
+            ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = MessageText, UserId = client.SqlId }, mainVM.SelectedChat.SqlId);
+            mainVM.SelectedChat.Messages.Add(mainVM.SelectedChat.GetMessageType(client.SqlId, new TextMessage(MessageText, DateTime.Now)));
             MessageText = "";
         }
 
@@ -228,7 +256,7 @@ namespace Client.ViewModels
         private void EditChat(object param)
         {
             Views.EditGroupWindow window = new Views.EditGroupWindow();
-            window.DataContext = new EditGroupViewModel(mainVM);
+            window.DataContext = new EditGroupViewModel(mainVM, ChatClient);
             window.ShowDialog();
         }
 
@@ -413,6 +441,8 @@ namespace Client.ViewModels
                 curMediaMessage = null;
                 player.Close();
             }
+            mainVM.SelectedChat.Messages.Clear();
+
         }
 
         public void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")

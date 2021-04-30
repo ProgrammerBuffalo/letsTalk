@@ -8,6 +8,8 @@ using System.IO;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Drawing;
+using System.Windows.Media.Imaging;
 
 namespace Client.ViewModels
 {
@@ -22,6 +24,9 @@ namespace Client.ViewModels
 
         private string info;
         private bool formIsEnabled;
+
+        private BitmapImage image;
+        private MemoryStream memoryStream;
 
         private string name;
         private string login;
@@ -57,6 +62,8 @@ namespace Client.ViewModels
         public bool IsSectionShown { get => isSectionShown; set => Set(ref isSectionShown, value); }
 
         public string Info { get => info; set => Set(ref info, value); }
+
+        public BitmapImage SelectedImage { get => image; set => Set(ref image, value); }
 
         public string Name { get => name; set => Set(ref name, value); }
         public string Login { get => login; set => Set(ref login, value); }
@@ -138,9 +145,10 @@ namespace Client.ViewModels
 
                 if (uploadFileInfo != null)
                 {
-
+                    this.memoryStream.Position = 0;
                     uploadFileInfo.FileName = fileName;
-                    uploadFileInfo.FileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read); ;
+
+                    uploadFileInfo.FileStream = memoryStream;
 
                     if (uploadFileInfo.FileStream.CanRead)
                         await avatarClient.UserAvatarUploadAsync(uploadFileInfo.FileName, UserId, uploadFileInfo.FileStream);
@@ -192,9 +200,46 @@ namespace Client.ViewModels
                 openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg; *.jpeg; *.png";
 
                 if (openFileDialog.ShowDialog() == true)
+                {
+                    fileName = openFileDialog.FileName;
                     uploadFileInfo = new ChatService.UploadFileInfo();
 
-                fileName = openFileDialog.FileName;
+                    Bitmap source = new Bitmap(fileName);
+                    this.memoryStream = new MemoryStream();
+                    Bitmap croppedSource = null;
+                    if (source.Height > 1000 || source.Width > 1000)
+                    {
+                        croppedSource = source.Clone(new Rectangle(250, 250, 750, 750), source.PixelFormat);
+                    }
+                    else
+                    {
+                        croppedSource = source.Clone(new Rectangle(0, 0, source.Width, source.Height), source.PixelFormat);
+                    }
+
+                    switch (fileName.Substring(fileName.LastIndexOf(".")))
+                    {
+                        case ".jpg": croppedSource.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Jpeg); break;
+                        case ".png": croppedSource.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png); break;
+                    }
+
+                    this.memoryStream.Position = 0;
+
+                    var bitmap = new BitmapImage();
+
+                    bitmap.BeginInit();
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.StreamSource = memoryStream;
+                    bitmap.EndInit();
+
+                    this.SelectedImage = bitmap;
+                }
+                else
+                {
+                    this.SelectedImage = null;
+                    memoryStream = null;
+                    uploadFileInfo = null;
+                }
+
             }
             catch (Exception ex)
             {

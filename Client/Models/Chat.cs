@@ -15,7 +15,11 @@ namespace Client.Models
 
         public int _messageCount = 30;
         public int _messageOffset = 0;
+        public DateTime _offsetDate = DateTime.Now;
 
+        private BitmapImage image;
+
+        public BitmapImage Image { get => image; set => Set(ref image, value); }
 
         private string userIsWriting;
 
@@ -236,7 +240,7 @@ namespace Client.Models
 
         public override void UserLeavedChatroom(int userId)
         {
-            Messages.Add(SystemMessage.UserLeavedChat(user.Name));
+            Messages.Add(SystemMessage.UserLeftChat(DateTime.Now, user.Name));
         }
 
         public override void RemoveUser(AvailableUser user)
@@ -301,9 +305,7 @@ namespace Client.Models
         private ObservableCollection<AvailableUser> users = new ObservableCollection<AvailableUser>();
         private Dictionary<AvailableUser, string> colors;
 
-        private BitmapImage image;
 
-        public BitmapImage Image { get => image; set => Set(ref image, value); }
 
         static ChatGroup()
         {
@@ -349,15 +351,7 @@ namespace Client.Models
         public void AddMember(AvailableUser user)
         {
             users.Add(user);
-            colors.Add(user, allColors[users.Count % colors.Count]);
-            Messages.Add(SystemMessage.UserAdded(user.Name));
-        }
-
-        public void RemoveMember(int userId)
-        {
-            var user = FindUser(userId);
-            users.Remove(user);
-            Messages.Add(SystemMessage.UserRemoved(user.Name));
+            Messages.Add(SystemMessage.UserAdded(DateTime.Now, user.Name));
         }
 
         public override bool SetOnlineState(int userId, bool state)
@@ -385,15 +379,16 @@ namespace Client.Models
         public override void UserLeavedChatroom(int userId)
         {
             var user = FindUser(userId);
-            Messages.Add(SystemMessage.UserLeavedChat(user.Name));
+            Messages.Add(SystemMessage.UserLeftChat(DateTime.Now, user.Name));
         }
 
         public override void RemoveUser(AvailableUser user)
         {
             Users.Remove(user);
+            Messages.Add(SystemMessage.UserRemoved(DateTime.Now, user.Name));
         }
 
-        private AvailableUser FindUser(Nullable<int> userId)
+        public AvailableUser FindUser(Nullable<int> userId)
         {
             if (userId == null)
                 return null;
@@ -446,8 +441,8 @@ namespace Client.Models
         public override SourceMessage GetMessageType(int senderId, Message message)
         {
             if (senderId == ClientUserInfo.getInstance().SqlId)
-                return new GroupMessage(message);
-            return new SourceMessage(message);
+                return new UserMessage(message);
+            return new GroupMessage(message);
         }
     }
 }

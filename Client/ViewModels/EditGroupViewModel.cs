@@ -23,9 +23,12 @@ namespace Client.ViewModels
 
         private bool canDrop;
 
-        public EditGroupViewModel(MainViewModel mainVM)
+        public ChatService.ChatClient ChatClient { get; set; }
+
+        public EditGroupViewModel(MainViewModel mainVM, ChatService.ChatClient chatClient)
         {
             this.mainVM = mainVM;
+            ChatClient = chatClient;
 
             Chat = (ChatGroup)mainVM.SelectedChat;
 
@@ -56,8 +59,9 @@ namespace Client.ViewModels
 
         private void RemoveMember(object param)
         {
-            //AvailableUser user = (AvailableUser)param;
-            //mainVM.SelectedChat.RemoveUser(user);
+            AvailableUser user = (AvailableUser)param;
+            mainVM.SelectedChat.RemoveUser(user);
+            ChatClient.RemoveUserFromChatroom(user.SqlId, chat.SqlId);
         }
 
         private void AddMember(object param)

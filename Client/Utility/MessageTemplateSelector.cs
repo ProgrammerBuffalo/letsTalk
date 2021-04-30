@@ -34,7 +34,7 @@ namespace Client.Utility
         //public DataTemplate SourceMessageDateTemplate { get; set; }
         //public DataTemplate UserMessageDataTemplate { get; set; }
         //public DataTemplate GroupMessageDataTemplate { get; set; }
-        //public DataTemplate SystemMessageDataTemplate { get; set; }
+        public DataTemplate SystemMessageDataTemplate { get; set; }
 
         public DataTemplate TextDataTemplate { get; set; }
         public DataTemplate FileDataTemplate { get; set; }
@@ -47,7 +47,7 @@ namespace Client.Utility
             Message message = ((SourceMessage)item).Message;
 
             if (message is TextMessage) return TextDataTemplate;
-            else
+            else if (message is FileMessage)
             {
                 FileMessage fileMessage = (FileMessage)message;
                 string extn = fileMessage.FileName.Substring(fileMessage.FileName.LastIndexOf('.'));
@@ -55,6 +55,8 @@ namespace Client.Utility
                 else if (extn == ".mp3" || extn == ".wave") return AudioDataTemplate;
                 else return FileDataTemplate;
             }
+            else
+                return SystemMessageDataTemplate;
             //DataTemplate select;
 
             //Border border = (Border)select.LoadContent();

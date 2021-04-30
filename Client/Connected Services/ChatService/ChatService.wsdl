@@ -124,9 +124,12 @@
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
-      <wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LeaveFromChatroom">
+      <soap12:operation soapAction="letsTalk.IChatService/Chat/LeaveFromChatroom" style="document" />
+      <wsdl:input>
         <soap12:body use="literal" />
-      </wsdl:output>
+      </wsdl:input>
     </wsdl:operation>
     <wsdl:operation name="Connect">
       <soap12:operation soapAction="letsTalk.IChatService/Chat/Connect" style="document" />
@@ -340,7 +343,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8302/Chat</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>LAPTOP-39BIREFL\user</Upn>
+          <Upn>HP-EliteBook\Elman</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
@@ -349,7 +352,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8302/Unit</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>LAPTOP-39BIREFL\user</Upn>
+          <Upn>HP-EliteBook\Elman</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
