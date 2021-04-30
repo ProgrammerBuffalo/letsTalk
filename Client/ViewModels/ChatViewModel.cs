@@ -31,7 +31,7 @@ namespace Client.ViewModels
         public ChatService.ChatClient ChatClient { get; set; }
 
         private ClientUserInfo client;
-        //private Chat chat;
+        private Chat chat;
 
         private MediaMessage curMediaMessage;
         private MediaPlayer player;
@@ -46,6 +46,7 @@ namespace Client.ViewModels
         public ChatViewModel(ChatService.ChatClient chatClient, MainViewModel mainVM)
         {
             this.mainVM = mainVM;
+            Chat = mainVM.SelectedChat;
 
             client = ClientUserInfo.getInstance();
             ChatClient = chatClient;
@@ -103,7 +104,7 @@ namespace Client.ViewModels
         public ICommand LoadCommand { get; }
         public ICommand DownloadFileCommand { get; }
 
-        public Chat Chat { get => mainVM.SelectedChat; }
+        public Chat Chat { get => chat; set => chat = value; }
         //public Chat Chat { get => chat; set => Set(ref chat, value); }
         public string IsWritingText { get => isWritingText; set => Set(ref isWritingText, value); }
         public string MessageText { get => messageText; set => Set(ref messageText, value); }
@@ -158,8 +159,8 @@ namespace Client.ViewModels
 
             if (serviceMessages != null)
             {
-                ObservableCollection<Models.SourceMessage> messages =
-                new ObservableCollection<Models.SourceMessage>(await System.Threading.Tasks.Task<List<SourceMessage>>.Run(() =>
+                ObservableCollection<SourceMessage> messages =
+                new ObservableCollection<SourceMessage>(await System.Threading.Tasks.Task.Run(() =>
                 {
                     List<SourceMessage> messagesFromChat = new List<SourceMessage>();
                     foreach (var message in serviceMessages)
@@ -215,13 +216,13 @@ namespace Client.ViewModels
         private void TextBox_KeyUp(object obj)
         {
             if (MessageText.Length < 1)
-                ChatClient.MessageIsWritingAsync(mainVM.SelectedChat.SqlId, null);
+                ChatClient.MessageIsWritingAsync(Chat.SqlId, null);
         }
 
         private void TextBox_KeyDown(object obj)
         {
             if (MessageText.Length > 1)
-                ChatClient.MessageIsWritingAsync(mainVM.SelectedChat.SqlId, client.SqlId);
+                ChatClient.MessageIsWritingAsync(Chat.SqlId, client.SqlId);
         }
 
         private void MediaEnded(object sender, EventArgs e)
@@ -399,7 +400,7 @@ namespace Client.ViewModels
             string extn = path.Substring(path.LastIndexOf('.'));
             if (extn == ".mp3" || extn == ".wave")
             {
-                mainVM.SelectedChat.Messages.Add(mainVM.SelectedChat.GetMessageType(client.SqlId, new MediaMessage(path, DateTime.Now)));
+                Chat.Messages.Add(Chat.GetMessageType(client.SqlId, new MediaMessage(path, DateTime.Now)));
                 return;
             }
 
@@ -410,7 +411,7 @@ namespace Client.ViewModels
             try
             {
                 if (fileStream.CanRead)
-                    stream_id = fileClient.FileUpload(mainVM.SelectedChat.SqlId, path, client.SqlId, fileStream);
+                    stream_id = fileClient.FileUpload(Chat.SqlId, path, client.SqlId, fileStream);
             }
             catch (Exception ex) { }
             finally
@@ -420,7 +421,7 @@ namespace Client.ViewModels
                     fileStream.Close();
                 }
             }
-            mainVM.SelectedChat.Messages.Add(new SessionSendedMessage(new FileMessage(path, DateTime.Now, stream_id)));
+            Chat.Messages.Add(new SessionSendedMessage(new FileMessage(path, DateTime.Now, stream_id)));
         }
 
         private void MediaPosChanged(object param)
@@ -432,7 +433,7 @@ namespace Client.ViewModels
 
         private void Unload(object param)
         {
-            ChatClient.MessageIsWriting(mainVM.SelectedChat.SqlId, null);
+            ChatClient.MessageIsWriting(Chat.SqlId, null);
             if (curMediaMessage != null)
             {
                 curMediaMessage.IsPlaying = false;

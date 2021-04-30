@@ -3,6 +3,7 @@ using Client.Utility;
 using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -20,6 +21,7 @@ namespace Client.ViewModels
         private bool loadCount1IsChecked;
         private bool loadCount2IsChecked;
         private bool loadCount3IsChecked;
+        private bool isFromDevice;
 
 
         public SettingsViewModel()
@@ -78,6 +80,7 @@ namespace Client.ViewModels
 
         private void DefaultWallpaperShow(object param)
         {
+            isFromDevice = false;
             wallpaperWindow = new Views.DefaultWallpaperWindow();
             wallpaperWindow.DataContext = this;
             wallpaperWindow.ShowDialog();
@@ -97,6 +100,7 @@ namespace Client.ViewModels
 
         private void DeviceWallpaperShow(object param)
         {
+            isFromDevice = true;
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Filter = "Image files (*.png,*.jpg,*jpeg)|*.png;*.jpg;*jpeg";
             if (dialog.ShowDialog() == true)
@@ -145,7 +149,11 @@ namespace Client.ViewModels
             dialog.Filter = "Audio files (*.mp3,*.wav)|*.mp3;*.wav";
             if (dialog.ShowDialog() == true)
             {
-                settings.SelectedRington = new Rington(dialog.FileName.Substring(dialog.FileName.LastIndexOf('\\') + 1), dialog.FileName);
+                string fileName = dialog.FileName.Substring(dialog.FileName.LastIndexOf('\\') + 1);
+                string path = AppDomain.CurrentDomain.BaseDirectory + "Settings" + fileName;
+
+                FileStream stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Write);
+                settings.SelectedRington = new Rington(fileName, dialog.FileName);
             }
         }
 
