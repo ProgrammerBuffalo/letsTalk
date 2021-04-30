@@ -127,7 +127,7 @@
   <xs:element name="NotifyUserIsRemovedFromChat">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/letsTalk" minOccurs="0" name="serviceMessageManage" nillable="true" type="q5:ServiceMessageManage" />
+        <xs:element minOccurs="0" name="userId" type="xs:int" />
         <xs:element minOccurs="0" name="chatId" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
@@ -142,6 +142,7 @@
   <xs:element name="UserLeftChatroom">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="chatId" type="xs:int" />
         <xs:element minOccurs="0" name="userId" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
@@ -149,7 +150,7 @@
   <xs:element name="ReplyMessage">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/letsTalk" minOccurs="0" name="message" nillable="true" type="q6:ServiceMessageText" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/letsTalk" minOccurs="0" name="message" nillable="true" type="q5:ServiceMessageText" />
         <xs:element minOccurs="0" name="chatroomId" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
@@ -165,7 +166,7 @@
   <xs:element name="NotifyUserFileSendedToChat">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/letsTalk" minOccurs="0" name="serviceMessageFile" nillable="true" type="q7:ServiceMessageFile" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/letsTalk" minOccurs="0" name="serviceMessageFile" nillable="true" type="q6:ServiceMessageFile" />
         <xs:element minOccurs="0" name="chatroomId" type="xs:int" />
       </xs:sequence>
     </xs:complexType>

@@ -122,7 +122,7 @@ namespace Client.ViewModels
             CurrentView = control;
         }
 
-        private void UserLeavedChatroom(int chatId, int userId)
+        private void UserLeftFromChatroom(int chatId, int userId)
         {
             var chat = FindChatroom(chatId);
             chat.UserLeavedChatroom(userId);
@@ -189,10 +189,9 @@ namespace Client.ViewModels
             //throw new NotImplementedException();
         }
 
-        public void NotifyUserIsRemovedFromChat(ChatService.ServiceMessageManage serviceMessageManage, int chatId)
+        public void NotifyUserIsRemovedFromChat(int userId, int chatId)
         {
-            //UserRemovedFromChat(chatId, userId);
-            //throw new NotImplementedException();
+            UserRemovedFromChat(chatId, userId);
         }
 
         public void UserJoinedToChatroom(int userId)
@@ -200,10 +199,9 @@ namespace Client.ViewModels
            //throw new NotImplementedException();
         }
 
-        public void UserLeftChatroom(int userId)
+        public void UserLeftChatroom(int chatId, int userId)
         {
-            //UserLeavedChatroom(chatId, userId);
-            //throw new NotImplementedException();
+            UserLeftFromChatroom(chatId, userId);
         }
 
         public void ReplyMessage(ServiceMessageText message, int chatroomId)
@@ -245,14 +243,20 @@ namespace Client.ViewModels
                 List<Models.Chat> clientChatrooms = new List<Models.Chat>();
                 foreach (Chatroom key in chatrooms.Keys)
                 {
+                    bool canWrite = false;
                     List<AvailableUser> availableUsers = new List<AvailableUser>();
                     foreach (UserInChat userInChat in chatrooms[key])
                     {
+                        if (userInChat.UserSqlId == clientUserInfo.SqlId)
+                        {
+                            canWrite = true;
+                            continue;
+                        }
                         availableUsers.Add(new AvailableUser { SqlId = userInChat.UserSqlId, Name = userInChat.UserName, IsOnline = userInChat.IsOnline });
                     }
 
-                    clientChatrooms.Add(availableUsers.Count > 1 ? new ChatGroup(key.ChatSqlId, key.ChatName, availableUsers)
-                                                                 : (Models.Chat)new ChatOne(key.ChatSqlId, availableUsers.First()));
+                    clientChatrooms.Add(availableUsers.Count > 1 ? new ChatGroup(key.ChatSqlId, key.ChatName, availableUsers) { CanWrite = canWrite }
+                                                                 : (Models.Chat)new ChatOne(key.ChatSqlId, availableUsers.First()) { CanWrite = canWrite });
                 }
                 return clientChatrooms;
             }));

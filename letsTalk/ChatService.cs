@@ -921,7 +921,7 @@ namespace letsTalk
                 {
                     sqlConnection.Open();
 
-                    SqlCommand FindChatroomsCommand = new SqlCommand(@"SELECT Id_Chat FROM User_Chatroom WHERE Id_User = @Id_User", sqlConnection);
+                    SqlCommand FindChatroomsCommand = new SqlCommand(@"SELECT Id_Chat FROM User_Chatroom WHERE Id_User = @Id_User AND LeaveDate is NULL", sqlConnection);
                     FindChatroomsCommand.CommandType = CommandType.Text;
                     FindChatroomsCommand.Parameters.Add("@Id_User", SqlDbType.Int).Value = sqlId;
 
@@ -1048,6 +1048,8 @@ namespace letsTalk
                         userNickname = sqlCommandUserName.ExecuteScalar().ToString();
                     }
 
+                    transactionScope.Complete();
+
                 }
                 ConnectedUser connectedUser = chatroomsInUsers.Keys.FirstOrDefault(u => u.SqlID == userId);
 
@@ -1058,7 +1060,7 @@ namespace letsTalk
 
                     if (connectedUser != null)
                     {
-                        connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsRemovedFromChat(serviceMessageManage, chatId);
+                        connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsRemovedFromChat(userId, chatId);
 
                         chatroomsInUsers.Where(users => users.Key.SqlID == userId)
                                         .Select(c => c.Value)
@@ -1070,7 +1072,7 @@ namespace letsTalk
                     foreach (var user in chatroomsInUsers.Keys)
                     {
                         if (user.UserContext.Channel != OperationContext.Current.Channel)
-                            user.UserContext.GetCallbackChannel<IChatCallback>().UserLeftChatroom(userId);
+                            user.UserContext.GetCallbackChannel<IChatCallback>().UserLeftChatroom(chatId, userId);
                     }
                 }
                 Console.WriteLine("User was removed from chatroom (" + OperationContext.Current.Channel.GetHashCode() + ")");
@@ -1128,7 +1130,7 @@ namespace letsTalk
                         {
                             if (user.UserContext.Channel != OperationContext.Current.Channel)
                             {
-                                user.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsRemovedFromChat(new ServiceMessageManage { RulingMessage = RulingMessage.ChatroomDelete, DateTime = leaveDate, UserNickname = userNickname }, chatId);
+                                user.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsRemovedFromChat(userId, chatId);
                             }
                             chatroomsInUsers[user].Remove(chatId);
                         }

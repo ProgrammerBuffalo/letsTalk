@@ -98,7 +98,7 @@
                 <Grid x:Name="ellipseGrid" Grid.Row="0" Grid.Column="0">
                     <Ellipse Width="50" Height="50" StrokeThickness="3" Stroke="Black">
                         <Ellipse.Fill>
-                            <ImageBrush ImageSource="{Binding Path=User.Avatar}"/>
+                            <ImageBrush ImageSource="{Binding Path=User.Image}"/>
                         </Ellipse.Fill>
                     </Ellipse>
                     <Ellipse Style="{StaticResource OnlineEllipseStyle}"/>
@@ -177,7 +177,7 @@
                 <Grid x:Name="ellipseGrid" Grid.Row="0" Grid.Column="0">
                     <Ellipse Width="50" Height="50" StrokeThickness="3" Stroke="Black">
                         <Ellipse.Fill>
-                            <ImageBrush ImageSource="{Binding Path=User.Avatar}"/>
+                            <ImageBrush ImageSource="{Binding Path=User.Image}"/>
                         </Ellipse.Fill>
                     </Ellipse>
                     <Ellipse Style="{StaticResource OnlineEllipseStyle}"/>
@@ -256,7 +256,7 @@
                 <Grid x:Name="ellipseGrid" Grid.Row="0" Grid.Column="0">
                     <Ellipse Width="50" Height="50" StrokeThickness="3" Stroke="Black">
                         <Ellipse.Fill>
-                            <ImageBrush ImageSource="{Binding Path=User.Avatar}"/>
+                            <ImageBrush ImageSource="{Binding Path=User.Image}"/>
                         </Ellipse.Fill>
                     </Ellipse>
                     <Ellipse Style="{StaticResource OnlineEllipseStyle}"/>
@@ -365,7 +365,7 @@
                 <Grid x:Name="ellipseGrid" Grid.Row="0" Grid.Column="0">
                     <Ellipse Width="50" Height="50" StrokeThickness="3" Stroke="Black">
                         <Ellipse.Fill>
-                            <ImageBrush ImageSource="{Binding Path=User.Avatar}"/>
+                            <ImageBrush ImageSource="{Binding Path=User.Image}"/>
                         </Ellipse.Fill>
                     </Ellipse>
                     <Ellipse Style="{StaticResource OnlineEllipseStyle}"/>

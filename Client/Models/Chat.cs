@@ -12,6 +12,7 @@ namespace Client.Models
 
         private ObservableCollection<SourceMessage> messages = new ObservableCollection<SourceMessage>();
         private int count;
+        private bool canWrite;
 
         public int _messageCount = 15;
         public int _messageOffset = 0;
@@ -20,6 +21,8 @@ namespace Client.Models
         private BitmapImage image;
 
         public BitmapImage Image { get => image; set => Set(ref image, value); }
+        public bool CanWrite { get => canWrite; set => Set(ref canWrite, value); }
+
 
         private string userIsWriting;
 

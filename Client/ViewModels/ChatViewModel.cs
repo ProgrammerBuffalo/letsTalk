@@ -23,6 +23,8 @@ namespace Client.ViewModels
         private delegate void MessageSendType(string message);
         private MessageSendType sendType;
 
+
+        private bool canWrite = true;
         private int _countLeft;
 
         private double _previousScrollOffset;
@@ -54,7 +56,7 @@ namespace Client.ViewModels
 
             client = ClientUserInfo.getInstance();
             ChatClient = chatClient;
-            //Settings = Settings.Instance;
+            Settings = Settings.Instance;
 
             TextBox_KeyDownCommand = new Command(TextBox_KeyDown);
             TextBox_KeyUpCommand = new Command(TextBox_KeyUp);
@@ -289,7 +291,9 @@ namespace Client.ViewModels
         //тут должен быть твой метод для сообшения другим пользователям что узер покинул chat
         public void LeaveChat(object param)
         {
-            //chat.Messages.Add(SystemMessage.UserLeavedChat(client.UserName));
+            chat.Messages.Add(SystemMessage.UserLeftChat(DateTime.Now, client.UserName));
+            ChatClient.LeaveFromChatroom(client.SqlId, Chat.SqlId);
+            Chat.CanWrite = false;
         }
 
         //тут должен быть твой метод для сообшения другим пользователям что узер покинул chat
@@ -467,8 +471,8 @@ namespace Client.ViewModels
                 curMediaMessage = null;
                 player.Close();
             }
-            mainVM.SelectedChat.Messages.Clear();
-
+            chat.Messages.Clear();
+            chat._offsetDate = DateTime.Now;
         }
 
         public void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")

@@ -63,8 +63,8 @@
             <!--<Button DockPanel.Dock="Right" Content="Add User" Margin="5" Command="{Binding Path=AddUserCommand}" Style="{StaticResource GroupButtons}"/>-->
             <!--<Button DockPanel.Dock="Right" Content="Remove User" Margin="5" Command="{Binding Path=RemoveUserCommand}" Style="{StaticResource GroupButtons}"/>-->
             <!--<Button DockPanel.Dock="Right" Content="Delete Chat" Margin="5" Command="{Binding Path=DeleteChatCommand}"/>-->
-            <Button DockPanel.Dock="Right" Content="Edit chat" Margin="5" Command="{Binding EditChatCommand}"/>
-            <Button DockPanel.Dock="Right" Content="Leave" Margin="5" Command="{Binding LeaveChatCommand}"/>
+            <Button IsEnabled="{Binding Path=Chat.CanWrite}" DockPanel.Dock="Right" Content="Edit chat" Margin="5" Command="{Binding EditChatCommand}"/>
+            <Button IsEnabled="{Binding Path=Chat.CanWrite}" DockPanel.Dock="Right" Content="Leave" Margin="5" Command="{Binding LeaveChatCommand}"/>
             <DockPanel.Style>
                 <Style TargetType="DockPanel">
                     <Style.Triggers>
@@ -125,7 +125,7 @@
 
             <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Path=Chat.UserIsWriting}" FontSize="25" Panel.ZIndex="1" Margin="0,-41,20,70"/>
 
-            <TextBox Text="{Binding MessageText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox IsEnabled="{Binding Path=Chat.CanWrite}" Text="{Binding MessageText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      Grid.Column="0"
                      Background="DarkSlateGray" Foreground="White" FontSize="30" TextWrapping="Wrap"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
@@ -144,7 +144,7 @@
 
             <icons:PackIconMaterialDesign Grid.Column="1" Width="100" Height="100" Kind="AttachFile" Foreground="DarkGreen"/>
             <!--<Button Grid.Column="1" Content="File" FontSize="20" Command="{Binding OpenFileCommand}"></Button>-->
-            <Button Grid.Column="3" Content="Send" FontSize="20" Command="{Binding SendCommand}"></Button>
+            <Button IsEnabled="{Binding Path=Chat.CanWrite}" Grid.Column="3" Content="Send" FontSize="20" Command="{Binding SendCommand}"></Button>
         </Grid>
     </Grid>
 
