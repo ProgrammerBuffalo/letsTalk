@@ -79,6 +79,7 @@
         </Image>
 
         <ListView x:Name="chatListView"
+                  Focusable="True"                  
                   Grid.Row="1"
                   ItemContainerStyle="{StaticResource ListViewItemStyle}"
                   ItemTemplateSelector="{StaticResource MessageSelector}"

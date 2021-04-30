@@ -27,8 +27,6 @@ namespace Client.ChatService {
         
         private System.DateTime DateTimeField;
         
-        private int UserIdField;
-        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -52,19 +50,6 @@ namespace Client.ChatService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public int UserId {
-            get {
-                return this.UserIdField;
-            }
-            set {
-                if ((this.UserIdField.Equals(value) != true)) {
-                    this.UserIdField = value;
-                    this.RaisePropertyChanged("UserId");
-                }
-            }
-        }
-        
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         
         protected void RaisePropertyChanged(string propertyName) {
@@ -84,6 +69,8 @@ namespace Client.ChatService {
         private string FileNameField;
         
         private System.Guid StreamIdField;
+        
+        private int UserIdField;
         
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public string FileName {
@@ -110,6 +97,19 @@ namespace Client.ChatService {
                 }
             }
         }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public int UserId {
+            get {
+                return this.UserIdField;
+            }
+            set {
+                if ((this.UserIdField.Equals(value) != true)) {
+                    this.UserIdField = value;
+                    this.RaisePropertyChanged("UserId");
+                }
+            }
+        }
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -119,6 +119,8 @@ namespace Client.ChatService {
     public partial class ServiceMessageManage : Client.ChatService.ServiceMessage {
         
         private Client.ChatService.RulingMessage RulingMessageField;
+        
+        private string UserNicknameField;
         
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public Client.ChatService.RulingMessage RulingMessage {
@@ -132,6 +134,19 @@ namespace Client.ChatService {
                 }
             }
         }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public string UserNickname {
+            get {
+                return this.UserNicknameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UserNicknameField, value) != true)) {
+                    this.UserNicknameField = value;
+                    this.RaisePropertyChanged("UserNickname");
+                }
+            }
+        }
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -142,6 +157,8 @@ namespace Client.ChatService {
         
         private string TextField;
         
+        private int UserIdField;
+        
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public string Text {
             get {
@@ -151,6 +168,19 @@ namespace Client.ChatService {
                 if ((object.ReferenceEquals(this.TextField, value) != true)) {
                     this.TextField = value;
                     this.RaisePropertyChanged("Text");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public int UserId {
+            get {
+                return this.UserIdField;
+            }
+            set {
+                if ((this.UserIdField.Equals(value) != true)) {
+                    this.UserIdField = value;
+                    this.RaisePropertyChanged("UserId");
                 }
             }
         }
@@ -168,6 +198,9 @@ namespace Client.ChatService {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         UserRemoved = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ChatroomDelete = 4,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -657,10 +690,10 @@ namespace Client.ChatService {
         System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> GetRegisteredUsersAsync(int count, int offset, int callerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/MessagesFromOneChat", ReplyAction="letsTalk.IUnitService/Unit/MessagesFromOneChatResponse")]
-        Client.ChatService.ServiceMessage[] MessagesFromOneChat(int chatroomId, int offset, int count);
+        Client.ChatService.ServiceMessage[] MessagesFromOneChat(int chatroomId, int userId, int offset, int count, System.DateTime offsetDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/MessagesFromOneChat", ReplyAction="letsTalk.IUnitService/Unit/MessagesFromOneChatResponse")]
-        System.Threading.Tasks.Task<Client.ChatService.ServiceMessage[]> MessagesFromOneChatAsync(int chatroomId, int offset, int count);
+        System.Threading.Tasks.Task<Client.ChatService.ServiceMessage[]> MessagesFromOneChatAsync(int chatroomId, int userId, int offset, int count, System.DateTime offsetDate);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -714,12 +747,12 @@ namespace Client.ChatService {
             return base.Channel.GetRegisteredUsersAsync(count, offset, callerId);
         }
         
-        public Client.ChatService.ServiceMessage[] MessagesFromOneChat(int chatroomId, int offset, int count) {
-            return base.Channel.MessagesFromOneChat(chatroomId, offset, count);
+        public Client.ChatService.ServiceMessage[] MessagesFromOneChat(int chatroomId, int userId, int offset, int count, System.DateTime offsetDate) {
+            return base.Channel.MessagesFromOneChat(chatroomId, userId, offset, count, offsetDate);
         }
         
-        public System.Threading.Tasks.Task<Client.ChatService.ServiceMessage[]> MessagesFromOneChatAsync(int chatroomId, int offset, int count) {
-            return base.Channel.MessagesFromOneChatAsync(chatroomId, offset, count);
+        public System.Threading.Tasks.Task<Client.ChatService.ServiceMessage[]> MessagesFromOneChatAsync(int chatroomId, int userId, int offset, int count, System.DateTime offsetDate) {
+            return base.Channel.MessagesFromOneChatAsync(chatroomId, userId, offset, count, offsetDate);
         }
     }
     
@@ -746,10 +779,10 @@ namespace Client.ChatService {
         System.Threading.Tasks.Task<int> CreateChatroomAsync(string chatName, int[] users);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/DeleteChatroom")]
-        void DeleteChatroom(int chatId);
+        void DeleteChatroom(int chatId, int userId);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/DeleteChatroom")]
-        System.Threading.Tasks.Task DeleteChatroomAsync(int chatId);
+        System.Threading.Tasks.Task DeleteChatroomAsync(int chatId, int userId);
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/AddUserToChatroom", ReplyAction="letsTalk.IChatService/Chat/AddUserToChatroomResponse")]
         void AddUserToChatroom(int userId, int chatId);
@@ -757,11 +790,17 @@ namespace Client.ChatService {
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/AddUserToChatroom", ReplyAction="letsTalk.IChatService/Chat/AddUserToChatroomResponse")]
         System.Threading.Tasks.Task AddUserToChatroomAsync(int userId, int chatId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/RemoveUserFromChatroom", ReplyAction="letsTalk.IChatService/Chat/RemoveUserFromChatroomResponse")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/RemoveUserFromChatroom")]
         void RemoveUserFromChatroom(int userId, int chatId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/RemoveUserFromChatroom", ReplyAction="letsTalk.IChatService/Chat/RemoveUserFromChatroomResponse")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/RemoveUserFromChatroom")]
         System.Threading.Tasks.Task RemoveUserFromChatroomAsync(int userId, int chatId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/LeaveFromChatroom")]
+        void LeaveFromChatroom(int userId, int chatId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/LeaveFromChatroom")]
+        System.Threading.Tasks.Task LeaveFromChatroomAsync(int userId, int chatId);
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/Connect", ReplyAction="letsTalk.IChatService/Chat/ConnectResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(Client.ChatService.ConnectionExceptionFault), Action="letsTalk.IChatService/Chat/ConnectConnectionExceptionFaultFault", Name="ConnectionExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
@@ -790,7 +829,7 @@ namespace Client.ChatService {
         void NotifyUserIsAddedToChat(int chatId, int[] usersInChat);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/NotifyUserIsRemovedFromChat")]
-        void NotifyUserIsRemovedFromChat(int chatId);
+        void NotifyUserIsRemovedFromChat(Client.ChatService.ServiceMessageManage serviceMessageManage, int chatId);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/UserJoinedToChatroom")]
         void UserJoinedToChatroom(int userId);
@@ -860,12 +899,12 @@ namespace Client.ChatService {
             return base.Channel.CreateChatroomAsync(chatName, users);
         }
         
-        public void DeleteChatroom(int chatId) {
-            base.Channel.DeleteChatroom(chatId);
+        public void DeleteChatroom(int chatId, int userId) {
+            base.Channel.DeleteChatroom(chatId, userId);
         }
         
-        public System.Threading.Tasks.Task DeleteChatroomAsync(int chatId) {
-            return base.Channel.DeleteChatroomAsync(chatId);
+        public System.Threading.Tasks.Task DeleteChatroomAsync(int chatId, int userId) {
+            return base.Channel.DeleteChatroomAsync(chatId, userId);
         }
         
         public void AddUserToChatroom(int userId, int chatId) {
@@ -882,6 +921,14 @@ namespace Client.ChatService {
         
         public System.Threading.Tasks.Task RemoveUserFromChatroomAsync(int userId, int chatId) {
             return base.Channel.RemoveUserFromChatroomAsync(userId, chatId);
+        }
+        
+        public void LeaveFromChatroom(int userId, int chatId) {
+            base.Channel.LeaveFromChatroom(userId, chatId);
+        }
+        
+        public System.Threading.Tasks.Task LeaveFromChatroomAsync(int userId, int chatId) {
+            return base.Channel.LeaveFromChatroomAsync(userId, chatId);
         }
         
         public void Connect(int sqlId, string userName) {

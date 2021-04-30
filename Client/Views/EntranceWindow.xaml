@@ -185,7 +185,11 @@
             <Button Content="Registrate" Margin="10, 50, 10, 100" Style="{StaticResource ButtonRegistrateStyle}" Command="{Binding RegistrateCommand}"/>
         </Grid>
 
-        <Button Grid.Column="1" Grid.RowSpan="3" Margin="5, 15" Padding="15 30" Command="{Binding SetPhotoCommand}" ContentTemplate="{StaticResource PhotoButtonDataTemplate}"/>
+        <Button Grid.Column="1" Grid.RowSpan="3" Margin="5, 15" Padding="15 30" Command="{Binding SetPhotoCommand}" ContentTemplate="{StaticResource PhotoButtonDataTemplate}">
+            <Button.Background>
+                <ImageBrush ImageSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SelectedImage}" ></ImageBrush>
+            </Button.Background>
+        </Button>
 
         <Button Content="Back" Grid.Row="3" Grid.Column="1" Margin="10, 50, 10, 100" Command="{Binding BackCommand}"/>
 

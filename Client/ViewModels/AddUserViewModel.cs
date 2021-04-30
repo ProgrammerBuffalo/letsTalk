@@ -119,14 +119,18 @@ namespace Client.ViewModels
                 await System.Threading.Tasks.Task.Run(() =>
                 {
                     avatarClient.UserAvatarDownload(downloadRequest.Requested_SqlId, out lenght, out stream);
-                    if (lenght != 0)
+                    if (lenght > 0)
                     {
                         memoryStream = FileHelper.ReadFileByPart(stream);
 
                         Application.Current.Dispatcher.Invoke(() =>
                         {
                             var bitmapImage = new BitmapImage();
+                     
+                            memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
                             bitmapImage.BeginInit();
+                            bitmapImage.DecodePixelWidth = 400;
+                            bitmapImage.DecodePixelHeight = 400;
                             bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                             bitmapImage.StreamSource = memoryStream;
                             bitmapImage.EndInit();

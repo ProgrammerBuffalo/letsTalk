@@ -146,8 +146,8 @@ namespace Client.ViewModels
 
         private void UserRemovedFromChat(int chatId, int userId)
         {
-            var chat = FindChatroom(chatId);
-            (chat as ChatGroup).RemoveMember(userId);
+            ChatGroup chat = FindChatroom(chatId) as ChatGroup;
+            chat.RemoveUser(chat.FindUser(userId));
         }
 
         private Models.Chat FindChatroom(int chatId)
@@ -189,7 +189,7 @@ namespace Client.ViewModels
             //throw new NotImplementedException();
         }
 
-        public void NotifyUserIsRemovedFromChat(int chatId)
+        public void NotifyUserIsRemovedFromChat(ChatService.ServiceMessageManage serviceMessageManage, int chatId)
         {
             //UserRemovedFromChat(chatId, userId);
             //throw new NotImplementedException();
@@ -264,47 +264,47 @@ namespace Client.ViewModels
 
         }
 
-        private void Demo()
-        {
-            ObservableCollection<SourceMessage> Messages = new ObservableCollection<SourceMessage>();
+        //private void Demo()
+        //{
+        //    ObservableCollection<SourceMessage> Messages = new ObservableCollection<SourceMessage>();
 
-            Messages.Add(new SystemMessage(new TextMessage("User type messages")));
-            Messages.Add(new UserMessage(new TextMessage("hello group asd asfas fasf asfas fasf asfpKJAOPSKfa")));
-            Messages.Add(new UserMessage(new FileMessage("files/hall.png") { IsLoaded = false }));
-            Messages.Add(new UserMessage(new MediaMessage("files/control.mp3")));
-            Messages.Add(new UserMessage(new FileMessage("files/1.txt") { IsLoaded = true }));
-            Messages.Add(new UserMessage(new FileMessage("files/1.txt") { IsLoaded = false }));
+        //    Messages.Add(new SystemMessage(new TextMessage("User type messages")));
+        //    Messages.Add(new UserMessage(new TextMessage("hello group asd asfas fasf asfas fasf asfpKJAOPSKfa")));
+        //    Messages.Add(new UserMessage(new FileMessage("files/hall.png") { IsLoaded = false }));
+        //    Messages.Add(new UserMessage(new MediaMessage("files/control.mp3")));
+        //    Messages.Add(new UserMessage(new FileMessage("files/1.txt") { IsLoaded = true }));
+        //    Messages.Add(new UserMessage(new FileMessage("files/1.txt") { IsLoaded = false }));
 
-            Messages.Add(new SystemMessage(new TextMessage("Friend type messages")));
-            Messages.Add(new SourceMessage(new TextMessage("hello group asd asfas fasf asfas fasf asfpKJAOPSKfa")));
-            Messages.Add(new SourceMessage(new FileMessage("files/hall.png") { IsLoaded = false }));
-            Messages.Add(new SourceMessage(new MediaMessage("files/control.mp3")));
-            Messages.Add(new SourceMessage(new FileMessage("files/1.txt") { IsLoaded = true }));
-            Messages.Add(new SourceMessage(new FileMessage("files/1.txt") { IsLoaded = false }));
+        //    Messages.Add(new SystemMessage(new TextMessage("Friend type messages")));
+        //    Messages.Add(new SourceMessage(new TextMessage("hello group asd asfas fasf asfas fasf asfpKJAOPSKfa")));
+        //    Messages.Add(new SourceMessage(new FileMessage("files/hall.png") { IsLoaded = false }));
+        //    Messages.Add(new SourceMessage(new MediaMessage("files/control.mp3")));
+        //    Messages.Add(new SourceMessage(new FileMessage("files/1.txt") { IsLoaded = true }));
+        //    Messages.Add(new SourceMessage(new FileMessage("files/1.txt") { IsLoaded = false }));
 
-            Messages.Add(new SystemMessage(new TextMessage("Group type messages")));
-            Messages.Add(new GroupMessage(new TextMessage("hello group asd asfas fasf asfas fasf asfpKJAOPSKfa"), new AvailableUser() { Name = "eldar" }));
-            Messages.Add(new GroupMessage(new FileMessage("files/hall.png") { IsLoaded = false }, new AvailableUser() { Name = "Tamerlan" }));
-            Messages.Add(new GroupMessage(new MediaMessage("files/control.mp3"), new AvailableUser() { Name = "eldar" }));
-            Messages.Add(new GroupMessage(new FileMessage("files/1.txt") { IsLoaded = true }, new AvailableUser() { Name = "Eldar" }));
-            Messages.Add(new GroupMessage(new FileMessage("files/1.txt") { IsLoaded = false }, new AvailableUser() { Name = "Tamerlan" }));
+        //    Messages.Add(new SystemMessage(new TextMessage("Group type messages")));
+        //    Messages.Add(new GroupMessage(new TextMessage("hello group asd asfas fasf asfas fasf asfpKJAOPSKfa"), new AvailableUser() { Name = "eldar" }));
+        //    Messages.Add(new GroupMessage(new FileMessage("files/hall.png") { IsLoaded = false }, new AvailableUser() { Name = "Tamerlan" }));
+        //    Messages.Add(new GroupMessage(new MediaMessage("files/control.mp3"), new AvailableUser() { Name = "eldar" }));
+        //    Messages.Add(new GroupMessage(new FileMessage("files/1.txt") { IsLoaded = true }, new AvailableUser() { Name = "Eldar" }));
+        //    Messages.Add(new GroupMessage(new FileMessage("files/1.txt") { IsLoaded = false }, new AvailableUser() { Name = "Tamerlan" }));
 
-            //Chats.Add(new ChatOne() { User = new AvailableUser() { Name = "eldar" }, Messages = Messages });
-            //Chats.Add(new ChatGroup() { GroupName = "group1", Messages = Messages });
+        //    //Chats.Add(new ChatOne() { User = new AvailableUser() { Name = "eldar" }, Messages = Messages });
+        //    //Chats.Add(new ChatGroup() { GroupName = "group1", Messages = Messages });
 
-            BitmapImage image = new BitmapImage(new Uri("files/avatar1.png", UriKind.Relative));
-            Chats.Add(new ChatOne() { Avatar = image, Messages = Messages });
+        //    BitmapImage image = new BitmapImage(new Uri("files/avatar1.png", UriKind.Relative));
+        //    Chats.Add(new ChatOne() { Avatar = image, Messages = Messages });
 
-            image = new BitmapImage(new Uri("files/avatar2.png", UriKind.Relative));
-            Chats.Add(new ChatGroup() { Avatar = image, Messages = Messages });
+        //    image = new BitmapImage(new Uri("files/avatar2.png", UriKind.Relative));
+        //    Chats.Add(new ChatGroup() { Avatar = image, Messages = Messages });
 
-            image = new BitmapImage(new Uri("files/avatar3.png", UriKind.Relative));
-            Chats.Add(new ChatOne() { Avatar = image, Messages = Messages });
+        //    image = new BitmapImage(new Uri("files/avatar3.png", UriKind.Relative));
+        //    Chats.Add(new ChatOne() { Avatar = image, Messages = Messages });
 
-            //Messages.Add(new GroupMessage(new TextMessage("Hello !!!!"), "User2"));
-            //Messages.Add(new GroupMessage(new FileMessage("files/hall.png"), "User3"));
-            //Messages.Add(new GroupMessage(new FileMessage("files/2.pptx"), "Eldar"));
-            //Messages.Add(new GroupMessage(new MediaMessage("files/control.mp3"), "Emil"));
-        }
+        //    //Messages.Add(new GroupMessage(new TextMessage("Hello !!!!"), "User2"));
+        //    //Messages.Add(new GroupMessage(new FileMessage("files/hall.png"), "User3"));
+        //    //Messages.Add(new GroupMessage(new FileMessage("files/2.pptx"), "Eldar"));
+        //    //Messages.Add(new GroupMessage(new MediaMessage("files/control.mp3"), "Emil"));
+        //}
     }
 }

@@ -23,10 +23,7 @@ namespace letsTalk
     public class ServiceMessage
     {
         [DataMember(IsRequired = true)]
-        public int UserId { get; set; }
-
-        [DataMember(IsRequired = true)]
-        public Nullable<DateTime> DateTime { get; set; }
+        public DateTime DateTime { get; set; }
     }
 
     [DataContract]
@@ -34,6 +31,9 @@ namespace letsTalk
     {
         [DataMember(IsRequired = true)]
         public string Text { get; set; }
+
+        [DataMember(IsRequired = true)]
+        public int UserId { get; set; }
     }
 
     [DataContract]
@@ -44,11 +44,17 @@ namespace letsTalk
 
         [DataMember(IsRequired = true)]
         public string FileName { get; set; }
+
+        [DataMember(IsRequired = true)]
+        public int UserId { get; set; }
     }
 
     [DataContract]
     public class ServiceMessageManage : ServiceMessage
     {
+        [DataMember(IsRequired = true)]
+        public string UserNickname { get; set; }
+
         [DataMember(IsRequired = true)]
         public RulingMessage RulingMessage { get; set; }
     }

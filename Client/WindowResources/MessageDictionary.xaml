@@ -111,7 +111,7 @@
                 <Border x:Name="border" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" BorderBrush="AliceBlue" BorderThickness="3" CornerRadius="15" Margin="10,20,0,0">
                     <Grid>
                         <TextBlock Text="{Binding Path=Message.Text}" TextWrapping="Wrap" Foreground="Black" FontSize="18" Padding="8,0,8,15"/>
-                        <TextBlock Text="{Binding Path=Message.Date, StringFormat={}{0:hh:mm}}" Margin="10, 2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="DarkSlateGray" FontSize="12"/>
+                        <TextBlock x:Name="date" Text="{Binding Path=Message.Date, StringFormat={}{0:hh:mm}}" Margin="10, 2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="DarkSlateGray" FontSize="12"/>
                     </Grid>
                 </Border>
             </Grid>
@@ -153,6 +153,7 @@
                 <Setter TargetName="ellipseGrid" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="border" Property="Background" Value="#A6A2A6"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Center"/>
+                <Setter TargetName="date" Property="Visibility" Value="Collapsed"></Setter>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>

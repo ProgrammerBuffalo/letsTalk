@@ -1,4 +1,6 @@
-﻿namespace Client.Models
+﻿using System;
+
+namespace Client.Models
 {
     public enum MessageState { Readen, Recived, Send, NoInet };
 
@@ -85,34 +87,29 @@
     //скорее тут будут static поля с систменными сообшения 
     public class SystemMessage : SourceMessage
     {
-        public SystemMessage()
+        public SystemMessage(Message message)
         {
-
+            this.Message = message;
         }
 
-        public SystemMessage(Message message) : base(message)
+        public static SystemMessage ShiftDate(DateTime dateTime)
         {
-
+            return new SystemMessage(new TextMessage(dateTime.ToShortDateString()));
         }
 
-        public static SystemMessage UserLeavedChat(string login)
+        public static SystemMessage UserLeftChat(DateTime dateTime, string nickname)
         {
-            return new SystemMessage(new TextMessage(login + " leaved chat :("));
+            return new SystemMessage(new TextMessage(nickname + " left chat :(" + "   " + dateTime.ToShortTimeString()));
         }
 
-        public static SystemMessage UserBecomeAdmin(string admin, string login)
+        public static SystemMessage UserRemoved(DateTime dateTime, string nickname)
         {
-            return new SystemMessage(new TextMessage(admin + "gaved admin to" + login));
+            return new SystemMessage(new TextMessage(nickname + " was removed from chat" + "   " + dateTime.ToShortTimeString()));
         }
 
-        public static SystemMessage UserRemoved(string login)
+        public static SystemMessage UserAdded(DateTime dateTime, string nickname)
         {
-            return new SystemMessage(new TextMessage(login + " was removed from chat"));
-        }
-
-        public static SystemMessage UserAdded(string login)
-        {
-            return new SystemMessage(new TextMessage(login + "added to chat"));
+            return new SystemMessage(new TextMessage(nickname + "added to chat" + "   " + dateTime.ToShortTimeString()));
         }
     }
 }
