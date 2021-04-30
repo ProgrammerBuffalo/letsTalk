@@ -149,13 +149,16 @@ namespace Client.ViewModels
 
             if (serviceMessages == null)
             {
-                mainVM.SelectedChat.Messages.Add(SystemMessage.ShiftDate(mainVM.SelectedChat._offsetDate));
+                mainVM.SelectedChat.Messages.Insert(0, SystemMessage.ShiftDate(mainVM.SelectedChat._offsetDate));
+                mainVM.SelectedChat._messageOffset = 0;
                 mainVM.SelectedChat._offsetDate.AddDays(-1);
                 return;
             }
 
             if (serviceMessages.First().DateTime == DateTime.MinValue)
+            {
                 return;
+            }
 
             if (serviceMessages != null)
             {
