@@ -18,6 +18,7 @@ namespace Client.ChatService {
     [System.Runtime.Serialization.DataContractAttribute(Name="ServiceMessage", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
     [System.SerializableAttribute()]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(Client.ChatService.ServiceMessageFile))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(Client.ChatService.ServiceMessageManage))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(Client.ChatService.ServiceMessageText))]
     public partial class ServiceMessage : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -26,7 +27,7 @@ namespace Client.ChatService {
         
         private System.DateTime DateTimeField;
         
-        private int SenderField;
+        private int UserIdField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -52,14 +53,14 @@ namespace Client.ChatService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public int Sender {
+        public int UserId {
             get {
-                return this.SenderField;
+                return this.UserIdField;
             }
             set {
-                if ((this.SenderField.Equals(value) != true)) {
-                    this.SenderField = value;
-                    this.RaisePropertyChanged("Sender");
+                if ((this.UserIdField.Equals(value) != true)) {
+                    this.UserIdField = value;
+                    this.RaisePropertyChanged("UserId");
                 }
             }
         }
@@ -113,6 +114,28 @@ namespace Client.ChatService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ServiceMessageManage", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
+    [System.SerializableAttribute()]
+    public partial class ServiceMessageManage : Client.ChatService.ServiceMessage {
+        
+        private Client.ChatService.RulingMessage RulingMessageField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public Client.ChatService.RulingMessage RulingMessage {
+            get {
+                return this.RulingMessageField;
+            }
+            set {
+                if ((this.RulingMessageField.Equals(value) != true)) {
+                    this.RulingMessageField = value;
+                    this.RaisePropertyChanged("RulingMessage");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ServiceMessageText", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
     [System.SerializableAttribute()]
     public partial class ServiceMessageText : Client.ChatService.ServiceMessage {
@@ -131,6 +154,20 @@ namespace Client.ChatService {
                 }
             }
         }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="RulingMessage", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
+    public enum RulingMessage : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserJoined = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserLeft = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserRemoved = 3,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -620,10 +657,10 @@ namespace Client.ChatService {
         System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> GetRegisteredUsersAsync(int count, int offset, int callerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/MessagesFromOneChat", ReplyAction="letsTalk.IUnitService/Unit/MessagesFromOneChatResponse")]
-        Client.ChatService.ServiceMessage[] MessagesFromOneChat(int chatroomId);
+        Client.ChatService.ServiceMessage[] MessagesFromOneChat(int chatroomId, int offset, int count);
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/MessagesFromOneChat", ReplyAction="letsTalk.IUnitService/Unit/MessagesFromOneChatResponse")]
-        System.Threading.Tasks.Task<Client.ChatService.ServiceMessage[]> MessagesFromOneChatAsync(int chatroomId);
+        System.Threading.Tasks.Task<Client.ChatService.ServiceMessage[]> MessagesFromOneChatAsync(int chatroomId, int offset, int count);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -677,12 +714,12 @@ namespace Client.ChatService {
             return base.Channel.GetRegisteredUsersAsync(count, offset, callerId);
         }
         
-        public Client.ChatService.ServiceMessage[] MessagesFromOneChat(int chatroomId) {
-            return base.Channel.MessagesFromOneChat(chatroomId);
+        public Client.ChatService.ServiceMessage[] MessagesFromOneChat(int chatroomId, int offset, int count) {
+            return base.Channel.MessagesFromOneChat(chatroomId, offset, count);
         }
         
-        public System.Threading.Tasks.Task<Client.ChatService.ServiceMessage[]> MessagesFromOneChatAsync(int chatroomId) {
-            return base.Channel.MessagesFromOneChatAsync(chatroomId);
+        public System.Threading.Tasks.Task<Client.ChatService.ServiceMessage[]> MessagesFromOneChatAsync(int chatroomId, int offset, int count) {
+            return base.Channel.MessagesFromOneChatAsync(chatroomId, offset, count);
         }
     }
     

@@ -210,7 +210,7 @@ namespace Client.ViewModels
         {
             var chat = FindChatroom(chatroomId);
             if (chat != null)
-                chat.Messages.Add(chat.GetMessageType(message.Sender, new TextMessage(message.Text, message.DateTime)));
+                chat.Messages.Add(chat.GetMessageType(message.UserId, new TextMessage(message.Text, message.DateTime)));
         }
 
         public void ReplyMessageIsWriting(Nullable<int> userSqlId, int chatSqlId)
@@ -222,7 +222,7 @@ namespace Client.ViewModels
         {
             var chat = FindChatroom(chatroomId);
             if (chat != null)
-                chat.Messages.Add(chat.GetMessageType(serviceMessageFile.Sender, new FileMessage(serviceMessageFile.FileName, serviceMessageFile.DateTime, serviceMessageFile.StreamId)));
+                chat.Messages.Add(chat.GetMessageType(serviceMessageFile.UserId, new FileMessage(serviceMessageFile.FileName, serviceMessageFile.DateTime, serviceMessageFile.StreamId)));
         }
 
         public void ClosedWindow(object sender)

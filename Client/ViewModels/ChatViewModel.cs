@@ -56,7 +56,7 @@ namespace Client.ViewModels
             MediaPlayCommand = new Command(MediaPlay);
             MediaPosChangedCommand = new Command(MediaPosChanged);
             SendCommand = new Command(Send);
-            OpenSmileCommand = new Command(OpenSmile);
+            ShowMoreCommand = new Command(ShowMore);
             OpenFileCommand = new Command(OpenFile);
             UnloadCommand = new Command(Unload);
             LoadCommand = new Command(Load);
@@ -142,7 +142,9 @@ namespace Client.ViewModels
         private async void LoadMore()
         {
             ChatService.UnitClient unitClient = new ChatService.UnitClient();
-            ChatService.ServiceMessage[] serviceMessages = await unitClient.MessagesFromOneChatAsync(Chat.SqlId);
+            ChatService.ServiceMessage[] serviceMessages = await unitClient.MessagesFromOneChatAsync(chat.SqlId, chat._messageOffset, chat._messageCount);
+            if (serviceMessages == null)
+                return;
 
             if (serviceMessages != null)
             {
@@ -155,29 +157,31 @@ namespace Client.ViewModels
                         if (message is ChatService.ServiceMessageText)
                         {
                             var textmessage = message as ChatService.ServiceMessageText;
-                            messagesFromChat.Add(Chat.GetMessageType(textmessage.Sender, new TextMessage(textmessage.Text, textmessage.DateTime)));
+                            messagesFromChat.Add(chat.GetMessageType(textmessage.UserId, new TextMessage(textmessage.Text, textmessage.DateTime)));
                         }
                         else
                         {
                             var filemessage = message as ChatService.ServiceMessageFile;
-                            messagesFromChat.Add(Chat.GetMessageType(filemessage.Sender, new FileMessage(filemessage.FileName, filemessage.DateTime, filemessage.StreamId) { IsLoaded = true }));
+                            messagesFromChat.Add(chat.GetMessageType(filemessage.UserId, new FileMessage(filemessage.FileName, filemessage.DateTime, filemessage.StreamId) { IsLoaded = true }));
                         }
+
                     }
 
                     return messagesFromChat;
                 }));
 
-                foreach (var message in messages.Reverse())
-                    Chat.Messages.Insert(0, message);
-            }
+            foreach (var message in messages)
+                chat.Messages.Insert(0, message);
+
+            chat._messageOffset += chat._messageCount;
         }
 
         private void TextBox_EnterPressed(object obj)
         {
             if (MessageText.Length < 1)
                 return;
-            ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = MessageText, Sender = client.SqlId }, Chat.SqlId);
-            Chat.Messages.Add(Chat.GetMessageType(client.SqlId, new TextMessage(MessageText, DateTime.Now)));
+            ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = MessageText, UserId = client.SqlId }, chat.SqlId);
+            chat.Messages.Add(chat.GetMessageType(client.SqlId, new TextMessage(MessageText, DateTime.Now)));
             MessageText = "";
         }
 
@@ -353,9 +357,9 @@ namespace Client.ViewModels
             }
         }
 
-        private void OpenSmile(object param)
+        private void ShowMore(object param)
         {
-
+            LoadMore();
         }
 
         private void SendText(string text)

@@ -7,16 +7,26 @@ using System.Threading.Tasks;
 
 namespace letsTalk
 {
+    [DataContract(Name = "RulingMessage")]
+    public enum RulingMessage
+    {
+        [EnumMember] UserJoined = 1,
+        [EnumMember] UserLeft = 2,
+        [EnumMember] UserRemoved = 3,
+        [EnumMember] ChatroomDelete = 4
+    }
+
     [DataContract]
     [KnownType(typeof(ServiceMessageText))]
     [KnownType(typeof(ServiceMessageFile))]
+    [KnownType(typeof(ServiceMessageManage))]
     public class ServiceMessage
     {
         [DataMember(IsRequired = true)]
-        public int Sender { get; set; }
+        public int UserId { get; set; }
 
         [DataMember(IsRequired = true)]
-        public DateTime DateTime { get; set; }
+        public Nullable<DateTime> DateTime { get; set; }
     }
 
     [DataContract]
@@ -35,4 +45,12 @@ namespace letsTalk
         [DataMember(IsRequired = true)]
         public string FileName { get; set; }
     }
+
+    [DataContract]
+    public class ServiceMessageManage : ServiceMessage
+    {
+        [DataMember(IsRequired = true)]
+        public RulingMessage RulingMessage { get; set; }
+    }
+
 }

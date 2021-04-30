@@ -42,13 +42,16 @@ namespace letsTalk
         int CreateChatroom(string chatName, List<int> users);
 
         [OperationContract(IsOneWay = true)]
-        void DeleteChatroom(int chatId);
+        void DeleteChatroom(int chatId, int userId);
 
         [OperationContract(IsOneWay = false)]
         void AddUserToChatroom(int userId, int chatId);
 
-        [OperationContract(IsOneWay = false)]
+        [OperationContract(IsOneWay = true)]
         void RemoveUserFromChatroom(int userId, int chatId);
+
+        [OperationContract(IsOneWay = true)]
+        void LeaveFromChatroom(int userId, int chatId);
 
         [OperationContract(IsOneWay = false)]
         [FaultContract(typeof(ConnectionExceptionFault))]
@@ -74,9 +77,9 @@ namespace letsTalk
 
         //Оповещение пользователя о его удалении с чатрума
         [OperationContract(IsOneWay = true)]
-        void NotifyUserIsRemovedFromChat(int chatId);
+        void NotifyUserIsRemovedFromChat(ServiceMessageManage serviceMessageManage, int chatId);
 
-        //Оповещение пользователей, что пользователей присоединился/добавлен в чатрум
+        //Оповещение пользователей, что пользователь присоединился/добавлен в чатрум
         [OperationContract(IsOneWay = true)]
         void UserJoinedToChatroom(int userId);
 
@@ -97,5 +100,4 @@ namespace letsTalk
         void NotifyUserFileSendedToChat(ServiceMessageFile serviceMessageFile, int chatroomId);
 
     }
-
 }
