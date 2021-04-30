@@ -332,8 +332,12 @@ namespace Client.Models
         public ChatGroup(int sqlId, string groupName, IEnumerable<AvailableUser> users) : base(sqlId)
         {
             GroupName = groupName;
+            colors = new Dictionary<int, string>();
             foreach (var user in users)
+            {
                 Users.Add(user);
+                colors.Add(user.SqlId, allColors[Users.Count % allColors.Length]);
+            }
         }
 
         public ChatGroup(int sqlId, string groupName, string groupDesc, IEnumerable<AvailableUser> users) : this(sqlId, groupName, users)
