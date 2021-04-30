@@ -631,15 +631,17 @@ namespace letsTalk
                     {
                         int inner_offset = 0;
                         XElement xMessageEl = xMessagesEl.Elements("Message").LastOrDefault();
-                        if (xMessageEl == null)
-                        {
-                            return null;
-                        }
 
                         while (inner_offset < offset && xMessageEl != null)
                         {
                             inner_offset++;
                             xMessageEl = xMessageEl.PreviousNode as XElement;
+                        }
+
+                        if (xMessageEl == null)
+                        {
+                            serviceMessages.Add(new ServiceMessage() { DateTime = DateTime.MinValue });
+                            return serviceMessages;
                         }
 
                         for (int i = 0; i < count && xMessageEl != null
