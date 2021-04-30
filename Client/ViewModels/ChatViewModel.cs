@@ -56,7 +56,6 @@ namespace Client.ViewModels
             MediaPlayCommand = new Command(MediaPlay);
             MediaPosChangedCommand = new Command(MediaPosChanged);
             SendCommand = new Command(Send);
-            ShowMoreCommand = new Command(ShowMore);
             OpenFileCommand = new Command(OpenFile);
             UnloadCommand = new Command(Unload);
             LoadCommand = new Command(Load);
@@ -170,10 +169,11 @@ namespace Client.ViewModels
                     return messagesFromChat;
                 }));
 
-            foreach (var message in messages)
-                chat.Messages.Insert(0, message);
+                foreach (var message in messages)
+                    chat.Messages.Insert(0, message);
 
-            chat._messageOffset += chat._messageCount;
+                chat._messageOffset += chat._messageCount;
+            }
         }
 
         private void TextBox_EnterPressed(object obj)
@@ -422,4 +422,3 @@ namespace Client.ViewModels
         }
     }
 }
-

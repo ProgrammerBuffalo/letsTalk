@@ -37,11 +37,11 @@ namespace Client.Models
                                 FileMessage fileMessage = sourceMessage.Message as FileMessage;
                                 string extension = fileMessage.FileName.Substring(fileMessage.FileName.LastIndexOf('.'));
                                 switch (extension)
-                                {                                    
+                                {
                                     case ".jpg":
                                     case ".png":
                                     case ".jpeg":
-                                        if(sourceMessage is SessionSendedMessage)
+                                        if (sourceMessage is SessionSendedMessage)
                                         {
                                             sourceMessage.Message = LoadImageFromClient(fileMessage);
                                             break;
@@ -81,7 +81,7 @@ namespace Client.Models
             ImageMessage imageMessage = new ImageMessage(fileMessage.FileName, fileMessage.Date, fileMessage.StreamId);
 
             MemoryStream memoryStream = new MemoryStream();
-            using(FileStream fileStream = new FileStream(fileMessage.FileName, FileMode.Open, FileAccess.Read))
+            using (FileStream fileStream = new FileStream(fileMessage.FileName, FileMode.Open, FileAccess.Read))
             {
                 fileStream.CopyTo(memoryStream);
             }
@@ -307,10 +307,20 @@ namespace Client.Models
 
         static ChatGroup()
         {
-            allColors = new string[20];
-            allColors[0] = "Blue";
-            allColors[1] = "Green";
-            allColors[2] = "Red";
+            allColors = new string[13];
+            allColors[0] = "#945b3a";
+            allColors[1] = "#d95509";
+            allColors[2] = "#d99b09";
+            allColors[3] = "#6e8212";
+            allColors[4] = "#51c404";
+            allColors[5] = "#118515";
+            allColors[6] = "#2f736c";
+            allColors[7] = "#1978b3";
+            allColors[8] = "#5c75ed";
+            allColors[9] = "#7c1bc2";
+            allColors[10] = "#c21bb7";
+            allColors[11] = "#ed028b";
+            allColors[12] = "#8c0315";
         }
 
         //убрать
@@ -339,6 +349,7 @@ namespace Client.Models
         public void AddMember(AvailableUser user)
         {
             users.Add(user);
+            colors.Add(user, allColors[users.Count % colors.Count]);
             Messages.Add(SystemMessage.UserAdded(user.Name));
         }
 

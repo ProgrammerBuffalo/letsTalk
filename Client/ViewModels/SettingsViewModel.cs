@@ -132,7 +132,18 @@ namespace Client.ViewModels
 
         private void ConfirmWallpaper(object param)
         {
-            settings.SelectedWallpaper = selectedWallpaper;
+            if (isFromDevice)
+            {
+                foreach (var file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "Settings\\Wallpaper"))
+                    File.Delete(file);
+                string path = AppDomain.CurrentDomain.BaseDirectory + "Settings\\Wallpaper\\" + selectedWallpaper.Substring(selectedWallpaper.LastIndexOf('\\') + 1);
+                File.Copy(selectedWallpaper, path);
+                settings.SelectedWallpaper = path;
+            }
+            else
+            {
+                settings.SelectedWallpaper = selectedWallpaper;
+            }
             previewWallpaperWindow.Close();
         }
 
@@ -149,11 +160,15 @@ namespace Client.ViewModels
             dialog.Filter = "Audio files (*.mp3,*.wav)|*.mp3;*.wav";
             if (dialog.ShowDialog() == true)
             {
-                string fileName = dialog.FileName.Substring(dialog.FileName.LastIndexOf('\\') + 1);
-                string path = AppDomain.CurrentDomain.BaseDirectory + "Settings" + fileName;
+                foreach (var file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "Settings\\Rington"))
+                    File.Delete(file);
 
-                FileStream stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Write);
-                settings.SelectedRington = new Rington(fileName, dialog.FileName);
+                string fileName = dialog.FileName.Substring(dialog.FileName.LastIndexOf('\\') + 1);
+                string path = AppDomain.CurrentDomain.BaseDirectory + "Settings\\Rington\\" + fileName;
+                File.Copy(dialog.FileName, path);
+
+                //FileStream stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Write);
+                //settings.SelectedRington = new Rington(fileName, dialog.FileName);
             }
         }
 
