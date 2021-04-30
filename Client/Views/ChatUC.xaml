@@ -86,7 +86,7 @@
                   ItemTemplateSelector="{StaticResource MessageSelector}"
                   ItemsSource="{Binding Path=Chat.Messages}"
                   ScrollViewer.CanContentScroll="False"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <ListView.Background>
                 <ImageBrush ImageSource="{Binding Path=Settings.SelectedWallpaper}"/>
             </ListView.Background>

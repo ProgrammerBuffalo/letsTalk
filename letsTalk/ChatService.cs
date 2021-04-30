@@ -587,9 +587,16 @@ namespace letsTalk
             else
                 leaveDate = DateTime.Now.AddYears(1);
 
+            if (DateTime.Parse(xMessagesEl.FirstAttribute.Value).Date < offsetDate.Date)
+            {
+                serviceMessages.Add(new ServiceMessage() { DateTime = DateTime.MaxValue });
+                return serviceMessages;
+            }
+
             while (xMessagesEl != null)
             {
                 DateTime dateMessages = DateTime.Parse(xMessagesEl.FirstAttribute.Value);
+
                 if (dateMessages.Date == offsetDate.Date)
                 {
                     if (dateMessages.Date < leaveDate.Value.Date && dateMessages.Date > joinDate.Date)
@@ -602,6 +609,7 @@ namespace letsTalk
                             xElements = xElements.GetRange(offset, xElements.Count - offset);
                         else
                             xElements = xElements.GetRange(offset, count - offset);
+                        break;
                     }
                     else if (dateMessages.Date <= leaveDate.Value.Date && dateMessages.Date > joinDate.Date)
                     {
@@ -621,6 +629,10 @@ namespace letsTalk
                             xMessageEl = xMessageEl.PreviousNode as XElement;
                         }
 
+
+                        if (xMessageEl == null)
+                            return null;
+
                         for (int i = 0; i < count && xMessageEl != null; i++, xMessageEl = xMessageEl.PreviousNode as XElement)
                         {
                             xElements.Add(xMessageEl);
@@ -639,10 +651,7 @@ namespace letsTalk
                         }
 
                         if (xMessageEl == null)
-                        {
-                            serviceMessages.Add(new ServiceMessage() { DateTime = DateTime.MinValue });
-                            return serviceMessages;
-                        }
+                            return null;
 
                         for (int i = 0; i < count && xMessageEl != null
                             && DateTime.Parse(xMessageEl.Element("Date").Value).TimeOfDay > joinDate.TimeOfDay; i++, xMessageEl = xMessageEl.PreviousNode as XElement)
@@ -668,6 +677,9 @@ namespace letsTalk
                             }
                             xMessageEl = xMessageEl.PreviousNode as XElement;
                         }
+
+                        if (xMessageEl == null)
+                            return null;
 
                         for (int i = 0; i < count && xMessageEl != null
                              && DateTime.Parse(xMessageEl.Element("Date").Value).TimeOfDay > joinDate.TimeOfDay; i++, xMessageEl = xMessageEl.PreviousNode as XElement)

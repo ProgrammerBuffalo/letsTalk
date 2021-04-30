@@ -13,7 +13,7 @@ namespace Client.Models
         private ObservableCollection<SourceMessage> messages = new ObservableCollection<SourceMessage>();
         private int count;
 
-        public int _messageCount = 30;
+        public int _messageCount = 15;
         public int _messageOffset = 0;
         public DateTime _offsetDate = DateTime.Now;
 

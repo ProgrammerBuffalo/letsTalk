@@ -23,6 +23,8 @@ namespace Client.ViewModels
         private delegate void MessageSendType(string message);
         private MessageSendType sendType;
 
+        private int _countLeft;
+
         private double _previousScrollOffset;
 
         //public MainViewModel.ChatDelegate RemoveChat { get; set; }
@@ -47,6 +49,8 @@ namespace Client.ViewModels
         {
             this.mainVM = mainVM;
             Chat = mainVM.SelectedChat;
+
+            _countLeft = chat._messageCount;
 
             client = ClientUserInfo.getInstance();
             ChatClient = chatClient;
@@ -125,6 +129,7 @@ namespace Client.ViewModels
             //если чем выше значение тем раньше произойдет загрузка
             if (Scroll.VerticalOffset == 0 && _previousScrollOffset != Scroll.VerticalOffset)
             {
+                _countLeft = chat._messageCount;
                 _previousScrollOffset = Scroll.VerticalOffset;
                 LoaderVisibility = Visibility.Visible;
                 Scroll.VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Disabled;
@@ -151,12 +156,23 @@ namespace Client.ViewModels
             {
                 mainVM.SelectedChat.Messages.Insert(0, SystemMessage.ShiftDate(mainVM.SelectedChat._offsetDate));
                 mainVM.SelectedChat._messageOffset = 0;
-                mainVM.SelectedChat._offsetDate.AddDays(-1);
+                mainVM.SelectedChat._offsetDate = mainVM.SelectedChat._offsetDate.AddDays(-1);
+                if (_countLeft > 0)
+                    await LoadMore();
                 return;
             }
 
             if (serviceMessages.First().DateTime == DateTime.MinValue)
             {
+                return;
+            }
+
+            if (serviceMessages.First().DateTime == DateTime.MaxValue)
+            {
+                mainVM.SelectedChat.Messages.Insert(0, SystemMessage.ShiftDate(mainVM.SelectedChat._offsetDate));
+                mainVM.SelectedChat._messageOffset = 0;
+                mainVM.SelectedChat._offsetDate = mainVM.SelectedChat._offsetDate.AddDays(-1);
+                await LoadMore();
                 return;
             }
 
@@ -173,7 +189,7 @@ namespace Client.ViewModels
                             var textMessage = message as ChatService.ServiceMessageText;
                             messagesFromChat.Add(mainVM.SelectedChat.GetMessageType(textMessage.UserId, new TextMessage(textMessage.Text, textMessage.DateTime)));
                         }
-                        else if(message is ChatService.ServiceMessageFile)
+                        else if (message is ChatService.ServiceMessageFile)
                         {
                             var fileMessage = message as ChatService.ServiceMessageFile;
                             messagesFromChat.Add(mainVM.SelectedChat.GetMessageType(fileMessage.UserId, new FileMessage(fileMessage.FileName, fileMessage.DateTime, fileMessage.StreamId) { IsLoaded = true }));
@@ -200,10 +216,18 @@ namespace Client.ViewModels
                     return messagesFromChat;
                 }));
 
+                mainVM.SelectedChat._messageOffset += messages.Count;
+                _countLeft -= messages.Count;
+
                 foreach (var message in messages)
                     mainVM.SelectedChat.Messages.Insert(0, message);
 
-                mainVM.SelectedChat._messageOffset += mainVM.SelectedChat._messageCount;
+                if (_countLeft > 0)
+                {
+                    await LoadMore();
+                    return;
+                }
+
             }
         }
 
