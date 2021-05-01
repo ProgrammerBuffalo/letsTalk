@@ -303,7 +303,7 @@ namespace Client.Models
         private string groupName;
         private string groupDesc;
         private ObservableCollection<AvailableUser> users = new ObservableCollection<AvailableUser>();
-        private Dictionary<int, string> colors;
+        private Dictionary<int, string> colors = new Dictionary<int, string>();
 
         static ChatGroup()
         {
@@ -332,7 +332,6 @@ namespace Client.Models
         public ChatGroup(int sqlId, string groupName, IEnumerable<AvailableUser> users) : base(sqlId)
         {
             GroupName = groupName;
-            colors = new Dictionary<int, string>();
             foreach (var user in users)
             {
                 Users.Add(user);

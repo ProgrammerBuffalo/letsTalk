@@ -91,7 +91,6 @@ namespace Client.ViewModels
                 Views.ChatUC chatView = new Views.ChatUC();
                 ChatViewModel viewModel = new ChatViewModel(ChatClient, this);
                 chatView.getControl = new Views.ChatUC.GetControlDelegate(viewModel.SetScrollViewer);
-                //viewModel.RemoveChat += RemoveChatFromChats;
                 chatView.DataContext = viewModel;
                 CurrentView = chatView;
             }

@@ -166,9 +166,7 @@ namespace Client.ViewModels
                 string fileName = dialog.FileName.Substring(dialog.FileName.LastIndexOf('\\') + 1);
                 string path = AppDomain.CurrentDomain.BaseDirectory + "Settings\\Rington\\" + fileName;
                 File.Copy(dialog.FileName, path);
-
-                //FileStream stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Write);
-                //settings.SelectedRington = new Rington(fileName, dialog.FileName);
+                settings.SelectedRington = new Rington(fileName, dialog.FileName);
             }
         }
 

@@ -25,7 +25,6 @@ namespace Client.ViewModels
 
         private double _previousScrollOffset;
 
-        //public MainViewModel.ChatDelegate RemoveChat { get; set; }
         private MainViewModel mainVM;
 
         public ChatService.ChatClient ChatClient { get; set; }
@@ -50,7 +49,7 @@ namespace Client.ViewModels
 
             client = ClientUserInfo.getInstance();
             ChatClient = chatClient;
-            //Settings = Settings.Instance;
+            Settings = Settings.Instance;
 
             TextBox_KeyDownCommand = new Command(TextBox_KeyDown);
             TextBox_KeyUpCommand = new Command(TextBox_KeyUp);
@@ -63,11 +62,8 @@ namespace Client.ViewModels
             UnloadCommand = new Command(Unload);
             LoadCommand = new Command(Load);
 
-            //AddUserCommand = new Command(AddMember);
-            //RemoveUserCommand = new Command(RemoveMember);
             EditChatCommand = new Command(EditChat);
             LeaveChatCommand = new Command(LeaveChat);
-            //DeleteChatCommand = new Command(DeleteChat);
 
             DownloadFileCommand = new Command(DownloadFile);
 
@@ -95,11 +91,7 @@ namespace Client.ViewModels
         public ICommand UnloadCommand { get; }
 
         public ICommand EditChatCommand { get; }
-        //public ICommand AddUserCommand { get; }
-        //public ICommand RemoveUserCommand { get; }
         public ICommand LeaveChatCommand { get; }
-
-        //public ICommand DeleteChatCommand { get; }
 
         public ICommand LoadCommand { get; }
         public ICommand DownloadFileCommand { get; }
@@ -121,7 +113,6 @@ namespace Client.ViewModels
 
         private async void ScrollPositionChanged(object sender, System.Windows.Controls.ScrollChangedEventArgs e)
         {
-            //если чем выше значение тем раньше произойдет загрузка
             if (Scroll.VerticalOffset == 0 && _previousScrollOffset != Scroll.VerticalOffset)
             {
                 _previousScrollOffset = Scroll.VerticalOffset;
@@ -243,18 +234,6 @@ namespace Client.ViewModels
             });
         }
 
-        //тут должен быть твой метод для сообшения другим пользователям что добавлен новый узер
-        //public void AddMember(object param)
-        //{
-        //    (chat as ChatGroup).AddMember(AvaibleUser user);
-        //}
-
-        //тут должен быть метод для сообшения другим пользователям что узера удалили
-        //public void RemoveMember(object param)
-        //{
-        //    (chat as ChatGroup).RemoveMember();
-        //}
-
         private void EditChat(object param)
         {
             Views.EditGroupWindow window = new Views.EditGroupWindow();
@@ -267,12 +246,6 @@ namespace Client.ViewModels
         {
             //chat.Messages.Add(SystemMessage.UserLeavedChat(client.UserName));
         }
-
-        //тут должен быть твой метод для сообшения другим пользователям что узер покинул chat
-        //public void DeleteChat(object param)
-        //{
-        //    RemoveChat.Invoke(Chat);
-        //}
 
         //тут метод для загрузки файла
         public async void DownloadFile(object param)
@@ -443,8 +416,7 @@ namespace Client.ViewModels
                 curMediaMessage = null;
                 player.Close();
             }
-            mainVM.SelectedChat.Messages.Clear();
-
+            Chat.Messages.Clear();
         }
 
         public void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
