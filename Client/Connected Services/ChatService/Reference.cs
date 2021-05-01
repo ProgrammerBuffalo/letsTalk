@@ -829,13 +829,13 @@ namespace Client.ChatService {
         void NotifyUserIsAddedToChat(int chatId, int[] usersInChat);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/NotifyUserIsRemovedFromChat")]
-        void NotifyUserIsRemovedFromChat(Client.ChatService.ServiceMessageManage serviceMessageManage, int chatId);
+        void NotifyUserIsRemovedFromChat(int userId, int chatId);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/UserJoinedToChatroom")]
         void UserJoinedToChatroom(int userId);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/UserLeftChatroom")]
-        void UserLeftChatroom(int userId);
+        void UserLeftChatroom(int chatId, int userId);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/ReplyMessage")]
         void ReplyMessage(Client.ChatService.ServiceMessageText message, int chatroomId);

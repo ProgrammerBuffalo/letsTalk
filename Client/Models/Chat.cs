@@ -12,14 +12,17 @@ namespace Client.Models
 
         private ObservableCollection<SourceMessage> messages = new ObservableCollection<SourceMessage>();
         private int count;
+        private bool canWrite;
 
-        public int _messageCount = 30;
+        public int _messageCount = 15;
         public int _messageOffset = 0;
         public DateTime _offsetDate = DateTime.Now;
 
         private BitmapImage image;
 
         public BitmapImage Image { get => image; set => Set(ref image, value); }
+        public bool CanWrite { get => canWrite; set => Set(ref canWrite, value); }
+
 
         private string userIsWriting;
 

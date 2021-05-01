@@ -23,6 +23,10 @@ namespace Client.ViewModels
         private delegate void MessageSendType(string message);
         private MessageSendType sendType;
 
+
+        private bool canWrite = true;
+        private int _countLeft;
+
         private double _previousScrollOffset;
 
         private MainViewModel mainVM;
@@ -46,6 +50,8 @@ namespace Client.ViewModels
         {
             this.mainVM = mainVM;
             Chat = mainVM.SelectedChat;
+
+            _countLeft = chat._messageCount;
 
             client = ClientUserInfo.getInstance();
             ChatClient = chatClient;
@@ -115,6 +121,7 @@ namespace Client.ViewModels
         {
             if (Scroll.VerticalOffset == 0 && _previousScrollOffset != Scroll.VerticalOffset)
             {
+                _countLeft = chat._messageCount;
                 _previousScrollOffset = Scroll.VerticalOffset;
                 LoaderVisibility = Visibility.Visible;
                 Scroll.VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Disabled;
@@ -141,12 +148,23 @@ namespace Client.ViewModels
             {
                 mainVM.SelectedChat.Messages.Insert(0, SystemMessage.ShiftDate(mainVM.SelectedChat._offsetDate));
                 mainVM.SelectedChat._messageOffset = 0;
-                mainVM.SelectedChat._offsetDate.AddDays(-1);
+                mainVM.SelectedChat._offsetDate = mainVM.SelectedChat._offsetDate.AddDays(-1);
+                if (_countLeft > 0)
+                    await LoadMore();
                 return;
             }
 
             if (serviceMessages.First().DateTime == DateTime.MinValue)
             {
+                return;
+            }
+
+            if (serviceMessages.First().DateTime == DateTime.MaxValue)
+            {
+                mainVM.SelectedChat.Messages.Insert(0, SystemMessage.ShiftDate(mainVM.SelectedChat._offsetDate));
+                mainVM.SelectedChat._messageOffset = 0;
+                mainVM.SelectedChat._offsetDate = mainVM.SelectedChat._offsetDate.AddDays(-1);
+                await LoadMore();
                 return;
             }
 
@@ -190,10 +208,18 @@ namespace Client.ViewModels
                     return messagesFromChat;
                 }));
 
+                mainVM.SelectedChat._messageOffset += messages.Count;
+                _countLeft -= messages.Count;
+
                 foreach (var message in messages)
                     mainVM.SelectedChat.Messages.Insert(0, message);
 
-                mainVM.SelectedChat._messageOffset += mainVM.SelectedChat._messageCount;
+                if (_countLeft > 0)
+                {
+                    await LoadMore();
+                    return;
+                }
+
             }
         }
 
@@ -244,7 +270,9 @@ namespace Client.ViewModels
         //тут должен быть твой метод для сообшения другим пользователям что узер покинул chat
         public void LeaveChat(object param)
         {
-            //chat.Messages.Add(SystemMessage.UserLeavedChat(client.UserName));
+            chat.Messages.Add(SystemMessage.UserLeftChat(DateTime.Now, client.UserName));
+            ChatClient.LeaveFromChatroom(client.SqlId, Chat.SqlId);
+            Chat.CanWrite = false;
         }
 
         //тут метод для загрузки файла
@@ -416,7 +444,8 @@ namespace Client.ViewModels
                 curMediaMessage = null;
                 player.Close();
             }
-            Chat.Messages.Clear();
+            chat.Messages.Clear();
+            chat._offsetDate = DateTime.Now;
         }
 
         public void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")

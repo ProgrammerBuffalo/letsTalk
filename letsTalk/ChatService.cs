@@ -587,9 +587,16 @@ namespace letsTalk
             else
                 leaveDate = DateTime.Now.AddYears(1);
 
+            if (DateTime.Parse(xMessagesEl.FirstAttribute.Value).Date < offsetDate.Date)
+            {
+                serviceMessages.Add(new ServiceMessage() { DateTime = DateTime.MaxValue });
+                return serviceMessages;
+            }
+
             while (xMessagesEl != null)
             {
                 DateTime dateMessages = DateTime.Parse(xMessagesEl.FirstAttribute.Value);
+
                 if (dateMessages.Date == offsetDate.Date)
                 {
                     if (dateMessages.Date < leaveDate.Value.Date && dateMessages.Date > joinDate.Date)
@@ -602,6 +609,7 @@ namespace letsTalk
                             xElements = xElements.GetRange(offset, xElements.Count - offset);
                         else
                             xElements = xElements.GetRange(offset, count - offset);
+                        break;
                     }
                     else if (dateMessages.Date <= leaveDate.Value.Date && dateMessages.Date > joinDate.Date)
                     {
@@ -621,6 +629,10 @@ namespace letsTalk
                             xMessageEl = xMessageEl.PreviousNode as XElement;
                         }
 
+
+                        if (xMessageEl == null)
+                            return null;
+
                         for (int i = 0; i < count && xMessageEl != null; i++, xMessageEl = xMessageEl.PreviousNode as XElement)
                         {
                             xElements.Add(xMessageEl);
@@ -639,10 +651,7 @@ namespace letsTalk
                         }
 
                         if (xMessageEl == null)
-                        {
-                            serviceMessages.Add(new ServiceMessage() { DateTime = DateTime.MinValue });
-                            return serviceMessages;
-                        }
+                            return null;
 
                         for (int i = 0; i < count && xMessageEl != null
                             && DateTime.Parse(xMessageEl.Element("Date").Value).TimeOfDay > joinDate.TimeOfDay; i++, xMessageEl = xMessageEl.PreviousNode as XElement)
@@ -668,6 +677,9 @@ namespace letsTalk
                             }
                             xMessageEl = xMessageEl.PreviousNode as XElement;
                         }
+
+                        if (xMessageEl == null)
+                            return null;
 
                         for (int i = 0; i < count && xMessageEl != null
                              && DateTime.Parse(xMessageEl.Element("Date").Value).TimeOfDay > joinDate.TimeOfDay; i++, xMessageEl = xMessageEl.PreviousNode as XElement)
@@ -909,7 +921,7 @@ namespace letsTalk
                 {
                     sqlConnection.Open();
 
-                    SqlCommand FindChatroomsCommand = new SqlCommand(@"SELECT Id_Chat FROM User_Chatroom WHERE Id_User = @Id_User", sqlConnection);
+                    SqlCommand FindChatroomsCommand = new SqlCommand(@"SELECT Id_Chat FROM User_Chatroom WHERE Id_User = @Id_User AND LeaveDate is NULL", sqlConnection);
                     FindChatroomsCommand.CommandType = CommandType.Text;
                     FindChatroomsCommand.Parameters.Add("@Id_User", SqlDbType.Int).Value = sqlId;
 
@@ -1036,6 +1048,8 @@ namespace letsTalk
                         userNickname = sqlCommandUserName.ExecuteScalar().ToString();
                     }
 
+                    transactionScope.Complete();
+
                 }
                 ConnectedUser connectedUser = chatroomsInUsers.Keys.FirstOrDefault(u => u.SqlID == userId);
 
@@ -1046,7 +1060,7 @@ namespace letsTalk
 
                     if (connectedUser != null)
                     {
-                        connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsRemovedFromChat(serviceMessageManage, chatId);
+                        connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsRemovedFromChat(userId, chatId);
 
                         chatroomsInUsers.Where(users => users.Key.SqlID == userId)
                                         .Select(c => c.Value)
@@ -1058,7 +1072,7 @@ namespace letsTalk
                     foreach (var user in chatroomsInUsers.Keys)
                     {
                         if (user.UserContext.Channel != OperationContext.Current.Channel)
-                            user.UserContext.GetCallbackChannel<IChatCallback>().UserLeftChatroom(userId);
+                            user.UserContext.GetCallbackChannel<IChatCallback>().UserLeftChatroom(chatId, userId);
                     }
                 }
                 Console.WriteLine("User was removed from chatroom (" + OperationContext.Current.Channel.GetHashCode() + ")");
@@ -1116,7 +1130,7 @@ namespace letsTalk
                         {
                             if (user.UserContext.Channel != OperationContext.Current.Channel)
                             {
-                                user.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsRemovedFromChat(new ServiceMessageManage { RulingMessage = RulingMessage.ChatroomDelete, DateTime = leaveDate, UserNickname = userNickname }, chatId);
+                                user.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsRemovedFromChat(userId, chatId);
                             }
                             chatroomsInUsers[user].Remove(chatId);
                         }

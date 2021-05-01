@@ -77,7 +77,7 @@ namespace letsTalk
 
         //Оповещение пользователя о его удалении с чатрума
         [OperationContract(IsOneWay = true)]
-        void NotifyUserIsRemovedFromChat(ServiceMessageManage serviceMessageManage, int chatId);
+        void NotifyUserIsRemovedFromChat(int userId, int chatId);
 
         //Оповещение пользователей, что пользователь присоединился/добавлен в чатрум
         [OperationContract(IsOneWay = true)]
@@ -85,7 +85,7 @@ namespace letsTalk
 
         //Оповещение пользователей, что пользователь покинул группу
         [OperationContract(IsOneWay = true)]
-        void UserLeftChatroom(int userId);
+        void UserLeftChatroom(int chatId, int userId);
 
         //Оповещение о добавлении текстового сообщения в чатрум
         [OperationContract(IsOneWay = true)]
