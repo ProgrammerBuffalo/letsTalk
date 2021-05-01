@@ -75,6 +75,14 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="AddedUserToChatIsOnline">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userId" type="xs:int" />
+        <xs:element minOccurs="0" name="chatId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="Connect">
     <xs:complexType>
       <xs:sequence>
@@ -120,7 +128,8 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="chatId" type="xs:int" />
-        <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="usersInChat" nillable="true" type="q4:ArrayOfint" />
+        <xs:element minOccurs="0" name="chatName" nillable="true" type="xs:string" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/letsTalk" minOccurs="0" name="usersInChat" nillable="true" type="q4:ArrayOfUserInChat" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

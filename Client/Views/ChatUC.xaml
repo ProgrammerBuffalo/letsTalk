@@ -71,7 +71,7 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button IsEnabled="{Binding Path=Chat.CanWrite}" DockPanel.Dock="Right" Content="Leave" Margin="5" Command="{Binding LeaveChatCommand}"/>
+            <Button DockPanel.Dock="Right" Content="Leave" Margin="5" Command="{Binding LeaveChatCommand}"/>
         </DockPanel>
 
         <Image Grid.Row="1" VerticalAlignment="Top" Margin="0,10,0,0" Source="/Resources/loader.png" Visibility="{Binding Path=LoaderVisibility}" Width="50" Height="50" Panel.ZIndex="1">

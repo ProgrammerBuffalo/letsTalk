@@ -247,7 +247,7 @@ namespace Client.ViewModels
             if (usersToAdd.Count == 1)
             {
                 sqlId = chatClient.CreateChatroom(usersToAdd[0].Name, new int[] { client.SqlId, usersToAdd[0].SqlId });
-                chat = new ChatOne(sqlId, usersToAdd[0]);
+                chat = new ChatOne(sqlId, usersToAdd[0]) { CanWrite = true };
                 AddChat.Invoke(chat);
             }
             else
@@ -261,7 +261,7 @@ namespace Client.ViewModels
 
                     sqlId = chatClient.CreateChatroom(ChatName, users);
 
-                    chat = new ChatGroup(sqlId, ChatName, UsersToAdd);
+                    chat = new ChatGroup(sqlId, ChatName, UsersToAdd) { CanWrite = true };
                     AddChat.Invoke(chat);
                 }
                 else

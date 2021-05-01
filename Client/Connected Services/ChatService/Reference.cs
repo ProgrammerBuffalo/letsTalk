@@ -802,6 +802,12 @@ namespace Client.ChatService {
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/LeaveFromChatroom")]
         System.Threading.Tasks.Task LeaveFromChatroomAsync(int userId, int chatId);
         
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/AddedUserToChatIsOnline")]
+        void AddedUserToChatIsOnline(int userId, int chatId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/AddedUserToChatIsOnline")]
+        System.Threading.Tasks.Task AddedUserToChatIsOnlineAsync(int userId, int chatId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/Connect", ReplyAction="letsTalk.IChatService/Chat/ConnectResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(Client.ChatService.ConnectionExceptionFault), Action="letsTalk.IChatService/Chat/ConnectConnectionExceptionFaultFault", Name="ConnectionExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
         void Connect(int sqlId, string userName);
@@ -826,7 +832,7 @@ namespace Client.ChatService {
         void NotifyUserIsOffline(int sqlUserId);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/NotifyUserIsAddedToChat")]
-        void NotifyUserIsAddedToChat(int chatId, int[] usersInChat);
+        void NotifyUserIsAddedToChat(int chatId, string chatName, Client.ChatService.UserInChat[] usersInChat);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/NotifyUserIsRemovedFromChat")]
         void NotifyUserIsRemovedFromChat(int userId, int chatId);
@@ -929,6 +935,14 @@ namespace Client.ChatService {
         
         public System.Threading.Tasks.Task LeaveFromChatroomAsync(int userId, int chatId) {
             return base.Channel.LeaveFromChatroomAsync(userId, chatId);
+        }
+        
+        public void AddedUserToChatIsOnline(int userId, int chatId) {
+            base.Channel.AddedUserToChatIsOnline(userId, chatId);
+        }
+        
+        public System.Threading.Tasks.Task AddedUserToChatIsOnlineAsync(int userId, int chatId) {
+            return base.Channel.AddedUserToChatIsOnlineAsync(userId, chatId);
         }
         
         public void Connect(int sqlId, string userName) {

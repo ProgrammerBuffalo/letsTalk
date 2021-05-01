@@ -270,9 +270,15 @@ namespace Client.ViewModels
         //тут должен быть твой метод для сообшения другим пользователям что узер покинул chat
         public void LeaveChat(object param)
         {
-            chat.Messages.Add(SystemMessage.UserLeftChat(DateTime.Now, client.UserName));
-            ChatClient.LeaveFromChatroom(client.SqlId, Chat.SqlId);
-            Chat.CanWrite = false;
+            if (mainVM.SelectedChat != null)
+            {
+                chat.Messages.Add(SystemMessage.UserLeftChat(DateTime.Now, client.UserName));
+                ChatClient.LeaveFromChatroom(client.SqlId, Chat.SqlId);
+                Chat.CanWrite = false;
+                chat.Messages.Clear();
+                mainVM.SelectedChat = null;
+                mainVM.Chats.Remove(chat);
+            }
         }
 
         //тут метод для загрузки файла
@@ -436,16 +442,19 @@ namespace Client.ViewModels
 
         private void Unload(object param)
         {
-            ChatClient.MessageIsWriting(Chat.SqlId, null);
-            if (curMediaMessage != null)
+            if (mainVM.SelectedChat != null)
             {
-                curMediaMessage.IsPlaying = false;
-                curMediaMessage.CurrentLength = 0;
-                curMediaMessage = null;
-                player.Close();
+                ChatClient.MessageIsWriting(Chat.SqlId, null);
+                if (curMediaMessage != null)
+                {
+                    curMediaMessage.IsPlaying = false;
+                    curMediaMessage.CurrentLength = 0;
+                    curMediaMessage = null;
+                    player.Close();
+                }
+                chat.Messages.Clear();
+                chat._offsetDate = DateTime.Now;
             }
-            chat.Messages.Clear();
-            chat._offsetDate = DateTime.Now;
         }
 
         public void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
