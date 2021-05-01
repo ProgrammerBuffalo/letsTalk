@@ -102,9 +102,7 @@
                                  ItemTemplateSelector="{StaticResource ChatDataTemplateSelector}"
                                  ItemsSource="{Binding Path=Chats}"
                                  SelectedItem="{Binding Path=SelectedChat}"
-                                 IsPaneOpen="False" CompactPaneLength="55" OpenPaneLength="250" Width="250"
-                                 ItemClick="hamburgerMenu_ItemClick"
-                                 OptionsItemClick="hamburgerMenu_OptionsItemClick">
+                                 IsPaneOpen="False" CompactPaneLength="55" OpenPaneLength="250" Width="250">
 
             <controls:HamburgerMenu.OptionsItemsSource>
                 <controls:HamburgerMenuItemCollection>

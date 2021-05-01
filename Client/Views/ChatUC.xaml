@@ -60,20 +60,18 @@
 
         <DockPanel Background="Yellow" LastChildFill="False">
             <Image  DockPanel.Dock="Right" Style="{StaticResource AvatarImageStyle}"/>
-            <!--<Button DockPanel.Dock="Right" Content="Add User" Margin="5" Command="{Binding Path=AddUserCommand}" Style="{StaticResource GroupButtons}"/>-->
-            <!--<Button DockPanel.Dock="Right" Content="Remove User" Margin="5" Command="{Binding Path=RemoveUserCommand}" Style="{StaticResource GroupButtons}"/>-->
-            <!--<Button DockPanel.Dock="Right" Content="Delete Chat" Margin="5" Command="{Binding Path=DeleteChatCommand}"/>-->
-            <Button IsEnabled="{Binding Path=Chat.CanWrite}" DockPanel.Dock="Right" Content="Edit chat" Margin="5" Command="{Binding EditChatCommand}"/>
+            <Button IsEnabled="{Binding Path=Chat.CanWrite}" DockPanel.Dock="Right" Content="Edit chat" Margin="5" Command="{Binding EditChatCommand}">
+                <Button.Style>
+                    <Style BasedOn="{StaticResource MahApps.Styles.Button}" TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=Chat, Converter={StaticResource TypeConverter}}" Value="{x:Type models:ChatOne}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
             <Button IsEnabled="{Binding Path=Chat.CanWrite}" DockPanel.Dock="Right" Content="Leave" Margin="5" Command="{Binding LeaveChatCommand}"/>
-            <DockPanel.Style>
-                <Style TargetType="DockPanel">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Path=Chat, Converter={StaticResource TypeConverter}}" Value="{x:Type models:ChatOne}">
-                            <Setter Property="Visibility" Value="Hidden"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </DockPanel.Style>
         </DockPanel>
 
         <Image Grid.Row="1" VerticalAlignment="Top" Margin="0,10,0,0" Source="/Resources/loader.png" Visibility="{Binding Path=LoaderVisibility}" Width="50" Height="50" Panel.ZIndex="1">
@@ -142,8 +140,7 @@
                 </i:Interaction.Triggers>
             </TextBox>
 
-            <icons:PackIconMaterialDesign Grid.Column="1" Width="100" Height="100" Kind="AttachFile" Foreground="DarkGreen"/>
-            <!--<Button Grid.Column="1" Content="File" FontSize="20" Command="{Binding OpenFileCommand}"></Button>-->
+            <Button Grid.Column="1" Content="File" FontSize="20" Command="{Binding OpenFileCommand}"></Button>
             <Button IsEnabled="{Binding Path=Chat.CanWrite}" Grid.Column="3" Content="Send" FontSize="20" Command="{Binding SendCommand}"></Button>
         </Grid>
     </Grid>
