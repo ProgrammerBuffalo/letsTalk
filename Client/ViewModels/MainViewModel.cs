@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 //using System.IO;
 using System.Linq;
 using System.ServiceModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -157,6 +158,8 @@ namespace Client.ViewModels
 
         private void UserRemovedFromChat(int chatId, int userId)
         {
+            if (userId == clientUserInfo.SqlId)
+                return;
             ChatGroup chat = FindChatroom(chatId) as ChatGroup;
             chat.RemoveUser(chat.FindUser(userId));
         }
@@ -195,9 +198,25 @@ namespace Client.ViewModels
             UserOnlineState(sqlUserId, false);
         }
 
-        public void NotifyUserIsAddedToChat(int chatId, int[] usersInChat)
+        public void NotifyUserIsAddedToChat(int chatId, string chatName, ChatService.UserInChat[] usersInChat)
         {
-            //throw new NotImplementedException();
+            Task.Run(() => 
+            {
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    List<AvailableUser> availableUsers = new List<AvailableUser>();
+                    foreach(var user in usersInChat)
+                    {
+                        if(user.UserSqlId != clientUserInfo.SqlId)
+                         availableUsers.Add(new AvailableUser(user.UserName, user.UserSqlId) { IsOnline = user.IsOnline });
+                    }
+
+                    Chats.Add(availableUsers.Count > 1 ? new ChatGroup(chatId, chatName, availableUsers) { CanWrite = true }
+                                                   : (Models.Chat)new ChatOne(chatId, availableUsers.First()) { CanWrite = true });
+                });
+            });
+
+            ChatClient.AddedUserToChatIsOnline(this.clientUserInfo.SqlId, chatId);
         }
 
         public void NotifyUserIsRemovedFromChat(int userId, int chatId)
@@ -255,19 +274,26 @@ namespace Client.ViewModels
                 foreach (Chatroom key in chatrooms.Keys)
                 {
                     bool canWrite = false;
-                    List<AvailableUser> availableUsers = new List<AvailableUser>();
-                    foreach (UserInChat userInChat in chatrooms[key])
+                    if (chatrooms[key].Length > 1)
                     {
-                        if (userInChat.UserSqlId == clientUserInfo.SqlId)
+                        List<AvailableUser> availableUsers = new List<AvailableUser>();
+                        foreach (UserInChat userInChat in chatrooms[key])
                         {
-                            canWrite = true;
-                            continue;
+                            if (userInChat.UserSqlId == clientUserInfo.SqlId)
+                            {
+                                canWrite = true;
+                                continue;
+                            }
+                            availableUsers.Add(new AvailableUser { SqlId = userInChat.UserSqlId, Name = userInChat.UserName, IsOnline = userInChat.IsOnline });
                         }
-                        availableUsers.Add(new AvailableUser { SqlId = userInChat.UserSqlId, Name = userInChat.UserName, IsOnline = userInChat.IsOnline });
-                    }
 
-                    clientChatrooms.Add(availableUsers.Count > 1 ? new ChatGroup(key.ChatSqlId, key.ChatName, availableUsers) { CanWrite = canWrite }
-                                                                 : (Models.Chat)new ChatOne(key.ChatSqlId, availableUsers.First()) { CanWrite = canWrite });
+                        clientChatrooms.Add(availableUsers.Count > 1 ? new ChatGroup(key.ChatSqlId, key.ChatName, availableUsers) { CanWrite = canWrite }
+                                                                     : (Models.Chat)new ChatOne(key.ChatSqlId, availableUsers.First()) { CanWrite = canWrite });
+                    }
+                    else
+                    {
+                        clientChatrooms.Add(new ChatOne(key.ChatSqlId) { CanWrite = canWrite });
+                    }
                 }
                 return clientChatrooms;
             }));

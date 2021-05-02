@@ -253,6 +253,9 @@ namespace Client.Models
 
         public override async void DownloadAvatarAsync()
         {
+            if (this.user == null)
+                return;
+
             ChatService.DownloadRequest request = new ChatService.DownloadRequest(SqlId);
             var avatarClient = new ChatService.AvatarClient();
 
@@ -389,8 +392,8 @@ namespace Client.Models
 
         public override void RemoveUser(AvailableUser user)
         {
-            Users.Remove(user);
-            Messages.Add(SystemMessage.UserRemoved(DateTime.Now, user.Name));
+            if(Users.Remove(user))
+                Messages.Add(SystemMessage.UserRemoved(DateTime.Now, user.Name));
         }
 
         public AvailableUser FindUser(Nullable<int> userId)

@@ -38,6 +38,9 @@
   <wsdl:message name="Chat_LeaveFromChatroom_InputMessage">
     <wsdl:part name="parameters" element="tns:LeaveFromChatroom" />
   </wsdl:message>
+  <wsdl:message name="Chat_AddedUserToChatIsOnline_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddedUserToChatIsOnline" />
+  </wsdl:message>
   <wsdl:message name="Chat_Connect_InputMessage">
     <wsdl:part name="parameters" element="tns:Connect" />
   </wsdl:message>
@@ -104,6 +107,9 @@
     </wsdl:operation>
     <wsdl:operation name="LeaveFromChatroom">
       <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/LeaveFromChatroom" message="tns:Chat_LeaveFromChatroom_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddedUserToChatIsOnline">
+      <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/AddedUserToChatIsOnline" message="tns:Chat_AddedUserToChatIsOnline_InputMessage" />
     </wsdl:operation>
     <wsdl:operation name="Connect">
       <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/Connect" message="tns:Chat_Connect_InputMessage" />

@@ -324,6 +324,7 @@ namespace letsTalk
         {
             int chat_id;
             string fullpathXML = "";
+            List<UserInChat> usersInChat = new List<UserInChat>();
             try
             {
                 Console.WriteLine("Creating chatroom (" + OperationContext.Current.Channel.GetHashCode() + ")");
@@ -397,6 +398,19 @@ namespace letsTalk
                             content_id = sqlDataReader.GetSqlInt32(0).Value;
                         }
 
+                        SqlCommand sqlCommandFindUsersInChat = new SqlCommand(@"SELECT Users.Id, Users.Name FROM User_Chatroom INNER JOIN Users ON User_Chatroom.Id_User = Users.Id WHERE Id_Chat = @IdChat", sqlConnection);
+                        sqlCommandFindUsersInChat.Parameters.Add("@IdChat", SqlDbType.Int).Value = chat_id;
+
+                        using (SqlDataReader sqlDataReader = sqlCommandFindUsersInChat.ExecuteReader())
+                        {
+                            while (sqlDataReader.Read())
+                            {
+                                usersInChat.Add(new UserInChat() { UserSqlId = sqlDataReader.GetInt32(0), UserName = sqlDataReader.GetString(1) });
+                            }
+                        }
+
+                        usersInChat[usersInChat.FindIndex(u => u.UserSqlId == users[0])].IsOnline = true;
+
                         SqlCommand sqlCommandMergeContentWithChatroom = new SqlCommand(@"INSERT INTO Chatroom_Content VALUES(@IdChat, @IdContent)", sqlConnection);
                         sqlCommandMergeContentWithChatroom.CommandType = CommandType.Text;
 
@@ -427,14 +441,14 @@ namespace letsTalk
                             {
                                 chatroomsInUsers[connectedUser].Add(chat_id);
                                 if (connectedUser.UserContext.Channel != OperationContext.Current.Channel)
-                                    connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsAddedToChat(chat_id, users);
+                                {
+                                    connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsAddedToChat(chat_id, chatName, usersInChat);
+                                    connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsOnline(user);
+                                }
                             }
-
                         }
                     }
                 }
-
-
 
                 Console.WriteLine("Chatroom has been created (" + OperationContext.Current.Channel.GetHashCode() + ")");
                 return chat_id;
@@ -443,6 +457,23 @@ namespace letsTalk
             {
                 Console.WriteLine(ex.Message);
                 return 0;
+            }
+        }
+
+        public void AddedUserToChatIsOnline(int userId, int chatId)
+        {
+            lock (lockerSyncObj)
+            {
+                List<ConnectedUser> connectedUsers = this.chatroomsInUsers.
+                                                     Where(chat => chat.Value.Contains(chatId)).Select(user => user.Key).ToList();
+
+                foreach (var connectedUser in connectedUsers)
+                {
+                    if(connectedUser.UserContext.Channel != OperationContext.Current.Channel)
+                    {
+                        connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsOnline(userId);
+                    }
+                }
             }
         }
 
@@ -952,9 +983,16 @@ namespace letsTalk
                 string fullpathXML;
                 DateTime joinDate;
                 string userNickname;
+                string chatName;
+                List<UserInChat> usersInChat = new List<UserInChat>();
                 using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                 {
                     sqlConnection.Open();
+
+                    SqlCommand sqlCommandChatName = new SqlCommand(@"SELECT Name FROM Chatrooms WHERE Id = @ChatID", sqlConnection);
+                    sqlCommandChatName.Parameters.Add("@ChatID", SqlDbType.Int).Value = chatId;
+
+                    chatName = sqlCommandChatName.ExecuteScalar().ToString();
 
                     SqlCommand sqlCommandAddUserToChat = new SqlCommand(@"INSERT INTO User_Chatroom VALUES(@ChatID, @UserID) OUTPUT INSERTED.JoinDate", sqlConnection);
                     sqlCommandAddUserToChat.CommandType = CommandType.Text;
@@ -977,6 +1015,17 @@ namespace letsTalk
                     sqlCommandUserName.Parameters.Add("@Id", SqlDbType.Int).Value = userId;
 
                     userNickname = sqlCommandUserName.ExecuteScalar().ToString();
+
+                    SqlCommand sqlCommandFindUsersInChat = new SqlCommand(@"SELECT Users.Id, Users.Name FROM User_Chatroom INNER JOIN Users ON User_Chatroom.Id_User = Users.Id WHERE Id_Chat = @IdChat", sqlConnection);
+                    sqlCommandFindUsersInChat.Parameters.Add("@IdChat", SqlDbType.Int).Value = chatId;
+
+                    using (SqlDataReader sqlDataReader = sqlCommandFindUsersInChat.ExecuteReader())
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            usersInChat.Add(new UserInChat() { UserSqlId = sqlDataReader.GetInt32(0), UserName = sqlDataReader.GetString(1) });
+                        }
+                    }
                 }
 
                 lock (lockerSyncObj)
@@ -991,7 +1040,7 @@ namespace letsTalk
                                                                     .Select(u => u.Key).ToList();
 
                         ConnectedUser connectedUser = chatroomsInUsers.Keys.First(u => u.SqlID == userId);
-                        connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsAddedToChat(chatId, users.Select(u => u.SqlID).ToList());
+                        connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsAddedToChat(chatId, chatName, usersInChat);
 
                         Console.WriteLine("User joined callbacks...");
 
@@ -1046,6 +1095,17 @@ namespace letsTalk
                         sqlCommandUserName.Parameters.Add("@Id", SqlDbType.Int).Value = userId;
 
                         userNickname = sqlCommandUserName.ExecuteScalar().ToString();
+
+                        if (RulingMessage.UserLeft == rulingMessage)
+                        {
+
+                            SqlCommand sqlCommandDeleteUserFromChat = new SqlCommand(@"DELETE FROM User_Chatroom WHERE Id_User = @UserId AND Id_Chat = @ChatId", sqlConnection);
+
+                            sqlCommandDeleteUserFromChat.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                            sqlCommandDeleteUserFromChat.Parameters.Add("@ChatId", SqlDbType.Int).Value = chatId;
+
+                            sqlCommandDeleteUserFromChat.ExecuteNonQuery();
+                        }
                     }
 
                     transactionScope.Complete();
@@ -1093,7 +1153,33 @@ namespace letsTalk
         // Покинуть чатрум
         public void LeaveFromChatroom(int userId, int chatId)
         {
-            RemoveUser(userId, chatId, RulingMessage.UserLeft);
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(connection_string))
+                {
+                    sqlConnection.Open();
+
+                    SqlCommand sqlCommandIsAlreadyLeft = new SqlCommand(@"SELECT LeaveDate FROM User_Chatroom WHERE Id_User = @UserId AND Id_Chat = @ChatId", sqlConnection);
+
+                    sqlCommandIsAlreadyLeft.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommandIsAlreadyLeft.Parameters.Add("@ChatId", SqlDbType.Int).Value = chatId;
+
+                    using (SqlDataReader reader = sqlCommandIsAlreadyLeft.ExecuteReader())
+                    {
+                        reader.Read();
+                        if (reader.GetValue(0) == DBNull.Value)
+                        {
+                            sqlConnection.Close();
+                            reader.Close();
+                            RemoveUser(userId, chatId, RulingMessage.UserLeft);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         //Полное удаление чатрума
@@ -1334,5 +1420,7 @@ namespace letsTalk
 
             return messages;
         }
+
+
     }
 }

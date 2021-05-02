@@ -131,6 +131,12 @@
         <soap12:body use="literal" />
       </wsdl:input>
     </wsdl:operation>
+    <wsdl:operation name="AddedUserToChatIsOnline">
+      <soap12:operation soapAction="letsTalk.IChatService/Chat/AddedUserToChatIsOnline" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
     <wsdl:operation name="Connect">
       <soap12:operation soapAction="letsTalk.IChatService/Chat/Connect" style="document" />
       <wsdl:input>
