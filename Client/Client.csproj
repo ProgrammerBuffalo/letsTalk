@@ -209,6 +209,7 @@
     <Compile Include="Utility\Converters.cs" />
     <Compile Include="Utility\FileHelper.cs" />
     <Compile Include="Utility\MessageTemplateSelector.cs" />
+    <Compile Include="Utility\UCHelper.cs" />
     <Compile Include="Utility\ValidationRules.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
     <Compile Include="ViewModels\AvailableUsersViewModel.cs" />
@@ -478,6 +479,9 @@
     <Resource Include="Resources\Extensions\xls.png" />
     <Resource Include="Resources\Extensions\zip.png" />
     <Resource Include="Resources\loader.png" />
+    <Content Include="files\Animals.wav" />
+    <Content Include="files\control.wav" />
+    <Content Include="files\justin-timberlake-cry-me-a-river.wav" />
     <Content Include="Resources\Ringtons\alcatel_success.wav" />
     <Content Include="Resources\Ringtons\basic_whistle.wav" />
     <Content Include="Resources\Ringtons\doorslam.wav" />

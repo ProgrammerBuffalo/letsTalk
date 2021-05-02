@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:icons ="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="500">
+             d:DesignHeight="500" d:DesignWidth="500">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -32,10 +32,10 @@
                 <RowDefinition/>
                 <RowDefinition Height="30"/>
                 <RowDefinition/>
-                <RowDefinition Height="30"/>
+                <!--<RowDefinition Height="30"/>
                 <RowDefinition/>
                 <RowDefinition Height="30"/>
-                <RowDefinition/>
+                <RowDefinition/>-->
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -52,12 +52,12 @@
 
                 <StackPanel Grid.Column="0" VerticalAlignment="Center">
                     <TextBlock Text="User name:"/>
-                    <TextBox Text="{Binding Path=Client.UserName}" />
+                    <TextBlock Text="{Binding Path=Client.UserName}" />
                 </StackPanel>
-                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                <!--<StackPanel Grid.Column="1" VerticalAlignment="Center">
                     <TextBlock Text="User description:"/>
                     <TextBox Text="{Binding Path=Client.UserDesc}" />
-                </StackPanel>
+                </StackPanel>-->
                 <StackPanel Grid.Column="2" VerticalAlignment="Center">
                     <TextBlock Text="User avatar:"/>
                     <Ellipse Width="50" Height="50" StrokeThickness="3" Stroke="Black">
@@ -65,7 +65,7 @@
                             <ImageBrush ImageSource="{Binding Path=Client.UserImage}"/>
                         </Ellipse.Fill>
                     </Ellipse>
-                    <Button Content="Change" Command="{Binding ChangeAvatarCommand}"/>
+                    <!--<Button Content="Change" Command="{Binding ChangeAvatarCommand}"/>-->
                 </StackPanel>
             </Grid>
 
@@ -105,7 +105,7 @@
                 <Button Grid.Column="1" Content="Select from device" Command="{Binding DeviceWallpaperShowCommand}"/>
             </Grid>
 
-            <TextBlock Grid.Row="6" Text="Notify rington" Style="{StaticResource HeaderStyle}"/>
+            <!--<TextBlock Grid.Row="6" Text="Notify rington" Style="{StaticResource HeaderStyle}"/>
 
             <Grid Grid.Row="7">
                 <Grid.ColumnDefinitions>
@@ -132,7 +132,7 @@
 
             <Grid Grid.Row="9">
 
-            </Grid>
+            </Grid>-->
 
             <icons:PackIconFontAwesome Width="48"
                                        Height="48"

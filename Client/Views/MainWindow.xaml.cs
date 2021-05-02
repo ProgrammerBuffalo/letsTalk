@@ -12,6 +12,17 @@
             hamburgerMenu.Loaded += HamburgerMenu_Loaded;
         }
 
+        public void AddUC(System.Windows.Controls.UserControl uc)
+        {
+            System.Windows.Controls.Grid.SetColumn(uc, 1);
+            grid.Children.Add(uc);
+        }
+
+        public void RemoveUC(System.Windows.Controls.UserControl uc)
+        {
+            grid.Children.Remove(uc);
+        }
+
         private void HamburgerMenu_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
             if (hamburgerMenu.IsPaneOpen)

@@ -4,19 +4,20 @@ using Client.Utility;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
+//using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 
 namespace Client.ViewModels
 {
-    public class MainViewModel : System.ComponentModel.INotifyPropertyChanged, ChatCallback
+    public class MainViewModel : System.ComponentModel.INotifyPropertyChanged, ChatCallback, IHelperUC
     {
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        public event UCChangedEventHandler RemoveUC;
+        public event UCChangedEventHandler AddUC;
 
         public delegate void ChatDelegate(Models.Chat chat);
 
@@ -26,14 +27,14 @@ namespace Client.ViewModels
         private ObservableCollection<Models.Chat> chats;
         private Models.Chat selectedChat;
 
-        private ContentControl currentView;
+        private UserControl currentView;
 
         public MainViewModel()
         {
             LoadedWindowCommand = new Command(LoadedWindow);
             ClosedWindowCommand = new Command(ClosedWindow);
             SelectedChatChangedCommand = new Command(SelectedChatChanged);
-            AddUserCommand = new Command(AddUser);
+            //AddUserCommand = new Command(AddUser);
             CreateGroupCommand = new Command(CreateGroup);
             SettingsCommand = new Command(Settings);
 
@@ -46,8 +47,13 @@ namespace Client.ViewModels
         {
             ChatClient = new ChatClient(new InstanceContext(this));
             ClientUserInfo = new ClientUserInfo(sqlId, name);
-
+            //"C:\\Users\\user\\AppData\\Local\\Temp\\tmp7A5D.tmp"
+            //"C:\\Users\\user\\AppData\\Local\\Temp\\tmpA888.tmp"
             ChatClient.Connect(sqlId, name);
+            //string temp = System.IO.Path.GetTempFileName();
+            //byte[] music = System.IO.File.ReadAllBytes("files\\control.wav");
+            //System.IO.File.WriteAllBytes(temp, music);
+            //System.IO.File.WriteAllBytes("aaa.wav", music);            
             //Demo();
         }
 
@@ -55,7 +61,7 @@ namespace Client.ViewModels
         public ICommand ClosedWindowCommand { get; }
         //public ICommand SelectedHambugerOptionItemCommand { get; }
         public ICommand SelectedChatChangedCommand { get; }
-        public ICommand AddUserCommand { get; }
+        //public ICommand AddUserCommand { get; }
         public ICommand CreateGroupCommand { get; }
         public ICommand SettingsCommand { get; }
 
@@ -64,7 +70,7 @@ namespace Client.ViewModels
         public ObservableCollection<Models.Chat> Chats { get => chats; set => Set(ref chats, value); }
         public Models.Chat SelectedChat { get => selectedChat; set => Set(ref selectedChat, value); }
 
-        public ContentControl CurrentView { get => currentView; set => Set(ref currentView, value); }
+        //public UserControl CurrentView { get => currentView; set => Set(ref currentView, value); }
 
         // После того как окно полностью прогрузилось, у нас происходит вызов загрузки аватарки с сервера к пользователю
         public void LoadedWindow(object sender)
@@ -78,7 +84,7 @@ namespace Client.ViewModels
             {
                 MessageBox.Show(ex.Message);
             }
-            catch (IOException)
+            catch (System.IO.IOException)
             {
                 MessageBox.Show("avatar image could not be download");
             }
@@ -88,37 +94,43 @@ namespace Client.ViewModels
         {
             if (selectedChat != null)
             {
+                RemoveUC.Invoke(currentView);
                 Views.ChatUC chatView = new Views.ChatUC();
                 ChatViewModel viewModel = new ChatViewModel(ChatClient, this);
                 chatView.getControl = new Views.ChatUC.GetControlDelegate(viewModel.SetScrollViewer);
                 chatView.DataContext = viewModel;
-                CurrentView = chatView;
+                currentView = chatView;
+                AddUC.Invoke(currentView);
             }
         }
 
-        private void AddUser(object param)
-        {
-            UserControl control = new Views.AddUserUC();
-            AddUserViewModel viewModel = new AddUserViewModel(ChatClient);
-            viewModel.AddChat += AddChatToChats;
-            control.DataContext = viewModel;
-            CurrentView = control;
-        }
+        //private void AddUser(object param)
+        //{
+        //    UserControl control = new Views.AddUserUC();
+        //    AddUserViewModel viewModel = new AddUserViewModel(ChatClient);
+        //    viewModel.AddChat += AddChatToChats;
+        //    control.DataContext = viewModel;
+        //    CurrentView = control;
+        //}
 
         private void CreateGroup(object param)
         {
+            RemoveUC.Invoke(currentView);
             UserControl control = new Views.CreateGroupUC();
             CreateGroupViewModel viewModel = new CreateGroupViewModel(ChatClient);
             viewModel.AddChat += AddChatToChats;
             control.DataContext = viewModel;
-            CurrentView = control;
+            currentView = control;
+            AddUC.Invoke(currentView);
         }
 
         private void Settings(object param)
         {
+            RemoveUC.Invoke(currentView);
             UserControl control = new Views.UCSettings();
             control.DataContext = new SettingsViewModel();
-            CurrentView = control;
+            currentView = control;
+            AddUC.Invoke(currentView);
         }
 
         private void UserLeftFromChatroom(int chatId, int userId)
@@ -138,10 +150,10 @@ namespace Client.ViewModels
             }
         }
 
-        private void UserAddedToChat(int chatId, int userId)
-        {
+        //private void UserAddedToChat(int chatId, int userId)
+        //{
 
-        }
+        //}
 
         private void UserRemovedFromChat(int chatId, int userId)
         {
@@ -195,7 +207,7 @@ namespace Client.ViewModels
 
         public void UserJoinedToChatroom(int userId)
         {
-           //throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void UserLeftChatroom(int chatId, int userId)

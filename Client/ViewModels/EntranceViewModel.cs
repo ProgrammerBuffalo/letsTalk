@@ -88,9 +88,13 @@ namespace Client.ViewModels
                 {
                     ChatService.ServerUserInfo serverUserInfo = unitClient.Authorization(new ChatService.AuthenticationUserInfo() { Login = Login, Password = Password });
 
-                    MainWindow mainWindow = new MainWindow();
-                    mainWindow.DataContext = new MainViewModel(serverUserInfo.Name, serverUserInfo.SqlId);
-                    mainWindow.Show();
+                    MainWindow window = new MainWindow();
+                    MainViewModel viewModel = new MainViewModel(serverUserInfo.Name, serverUserInfo.SqlId);
+                    viewModel.AddUC += window.AddUC;
+                    viewModel.RemoveUC += window.RemoveUC;
+                    window.DataContext = viewModel;
+                    //mainWindow.removeUCDelegate += viewModel.
+                    window.Show();
                     entranceWindow.Close();
                 }
                 catch (FaultException<ChatService.AuthorizationExceptionFault> ex)

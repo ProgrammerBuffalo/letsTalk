@@ -87,13 +87,13 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid>
+    <Grid x:Name="grid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="col1"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
 
-        <UserControl x:Name="uc" Grid.Column="1" Content="{Binding CurrentView}"/>
+        <!--<UserControl x:Name="uc" Grid.Column="1" Content="{Binding CurrentView}"/>-->
 
         <controls:HamburgerMenu x:Name="hamburgerMenu" PaneBackground="#ffff1a" PaneForeground="Gray"
                                  OptionsItemTemplate="{StaticResource HamburgerMenuOptionsTemplate}"
@@ -113,17 +113,17 @@
                         </controls:HamburgerMenuIconItem.Icon>
                     </controls:HamburgerMenuIconItem>-->
 
-                    <controls:HamburgerMenuIconItem Tag="UC2" Label="All Chatrooms" Command="{Binding CreateGroupCommand}">
+                    <controls:HamburgerMenuIconItem Tag="UC2" Label="Create Chatroom" Command="{Binding CreateGroupCommand}">
                         <controls:HamburgerMenuIconItem.Icon>
                             <icons:PackIconMaterial  Kind="AccountMultiplePlus" Width="25" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         </controls:HamburgerMenuIconItem.Icon>
                     </controls:HamburgerMenuIconItem>
 
-                    <controls:HamburgerMenuIconItem Tag="UCAddUser" Label="Add User" Command="{Binding AddUserCommand}">
+                    <!--<controls:HamburgerMenuIconItem Tag="UCAddUser" Label="Add User" Command="{Binding AddUserCommand}">
                         <controls:HamburgerMenuIconItem.Icon>
                             <icons:PackIconMaterial  Kind="AccountPlus" Width="25" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         </controls:HamburgerMenuIconItem.Icon>
-                    </controls:HamburgerMenuIconItem>
+                    </controls:HamburgerMenuIconItem>-->
 
                     <controls:HamburgerMenuIconItem Tag="UCSettings" Label="Settings" Command="{Binding SettingsCommand}">
                         <controls:HamburgerMenuIconItem.Icon>
