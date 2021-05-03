@@ -142,7 +142,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button Grid.Column="0" Margin="10, 2" Style="{StaticResource ButtonEllipseStyle}"/>
+                        <Button Command="{Binding Path=DataContext.ChangeAvatarCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" Grid.Column="0" Margin="10, 2" Style="{StaticResource ButtonEllipseStyle}"/>
 
                         <TextBlock Grid.Column="1" 
                                 HorizontalAlignment="Center" VerticalAlignment="Center"

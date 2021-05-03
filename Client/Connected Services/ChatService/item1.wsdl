@@ -80,8 +80,14 @@
   <wsdl:message name="Chat_ReplyMessageIsWriting_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ReplyMessageIsWriting" />
   </wsdl:message>
-  <wsdl:message name="Chat_NotifyUserFileSendedToChat_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:NotifyUserFileSendedToChat" />
+  <wsdl:message name="Chat_NotifyUserSendedFileToChat_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:NotifyUserSendedFileToChat" />
+  </wsdl:message>
+  <wsdl:message name="Chat_NotifyUserChangedAvatar_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:NotifyUserChangedAvatar" />
+  </wsdl:message>
+  <wsdl:message name="Chat_NotifyСhatroomAvatarIsChanged_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:NotifyСhatroomAvatarIsChanged" />
   </wsdl:message>
   <wsdl:portType name="Chat">
     <wsdl:operation name="MessageIsWriting">
@@ -144,8 +150,14 @@
     <wsdl:operation name="ReplyMessageIsWriting">
       <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/ReplyMessageIsWriting" message="tns:Chat_ReplyMessageIsWriting_OutputCallbackMessage" />
     </wsdl:operation>
-    <wsdl:operation name="NotifyUserFileSendedToChat">
-      <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/NotifyUserFileSendedToChat" message="tns:Chat_NotifyUserFileSendedToChat_OutputCallbackMessage" />
+    <wsdl:operation name="NotifyUserSendedFileToChat">
+      <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/NotifyUserSendedFileToChat" message="tns:Chat_NotifyUserSendedFileToChat_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="NotifyUserChangedAvatar">
+      <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/NotifyUserChangedAvatar" message="tns:Chat_NotifyUserChangedAvatar_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="NotifyСhatroomAvatarIsChanged">
+      <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/NotifyСhatroomAvatarIsChanged" message="tns:Chat_NotifyСhatroomAvatarIsChanged_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

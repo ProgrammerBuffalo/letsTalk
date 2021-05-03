@@ -849,8 +849,14 @@ namespace Client.ChatService {
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/ReplyMessageIsWriting")]
         void ReplyMessageIsWriting(System.Nullable<int> userId, int chatroomId);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/NotifyUserFileSendedToChat")]
-        void NotifyUserFileSendedToChat(Client.ChatService.ServiceMessageFile serviceMessageFile, int chatroomId);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/NotifyUserSendedFileToChat")]
+        void NotifyUserSendedFileToChat(Client.ChatService.ServiceMessageFile serviceMessageFile, int chatroomId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/NotifyUserChangedAvatar")]
+        void NotifyUserChangedAvatar(int userId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/NotifyСhatroomAvatarIsChanged")]
+        void NotifyСhatroomAvatarIsChanged(int chatId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

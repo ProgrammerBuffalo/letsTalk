@@ -100,7 +100,14 @@ namespace letsTalk
 
         //Оповещение пользователей, о добавлении в чатрум файла
         [OperationContract(IsOneWay = true)]
-        void NotifyUserFileSendedToChat(ServiceMessageFile serviceMessageFile, int chatroomId);
+        void NotifyUserSendedFileToChat(ServiceMessageFile serviceMessageFile, int chatroomId);
 
+        //Оповещение пользователей, что была изменена аватарка пользователя
+        [OperationContract(IsOneWay = true)]
+        void NotifyUserChangedAvatar(int userId);
+
+        //Оповещение пользователей, что была изменена аватарка клиента
+        [OperationContract(IsOneWay = true)]
+        void NotifyСhatroomAvatarIsChanged(int chatId);
     }
 }
