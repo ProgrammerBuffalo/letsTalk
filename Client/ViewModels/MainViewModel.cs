@@ -1,9 +1,11 @@
 ﻿using Client.ChatService;
 using Client.Models;
 using Client.Utility;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.ServiceModel;
@@ -37,10 +39,59 @@ namespace Client.ViewModels
             AddUserCommand = new Command(AddUser);
             CreateGroupCommand = new Command(CreateGroup);
             SettingsCommand = new Command(Settings);
+            ChangeAvatarCommand = new Command(ChangeAvatar);
 
             Chats = new ObservableCollection<Models.Chat>();
 
             //SelectedHambugerOptionItemCommand = new Command(SelectedHambugerOptionItem);
+        }
+
+        private async void ChangeAvatar(object obj)
+        {
+            MessageBox.Show("!!!");
+            UploadFileInfo uploadFileInfo = null;
+
+            try
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Multiselect = false;
+                openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg; *.jpeg; *.png";
+                if (openFileDialog.ShowDialog() == true)
+                {
+
+                    MemoryStream memoryStream = Utility.ImageCropper.GetCroppedImage(openFileDialog.FileName);
+                    memoryStream.Position = 0;
+
+                    uploadFileInfo = new ChatService.UploadFileInfo { FileName = openFileDialog.FileName, FileStream = memoryStream, Responsed_SqlId = clientUserInfo.SqlId };
+                    ChatService.AvatarClient avatarClient = new ChatService.AvatarClient();
+
+                    if (uploadFileInfo.FileStream.CanRead)
+                        await avatarClient.UserAvatarUploadAsync(uploadFileInfo.FileName, uploadFileInfo.Responsed_SqlId, uploadFileInfo.FileStream);
+
+                    memoryStream.Position = 0;
+
+                    var bitmap = new BitmapImage();
+
+                    bitmap.BeginInit();
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.StreamSource = memoryStream;
+                    bitmap.EndInit();
+
+                    clientUserInfo.UserImage = bitmap;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                if (uploadFileInfo != null)
+                {
+                    if (uploadFileInfo.FileStream != null)
+                        uploadFileInfo.FileStream.Dispose();
+                }
+            }
         }
 
         public MainViewModel(string name, int sqlId) : this()
@@ -59,6 +110,8 @@ namespace Client.ViewModels
         public ICommand AddUserCommand { get; }
         public ICommand CreateGroupCommand { get; }
         public ICommand SettingsCommand { get; }
+
+        public ICommand ChangeAvatarCommand { get; }
 
         public ClientUserInfo ClientUserInfo { get => clientUserInfo; set => Set(ref clientUserInfo, value); } // Вся информация о подключенном юзере
 
@@ -226,7 +279,9 @@ namespace Client.ViewModels
         {
             var chat = FindChatroom(chatroomId);
             if (chat != null)
+            {
                 chat.Messages.Add(chat.GetMessageType(message.UserId, new TextMessage(message.Text, message.DateTime)));
+            }
         }
 
         public void ReplyMessageIsWriting(Nullable<int> userSqlId, int chatSqlId)
@@ -234,7 +289,7 @@ namespace Client.ViewModels
             ChatIsWriting(chatSqlId, userSqlId);
         }
 
-        public void NotifyUserFileSendedToChat(ServiceMessageFile serviceMessageFile, int chatroomId)
+        public void NotifyUserSendedFileToChat(ServiceMessageFile serviceMessageFile, int chatroomId)
         {
             var chat = FindChatroom(chatroomId);
             if (chat != null)
@@ -286,11 +341,23 @@ namespace Client.ViewModels
                 return clientChatrooms;
             }));
 
-            foreach (Models.Chat chat in chats)
-            {
-                chat.DownloadAvatarAsync();
-            }
+        }
 
+        public void NotifyUserChangedAvatar(int userId)
+        {
+            foreach(Models.Chat chat in Chats)
+            {
+                AvailableUser user = chat.FindUser(userId);
+                if (user != null)
+                {
+                    chat.DownloadAvatarAsync(user.SqlId);
+                }
+            }
+        }
+
+        public void NotifyСhatroomAvatarIsChanged(int chatId)
+        {
+            throw new NotImplementedException();
         }
 
         //private void Demo()

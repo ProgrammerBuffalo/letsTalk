@@ -149,7 +149,6 @@ namespace Client.Models
             return imageMessage;
         }
 
-        public virtual async void DownloadAvatarAsync() { }
 
         public int SqlId { get; set; }
 
@@ -170,6 +169,48 @@ namespace Client.Models
         public abstract void UserLeavedChatroom(int userId);
 
         public abstract void RemoveUser(AvailableUser user);
+
+        public abstract AvailableUser FindUser(Nullable<int> userId);
+
+        public async void DownloadAvatarAsync(int id)
+        {
+            ChatService.DownloadRequest request = new ChatService.DownloadRequest(SqlId);
+            var avatarClient = new ChatService.AvatarClient();
+
+            Stream stream = null;
+            long lenght = 0;
+
+            try
+            {
+                await System.Threading.Tasks.Task.Run(() =>
+                {
+                    avatarClient.UserAvatarDownload(id, out lenght, out stream);
+                    if (lenght <= 0)
+                        return;
+                    MemoryStream memoryStream = Utility.FileHelper.ReadFileByPart(stream);
+
+                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        var bitmapImage = new BitmapImage();
+                        bitmapImage.BeginInit();
+                        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmapImage.StreamSource = memoryStream;
+                        bitmapImage.EndInit();
+
+                        Avatar = bitmapImage;
+                    });
+                    memoryStream.Close();
+                    memoryStream.Dispose();
+                    stream.Close();
+                    stream.Dispose();
+                });
+
+            }
+            catch (System.ServiceModel.FaultException<ChatService.ConnectionExceptionFault> ex)
+            {
+                throw ex;
+            }
+        }
 
         protected void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
         {
@@ -207,6 +248,7 @@ namespace Client.Models
         public ChatOne(int sqlId, AvailableUser user) : this(sqlId)
         {
             User = user;
+            DownloadAvatarAsync(user.SqlId);
         }
 
         public ChatOne(IEnumerable<SourceMessage> messages, AvailableUser user, int count) : base(messages, count)
@@ -251,54 +293,16 @@ namespace Client.Models
             if (this.user.SqlId == user.SqlId) this.user = null;
         }
 
-        public override async void DownloadAvatarAsync()
-        {
-            if (this.user == null)
-                return;
-
-            ChatService.DownloadRequest request = new ChatService.DownloadRequest(SqlId);
-            var avatarClient = new ChatService.AvatarClient();
-
-            Stream stream = null;
-            long lenght = 0;
-
-            try
-            {
-                await System.Threading.Tasks.Task.Run(() =>
-                {
-                    avatarClient.UserAvatarDownload(user.SqlId, out lenght, out stream);
-                    if (lenght <= 0)
-                        return;
-                    MemoryStream memoryStream = Utility.FileHelper.ReadFileByPart(stream);
-
-                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        var bitmapImage = new BitmapImage();
-                        bitmapImage.BeginInit();
-                        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                        bitmapImage.StreamSource = memoryStream;
-                        bitmapImage.EndInit();
-
-                        Avatar = bitmapImage;
-                    });
-                    memoryStream.Close();
-                    memoryStream.Dispose();
-                    stream.Close();
-                    stream.Dispose();
-                });
-
-            }
-            catch (System.ServiceModel.FaultException<ChatService.ConnectionExceptionFault> ex)
-            {
-                throw ex;
-            }
-        }
-
         public override SourceMessage GetMessageType(int senderId, Message message)
         {
             if (senderId == ClientUserInfo.getInstance().SqlId)
                 return new UserMessage(message);
             return new SourceMessage(message);
+        }
+
+        public override AvailableUser FindUser(int? userId)
+        {
+            return user;
         }
     }
 
@@ -329,10 +333,16 @@ namespace Client.Models
             allColors[12] = "#8c0315";
         }
 
-        //убрать
         public ChatGroup()
         {
-
+            Users.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(
+               delegate (object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+               {
+                   if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+                   {
+                       DownloadAvatarAsync((e.NewItems[0] as AvailableUser).SqlId);
+                   }
+               });
         }
 
         public ChatGroup(int sqlId, string groupName, IEnumerable<AvailableUser> users) : base(sqlId)
@@ -392,11 +402,11 @@ namespace Client.Models
 
         public override void RemoveUser(AvailableUser user)
         {
-            if(Users.Remove(user))
+            if (Users.Remove(user))
                 Messages.Add(SystemMessage.UserRemoved(DateTime.Now, user.Name));
         }
 
-        public AvailableUser FindUser(Nullable<int> userId)
+        public override AvailableUser FindUser(Nullable<int> userId)
         {
             if (userId == null)
                 return null;
@@ -404,47 +414,7 @@ namespace Client.Models
                 if (user.SqlId == userId)
                     return user;
             return null;
-        }
-
-        public override async void DownloadAvatarAsync()
-        {
-            ChatService.DownloadRequest request = new ChatService.DownloadRequest(SqlId);
-            var avatarClient = new ChatService.AvatarClient();
-
-            Stream stream = null;
-            long lenght = 0;
-
-            try
-            {
-                await System.Threading.Tasks.Task.Run(() =>
-                {
-                    avatarClient.ChatAvatarDownload(SqlId, out lenght, out stream);
-                    if (lenght <= 0)
-                        return;
-                    MemoryStream memoryStream = Utility.FileHelper.ReadFileByPart(stream);
-
-                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        var bitmapImage = new BitmapImage();
-                        bitmapImage.BeginInit();
-                        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                        bitmapImage.StreamSource = memoryStream;
-                        bitmapImage.EndInit();
-
-                        Image = bitmapImage;
-                    });
-                    memoryStream.Close();
-                    memoryStream.Dispose();
-                    stream.Close();
-                    stream.Dispose();
-                });
-
-            }
-            catch (System.ServiceModel.FaultException<ChatService.ConnectionExceptionFault> ex)
-            {
-                throw ex;
-            }
-        }
+        }        
 
         public AvailableUser GetUserById(int sqlId)
         {

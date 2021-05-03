@@ -208,6 +208,8 @@ namespace letsTalk
         // Здесь сервер заносит картинку в файловую таблицу, процесс обратный методу AvatarDownload
         private void AvatarUpload(string selector, UploadFileInfo uploadRequest)
         {
+            Guid exsistingAvatar = Guid.Empty;
+            Guid stream_id;
             try
             {
                 using (TransactionScope trScope = new TransactionScope())
@@ -215,6 +217,28 @@ namespace letsTalk
                     using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                     {
                         sqlConnection.Open();
+
+                        SqlCommand sqlCommandFindExsistAvatar = new SqlCommand($@"SELECT stream_id FROM {selector} WHERE {selector}.Id = @Id", sqlConnection);
+                        sqlCommandFindExsistAvatar.Parameters.Add("@Id", SqlDbType.Int).Value = uploadRequest.Responsed_SqlId;
+
+                        using (SqlDataReader dataReader = sqlCommandFindExsistAvatar.ExecuteReader())
+                        {
+                            dataReader.Read();
+                            Guid.TryParse(dataReader[0].ToString(), out exsistingAvatar);
+                        }
+
+                        if (exsistingAvatar != Guid.Empty)
+                        {
+                            SqlCommand sqlCommandUpdateStreamIdToNull = new SqlCommand($@"UPDATE {selector} SET stream_id = null WHERE {selector}.Id = @Id", sqlConnection);
+                            sqlCommandUpdateStreamIdToNull.Parameters.Add("@Id", SqlDbType.Int).Value = uploadRequest.Responsed_SqlId;
+
+                            sqlCommandUpdateStreamIdToNull.ExecuteNonQuery();
+
+                            SqlCommand sqlCommand = new SqlCommand(@"DELETE FROM dbo.DataFT WHERE stream_id = @stream_id", sqlConnection);
+
+                            sqlCommand.Parameters.Add("@stream_id", SqlDbType.UniqueIdentifier).Value = exsistingAvatar;
+                            sqlCommand.ExecuteNonQuery();
+                        }
 
                         SqlCommand sqlCommandAddAvatar = new SqlCommand($@" INSERT INTO DataFT(file_stream, name, path_locator)
                                                                         OUTPUT INSERTED.stream_id, GET_FILESTREAM_TRANSACTION_CONTEXT(),
@@ -226,7 +250,6 @@ namespace letsTalk
                         string fileName = uploadRequest.FileName;
                         sqlCommandAddAvatar.Parameters.Add("@name", SqlDbType.NVarChar).Value = "AVATAR" + uploadRequest.Responsed_SqlId + $".{fileName.Substring(fileName.LastIndexOf(".") + 1)}";
 
-                        Guid stream_id;
                         byte[] transaction_context;
                         string full_path;
 
@@ -274,16 +297,64 @@ namespace letsTalk
 
                 throw new FaultException<StreamExceptionFault>(streamExceptionFault, streamExceptionFault.Message);
             }
+
         }
 
         public void UserAvatarUpload(UploadFileInfo uploadRequest)
         {
             AvatarUpload("Users", uploadRequest);
+
+            try
+            {
+                lock (lockerSyncObj)
+                {
+                    List<int> requestedChatrooms = chatroomsInUsers.FirstOrDefault(c => c.Key.SqlID == uploadRequest.Responsed_SqlId).Value;
+                    if (requestedChatrooms != null)
+                    {
+                        List<ConnectedUser> connectedFriends = chatroomsInUsers.Where
+                            (chiu => chiu.Value.Intersect(requestedChatrooms) != null).Select(u => u.Key).ToList();
+
+                        foreach (ConnectedUser connectedUser in connectedFriends)
+                        {
+                            if (connectedUser.UserContext.Channel != OperationContext.Current.Channel)
+                            {
+                                connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserChangedAvatar(uploadRequest.Responsed_SqlId);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         public void ChatAvatarUpload(UploadFileInfo uploadRequest)
         {
             AvatarUpload("Chatrooms", uploadRequest);
+
+            try
+            {
+                lock (lockerSyncObj)
+                {
+                    List<ConnectedUser> connectedUsers = chatroomsInUsers.Where
+                        (c => c.Value.Contains(uploadRequest.Responsed_SqlId)).Select(u => u.Key).ToList();
+
+                    foreach (ConnectedUser user in connectedUsers)
+                    {
+                        if (user.UserContext.Channel != OperationContext.Current.Channel)
+                        {
+                            user.UserContext.GetCallbackChannel<IChatCallback>().NotifyСhatroomAvatarIsChanged(uploadRequest.Responsed_SqlId);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
         }
 
         // Получает список всех существующий пользователей в Базе Данных
@@ -469,7 +540,7 @@ namespace letsTalk
 
                 foreach (var connectedUser in connectedUsers)
                 {
-                    if(connectedUser.UserContext.Channel != OperationContext.Current.Channel)
+                    if (connectedUser.UserContext.Channel != OperationContext.Current.Channel)
                     {
                         connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsOnline(userId);
                     }
@@ -1322,7 +1393,7 @@ namespace letsTalk
                     {
                         if (user.SqlID != chatToServer.Responsed_UserSqlId)
                         {
-                            user.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserFileSendedToChat(serviceMessageFile, chatToServer.ChatroomId);
+                            user.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserSendedFileToChat(serviceMessageFile, chatToServer.ChatroomId);
                         }
 
                     }

@@ -208,6 +208,7 @@
     <Compile Include="Utility\Command.cs" />
     <Compile Include="Utility\Converters.cs" />
     <Compile Include="Utility\FileHelper.cs" />
+    <Compile Include="Utility\ImageCropper.cs" />
     <Compile Include="Utility\MessageTemplateSelector.cs" />
     <Compile Include="Utility\ValidationRules.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />

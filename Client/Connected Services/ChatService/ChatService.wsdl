@@ -206,8 +206,20 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="NotifyUserFileSendedToChat">
-      <soap12:operation soapAction="letsTalk.IChatService/Chat/NotifyUserFileSendedToChat" style="document" />
+    <wsdl:operation name="NotifyUserSendedFileToChat">
+      <soap12:operation soapAction="letsTalk.IChatService/Chat/NotifyUserSendedFileToChat" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="NotifyUserChangedAvatar">
+      <soap12:operation soapAction="letsTalk.IChatService/Chat/NotifyUserChangedAvatar" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="NotifyСhatroomAvatarIsChanged">
+      <soap12:operation soapAction="letsTalk.IChatService/Chat/NotifyСhatroomAvatarIsChanged" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
