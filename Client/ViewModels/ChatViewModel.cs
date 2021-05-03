@@ -142,13 +142,13 @@ namespace Client.ViewModels
         private async Task LoadMore()
         {
             ChatService.UnitClient unitClient = new ChatService.UnitClient();
-            ChatService.ServiceMessage[] serviceMessages = await unitClient.MessagesFromOneChatAsync(mainVM.SelectedChat.SqlId, mainVM.ClientUserInfo.SqlId, mainVM.SelectedChat._messageOffset, mainVM.SelectedChat._messageCount, mainVM.SelectedChat._offsetDate);
+            ChatService.ServiceMessage[] serviceMessages = await unitClient.MessagesFromOneChatAsync(Chat.SqlId, mainVM.ClientUserInfo.SqlId, Chat._messageOffset, Chat._messageCount, Chat._offsetDate);
 
             if (serviceMessages == null)
             {
-                mainVM.SelectedChat.Messages.Insert(0, SystemMessage.ShiftDate(mainVM.SelectedChat._offsetDate));
-                mainVM.SelectedChat._messageOffset = 0;
-                mainVM.SelectedChat._offsetDate = mainVM.SelectedChat._offsetDate.AddDays(-1);
+                Chat.Messages.Insert(0, SystemMessage.ShiftDate(Chat._offsetDate));
+                Chat._messageOffset = 0;
+                Chat._offsetDate = Chat._offsetDate.AddDays(-1);
                 if (_countLeft > 0)
                     await LoadMore();
                 return;
@@ -161,9 +161,9 @@ namespace Client.ViewModels
 
             if (serviceMessages.First().DateTime == DateTime.MaxValue)
             {
-                mainVM.SelectedChat.Messages.Insert(0, SystemMessage.ShiftDate(mainVM.SelectedChat._offsetDate));
-                mainVM.SelectedChat._messageOffset = 0;
-                mainVM.SelectedChat._offsetDate = mainVM.SelectedChat._offsetDate.AddDays(-1);
+                Chat.Messages.Insert(0, SystemMessage.ShiftDate(Chat._offsetDate));
+                Chat._messageOffset = 0;
+                Chat._offsetDate = Chat._offsetDate.AddDays(-1);
                 await LoadMore();
                 return;
             }
@@ -179,12 +179,12 @@ namespace Client.ViewModels
                         if (message is ChatService.ServiceMessageText)
                         {
                             var textMessage = message as ChatService.ServiceMessageText;
-                            messagesFromChat.Add(mainVM.SelectedChat.GetMessageType(textMessage.UserId, new TextMessage(textMessage.Text, textMessage.DateTime)));
+                            messagesFromChat.Add(Chat.GetMessageType(textMessage.UserId, new TextMessage(textMessage.Text, textMessage.DateTime)));
                         }
                         else if (message is ChatService.ServiceMessageFile)
                         {
                             var fileMessage = message as ChatService.ServiceMessageFile;
-                            messagesFromChat.Add(mainVM.SelectedChat.GetMessageType(fileMessage.UserId, new FileMessage(fileMessage.FileName, fileMessage.DateTime, fileMessage.StreamId) { IsLoaded = true }));
+                            messagesFromChat.Add(Chat.GetMessageType(fileMessage.UserId, new FileMessage(fileMessage.FileName, fileMessage.DateTime, fileMessage.StreamId) { IsLoaded = true }));
                         }
                         else
                         {
@@ -204,15 +204,14 @@ namespace Client.ViewModels
                         }
 
                     }
-
                     return messagesFromChat;
                 }));
 
-                mainVM.SelectedChat._messageOffset += messages.Count;
+                Chat._messageOffset += messages.Count;
                 _countLeft -= messages.Count;
 
                 foreach (var message in messages)
-                    mainVM.SelectedChat.Messages.Insert(0, message);
+                    Chat.Messages.Insert(0, message);
 
                 if (_countLeft > 0)
                 {
@@ -227,8 +226,8 @@ namespace Client.ViewModels
         {
             if (MessageText.Length < 1)
                 return;
-            ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = MessageText, UserId = client.SqlId }, mainVM.SelectedChat.SqlId);
-            mainVM.SelectedChat.Messages.Add(mainVM.SelectedChat.GetMessageType(client.SqlId, new TextMessage(MessageText, DateTime.Now)));
+            ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = MessageText, UserId = client.SqlId }, Chat.SqlId);
+            Chat.Messages.Add(Chat.GetMessageType(client.SqlId, new TextMessage(MessageText, DateTime.Now)));
             MessageText = "";
         }
 
@@ -270,13 +269,12 @@ namespace Client.ViewModels
         //тут должен быть твой метод для сообшения другим пользователям что узер покинул chat
         public void LeaveChat(object param)
         {
-            if (mainVM.SelectedChat != null)
+            if (Chat != null)
             {
                 chat.Messages.Add(SystemMessage.UserLeftChat(DateTime.Now, client.UserName));
                 ChatClient.LeaveFromChatroom(client.SqlId, Chat.SqlId);
                 Chat.CanWrite = false;
                 chat.Messages.Clear();
-                mainVM.SelectedChat = null;
                 mainVM.Chats.Remove(chat);
             }
         }
@@ -442,7 +440,7 @@ namespace Client.ViewModels
 
         private void Unload(object param)
         {
-            if (mainVM.SelectedChat != null)
+            if (Chat != null)
             {
                 ChatClient.MessageIsWriting(Chat.SqlId, null);
                 if (curMediaMessage != null)
