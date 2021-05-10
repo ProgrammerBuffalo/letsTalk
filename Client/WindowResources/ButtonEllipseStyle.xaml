@@ -23,7 +23,7 @@
                             </Icons:PackIconMaterial>
 
                             <Border.Background>
-                                <ImageBrush ImageSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ClientUserInfo.UserImage}" Stretch="Fill"/>
+                                <ImageBrush ImageSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.Client.UserImage}" Stretch="Fill"/>
                             </Border.Background>
 
                         </Border>

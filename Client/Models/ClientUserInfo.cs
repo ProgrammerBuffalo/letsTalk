@@ -13,32 +13,31 @@ namespace Client.Models
     {
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 
-        private static ClientUserInfo instance;
+        //private static ClientUserInfo instance;
 
         private string userName;
         private string userDesc; // описание пользователя (Hey there i am using Lets Talk!!!)
         private BitmapImage userImage = null; // Аватарка
         private Activity activity; // поле для показа подключенных и не подключенных клиентов
 
+        //public static ClientUserInfo getInstance()
+        //{
+        //    return instance;
+        //}
 
-        public static ClientUserInfo getInstance()
-        {
-            return instance;
-        }
-
-        public ClientUserInfo(string userName, string userDesc, string imagePath, Activity activity)
-        {
-            UserName = userName;
-            UserDesc = userDesc;
-            UserImage = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + imagePath));
-            Activity = activity;
-        }
+        //public ClientUserInfo(string userName, string userDesc, string imagePath, Activity activity)
+        //{
+        //    UserName = userName;
+        //    UserDesc = userDesc;
+        //    UserImage = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + imagePath));
+        //    Activity = activity;
+        //}
 
         public ClientUserInfo(int sqlId, string userName)
         {
             SqlId = sqlId;
             UserName = userName;
-            instance = this;
+            //instance = this;
         }
 
         public int SqlId { private set; get; } // Id в БД
@@ -50,6 +49,8 @@ namespace Client.Models
         public Activity Activity { get => activity; set => Set(ref activity, value); }
 
         public BitmapImage UserImage { get => userImage; set => Set(ref userImage, value); }
+
+        public Dictionary<int, AvailableUser> Users { get; set; }
 
         public async void DownloadAvatarAsync()
         {

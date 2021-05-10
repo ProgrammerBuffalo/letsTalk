@@ -6,8 +6,9 @@
                     xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/WindowResources/ChatsDictionary.xaml"/>
+        <ResourceDictionary Source="/WindowResources/ThemeDictionary.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-
+    
     <u:TicksToTime x:Key="TicksToTime"/>
     <u:PathToExtension x:Key="PathToExtension"/>
     <u:PathToName x:Key="PathToName"/>
@@ -104,7 +105,7 @@
                     <Ellipse Style="{StaticResource OnlineEllipseStyle}"/>
                 </Grid>
 
-                <Border x:Name="groupBorder" Grid.Row="0" Grid.Column="1" Margin="15,0,0,0" CornerRadius="10" Background="#add4db" BorderBrush="White" BorderThickness="1" Visibility="Hidden" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <Border x:Name="groupBorder" Grid.Row="0" Grid.Column="1" Margin="15,0,0,0" CornerRadius="10" Background="{StaticResource GroupBackground}" BorderBrush="White" BorderThickness="1" Visibility="Hidden" VerticalAlignment="Top" HorizontalAlignment="Left">
                     <TextBlock x:Name="groupText" Text="{Binding Path=User.Name}" FontSize="15" Foreground="Black" FontWeight="DemiBold" Padding="10,0,10,0"/>
                 </Border>
 
@@ -122,7 +123,7 @@
                 <Setter TargetName="mainGrid" Property="Grid.Column" Value="1"/>
                 <Setter TargetName="mainGridCol1" Property="Width" Value="0"/>
                 <Setter TargetName="mainGridRow1" Property="Height" Value="0"/>
-                <Setter TargetName="border" Property="Background" Value="#EF44F2"/>
+                <Setter TargetName="border" Property="Background" Value="{StaticResource UserMessageBackground}"/>
                 <Setter TargetName="ellipseGrid" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Right"/>
             </DataTrigger>
@@ -131,20 +132,20 @@
                 <Setter TargetName="ellipseGrid" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="mainGridCol1" Property="Width" Value="0"/>
                 <Setter TargetName="mainGridRow1" Property="Height" Value="0"/>
-                <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
+                <Setter TargetName="border" Property="Background" Value="{StaticResource SourceMessageBackground}"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:SessionSendedMessage}">
                 <Setter TargetName="mainGrid" Property="Grid.Column" Value="1"/>
                 <Setter TargetName="mainGridCol1" Property="Width" Value="0"/>
                 <Setter TargetName="mainGridRow1" Property="Height" Value="0"/>
-                <Setter TargetName="border" Property="Background" Value="#EF44F2"/>
+                <Setter TargetName="border" Property="Background" Value="{StaticResource UserMessageBackground}"/>
                 <Setter TargetName="ellipseGrid" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Right"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:GroupMessage}">
                 <Setter TargetName="mainGrid" Property="Grid.Column" Value="0"/>
-                <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
+                <Setter TargetName="border" Property="Background" Value="{StaticResource SourceMessageBackground}"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
                 <Setter TargetName="groupBorder" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="groupText" Property="Foreground" Value="{Binding Path=Color}"/>
@@ -185,7 +186,7 @@
                     <Ellipse Style="{StaticResource OnlineEllipseStyle}"/>
                 </Grid>
 
-                <Border x:Name="groupBorder" Grid.Row="0" Grid.Column="1" Margin="15,0,0,0" CornerRadius="10" Background="#add4db" BorderBrush="White" BorderThickness="1" Visibility="Hidden" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <Border x:Name="groupBorder" Grid.Row="0" Grid.Column="1" Margin="15,0,0,0" CornerRadius="10" Background="{StaticResource GroupBackground}" BorderBrush="White" BorderThickness="1" Visibility="Hidden" VerticalAlignment="Top" HorizontalAlignment="Left">
                     <TextBlock x:Name="groupText" Text="{Binding Path=User.Name}" FontSize="15" Foreground="Black" FontWeight="DemiBold" Padding="10,0,10,0"/>
                 </Border>
                 
@@ -212,7 +213,7 @@
                 <Setter TargetName="mainGrid" Property="Grid.Column" Value="1"/>
                 <Setter TargetName="mainGridCol1" Property="Width" Value="0"/>
                 <Setter TargetName="mainGridRow1" Property="Height" Value="0"/>
-                <Setter TargetName="border" Property="Background" Value="#EF44F2"/>
+                <Setter TargetName="border" Property="Background" Value="{StaticResource UserMessageBackground}"/>
                 <Setter TargetName="ellipseGrid" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Right"/>
             </DataTrigger>
@@ -221,20 +222,20 @@
                 <Setter TargetName="ellipseGrid" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="mainGridCol1" Property="Width" Value="0"/>
                 <Setter TargetName="mainGridRow1" Property="Height" Value="0"/>
-                <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
+                <Setter TargetName="border" Property="Background" Value="{StaticResource SourceMessageBackground}"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:SessionSendedMessage}">
                 <Setter TargetName="mainGrid" Property="Grid.Column" Value="1"/>
                 <Setter TargetName="mainGridCol1" Property="Width" Value="0"/>
                 <Setter TargetName="mainGridRow1" Property="Height" Value="0"/>
-                <Setter TargetName="border" Property="Background" Value="#EF44F2"/>
+                <Setter TargetName="border" Property="Background" Value="{StaticResource UserMessageBackground}"/>
                 <Setter TargetName="ellipseGrid" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Right"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:GroupMessage}">
                 <Setter TargetName="mainGrid" Property="Grid.Column" Value="0"/>
-                <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
+                <Setter TargetName="border" Property="Background" Value="{StaticResource SourceMessageBackground}"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
                 <Setter TargetName="groupBorder" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="groupText" Property="Foreground" Value="{Binding Path=Color}"/>
@@ -268,7 +269,7 @@
                     <Ellipse Style="{StaticResource OnlineEllipseStyle}"/>
                 </Grid>
 
-                <Border x:Name="groupBorder" Grid.Row="0" Grid.Column="1" Margin="15,0,0,0" CornerRadius="10" Background="#add4db" BorderBrush="White" BorderThickness="1" Visibility="Hidden" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <Border x:Name="groupBorder" Grid.Row="0" Grid.Column="1" Margin="15,0,0,0" CornerRadius="10" Background="{StaticResource GroupBackground}" BorderBrush="White" BorderThickness="1" Visibility="Hidden" VerticalAlignment="Top" HorizontalAlignment="Left">
                     <TextBlock x:Name="groupText" Text="{Binding Path=User.Name}" FontSize="15" Foreground="Black" FontWeight="DemiBold" Padding="10,0,10,0"/>
                 </Border>
                 
@@ -297,7 +298,7 @@
                 <Setter TargetName="mainGridCol1" Property="Width" Value="0"/>
                 <Setter TargetName="mainGridRow1" Property="Height" Value="0"/>
                 <Setter TargetName="ellipseGrid" Property="Visibility" Value="Collapsed"/>
-                <Setter TargetName="border" Property="Background" Value="#EF44F2"/>
+                <Setter TargetName="border" Property="Background" Value="{StaticResource UserMessageBackground}"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Right"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:SourceMessage}">
@@ -305,20 +306,20 @@
                 <Setter TargetName="ellipseGrid" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="mainGridCol1" Property="Width" Value="0"/>
                 <Setter TargetName="mainGridRow1" Property="Height" Value="0"/>
-                <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
+                <Setter TargetName="border" Property="Background" Value="{StaticResource SourceMessageBackground}"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:SessionSendedMessage}">
                 <Setter TargetName="mainGrid" Property="Grid.Column" Value="1"/>
                 <Setter TargetName="mainGridCol1" Property="Width" Value="0"/>
                 <Setter TargetName="mainGridRow1" Property="Height" Value="0"/>
-                <Setter TargetName="border" Property="Background" Value="#EF44F2"/>
+                <Setter TargetName="border" Property="Background" Value="{StaticResource UserMessageBackground}"/>
                 <Setter TargetName="ellipseGrid" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Right"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:GroupMessage}">
                 <Setter TargetName="mainGrid" Property="Grid.Column" Value="0"/>
-                <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
+                <Setter TargetName="border" Property="Background" Value="{StaticResource SourceMessageBackground}"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
                 <Setter TargetName="groupBorder" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="groupText" Property="Foreground" Value="{Binding Path=Color}"/>
@@ -381,12 +382,10 @@
                     <Ellipse Style="{StaticResource OnlineEllipseStyle}"/>
                 </Grid>
 
-                <Border x:Name="groupBorder" Grid.Row="0" Grid.Column="1" Margin="15,0,0,0" CornerRadius="10" Background="#add4db" BorderBrush="White" BorderThickness="1" Visibility="Hidden" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <Border x:Name="groupBorder" Grid.Row="0" Grid.Column="1" Margin="15,0,0,0" CornerRadius="10" Background="{StaticResource GroupBackground}" BorderBrush="White" BorderThickness="1" Visibility="Hidden" VerticalAlignment="Top" HorizontalAlignment="Left">
                     <TextBlock x:Name="groupText" Text="{Binding Path=User.Name}" FontSize="15" Foreground="Black" FontWeight="DemiBold" Padding="10,0,10,0"/>
                 </Border>
                 
-                <!--<TextBlock x:Name="group" Text="{Binding Path=User.Name}" Grid.Row="0" Grid.Column="1" Margin="15,0,0,0" Visibility="Hidden" FontSize="15" Foreground="Green" FontWeight="DemiBold"/>-->
-
                 <Border x:Name="border" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Margin="5,20,0,0" MinWidth="250" Width="250" Height="65" BorderBrush="AliceBlue" BorderThickness="3" CornerRadius="15">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -429,18 +428,18 @@
                 <Setter TargetName="ellipseGrid" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="mainGridCol1" Property="Width" Value="0"/>
                 <Setter TargetName="mainGridRow1" Property="Height" Value="0"/>
-                <Setter TargetName="border" Property="Background" Value="#EF44F2"/>
+                <Setter TargetName="border" Property="Background" Value="{StaticResource UserMessageBackground}"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Right"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:SourceMessage}">
-                <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
+                <Setter TargetName="border" Property="Background" Value="{StaticResource SourceMessageBackground}"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
                 <Setter TargetName="ellipseGrid" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="mainGridCol1" Property="Width" Value="0"/>
                 <Setter TargetName="mainGridRow1" Property="Height" Value="0"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:GroupMessage}">
-                <Setter TargetName="border" Property="Background" Value="#D8BDD9"/>
+                <Setter TargetName="border" Property="Background" Value="{StaticResource SourceMessageBackground}"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
                 <Setter TargetName="groupBorder" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="groupText" Property="Foreground" Value="{Binding Path=Color}"/>
@@ -449,7 +448,7 @@
                 <Setter TargetName="mainGrid" Property="Grid.Column" Value="1"/>
                 <Setter TargetName="mainGridCol1" Property="Width" Value="0"/>
                 <Setter TargetName="mainGridRow1" Property="Height" Value="0"/>
-                <Setter TargetName="border" Property="Background" Value="#EF44F2"/>
+                <Setter TargetName="border" Property="Background" Value="{StaticResource UserMessageBackground}"/>
                 <Setter TargetName="ellipseGrid" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Right"/>
             </DataTrigger>
@@ -474,13 +473,13 @@
         </Setter>
     </Style>
 
-    <Style x:Key="ListViewStyle" TargetType="ListView">
+    <!--<Style x:Key="ListViewStyle" TargetType="ListView">
         <Setter Property="SelectedItem" Value="{Binding Path=SelectedMessage}"/>
         <Setter Property="ItemContainerStyle" Value="{StaticResource ListViewItemStyle}"/>
         <Setter Property="ItemTemplateSelector" Value="{StaticResource MessageSelector}"/>
         <Setter Property="ItemsSource" Value="{Binding Path=Messages}"/>
         <Setter Property="Background" Value="YellowGreen"/>
         <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
-    </Style>
+    </Style>-->
 
 </ResourceDictionary>

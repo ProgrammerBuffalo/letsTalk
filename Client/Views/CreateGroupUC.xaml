@@ -9,7 +9,17 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <ResourceDictionary Source="/WindowResources\ChatsDictionary.xaml"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/WindowResources\ChatsDictionary.xaml"/>
+                <ResourceDictionary Source="/WindowResources\ThemeDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="ButtonStyle" TargetType="Button" BasedOn="{StaticResource MahApps.Styles.Button}">
+                <Setter Property="Background" Value="{StaticResource ButtonBackground}"/>
+                <Setter Property="Foreground" Value="FloralWhite"/>
+            </Style>
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid>
@@ -29,7 +39,7 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-           
+
             <TextBox Text="{Binding Path=SearchText}"
                 metro:TextBoxHelper.Watermark="Search users"
                 metro:TextBoxHelper.ClearTextButton="True"
@@ -41,6 +51,7 @@
             <Button Grid.Column="1" 
                     Content="Search"
                     Margin="10" MaxHeight="50" MaxWidth="200"
+                    Style="{StaticResource ButtonStyle}"
                     Command="{Binding SearchCommand}">
             </Button>
         </Grid>
@@ -53,11 +64,13 @@
             dd:DragDrop.IsDropTarget="{Binding Path=AllUsersIsDropTarget}"
             dd:DragDrop.DragHandler="{Binding}"
             dd:DragDrop.DropHandler="{Binding}"
+            dd:DragDrop.DragAdornerTemplate="{StaticResource ChatDataTemplate}"
+            dd:DragDrop.DropAdornerTemplate="{StaticResource ChatDataTemplate}"
             ItemsSource="{Binding Path=AllUsers}"
             SelectedItem="{Binding Path=SelectedUser}"
             ItemTemplate="{StaticResource ChatDataTemplate}"
             ItemContainerStyle="{StaticResource ChatListViewItemStyle}"
-            Background="LightGreen" Margin="20">
+            Margin="20" Background="White">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseEnter">
                     <i:InvokeCommandAction Command="{Binding AllUsers_MouseEnterCommand}"/>
@@ -75,10 +88,11 @@
         </ListView>
 
         <Button 
-            Content="Show More"
             Grid.Row="3" Grid.Column="0"
+            Content="Show More"
             Width="150" Height="50"
             VerticalAlignment="Center" HorizontalAlignment="Center"
+            Style="{StaticResource ButtonStyle}"
             Command="{Binding ShowMoreCommand}">
         </Button>
 
@@ -100,11 +114,13 @@
             dd:DragDrop.IsDragSource="True"
             dd:DragDrop.DragHandler="{Binding}"
             dd:DragDrop.DropHandler="{Binding}"
+            dd:DragDrop.DragAdornerTemplate="{StaticResource ChatDataTemplate}"
+            dd:DragDrop.DropAdornerTemplate="{StaticResource ChatDataTemplate}"
             ItemsSource="{Binding Path=UsersToAdd}"
             SelectedItem="{Binding Path=SelectedUser}"
             ItemTemplate="{StaticResource ChatDataTemplate}"
             ItemContainerStyle="{StaticResource ChatListViewItemStyle}"
-            Background="LightCyan" Margin="20">
+            Background="White" Margin="20">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseEnter">
                     <i:InvokeCommandAction Command="{Binding UsersToAdd_MouseEnterCommand}"/>
@@ -121,7 +137,13 @@
             </i:Interaction.Triggers>
         </ListView>
 
-        <Button Grid.Row="3" Grid.Column="1" Width="100" Height="50" Content="Create Group" VerticalAlignment="Center" HorizontalAlignment="Center" Command="{Binding CreateGroupCommand}"/>
+        <Button Grid.Row="3" Grid.Column="1"
+                Content="Create Group"
+                Width="100" Height="50"
+                VerticalAlignment="Center" HorizontalAlignment="Center" 
+                Style="{StaticResource ButtonStyle}"
+                Command="{Binding CreateGroupCommand}">
+        </Button>
     </Grid>
 
 </UserControl>

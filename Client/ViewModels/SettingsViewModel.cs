@@ -24,9 +24,9 @@ namespace Client.ViewModels
         private bool isFromDevice;
 
 
-        public SettingsViewModel()
+        public SettingsViewModel(ClientUserInfo client)
         {
-            Client = ClientUserInfo.getInstance();
+            Client = client;
             settings = Settings.Instance;
             player = new MediaPlayer();
 

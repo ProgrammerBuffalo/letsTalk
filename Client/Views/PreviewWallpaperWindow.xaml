@@ -6,10 +6,20 @@
         mc:Ignorable="d"
         Title="PreviewWallpaperWindow" Height="450" Width="800">
     <Window.Resources>
-        <ResourceDictionary Source="/WindowResources/MessageDictionary.xaml"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/WindowResources/MessageDictionary.xaml"/>
+                <ResourceDictionary Source="/WindowResources/ThemeDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="ButtonStyle" BasedOn="{StaticResource MahApps.Styles.Button}" TargetType="Button">
+                <Setter Property="Background" Value="{StaticResource ButtonBackground}"/>
+                <Setter Property="Foreground" Value="FloralWhite"/>
+            </Style>
+        </ResourceDictionary>
     </Window.Resources>
 
-    <Grid>
+    <Grid Background="{StaticResource MainBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="5*"/>
             <RowDefinition/>
@@ -34,6 +44,7 @@
                 FontSize="20"
                 Width="300" Height="40"
                 VerticalAlignment="Center" HorizontalAlignment="Center"
+                Style="{StaticResource ButtonStyle}"
                 Command="{Binding ConfirmWallpaperCommand}">
         </Button>
     </Grid>

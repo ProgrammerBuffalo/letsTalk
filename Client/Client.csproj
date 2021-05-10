@@ -212,16 +212,12 @@
     <Compile Include="Utility\MessageTemplateSelector.cs" />
     <Compile Include="Utility\UCHelper.cs" />
     <Compile Include="Utility\ValidationRules.cs" />
-    <Compile Include="ViewModels\AddUserViewModel.cs" />
-    <Compile Include="ViewModels\AvailableUsersViewModel.cs" />
+    <Compile Include="ViewModels\CreateChatViewModel.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
     <Compile Include="ViewModels\EntranceViewModel.cs" />
     <Compile Include="ViewModels\EditGroupViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
-    <Compile Include="Views\AddUserUC.xaml.cs">
-      <DependentUpon>AddUserUC.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\CreateGroupUC.xaml.cs">
       <DependentUpon>CreateGroupUC.xaml</DependentUpon>
     </Compile>
@@ -246,12 +242,6 @@
     <Compile Include="Views\RingtonWindow.xaml.cs">
       <DependentUpon>RingtonWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SettingsWindow.xaml.cs">
-      <DependentUpon>SettingsWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UCSettings.xaml.cs">
-      <DependentUpon>UCSettings.xaml</DependentUpon>
-    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -260,6 +250,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsUC.xaml.cs">
+      <DependentUpon>SettingsUC.xaml</DependentUpon>
     </Compile>
     <Page Include="UserControls\ChatItem.xaml">
       <SubType>Designer</SubType>
@@ -274,10 +267,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\PasswordWarning.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\AddUserUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -309,19 +298,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SettingsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UCAvailableUsers.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\ChatUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UCSettings.xaml">
+    <Page Include="Views\SettingsUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -341,6 +322,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="WindowResources\SettingsResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WindowResources\SlideRadioButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -349,11 +334,12 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="WindowResources\ThemeDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Views\UCAvailableUsers.xaml.cs">
-      <DependentUpon>UCAvailableUsers.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

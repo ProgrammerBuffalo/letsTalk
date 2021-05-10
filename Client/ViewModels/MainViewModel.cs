@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace Client.ViewModels
 {
@@ -24,27 +25,60 @@ namespace Client.ViewModels
 
         public delegate void ChatDelegate(Models.Chat chat);
 
-        private ClientUserInfo clientUserInfo;
-        private ChatClient ChatClient { set; get; } // Сеанс
+        private ClientUserInfo client;
 
         private ObservableCollection<Models.Chat> chats;
         private Models.Chat selectedChat;
 
         private UserControl currentView;
 
-        public MainViewModel()
+        public MainViewModel(string name, int sqlId)
         {
+            ChatClient = new ChatClient(new InstanceContext(this));
+            Client = new ClientUserInfo(sqlId, name);
+            ChatClient.Connect(sqlId, name);
+
             LoadedWindowCommand = new Command(LoadedWindow);
             ClosedWindowCommand = new Command(ClosedWindow);
             SelectedChatChangedCommand = new Command(SelectedChatChanged);
-            //AddUserCommand = new Command(AddUser);
-            CreateGroupCommand = new Command(CreateGroup);
+            CreateChatCommand = new Command(CreateChat);
             SettingsCommand = new Command(Settings);
             ChangeAvatarCommand = new Command(ChangeAvatar);
 
+            Users = new Dictionary<int, AvailableUser>();
             Chats = new ObservableCollection<Models.Chat>();
+        }
 
-            //SelectedHambugerOptionItemCommand = new Command(SelectedHambugerOptionItem);
+        public ICommand LoadedWindowCommand { get; }
+        public ICommand ClosedWindowCommand { get; }
+        public ICommand SelectedChatChangedCommand { get; }
+        public ICommand CreateChatCommand { get; }
+        public ICommand SettingsCommand { get; }
+
+        public ICommand ChangeAvatarCommand { get; }
+
+        public ChatClient ChatClient { set; get; } // Сеанс
+        public ClientUserInfo Client { get => client; set => Set(ref client, value); } // Вся информация о подключенном юзере
+
+        public Dictionary<int, AvailableUser> Users { get; private set; }
+        public ObservableCollection<Models.Chat> Chats { get => chats; set => Set(ref chats, value); }
+        public Models.Chat SelectedChat { get => selectedChat; set => Set(ref selectedChat, value); }
+
+        public void LoadedWindow(object sender)
+        {
+            try
+            {
+                client.DownloadAvatarAsync();
+                LoadChatroomsAsync();
+            }
+            catch (FaultException<ConnectionExceptionFault> ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (System.IO.IOException)
+            {
+                MessageBox.Show("avatar image could not be download");
+            }
         }
 
         private async void ChangeAvatar(object obj)
@@ -60,10 +94,10 @@ namespace Client.ViewModels
                 if (openFileDialog.ShowDialog() == true)
                 {
 
-                    MemoryStream memoryStream = Utility.ImageCropper.GetCroppedImage(openFileDialog.FileName);
+                    MemoryStream memoryStream = ImageCropper.GetCroppedImage(openFileDialog.FileName);
                     memoryStream.Position = 0;
 
-                    uploadFileInfo = new ChatService.UploadFileInfo { FileName = openFileDialog.FileName, FileStream = memoryStream, Responsed_SqlId = clientUserInfo.SqlId };
+                    uploadFileInfo = new ChatService.UploadFileInfo { FileName = openFileDialog.FileName, FileStream = memoryStream, Responsed_SqlId = client.SqlId };
                     ChatService.AvatarClient avatarClient = new ChatService.AvatarClient();
 
                     if (uploadFileInfo.FileStream.CanRead)
@@ -78,7 +112,7 @@ namespace Client.ViewModels
                     bitmap.StreamSource = memoryStream;
                     bitmap.EndInit();
 
-                    clientUserInfo.UserImage = bitmap;
+                    client.UserImage = bitmap;
                 }
             }
             catch (Exception ex)
@@ -95,54 +129,6 @@ namespace Client.ViewModels
             }
         }
 
-        public MainViewModel(string name, int sqlId) : this()
-        {
-            ChatClient = new ChatClient(new InstanceContext(this));
-            ClientUserInfo = new ClientUserInfo(sqlId, name);
-            //"C:\\Users\\user\\AppData\\Local\\Temp\\tmp7A5D.tmp"
-            //"C:\\Users\\user\\AppData\\Local\\Temp\\tmpA888.tmp"
-            ChatClient.Connect(sqlId, name);
-            //string temp = System.IO.Path.GetTempFileName();
-            //byte[] music = System.IO.File.ReadAllBytes("files\\control.wav");
-            //System.IO.File.WriteAllBytes(temp, music);
-            //System.IO.File.WriteAllBytes("aaa.wav", music);            
-            //Demo();
-        }
-
-        public ICommand LoadedWindowCommand { get; }
-        public ICommand ClosedWindowCommand { get; }
-        //public ICommand SelectedHambugerOptionItemCommand { get; }
-        public ICommand SelectedChatChangedCommand { get; }
-        //public ICommand AddUserCommand { get; }
-        public ICommand CreateGroupCommand { get; }
-        public ICommand SettingsCommand { get; }
-
-        public ICommand ChangeAvatarCommand { get; }
-
-        public ClientUserInfo ClientUserInfo { get => clientUserInfo; set => Set(ref clientUserInfo, value); } // Вся информация о подключенном юзере
-
-        public ObservableCollection<Models.Chat> Chats { get => chats; set => Set(ref chats, value); }
-        public Models.Chat SelectedChat { get => selectedChat; set => Set(ref selectedChat, value); }
-
-        //public UserControl CurrentView { get => currentView; set => Set(ref currentView, value); }
-
-        // После того как окно полностью прогрузилось, у нас происходит вызов загрузки аватарки с сервера к пользователю
-        public void LoadedWindow(object sender)
-        {
-            try
-            {
-                clientUserInfo.DownloadAvatarAsync();
-                LoadChatroomsAsync();
-            }
-            catch (FaultException<ConnectionExceptionFault> ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            catch (System.IO.IOException)
-            {
-                MessageBox.Show("avatar image could not be download");
-            }
-        }
 
         public void SelectedChatChanged(object param)
         {
@@ -150,7 +136,7 @@ namespace Client.ViewModels
             {
                 RemoveUC.Invoke(currentView);
                 Views.ChatUC chatView = new Views.ChatUC();
-                ChatViewModel viewModel = new ChatViewModel(ChatClient, this);
+                ChatViewModel viewModel = new ChatViewModel(this);
                 chatView.getControl = new Views.ChatUC.GetControlDelegate(viewModel.SetScrollViewer);
                 chatView.DataContext = viewModel;
                 currentView = chatView;
@@ -167,12 +153,11 @@ namespace Client.ViewModels
         //    CurrentView = control;
         //}
 
-        private void CreateGroup(object param)
+        private void CreateChat(object param)
         {
             RemoveUC.Invoke(currentView);
             UserControl control = new Views.CreateGroupUC();
-            CreateGroupViewModel viewModel = new CreateGroupViewModel(ChatClient);
-            viewModel.AddChat += AddChatToChats;
+            CreateChatViewModel viewModel = new CreateChatViewModel(this);
             control.DataContext = viewModel;
             currentView = control;
             AddUC.Invoke(currentView);
@@ -181,8 +166,8 @@ namespace Client.ViewModels
         private void Settings(object param)
         {
             RemoveUC.Invoke(currentView);
-            UserControl control = new Views.UCSettings();
-            control.DataContext = new SettingsViewModel();
+            UserControl control = new Views.SettingsUC();
+            control.DataContext = new SettingsViewModel(Client);
             currentView = control;
             AddUC.Invoke(currentView);
         }
@@ -211,7 +196,7 @@ namespace Client.ViewModels
 
         private void UserRemovedFromChat(int chatId, int userId)
         {
-            if (userId == clientUserInfo.SqlId)
+            if (userId == client.SqlId)
                 return;
             ChatGroup chat = FindChatroom(chatId) as ChatGroup;
             chat.RemoveUser(chat.FindUser(userId));
@@ -253,15 +238,15 @@ namespace Client.ViewModels
 
         public void NotifyUserIsAddedToChat(int chatId, string chatName, ChatService.UserInChat[] usersInChat)
         {
-            Task.Run(() => 
+            Task.Run(() =>
             {
                 App.Current.Dispatcher.Invoke(() =>
                 {
                     List<AvailableUser> availableUsers = new List<AvailableUser>();
-                    foreach(var user in usersInChat)
+                    foreach (var user in usersInChat)
                     {
-                        if(user.UserSqlId != clientUserInfo.SqlId)
-                         availableUsers.Add(new AvailableUser(user.UserName, user.UserSqlId) { IsOnline = user.IsOnline });
+                        if (user.UserSqlId != client.SqlId)
+                            availableUsers.Add(new AvailableUser(user.UserSqlId, user.UserName, user.IsOnline));
                     }
 
                     Chats.Add(availableUsers.Count > 1 ? new ChatGroup(chatId, chatName, availableUsers) { CanWrite = true }
@@ -269,7 +254,7 @@ namespace Client.ViewModels
                 });
             });
 
-            ChatClient.AddedUserToChatIsOnline(this.clientUserInfo.SqlId, chatId);
+            ChatClient.AddedUserToChatIsOnline(this.client.SqlId, chatId);
         }
 
         public void NotifyUserIsRemovedFromChat(int userId, int chatId)
@@ -292,7 +277,7 @@ namespace Client.ViewModels
             var chat = FindChatroom(chatroomId);
             if (chat != null)
             {
-                chat.Messages.Add(chat.GetMessageType(message.UserId, new TextMessage(message.Text, message.DateTime)));
+                chat.Messages.Add(chat.GetMessageType(Client.SqlId, message.UserId, new TextMessage(message.Text, message.DateTime)));
             }
         }
 
@@ -305,7 +290,7 @@ namespace Client.ViewModels
         {
             var chat = FindChatroom(chatroomId);
             if (chat != null)
-                chat.Messages.Add(chat.GetMessageType(serviceMessageFile.UserId, new FileMessage(serviceMessageFile.FileName, serviceMessageFile.DateTime, serviceMessageFile.StreamId)));
+                chat.Messages.Add(chat.GetMessageType(Client.SqlId, serviceMessageFile.UserId, new FileMessage(serviceMessageFile.FileName, serviceMessageFile.DateTime, serviceMessageFile.StreamId)));
         }
 
         public void ClosedWindow(object sender)
@@ -313,15 +298,9 @@ namespace Client.ViewModels
             //ChatClient.Disconnect();
         }
 
-        public void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
-        {
-            prop = value;
-            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(prop_name));
-        }
-
         private async void LoadChatroomsAsync()
         {
-            Dictionary<Chatroom, UserInChat[]> chatrooms = await ChatClient.FindAllChatroomsForClientAsync(clientUserInfo.SqlId);
+            Dictionary<Chatroom, UserInChat[]> chatrooms = await ChatClient.FindAllChatroomsForClientAsync(client.SqlId);
             Chats = new ObservableCollection<Models.Chat>
                 (await System.Threading.Tasks.Task<List<Models.Chat>>.Run(() =>
             {
@@ -334,16 +313,15 @@ namespace Client.ViewModels
                         List<AvailableUser> availableUsers = new List<AvailableUser>();
                         foreach (UserInChat userInChat in chatrooms[key])
                         {
-                            if (userInChat.UserSqlId == clientUserInfo.SqlId)
+                            if (userInChat.UserSqlId == client.SqlId)
                             {
                                 canWrite = true;
                                 continue;
                             }
-                            availableUsers.Add(new AvailableUser { SqlId = userInChat.UserSqlId, Name = userInChat.UserName, IsOnline = userInChat.IsOnline });
+                            availableUsers.Add(new AvailableUser(userInChat.UserSqlId, userInChat.UserName, userInChat.IsOnline));
                         }
-
                         clientChatrooms.Add(availableUsers.Count > 1 ? new ChatGroup(key.ChatSqlId, key.ChatName, availableUsers) { CanWrite = canWrite }
-                                                                     : (Models.Chat)new ChatOne(key.ChatSqlId, availableUsers.First()) { CanWrite = canWrite });
+                                                                 : (Models.Chat)new ChatOne(key.ChatSqlId, availableUsers.First()) { CanWrite = canWrite });
                     }
                     else
                     {
@@ -357,7 +335,7 @@ namespace Client.ViewModels
 
         public void NotifyUserChangedAvatar(int userId)
         {
-            foreach(Models.Chat chat in Chats)
+            foreach (Models.Chat chat in Chats)
             {
                 AvailableUser user = chat.FindUser(userId);
                 if (user != null)
@@ -370,6 +348,12 @@ namespace Client.ViewModels
         public void NotifyСhatroomAvatarIsChanged(int chatId)
         {
             throw new NotImplementedException();
+        }
+
+        public void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
+        {
+            prop = value;
+            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(prop_name));
         }
 
         //private void Demo()

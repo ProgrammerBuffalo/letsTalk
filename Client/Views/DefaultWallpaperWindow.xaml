@@ -3,37 +3,44 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-        xmlns:utility="clr-namespace:Client.Utility"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"       
         mc:Ignorable="d"
         Title="DefaultWallpaperWindow" Height="600" Width="820">
     <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/WindowResources/ThemeDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
 
-        <utility:TempConverter x:Key="TempConverter"/>
+            <Style x:Key="WallpaperContainerStyle" TargetType="ListViewItem">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListViewItem">
+                            <Border BorderBrush="Black" BorderThickness="3" Margin="1" Cursor="Hand">
+                                <ContentPresenter/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
 
-        <Style x:Key="WallpaperContainerStyle" TargetType="ListViewItem">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ListViewItem">
-                        <Border BorderBrush="Black" BorderThickness="3" Margin="1" Cursor="Hand">
-                            <ContentPresenter/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+            <DataTemplate x:Key="WallpaperDataTemplate">
+                <Image Width="250" Height="250" Stretch="Fill">
+                    <Image.Source>
+                        <BitmapImage UriSource="{Binding BindsDirectlyToSource=True }" DecodePixelHeight="250"/>
+                    </Image.Source>
+                </Image>
+            </DataTemplate>
 
-        <DataTemplate x:Key="WallpaperDataTemplate">
-            <Image Width="250" Height="250" Stretch="Fill">
-                <Image.Source>
-                    <BitmapImage UriSource="{Binding BindsDirectlyToSource=True }" DecodePixelHeight="250"/>
-                </Image.Source>
-            </Image>
-        </DataTemplate>
+            <ItemsPanelTemplate x:Key="WallpaperItemTemplate">
+                <WrapPanel/>
+            </ItemsPanelTemplate>
 
-        <ItemsPanelTemplate x:Key="WallpaperItemTemplate">
-            <WrapPanel/>
-        </ItemsPanelTemplate>
+            <Style x:Key="ButtonStyle" BasedOn="{StaticResource MahApps.Styles.Button}" TargetType="Button">
+                <Setter Property="Background" Value="{StaticResource ButtonBackground}"/>
+                <Setter Property="Foreground" Value="FloralWhite"/>
+            </Style>
+        </ResourceDictionary>
     </Window.Resources>
 
     <Grid Background="Beige">
@@ -62,7 +69,7 @@
             </i:Interaction.Triggers>
         </ListView>
 
-        <Button Grid.Column="0" Grid.Row="1" Content="Confirm wallpaper" Width="200" Height="40" Command="{Binding ConfirmWallpaperCommand}"/>
-        <Button Grid.Column="1" Grid.Row="1" Content="Preview wallpaper" Width="200" Height="40" Command="{Binding PreviewWallpaperShowCommand}"/>
+        <Button Grid.Column="0" Grid.Row="1" Content="Confirm wallpaper" Width="200" Height="40" Style="{StaticResource ButtonStyle}" Command="{Binding ConfirmWallpaperCommand}"/>
+        <Button Grid.Column="1" Grid.Row="1" Content="Preview wallpaper" Width="200" Height="40" Style="{StaticResource ButtonStyle}" Command="{Binding PreviewWallpaperShowCommand}"/>
     </Grid>
 </Window>

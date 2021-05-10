@@ -23,6 +23,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/WindowResources/ButtonEllipseStyle.xaml"/>
                 <ResourceDictionary Source="/WindowResources/ChatsDictionary.xaml"/>
+                <ResourceDictionary Source="/WindowResources/ThemeDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate x:Key="HamburgerMenuOptionsTemplate" DataType="{x:Type controls:HamburgerMenuIconItem}">
@@ -49,7 +50,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="ListBoxItem">
-                            <Border x:Name="border" Cursor="Hand" Background="#ffff1a">
+                            <Border x:Name="border" Cursor="Hand" Background="{StaticResource HamburgerBackground}">
                                 <ContentPresenter/>
                             </Border>
 
@@ -87,7 +88,7 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid x:Name="grid">
+    <Grid x:Name="grid" Background="{StaticResource MainBackground}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="col1"/>
             <ColumnDefinition Width="3*"/>
@@ -95,7 +96,7 @@
 
         <!--<UserControl x:Name="uc" Grid.Column="1" Content="{Binding CurrentView}"/>-->
 
-        <controls:HamburgerMenu x:Name="hamburgerMenu" PaneBackground="#ffff1a" PaneForeground="Gray"
+        <controls:HamburgerMenu x:Name="hamburgerMenu" PaneBackground="{StaticResource HamburgerBackground}" PaneForeground="Gray"
                                  OptionsItemTemplate="{StaticResource HamburgerMenuOptionsTemplate}"
                                  OptionsItemContainerStyle="{StaticResource HamburgerOptionItemContainerStyle}"
                                  ItemContainerStyle="{StaticResource ChatListBoxItemStyle}"
@@ -113,7 +114,7 @@
                         </controls:HamburgerMenuIconItem.Icon>
                     </controls:HamburgerMenuIconItem>-->
 
-                    <controls:HamburgerMenuIconItem Tag="UC2" Label="Create Chatroom" Command="{Binding CreateGroupCommand}">
+                    <controls:HamburgerMenuIconItem Tag="UC2" Label="Create Chatroom" Command="{Binding CreateChatCommand}">
                         <controls:HamburgerMenuIconItem.Icon>
                             <icons:PackIconMaterial  Kind="AccountMultiplePlus" Width="25" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         </controls:HamburgerMenuIconItem.Icon>
@@ -148,7 +149,7 @@
                                 HorizontalAlignment="Center" VerticalAlignment="Center"
                                 FontSize="16"
                                 Foreground="Gray"
-                                Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.ClientUserInfo.UserName}"/>
+                                Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.Client.UserName}"/>
                     </Grid>
                 </DataTemplate>
             </controls:HamburgerMenu.HamburgerMenuHeaderTemplate>

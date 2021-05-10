@@ -6,12 +6,18 @@
         mc:Ignorable="d"
         Title="RingtonWindow" Height="500" Width="300" ResizeMode="NoResize">
     <Window.Resources>
-        <ResourceDictionary Source="/WindowResources/SlideRadioButton.xaml"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/WindowResources/SlideRadioButton.xaml"/>
+                <ResourceDictionary Source="/WindowResources/ThemeDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
 
-    <GroupBox Style="{x:Null}" x:Name="ringtons">
+    <GroupBox Style="{x:Null}" x:Name="ringtons" Background="{StaticResource MainBackground}">
         <ListView SelectedItem="{Binding Path=Settings.SelectedRington}"
                   ItemsSource="{Binding Path=Settings.Ringtons}"
+                  Background="{StaticResource MainBackground}"
                   SelectionMode="Single">
             <ListView.ItemTemplate>
                 <DataTemplate>

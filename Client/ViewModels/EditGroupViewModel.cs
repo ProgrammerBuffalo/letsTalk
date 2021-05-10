@@ -25,10 +25,9 @@ namespace Client.ViewModels
 
         public ChatService.ChatClient ChatClient { get; set; }
 
-        public EditGroupViewModel(MainViewModel mainVM, ChatService.ChatClient chatClient)
+        public EditGroupViewModel(MainViewModel mainVM)
         {
             this.mainVM = mainVM;
-            ChatClient = chatClient;
 
             Chat = (ChatGroup)mainVM.SelectedChat;
 

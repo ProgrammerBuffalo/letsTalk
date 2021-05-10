@@ -164,7 +164,7 @@ namespace Client.Models
 
         public abstract void MessageIsWriting(Nullable<int> userId);
 
-        public abstract SourceMessage GetMessageType(int senderId, Message message);
+        public abstract SourceMessage GetMessageType(int clientId, int senderId, Message message);
 
         public abstract void UserLeavedChatroom(int userId);
 
@@ -227,13 +227,7 @@ namespace Client.Models
 
     public class ChatOne : Chat
     {
-        AvailableUser user;
-
-        //убрать
-        public ChatOne()
-        {
-            user = new AvailableUser();
-        }
+        private AvailableUser user;
 
         public ChatOne(int sqlId) : base(sqlId)
         {
@@ -293,9 +287,9 @@ namespace Client.Models
             if (this.user.SqlId == user.SqlId) this.user = null;
         }
 
-        public override SourceMessage GetMessageType(int senderId, Message message)
+        public override SourceMessage GetMessageType(int clientId, int senderId, Message message)
         {
-            if (senderId == ClientUserInfo.getInstance().SqlId)
+            if (senderId == clientId)
                 return new UserMessage(message);
             return new SourceMessage(message);
         }
@@ -414,7 +408,7 @@ namespace Client.Models
                 if (user.SqlId == userId)
                     return user;
             return null;
-        }        
+        }
 
         public AvailableUser GetUserById(int sqlId)
         {
@@ -425,9 +419,9 @@ namespace Client.Models
             return null;
         }
 
-        public override SourceMessage GetMessageType(int senderId, Message message)
+        public override SourceMessage GetMessageType(int clientId, int senderId, Message message)
         {
-            if (senderId == ClientUserInfo.getInstance().SqlId)
+            if (senderId == clientId)
                 return new UserMessage(message);
             return new GroupMessage(message, GetUserById(senderId), colors[senderId]);
         }

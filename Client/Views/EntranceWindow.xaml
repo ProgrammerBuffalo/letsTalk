@@ -8,126 +8,142 @@
         xmlns:uc="clr-namespace:Client.UserControls"
         xmlns:utility="clr-namespace:Client.Utility"
         mc:Ignorable="d"
-        Title="Entrance" Height="450" Width="350">
+        Title="Entrance" Height="450" Width="350" ResizeMode="NoResize">
 
     <Window.Resources>
-        <Style x:Key="ColumnStyle" TargetType="ColumnDefinition">
-            <Setter Property="ColumnDefinition.Width" Value="0"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="True">
-                    <Setter Property="Width" Value="1*" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="False">
-                    <Setter Property="Width" Value="0" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/WindowResources/ThemeDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
 
-        <Style x:Key="TextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource MahApps.Styles.TextBox}">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="true">
-                    <Setter Property="TextBox.Visibility" Value="Visible" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="false">
-                    <Setter Property="TextBox.Visibility" Value="Collapsed" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
+            <Style x:Key="ColumnStyle" TargetType="ColumnDefinition">
+                <Setter Property="ColumnDefinition.Width" Value="0"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="True">
+                        <Setter Property="Width" Value="1*" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="False">
+                        <Setter Property="Width" Value="0" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
 
-        <Style x:Key="LoginStyle" TargetType="uc:LoginWarning">
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="FontSize" Value="18"/>
-            <Setter Property="Margin" Value="15, 0, 5, 0"/>
+            <Style x:Key="TextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource MahApps.Styles.TextBox}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="true">
+                        <Setter Property="TextBox.Visibility" Value="Visible" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="false">
+                        <Setter Property="TextBox.Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
 
-            <Style.Triggers>
-                <Trigger Property="Validation.HasError" Value="True">
-                    <Setter Property="IsWarning" Value="True"/>
-                    <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/>
-                    <Setter Property="ErrorText" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+            <Style x:Key="LoginStyle" TargetType="uc:LoginWarning">
+                <Setter Property="Height" Value="40"/>
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="Margin" Value="15, 0, 5, 0"/>
 
-        <Style x:Key="PasswordStyle" TargetType="uc:PasswordWarning">
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="FontSize" Value="18"/>
-            <Setter Property="Margin" Value="15, 0, 5, 0"/>
+                <Style.Triggers>
+                    <Trigger Property="Validation.HasError" Value="True">
+                        <Setter Property="IsWarning" Value="True"/>
+                        <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/>
+                        <Setter Property="ErrorText" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
 
-            <Style.Triggers>
-                <Trigger Property="Validation.HasError" Value="True">
-                    <Setter Property="IsWarning" Value="True"/>
-                    <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/>
-                    <Setter Property="ErrorText" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+            <Style x:Key="PasswordStyle" TargetType="uc:PasswordWarning">
+                <Setter Property="Height" Value="40"/>
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="Margin" Value="15, 0, 5, 0"/>
 
-        <Style x:Key="ButtonSignInStyle" TargetType="Button" BasedOn="{StaticResource MahApps.Styles.Button}">
-            <Setter Property="Visibility" Value="Visible"/>
-            <Setter Property="IsEnabled" Value="False"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="false">
-                    <Setter Property="Visibility" Value="Visible" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="true">
-                    <Setter Property="Visibility" Value="Collapsed" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding ElementName=login, Path=IsWarning}" Value="True">
-                    <Setter Property="IsEnabled" Value="False"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding ElementName=password, Path=IsWarning}" Value="True">
-                    <Setter Property="IsEnabled" Value="False"/>
-                </DataTrigger>
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding ElementName=login, Path=IsWarning}" Value="False"/>
-                        <Condition Binding="{Binding ElementName=password, Path=IsWarning}" Value="False"/>
-                    </MultiDataTrigger.Conditions>
-                    <MultiDataTrigger.Setters>
-                        <Setter Property="IsEnabled" Value="True"/>
-                    </MultiDataTrigger.Setters>
-                </MultiDataTrigger>
-            </Style.Triggers>
-        </Style>
+                <Style.Triggers>
+                    <Trigger Property="Validation.HasError" Value="True">
+                        <Setter Property="IsWarning" Value="True"/>
+                        <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/>
+                        <Setter Property="ErrorText" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
 
-        <Style x:Key="ButtonRegistrateStyle" TargetType="Button" BasedOn="{StaticResource MahApps.Styles.Button}">
-            <Setter Property="Grid.Column" Value="1"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="false">
-                    <Setter Property="Grid.Column" Value="1" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="true">
-                    <Setter Property="Grid.Column" Value="0" />
-                    <Setter Property="Grid.ColumnSpan" Value="2"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding ElementName=name, Path=IsWarning}" Value="True">
-                    <Setter Property="IsEnabled" Value="False"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding ElementName=login, Path=IsWarning}" Value="True">
-                    <Setter Property="IsEnabled" Value="False"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding ElementName=password, Path=IsWarning}" Value="True">
-                    <Setter Property="IsEnabled" Value="False"/>
-                </DataTrigger>
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding ElementName=name, Path=IsWarning}" Value="False"/>
-                        <Condition Binding="{Binding ElementName=login, Path=IsWarning}" Value="False"/>
-                        <Condition Binding="{Binding ElementName=password, Path=IsWarning}" Value="False"/>
-                    </MultiDataTrigger.Conditions>
-                    <MultiDataTrigger.Setters>
-                        <Setter Property="IsEnabled" Value="True"/>
-                    </MultiDataTrigger.Setters>
-                </MultiDataTrigger>
-            </Style.Triggers>
-        </Style>
+            <Style x:Key="ButtonSignInStyle" TargetType="Button" BasedOn="{StaticResource MahApps.Styles.Button}">
+                <Setter Property="Visibility" Value="Visible"/>
+                <Setter Property="IsEnabled" Value="False"/>
+                <Setter Property="Background" Value="{StaticResource ButtonBackground}"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="false">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="true">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ElementName=login, Path=IsWarning}" Value="True">
+                        <Setter Property="IsEnabled" Value="False"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ElementName=password, Path=IsWarning}" Value="True">
+                        <Setter Property="IsEnabled" Value="False"/>
+                    </DataTrigger>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding ElementName=login, Path=IsWarning}" Value="False"/>
+                            <Condition Binding="{Binding ElementName=password, Path=IsWarning}" Value="False"/>
+                        </MultiDataTrigger.Conditions>
+                        <MultiDataTrigger.Setters>
+                            <Setter Property="IsEnabled" Value="True"/>
+                        </MultiDataTrigger.Setters>
+                    </MultiDataTrigger>
+                </Style.Triggers>
+            </Style>
 
-        <DataTemplate x:Key="PhotoButtonDataTemplate">
-            <Icons:PackIconMaterialDesign Width="Auto" Height="Auto" Foreground="#FFDA0B" Kind="AddAPhoto"/>
-        </DataTemplate>
+            <Style x:Key="ButtonRegistrateStyle" TargetType="Button" BasedOn="{StaticResource MahApps.Styles.Button}">
+                <Setter Property="Grid.Column" Value="1"/>
+                <Setter Property="Background" Value="{StaticResource ButtonBackground}"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="false">
+                        <Setter Property="Grid.Column" Value="1" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="true">
+                        <Setter Property="Grid.Column" Value="0" />
+                        <Setter Property="Grid.ColumnSpan" Value="2"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ElementName=name, Path=IsWarning}" Value="True">
+                        <Setter Property="IsEnabled" Value="False"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ElementName=login, Path=IsWarning}" Value="True">
+                        <Setter Property="IsEnabled" Value="False"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ElementName=password, Path=IsWarning}" Value="True">
+                        <Setter Property="IsEnabled" Value="False"/>
+                    </DataTrigger>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding ElementName=name, Path=IsWarning}" Value="False"/>
+                            <Condition Binding="{Binding ElementName=login, Path=IsWarning}" Value="False"/>
+                            <Condition Binding="{Binding ElementName=password, Path=IsWarning}" Value="False"/>
+                        </MultiDataTrigger.Conditions>
+                        <MultiDataTrigger.Setters>
+                            <Setter Property="IsEnabled" Value="True"/>
+                        </MultiDataTrigger.Setters>
+                    </MultiDataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="BackButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="{StaticResource ButtonBackground}"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Margin" Value="10, 50, 10, 100"/>
+            </Style>
+
+            <DataTemplate x:Key="PhotoButtonDataTemplate">
+                <Icons:PackIconMaterialDesign Width="Auto" Height="Auto" Foreground="#FFDA0B" Kind="AddAPhoto"/>
+            </DataTemplate>
+        </ResourceDictionary>
     </Window.Resources>
 
-    <Grid>
+    <Grid Background="{StaticResource MainBackground}"> 
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
@@ -144,16 +160,9 @@
                  Grid.Row="0" Grid.Column="0"
                  Controls:TextBoxHelper.Watermark="Your Name"
                  Controls:TextBoxHelper.ClearTextButton="True"
-                 Margin="15" FontSize="18"
+                 Margin="15,15,5,15" FontSize="18"
                  Style="{StaticResource TextBoxStyle}" />
-
-
-        <!--<TextBox Text="{Binding Path=Login}"
-                 Grid.Row="1" Grid.Column="0"
-                 Controls:TextBoxHelper.Watermark="Login"
-                 Controls:TextBoxHelper.ClearTextButton="True"
-                 Margin="15" FontSize="18"/>-->
-
+        
         <uc:LoginWarning x:Name="login" Grid.Row="1" Style="{StaticResource LoginStyle}">
             <uc:LoginWarning.Text>
                 <Binding Path="Login">
@@ -191,7 +200,7 @@
             </Button.Background>
         </Button>
 
-        <Button Content="Back" Grid.Row="3" Grid.Column="1" Margin="10, 50, 10, 100" Command="{Binding BackCommand}"/>
+        <Button Content="Back" Grid.Row="3" Grid.Column="1" Style="{StaticResource BackButtonStyle}" Command="{Binding BackCommand}"/>
 
         <uc:LoadingUserControl Grid.RowSpan="4" Grid.ColumnSpan="2" State="{Binding Path=LoaderState}"  Visibility="{Binding Path=LoaderVisibility}"/>
 

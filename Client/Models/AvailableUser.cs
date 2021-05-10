@@ -12,10 +12,15 @@
 
         }
 
-        public AvailableUser(string name, int sqlId)
+        public AvailableUser(int sqlId, string name)
         {
-            Name = name;
             SqlId = sqlId;
+            Name = name;
+        }
+
+        public AvailableUser(int sqlId, string name, bool isOnline) : this(sqlId, name) 
+        {
+            IsOnline = isOnline;
         }
 
         public bool IsOnline { get => isOnline; set => Set(ref isOnline, value); }
