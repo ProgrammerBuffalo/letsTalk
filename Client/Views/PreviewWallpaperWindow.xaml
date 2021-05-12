@@ -11,11 +11,6 @@
                 <ResourceDictionary Source="/WindowResources/MessageDictionary.xaml"/>
                 <ResourceDictionary Source="/WindowResources/ThemeDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
-            <Style x:Key="ButtonStyle" BasedOn="{StaticResource MahApps.Styles.Button}" TargetType="Button">
-                <Setter Property="Background" Value="{StaticResource ButtonBackground}"/>
-                <Setter Property="Foreground" Value="FloralWhite"/>
-            </Style>
         </ResourceDictionary>
     </Window.Resources>
 

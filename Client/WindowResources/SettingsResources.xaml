@@ -12,9 +12,7 @@
         <Setter Property="FontWeight" Value="Bold"/>
     </Style>
 
-    <Style x:Key="ButtonStyle" BasedOn="{StaticResource MahApps.Styles.Button}" TargetType="Button">
-        <Setter Property="Background" Value="{StaticResource ButtonBackground}"/>
-        <Setter Property="Foreground" Value="FloralWhite"/>
+    <Style x:Key="ButtonStyle" BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
         <Setter Property="Height" Value="40"/>
         <Setter Property="MinWidth" Value="120"/>
         <Setter Property="MaxWidth" Value="300"/>

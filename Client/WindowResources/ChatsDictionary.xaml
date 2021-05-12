@@ -47,17 +47,18 @@
             UserName="{Binding Path=User.Name}"
             Description="{Binding Path=User.Description}"
             Avatar="{Binding Path=Avatar}"
+            IsOnline="{Binding Path=User.IsOnline}"
             IsOnlineVisibility="Visible">
         </uc:ChatItem>
 
-        <DataTemplate.Triggers>
+        <!--<DataTemplate.Triggers>
             <DataTrigger Binding="{Binding Path=User.IsOnline}" Value="True">
                 <Setter TargetName="chat" Property="IsOnline" Value="True"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding Path=User.IsOnline}" Value="False">
                 <Setter TargetName="chat" Property="IsOnline" Value="False"/>
             </DataTrigger>
-        </DataTemplate.Triggers>
+        </DataTemplate.Triggers>-->
     </DataTemplate>
 
     <DataTemplate x:Key="ChatDataTemplate">

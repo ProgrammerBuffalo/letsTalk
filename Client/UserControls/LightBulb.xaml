@@ -1,0 +1,151 @@
+﻿<UserControl x:Class="Client.UserControls.LightBulb"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             xmlns:local="clr-namespace:Client.UserControls"
+             x:Name="uc" d:DesignHeight="50" d:DesignWidth="50">
+    <UserControl.Resources>
+        <Storyboard x:Key="StoryboardOnline">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="ellipse">
+                <EasingColorKeyFrame KeyTime="0" Value="#FFFCFFB7"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.175" Value="#FFF9FF84"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.35" Value="#FFF8FF63"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#FFFFDF50"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.7" Value="#FFFFEC33"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="path">
+                <EasingColorKeyFrame KeyTime="0" Value="#FFFCFFB7"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.175" Value="#FFF9FF84"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.35" Value="#FFF8FF63"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#FFFFDF50"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.7" Value="#FFFFEC33"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="ellipse1">
+                <EasingColorKeyFrame KeyTime="0" Value="#FFFFFFD6"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.233" Value="#FFFFFFB5"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.467" Value="#FFFFFFA7"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.7" Value="#FFFFE673"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="path1">
+                <EasingColorKeyFrame KeyTime="0" Value="#FFFFFFD6"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.233" Value="#FFFFFFB5"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.467" Value="#FFFFFFA7"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.7" Value="#FFFFE673"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="ellipse2">
+                <EasingColorKeyFrame KeyTime="0:0:0.7" Value="#FFFFD100"/>
+            </ColorAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Effect).(BlurEffect.Radius)" Storyboard.TargetName="ellipse2">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="100"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Effect).(BlurEffect.Radius)" Storyboard.TargetName="ellipse1">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.233" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.467" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="2"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Effect).(BlurEffect.Radius)" Storyboard.TargetName="path1">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.233" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.467" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="2"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="StoryboardOffline">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="ellipse">
+                <EasingColorKeyFrame KeyTime="0" Value="#FFFFEC33"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.175" Value="#FFFFDF50"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.35" Value="#FFF8FF63"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#FFF9FF84"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.7" Value="#FFFFFF"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="path">
+                <EasingColorKeyFrame KeyTime="0" Value="#FFFFEC33"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.175" Value="#FFFFDF50"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.35" Value="#FFF8FF63"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#FFF9FF84"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.7" Value="#FFFFFF"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="ellipse1">
+                <EasingColorKeyFrame KeyTime="0" Value="#FFFFE673"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.233" Value="#FFFFFFA7"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.467" Value="#FFFFFFB5"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.7" Value="#FFFFFF"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="path1">
+                <EasingColorKeyFrame KeyTime="0" Value="#FFFFE673"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.233" Value="#FFFFFFA7"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.467" Value="#FFFFFFB5"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.7" Value="#FFFFFF"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="ellipse2">
+                <EasingColorKeyFrame KeyTime="0:0:0.7" Value="#FFFFFF"/>
+            </ColorAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Effect).(BlurEffect.Radius)" Storyboard.TargetName="ellipse2">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Effect).(BlurEffect.Radius)" Storyboard.TargetName="ellipse1">
+
+                <EasingDoubleKeyFrame KeyTime="0:0:0.233" Value="2"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.467" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Effect).(BlurEffect.Radius)" Storyboard.TargetName="path1">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.233" Value="2"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.467" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </UserControl.Resources>
+
+    <Grid Width="31" Height="42">
+        <Ellipse x:Name="ellipse2" HorizontalAlignment="Left" Height="30" Stroke="{x:Null}" VerticalAlignment="Top" Width="31" Fill="#FFF3F3F3">
+            <Ellipse.Effect>
+                <BlurEffect Radius="0"></BlurEffect>
+            </Ellipse.Effect>
+        </Ellipse>
+        <Ellipse x:Name="ellipse1" HorizontalAlignment="Left" Height="32" Stroke="#FF323131" VerticalAlignment="Top" Width="31" Fill="#FFF3F3F3">
+            <Ellipse.Effect>
+                <BlurEffect Radius="0"></BlurEffect>
+            </Ellipse.Effect>
+        </Ellipse>
+        <Path x:Name="path1" Data="M311.5,267.5 L311,316.5 314,323.5 319,329.5 326.5,334 335.5,335.5 461,334.5 469.5,332 476.5,325 479,318.5 479.5,266" HorizontalAlignment="Left" Height="7.291" Margin="7.505,28.161,0,0" Stretch="Fill" Stroke="#FF323131" VerticalAlignment="Top" Width="15.89" Fill="#FFF3F3F3">
+            <Path.Effect>
+                <BlurEffect Radius="0"></BlurEffect>
+            </Path.Effect>
+        </Path>
+        <Ellipse x:Name="ellipse" HorizontalAlignment="Left" Height="23" Margin="5,5,0,0" Stroke="#FF323131" VerticalAlignment="Top" Width="22" Fill="White"/>
+        <Path x:Name="path" Data="M354,244 L353.5,293 382.5,293 437,293 437.5,243" HorizontalAlignment="Left" Height="5.379" Margin="10.998,25.678,0,0" Stretch="Fill" Stroke="#FF323131" VerticalAlignment="Top" Width="8.776" Fill="White"/>
+        <Path x:Name="path2" Data="M332.5,378 L332.66632,402.33333 334.50055,407.16708 338.0029,412.0001 341.17169,416.0001 345.6742,417.66676 350.34335,418.99974 354.34618,419.49972 439.0674,419.16639 442.7364,418.49973 448.23956,416.49975 452.74208,412.8331 456.0772,407.9998 457.9117,403.1665 458.57914,399.66652 458.57914,377.66667 z" HorizontalAlignment="Left" Height="4.43" Margin="8.406,37.723,0,0" Stretch="Fill" Stroke="#FF323131" VerticalAlignment="Top" Width="13.386" Fill="#FFF1F1F1"/>
+        <Path Data="M379,252 L343.33333,207.33333" Fill="White" HorizontalAlignment="Left" Height="8.746" Margin="11.541,14.912,0,0" Stretch="Fill" Stroke="Black" VerticalAlignment="Top" Width="3.197"/>
+        <Path Data="M379,252 L343.33333,207.33333" Fill="White" HorizontalAlignment="Left" Height="8.746" Margin="16.389,14.903,0,0" Stretch="Fill" Stroke="Black" VerticalAlignment="Top" Width="3.197" RenderTransformOrigin="0.5,0.5">
+            <Path.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleY="0.727" ScaleX="1.373"/>
+                    <SkewTransform AngleY="23.98"/>
+                    <RotateTransform Angle="46.602"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Path.RenderTransform>
+        </Path>
+        <Path Data="M332.625,173.58333 L330.5,170.25033 327,168.00034 324.5,170.50033 323.75,174.50033 325.25,180.50031 328,184.2503 331.75,186.75028 335.75,187.75029 341.08333,186.91696 C341.08333,186.91696 365.87583,176.75032 366.37584,166.75034 366.87585,156.75036 383.5012,214.25023 412.12677,167.25033 412.12677,167.25033 428.00209,195.00038 444.50242,184.50025 L452.25257,180.8127 457.75267,177.75016 C457.75267,177.75016 459.25272,175.87514 459.31522,175.68764 459.37772,175.50013 460.37723,172.8126 460.50224,172.5001 460.62724,172.18759 460.56473,167.50003 460.56473,167.50003 L459.50233,165.62501 458.37731,165.0625 455.75227,165.3755 454.43975,166.12549 453.06472,167.68798 451.9397,169.56296 451.18969,171.06294 450.75218,172.43793" HorizontalAlignment="Left" Height="2.58" Margin="10.998,14.084,0,0" Stretch="Fill" Stroke="Black" VerticalAlignment="Top" Width="9.164"/>
+    </Grid>
+
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="local:LightBulb.On">
+            <EventTrigger.Actions>
+                <BeginStoryboard Storyboard="{StaticResource StoryboardOnline}"/>
+            </EventTrigger.Actions>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="local:LightBulb.Off">
+            <EventTrigger.Actions>
+                <BeginStoryboard Storyboard="{StaticResource StoryboardOffline}"/>
+            </EventTrigger.Actions>
+        </EventTrigger>
+    </UserControl.Triggers>
+</UserControl>

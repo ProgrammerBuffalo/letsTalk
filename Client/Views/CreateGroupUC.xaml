@@ -14,11 +14,6 @@
                 <ResourceDictionary Source="/WindowResources\ChatsDictionary.xaml"/>
                 <ResourceDictionary Source="/WindowResources\ThemeDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
-            <Style x:Key="ButtonStyle" TargetType="Button" BasedOn="{StaticResource MahApps.Styles.Button}">
-                <Setter Property="Background" Value="{StaticResource ButtonBackground}"/>
-                <Setter Property="Foreground" Value="FloralWhite"/>
-            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 

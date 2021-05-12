@@ -195,6 +195,9 @@
     <Compile Include="UserControls\ChatItem.xaml.cs">
       <DependentUpon>ChatItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\LightBulb.xaml.cs">
+      <DependentUpon>LightBulb.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\LoadingUserControl.xaml.cs">
       <DependentUpon>LoadingUserControl.xaml</DependentUpon>
     </Compile>
@@ -207,6 +210,7 @@
     <Compile Include="Utility\ChatDataTemplateSelector.cs" />
     <Compile Include="Utility\Command.cs" />
     <Compile Include="Utility\Converters.cs" />
+    <Compile Include="Utility\DataTemplateSelectors.cs" />
     <Compile Include="Utility\FileHelper.cs" />
     <Compile Include="Utility\ImageCropper.cs" />
     <Compile Include="Utility\MessageTemplateSelector.cs" />
@@ -255,6 +259,10 @@
       <DependentUpon>SettingsUC.xaml</DependentUpon>
     </Compile>
     <Page Include="UserControls\ChatItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\LightBulb.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

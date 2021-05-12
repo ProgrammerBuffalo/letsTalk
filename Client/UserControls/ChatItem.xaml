@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:utility="clr-namespace:Client.Utility"
+             xmlns:UC="clr-namespace:Client.UserControls"
              mc:Ignorable="d" 
              Name="ui" d:DesignHeight="450" d:DesignWidth="800">
 
@@ -23,7 +24,7 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
 
-        <Style x:Key="ActivityStyle" TargetType="Ellipse">
+        <!--<Style x:Key="ActivityStyle" TargetType="Ellipse">
             <Setter Property="Stroke" Value="Black"/>
             <Setter Property="StrokeThickness" Value="1"/>
             <Setter Property="VerticalAlignment" Value="Bottom"/>
@@ -47,21 +48,21 @@
                     <Setter Property="Fill" Value="Red"/>
                 </DataTrigger>
             </Style.Triggers>
-        </Style>
+        </Style>-->
     </UserControl.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MaxWidth="50"/>
+            <ColumnDefinition MaxWidth="60"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
-        <Ellipse Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Width="50" Height="50" StrokeThickness="1" Stroke="Black">
+        <Ellipse Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Width="60" Height="60" StrokeThickness="1" Stroke="Black">
             <Ellipse.Fill>
                 <ImageBrush ImageSource="{Binding Path=Avatar, ElementName=ui}"/>
             </Ellipse.Fill>
@@ -69,7 +70,7 @@
 
         <Control Grid.Row="0" Grid.Column="0" Template="{StaticResource MessageTemplate}"/>
 
-        <Ellipse Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Style="{StaticResource ActivityStyle}"/>
+        <UC:LightBulb Grid.RowSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="-10" Visibility="{Binding ElementName=ui, Path=IsOnlineVisibility}" IsOn="{Binding ElementName=ui, Path=IsOnline}"/>
 
         <TextBlock Text="{Binding Path=UserName, ElementName=ui}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" FontWeight="DemiBold" FontSize="14"/>
 

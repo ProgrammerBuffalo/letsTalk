@@ -10,4 +10,11 @@
     <SolidColorBrush x:Key="HeaderTextForeground" Color="#575339"/>
     <SolidColorBrush x:Key="SourceMessageBackground" Color="#b586ea"/>
     <SolidColorBrush x:Key="GroupBackground" Color="#86bbea"/>
+    <SolidColorBrush x:Key="ButtonForeground" Color="FloralWhite"/>
+
+    <Style x:Key="ButtonStyle" BasedOn="{StaticResource MahApps.Styles.Button}" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource ButtonBackground}"/>
+        <Setter Property="Foreground" Value="{StaticResource ButtonForeground}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+    </Style>
 </ResourceDictionary>

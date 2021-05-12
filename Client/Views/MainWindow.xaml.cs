@@ -45,8 +45,19 @@
             }
             else
             {
-                col1.Width = new System.Windows.GridLength(hamburgerMenu.CompactPaneLength);
+                //col1.Width = new System.Windows.GridLength(hamburgerMenu.CompactPaneLength);
             }
+        }
+
+        private void DoubleAnimation_Completed(object sender, System.EventArgs e)
+        {
+            //col1.Width = new System.Windows.GridLength(hamburgerMenu.Width);
+            //hamburgerMenu.OpenPaneLength = hamburgerMenu.Width;
+        }
+
+        private void DoubleAnimation_Completed_1(object sender, System.EventArgs e)
+        {
+            col1.Width = new System.Windows.GridLength(hamburgerMenu.CompactPaneLength);
         }
     }
 }

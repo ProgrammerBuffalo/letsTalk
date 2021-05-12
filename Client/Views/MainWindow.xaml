@@ -85,6 +85,36 @@
                 </Setter>
             </Style>
 
+            <Storyboard x:Key="HamburgerOpneAnim">
+                <DoubleAnimation Storyboard.TargetProperty="OpenPaneLength" From="70" To="250" Duration="0:0:0.5" Completed="DoubleAnimation_Completed"/>
+            </Storyboard>
+
+            <Storyboard x:Key="HamburgerCloseAnim">
+                <DoubleAnimation Storyboard.TargetProperty="CompactPaneLength" From="250" To="70" Duration="0:0:0.5" Completed="DoubleAnimation_Completed_1"/>
+            </Storyboard>
+
+            <Style x:Key="HamburgerStyle" TargetType="controls:HamburgerMenu">
+                <Setter Property="IsPaneOpen" Value="False"/>
+                <Setter Property="Width" Value="250"/>
+                <Setter Property="OpenPaneLength" Value="250"/>
+                <Setter Property="CompactPaneLength" Value="70"/>
+                <Setter Property="PaneBackground" Value="{StaticResource HamburgerBackground}"/>
+                <Setter Property="PaneForeground" Value="Gray"/>
+
+                <Style.Triggers>
+                    <Trigger Property="IsPaneOpen" Value="True">
+                        <Trigger.EnterActions>
+                            <BeginStoryboard Storyboard="{StaticResource HamburgerOpneAnim}"/>
+                        </Trigger.EnterActions>
+                    </Trigger>
+                    <Trigger Property="IsPaneOpen" Value="False">
+                        <Trigger.EnterActions>
+                            <BeginStoryboard Storyboard="{StaticResource HamburgerCloseAnim}"/>
+                        </Trigger.EnterActions>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
         </ResourceDictionary>
     </Window.Resources>
 
@@ -94,44 +124,28 @@
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
 
-        <!--<UserControl x:Name="uc" Grid.Column="1" Content="{Binding CurrentView}"/>-->
-
-        <controls:HamburgerMenu x:Name="hamburgerMenu" PaneBackground="{StaticResource HamburgerBackground}" PaneForeground="Gray"
+        <controls:HamburgerMenu x:Name="hamburgerMenu"
                                  OptionsItemTemplate="{StaticResource HamburgerMenuOptionsTemplate}"
                                  OptionsItemContainerStyle="{StaticResource HamburgerOptionItemContainerStyle}"
                                  ItemContainerStyle="{StaticResource ChatListBoxItemStyle}"
                                  ItemTemplateSelector="{StaticResource ChatDataTemplateSelector}"
                                  ItemsSource="{Binding Path=Chats}"
                                  SelectedItem="{Binding Path=SelectedChat}"
-                                 IsPaneOpen="False" CompactPaneLength="55" OpenPaneLength="250" Width="250">
+                                 Style="{StaticResource HamburgerStyle}">
 
             <controls:HamburgerMenu.OptionsItemsSource>
                 <controls:HamburgerMenuItemCollection>
-
-                    <!--<controls:HamburgerMenuIconItem Tag="UCAvailableUsers" Label="All Chatrooms">
-                        <controls:HamburgerMenuIconItem.Icon>
-                            <icons:PackIconMaterial  Kind="AccountMultiple" Width="25" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                        </controls:HamburgerMenuIconItem.Icon>
-                    </controls:HamburgerMenuIconItem>-->
-
                     <controls:HamburgerMenuIconItem Tag="UC2" Label="Create Chatroom" Command="{Binding CreateChatCommand}">
                         <controls:HamburgerMenuIconItem.Icon>
                             <icons:PackIconMaterial  Kind="AccountMultiplePlus" Width="25" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         </controls:HamburgerMenuIconItem.Icon>
                     </controls:HamburgerMenuIconItem>
 
-                    <!--<controls:HamburgerMenuIconItem Tag="UCAddUser" Label="Add User" Command="{Binding AddUserCommand}">
-                        <controls:HamburgerMenuIconItem.Icon>
-                            <icons:PackIconMaterial  Kind="AccountPlus" Width="25" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                        </controls:HamburgerMenuIconItem.Icon>
-                    </controls:HamburgerMenuIconItem>-->
-
                     <controls:HamburgerMenuIconItem Tag="UCSettings" Label="Settings" Command="{Binding SettingsCommand}">
                         <controls:HamburgerMenuIconItem.Icon>
                             <icons:PackIconMaterial  Kind="Shield" Width="25" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         </controls:HamburgerMenuIconItem.Icon>
                     </controls:HamburgerMenuIconItem>
-
                 </controls:HamburgerMenuItemCollection>
             </controls:HamburgerMenu.OptionsItemsSource>
 
@@ -154,7 +168,23 @@
                 </DataTemplate>
             </controls:HamburgerMenu.HamburgerMenuHeaderTemplate>
 
-            <!--<controls:HamburgerMenu.ContentTemplate>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="ItemClick">
+                    <i:InvokeCommandAction Command="{Binding SelectedChatChangedCommand}" CommandParameter="{Binding ElementName=hamburgerMenu, Path=SelectedItem}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </controls:HamburgerMenu>
+
+    </Grid>
+</Window>
+
+
+
+
+
+
+
+<!--<controls:HamburgerMenu.ContentTemplate>
                 <DataTemplate>
                     <Grid>
                         <Grid.RowDefinitions>
@@ -171,19 +201,3 @@
                     </Grid>
                 </DataTemplate>
             </controls:HamburgerMenu.ContentTemplate>-->
-
-            <i:Interaction.Triggers>
-                <!--<i:EventTrigger EventName="OptionsItemClick">
-                    <i:InvokeCommandAction Command="{Binding SelectedHambugerOptionItemCommand}"
-                                           CommandParameter="{Binding ElementName=hamburgerMenu, Path=SelectedOptionsItem}"/>
-                </i:EventTrigger>-->
-
-                <i:EventTrigger EventName="ItemClick">
-                    <i:InvokeCommandAction Command="{Binding SelectedChatChangedCommand}"
-                                           CommandParameter="{Binding ElementName=hamburgerMenu, Path=SelectedItem}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </controls:HamburgerMenu>
-
-    </Grid>
-</Window>

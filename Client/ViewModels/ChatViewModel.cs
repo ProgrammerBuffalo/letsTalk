@@ -14,7 +14,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-
 namespace Client.ViewModels
 {
     class ChatViewModel : INotifyPropertyChanged
@@ -22,7 +21,6 @@ namespace Client.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         private delegate void MessageSendType(string message);
         private MessageSendType sendType;
-
 
         private bool canWrite = true;
         private int _countLeft;
@@ -83,12 +81,6 @@ namespace Client.ViewModels
             timer.Interval = 500;
 
             LoaderVisibility = Visibility.Hidden;
-            mainVM.SelectedChat.Messages.Add(new SourceMessage(new TextMessage("asdas das dasd asd as")));
-            mainVM.SelectedChat.Messages.Add(new UserMessage(new TextMessage("sd asd asfa  asd asd asd")));
-            mainVM.SelectedChat.Messages.Add(new SourceMessage(new TextMessage("asdas das dasd asd as")));
-            mainVM.SelectedChat.Messages.Add(new UserMessage(new TextMessage("sd asd asfa  asd asd asd")));
-            mainVM.SelectedChat.Messages.Add(new SourceMessage(new TextMessage("asdas das dasd asd as")));
-            mainVM.SelectedChat.Messages.Add(new UserMessage(new TextMessage("sd asd asfa  asd asd asd")));
         }
 
         public ICommand TextBox_KeyDownCommand { get; }

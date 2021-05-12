@@ -75,7 +75,7 @@ namespace Client.ViewModels
             {
                 MessageBox.Show(ex.Message);
             }
-            catch (System.IO.IOException)
+            catch (IOException)
             {
                 MessageBox.Show("avatar image could not be download");
             }

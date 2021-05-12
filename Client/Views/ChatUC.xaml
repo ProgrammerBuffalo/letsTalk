@@ -35,11 +35,6 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
-
-            <Style x:Key="ButtonStyle" BasedOn="{StaticResource MahApps.Styles.Button}" TargetType="Button" >
-                <Setter Property="Background" Value="{StaticResource ButtonBackground}"/>
-                <Setter Property="Foreground" Value="FloralWhite"/>
-            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
