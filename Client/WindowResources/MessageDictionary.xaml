@@ -13,6 +13,9 @@
     <u:PathToExtension x:Key="PathToExtension"/>
     <u:PathToName x:Key="PathToName"/>
     <u:TypeConverter x:Key="TypeConverter"/>
+    
+    
+    
 
     <SolidColorBrush x:Key="DownoadColor" Color="BlanchedAlmond"/>
 
@@ -472,14 +475,5 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-    <!--<Style x:Key="ListViewStyle" TargetType="ListView">
-        <Setter Property="SelectedItem" Value="{Binding Path=SelectedMessage}"/>
-        <Setter Property="ItemContainerStyle" Value="{StaticResource ListViewItemStyle}"/>
-        <Setter Property="ItemTemplateSelector" Value="{StaticResource MessageSelector}"/>
-        <Setter Property="ItemsSource" Value="{Binding Path=Messages}"/>
-        <Setter Property="Background" Value="YellowGreen"/>
-        <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
-    </Style>-->
 
 </ResourceDictionary>

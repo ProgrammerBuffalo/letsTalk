@@ -43,7 +43,7 @@ namespace Client.Utility
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             string path = value.ToString();
-            return path.Substring(path.LastIndexOf('/') + 1);
+            return path.Substring(path.LastIndexOf('\\') + 1);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

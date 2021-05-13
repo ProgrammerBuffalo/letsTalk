@@ -6,6 +6,7 @@
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:utility="clr-namespace:Client.Utility"
              xmlns:models="clr-namespace:Client.Models"
+             xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" >
     <UserControl.Resources>
@@ -13,6 +14,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/WindowResources/MessageDictionary.xaml"/>
                 <ResourceDictionary Source="/WindowResources/ThemeDictionary.xaml"/>
+                <ResourceDictionary Source="/WindowResources/InputMessageDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <utility:TypeConverter x:Key="TypeConverter"/>
@@ -35,6 +37,7 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
+
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -103,7 +106,7 @@
                   ItemTemplateSelector="{StaticResource MessageSelector}"
                   ItemsSource="{Binding Path=Chat.Messages}"
                   ScrollViewer.CanContentScroll="False"
-                  ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListView.Background>
                 <ImageBrush ImageSource="{Binding Path=Settings.SelectedWallpaper}"/>
             </ListView.Background>
@@ -118,15 +121,14 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="8*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Path=Chat.UserIsWriting}" FontSize="25" Panel.ZIndex="1" Margin="0,-41,20,70"/>
 
-            <TextBox IsEnabled="{Binding Path=Chat.CanWrite}" Text="{Binding MessageText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     Grid.Column="0"
-                     Background="DarkSlateGray" Foreground="White" FontSize="30" TextWrapping="Wrap"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <!--<TextBox Grid.Column="0"
+                     IsEnabled="{Binding Path=Chat.CanWrite}"
+                     Text="{Binding MessageText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource InputTextBoxStyle}">
                 <TextBox.InputBindings>
                     <KeyBinding Key="Enter" Command="{Binding TextBox_EnterPressedCommand}"/>
                 </TextBox.InputBindings>
@@ -138,10 +140,13 @@
                         <i:InvokeCommandAction Command="{Binding TextBox_KeyUpCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-            </TextBox>
+            </TextBox>-->
+
+            <ContentControl Content="{Binding Path=InputMessage}"
+                            ContentTemplateSelector="{StaticResource InputMessageTemplateSelector}"/>
 
             <Button Grid.Column="1" Content="File" FontSize="20" Background="{StaticResource ButtonBackground}" Command="{Binding OpenFileCommand}"/>
-            <Button IsEnabled="{Binding Path=Chat.CanWrite}" Grid.Column="3" Content="Send" FontSize="20" Background="{StaticResource ButtonBackground}" Command="{Binding SendCommand}"/>
+            <!--<Button IsEnabled="{Binding Path=Chat.CanWrite}" Grid.Column="3" Content="Send" FontSize="20" Background="{StaticResource ButtonBackground}" Command="{Binding SendCommand}"/>-->
         </Grid>
     </Grid>
 

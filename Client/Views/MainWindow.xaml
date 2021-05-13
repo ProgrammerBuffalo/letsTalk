@@ -6,6 +6,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:icons ="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:controls ="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:UC="clr-namespace:Client.UserControls"
         mc:Ignorable="d"
         Title="letsTalkWindow" Height="700" Width="1200" WindowStartupLocation="CenterScreen">
 
@@ -21,9 +22,9 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/WindowResources/ButtonEllipseStyle.xaml"/>
                 <ResourceDictionary Source="/WindowResources/ChatsDictionary.xaml"/>
                 <ResourceDictionary Source="/WindowResources/ThemeDictionary.xaml"/>
+                <ResourceDictionary Source="/WindowResources/ButtonLoaderTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate x:Key="HamburgerMenuOptionsTemplate" DataType="{x:Type controls:HamburgerMenuIconItem}">
@@ -85,13 +86,13 @@
                 </Setter>
             </Style>
 
-            <Storyboard x:Key="HamburgerOpneAnim">
+            <!--<Storyboard x:Key="HamburgerOpneAnim">
                 <DoubleAnimation Storyboard.TargetProperty="OpenPaneLength" From="70" To="250" Duration="0:0:0.5" Completed="DoubleAnimation_Completed"/>
             </Storyboard>
 
             <Storyboard x:Key="HamburgerCloseAnim">
                 <DoubleAnimation Storyboard.TargetProperty="CompactPaneLength" From="250" To="70" Duration="0:0:0.5" Completed="DoubleAnimation_Completed_1"/>
-            </Storyboard>
+            </Storyboard>-->
 
             <Style x:Key="HamburgerStyle" TargetType="controls:HamburgerMenu">
                 <Setter Property="IsPaneOpen" Value="False"/>
@@ -101,7 +102,7 @@
                 <Setter Property="PaneBackground" Value="{StaticResource HamburgerBackground}"/>
                 <Setter Property="PaneForeground" Value="Gray"/>
 
-                <Style.Triggers>
+                <!--<Style.Triggers>
                     <Trigger Property="IsPaneOpen" Value="True">
                         <Trigger.EnterActions>
                             <BeginStoryboard Storyboard="{StaticResource HamburgerOpneAnim}"/>
@@ -112,7 +113,7 @@
                             <BeginStoryboard Storyboard="{StaticResource HamburgerCloseAnim}"/>
                         </Trigger.EnterActions>
                     </Trigger>
-                </Style.Triggers>
+                </Style.Triggers>-->
             </Style>
 
         </ResourceDictionary>
@@ -151,19 +152,14 @@
 
             <controls:HamburgerMenu.HamburgerMenuHeaderTemplate>
                 <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="64"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                    <Grid Margin="25,0,0,0">
+                        <UC:ChatItem UserName="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.Client.UserName}"
+                                 Avatar="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.Client.UserImage}"
+                                 IsOnlineVisibility="Hidden"/>
 
-                        <Button Command="{Binding Path=DataContext.ChangeAvatarCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" Grid.Column="0" Margin="10, 2" Style="{StaticResource ButtonEllipseStyle}"/>
-
-                        <TextBlock Grid.Column="1" 
-                                HorizontalAlignment="Center" VerticalAlignment="Center"
-                                FontSize="16"
-                                Foreground="Gray"
-                                Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.Client.UserName}"/>
+                        <Button Cursor="Hand" Margin="5,5,0,0"
+                                Command="{Binding Path=DataContext.ChangeAvatarCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                Template="{StaticResource ButtonLoaderTemplate}"/>
                     </Grid>
                 </DataTemplate>
             </controls:HamburgerMenu.HamburgerMenuHeaderTemplate>

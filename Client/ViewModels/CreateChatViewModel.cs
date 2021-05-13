@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 namespace Client.ViewModels
 {
     //пока что сделал все в одном потоке потом исправлю шас на это времяни нет
-    class CreateChatViewModel : System.ComponentModel.INotifyPropertyChanged
+    class CreateChatViewModel : System.ComponentModel.INotifyPropertyChanged, IDropTarget
     {
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 
@@ -24,7 +24,7 @@ namespace Client.ViewModels
         private bool usersToAddIsDropSource;
         private bool allUsersIsDropTarget;
         private bool usersToAddIsDropTarget;
-        
+
         private string searchText;
         private string chatName;
         private AvailableUser selectedUser;
@@ -83,7 +83,7 @@ namespace Client.ViewModels
         public ObservableCollection<AvailableUser> AllUsers { get => allUsers; set => Set(ref allUsers, value); }
         public ObservableCollection<AvailableUser> UsersToAdd { get => usersToAdd; set => Set(ref usersToAdd, value); }
         public AvailableUser SelectedUser { get => selectedUser; set => Set(ref selectedUser, value); }
-        
+
         public string ChatName { get => chatName; set => Set(ref chatName, value); }
         public string SearchText { get => searchText; set => Set(ref searchText, value); }
 

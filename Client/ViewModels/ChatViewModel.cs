@@ -1,5 +1,6 @@
 ﻿using Client.Models;
 using Client.Utility;
+using GongSolutions.Wpf.DragDrop;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -18,20 +19,17 @@ namespace Client.ViewModels
 {
     class ChatViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private delegate void MessageSendType(string message);
-        private MessageSendType sendType;
+        //private delegate void MessageSendType(string message);
+        //private MessageSendType sendType;
 
-        private bool canWrite = true;
+        //private bool canWrite = true;
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private int _countLeft;
 
         private double _previousScrollOffset;
 
         private MainViewModel mainVM;
-
-        //public ChatService.ChatClient ChatClient { get; set; }
-
-        //private ClientUserInfo client;
         private Chat chat;
 
         private MediaMessage curMediaMessage;
@@ -43,35 +41,22 @@ namespace Client.ViewModels
         private string messageText = "";
 
         private Visibility loaderVisibility;
+        private Message inputMessage;
 
         public ChatViewModel(MainViewModel mainVM)
         {
             this.mainVM = mainVM;
             Chat = mainVM.SelectedChat;
+            Settings = Settings.Instance;
+
+            InputMessage = new TextMessage();
+            LoaderVisibility = Visibility.Hidden;
 
             _countLeft = chat._messageCount;
 
             //client = ClientUserInfo.getInstance();
             //ChatClient = chatClient;
-            Settings = Settings.Instance;
-
-            TextBox_KeyDownCommand = new Command(TextBox_KeyDown);
-            TextBox_KeyUpCommand = new Command(TextBox_KeyUp);
-            TextBox_EnterPressedCommand = new Command(TextBox_EnterPressed);
-
-            MediaPlayCommand = new Command(MediaPlay);
-            MediaPosChangedCommand = new Command(MediaPosChanged);
-            SendCommand = new Command(Send);
-            OpenFileCommand = new Command(OpenFile);
-            UnloadCommand = new Command(Unload);
-            LoadCommand = new Command(Load);
-
-            EditChatCommand = new Command(EditChat);
-            LeaveChatCommand = new Command(LeaveChat);
-
-            DownloadFileCommand = new Command(DownloadFile);
-
-            sendType = SendText;
+            //sendType = SendText;
 
             player = new MediaPlayer();
             player.MediaEnded += MediaEnded;
@@ -80,7 +65,25 @@ namespace Client.ViewModels
             timer.Elapsed += MediaPosTimer;
             timer.Interval = 500;
 
-            LoaderVisibility = Visibility.Hidden;
+            TextBox_KeyDownCommand = new Command(TextBox_KeyDown);
+            TextBox_KeyUpCommand = new Command(TextBox_KeyUp);
+            TextBox_EnterPressedCommand = new Command(TextBox_EnterPressed);
+
+            MediaPlayCommand = new Command(MediaPlay);
+            MediaPosChangedCommand = new Command(MediaPosChanged);
+            //SendCommand = new Command(Send);
+            OpenFileCommand = new Command(OpenFile);
+            UnloadCommand = new Command(Unload);
+            LoadCommand = new Command(Load);
+
+            EditChatCommand = new Command(EditChat);
+            LeaveChatCommand = new Command(LeaveChat);
+
+            DownloadFileCommand = new Command(DownloadFile);
+            CancelFileCommand = new Command(CancelFile);
+            SendFileCommand = new Command(SendFile);
+
+            InputMessage = new TextMessage();
         }
 
         public ICommand TextBox_KeyDownCommand { get; }
@@ -89,7 +92,7 @@ namespace Client.ViewModels
 
         public ICommand MediaPlayCommand { get; }
         public ICommand MediaPosChangedCommand { get; }
-        public ICommand SendCommand { get; }
+        //public ICommand SendCommand { get; }
         public ICommand OpenFileCommand { get; }
         public ICommand OpenSmileCommand { get; }
         public ICommand UnloadCommand { get; }
@@ -98,13 +101,17 @@ namespace Client.ViewModels
         public ICommand LeaveChatCommand { get; }
 
         public ICommand LoadCommand { get; }
+        public ICommand SendFileCommand { get; }
+        public ICommand CancelFileCommand { get; }
         public ICommand DownloadFileCommand { get; }
 
         public Chat Chat { get => chat; set => Set(ref chat, value); }
+        public Settings Settings { get; }
         public string IsWritingText { get => isWritingText; set => Set(ref isWritingText, value); }
+
+        public Message InputMessage { get => inputMessage; set => Set(ref inputMessage, value); }
         public string MessageText { get => messageText; set => Set(ref messageText, value); }
         public System.Windows.Controls.ScrollViewer Scroll { get; set; }
-        public Settings Settings { get; }
 
         public Visibility LoaderVisibility { get => loaderVisibility; set => Set(ref loaderVisibility, value); }
 
@@ -280,7 +287,6 @@ namespace Client.ViewModels
         //тут метод для загрузки файла
         public async void DownloadFile(object param)
         {
-
             FileMessage message = (FileMessage)param;
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -370,10 +376,10 @@ namespace Client.ViewModels
             }
         }
 
-        private void Send(object param)
-        {
-            sendType.Invoke(IsWritingText);
-        }
+        //private void Send(object param)
+        //{
+        //    sendType.Invoke(IsWritingText);
+        //}
 
         private void OpenFile(object param)
         {
@@ -385,9 +391,20 @@ namespace Client.ViewModels
                  + "|Zip files (*.zip)|*.zip";
             if (dialog.ShowDialog() == true)
             {
-                sendType = SendFile;
+                //sendType = SendFile;
                 IsWritingText = dialog.FileName;
+                InputMessage = new FileMessage() { FileName = dialog.FileName };
             }
+        }
+
+        private void SendFile(object param)
+        {
+
+        }
+
+        private void CancelFile(object param)
+        {
+            InputMessage = new TextMessage();
         }
 
         private void ShowMore(object param)
