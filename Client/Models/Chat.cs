@@ -172,45 +172,6 @@ namespace Client.Models
 
         public abstract AvailableUser FindUser(Nullable<int> userId);
 
-        public async void DownloadAvatarAsync(int id)
-        {
-            ChatService.DownloadRequest request = new ChatService.DownloadRequest(SqlId);
-            var avatarClient = new ChatService.AvatarClient();
-
-            Stream stream = null;
-            long lenght = 0;
-
-            try
-            {
-                await System.Threading.Tasks.Task.Run(() =>
-                {
-                    avatarClient.UserAvatarDownload(id, out lenght, out stream);
-                    if (lenght <= 0)
-                        return;
-                    MemoryStream memoryStream = Utility.FileHelper.ReadFileByPart(stream);
-
-                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        var bitmapImage = new BitmapImage();
-                        bitmapImage.BeginInit();
-                        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                        bitmapImage.StreamSource = memoryStream;
-                        bitmapImage.EndInit();
-
-                        Avatar = bitmapImage;
-                    });
-                    memoryStream.Close();
-                    memoryStream.Dispose();
-                    stream.Close();
-                    stream.Dispose();
-                });
-
-            }
-            catch (System.ServiceModel.FaultException<ChatService.ConnectionExceptionFault> ex)
-            {
-                throw ex;
-            }
-        }
 
         protected void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
         {
@@ -242,7 +203,6 @@ namespace Client.Models
         public ChatOne(int sqlId, AvailableUser user) : this(sqlId)
         {
             User = user;
-            DownloadAvatarAsync(user.SqlId);
         }
 
         public ChatOne(IEnumerable<SourceMessage> messages, AvailableUser user, int count) : base(messages, count)
@@ -251,16 +211,6 @@ namespace Client.Models
         }
 
         public AvailableUser User { get => user; set => Set(ref user, value); }
-
-        public override BitmapImage Avatar
-        {
-            get => user.Image;
-            set
-            {
-                user.Image = value;
-                Set("Avatar");
-            }
-        }
 
         public override bool SetOnlineState(int userId, bool state)
         {
@@ -325,18 +275,6 @@ namespace Client.Models
             allColors[10] = "#c21bb7";
             allColors[11] = "#ed028b";
             allColors[12] = "#8c0315";
-        }
-
-        public ChatGroup()
-        {
-            Users.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(
-               delegate (object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-               {
-                   if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-                   {
-                       DownloadAvatarAsync((e.NewItems[0] as AvailableUser).SqlId);
-                   }
-               });
         }
 
         public ChatGroup(int sqlId, string groupName, IEnumerable<AvailableUser> users) : base(sqlId)

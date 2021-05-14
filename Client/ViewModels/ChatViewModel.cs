@@ -273,7 +273,6 @@ namespace Client.ViewModels
             window.ShowDialog();
         }
 
-        //тут должен быть твой метод для сообшения другим пользователям что узер покинул chat
         public void LeaveChat(object param)
         {
             if (Chat != null)
@@ -286,7 +285,6 @@ namespace Client.ViewModels
             }
         }
 
-        //тут метод для загрузки файла
         public async void DownloadFile(object param)
         {
             FileMessage message = (FileMessage)param;
@@ -411,9 +409,9 @@ namespace Client.ViewModels
             InputMessage = new TextMessage();
         }
 
-        private void ShowMore(object param)
+        private async void ShowMore(object param)
         {
-            LoadMore();
+            await LoadMore();
         }
 
         private void SendFile(string path)
@@ -434,7 +432,7 @@ namespace Client.ViewModels
                 if (fileStream.CanRead)
                     stream_id = fileClient.FileUpload(Chat.SqlId, path, mainVM.Client.SqlId, fileStream);
             }
-            catch (Exception ex) { }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
             finally
             {
                 if (fileStream != null)

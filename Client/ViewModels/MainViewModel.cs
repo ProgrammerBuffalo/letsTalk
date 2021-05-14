@@ -45,8 +45,17 @@ namespace Client.ViewModels
             SettingsCommand = new Command(Settings);
             ChangeAvatarCommand = new Command(ChangeAvatar);
 
-            Users = new Dictionary<int, AvailableUser>();
+            Users = new ObservableCollection<KeyValuePair<int, AvailableUser>>();
             Chats = new ObservableCollection<Models.Chat>();
+
+            Users.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(
+               delegate (object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+               {
+                   if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+                   {
+                       DownloadAvatarAsync(((KeyValuePair<int, AvailableUser>)e.NewItems[0]).Value);
+                   }
+               });
         }
 
         public ICommand LoadedWindowCommand { get; }
@@ -60,7 +69,7 @@ namespace Client.ViewModels
         public ChatClient ChatClient { set; get; } // Сеанс
         public ClientUserInfo Client { get => client; set => Set(ref client, value); } // Вся информация о подключенном юзере
 
-        public Dictionary<int, AvailableUser> Users { get; private set; }
+        public ObservableCollection<KeyValuePair<int, AvailableUser>> Users { get; private set; }
         public ObservableCollection<Models.Chat> Chats { get => chats; set => Set(ref chats, value); }
         public Models.Chat SelectedChat { get => selectedChat; set => Set(ref selectedChat, value); }
 
@@ -295,7 +304,6 @@ namespace Client.ViewModels
 
         public void ClosedWindow(object sender)
         {
-            //ChatClient.Disconnect();
         }
 
         private async void LoadChatroomsAsync()
@@ -318,10 +326,17 @@ namespace Client.ViewModels
                                 canWrite = true;
                                 continue;
                             }
-                            availableUsers.Add(new AvailableUser(userInChat.UserSqlId, userInChat.UserName, userInChat.IsOnline));
+
+                            AvailableUser user = Users.FirstOrDefault(u => u.Key == userInChat.UserSqlId).Value;
+                            if (user == null)
+                            {
+                                user = new AvailableUser(userInChat.UserSqlId, userInChat.UserName, userInChat.IsOnline);
+                                Users.Add(new KeyValuePair<int, AvailableUser>(user.SqlId, user));
+                            }
+                            availableUsers.Add(user);
                         }
                         clientChatrooms.Add(availableUsers.Count > 1 ? new ChatGroup(key.ChatSqlId, key.ChatName, availableUsers) { CanWrite = canWrite }
-                                                                 : (Models.Chat)new ChatOne(key.ChatSqlId, availableUsers.First()) { CanWrite = canWrite });
+                                                                 : (Models.Chat)new ChatOne(key.ChatSqlId, availableUsers[0]) { CanWrite = canWrite });
                     }
                     else
                     {
@@ -330,19 +345,63 @@ namespace Client.ViewModels
                 }
                 return clientChatrooms;
             }));
+        }
 
+        public async void DownloadAvatarAsync(AvailableUser user)
+        {
+            ChatService.DownloadRequest request = new ChatService.DownloadRequest(user.SqlId);
+            var avatarClient = new ChatService.AvatarClient();
+            Stream stream = null;
+            MemoryStream memoryStream = null;
+            long lenght = 0;
+
+            try
+            {
+                await System.Threading.Tasks.Task.Run(() =>
+                {
+                    avatarClient.UserAvatarDownload(user.SqlId, out lenght, out stream);
+                    if (lenght <= 0)
+                        return;
+                    memoryStream = Utility.FileHelper.ReadFileByPart(stream);
+
+                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        var bitmapImage = new BitmapImage();
+                        bitmapImage.BeginInit();
+                        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmapImage.StreamSource = memoryStream;
+                        bitmapImage.EndInit();
+
+                        user.Image = bitmapImage;
+                    });
+
+                });
+
+            }
+            catch (System.ServiceModel.FaultException<ChatService.ConnectionExceptionFault> ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (memoryStream != null)
+                {
+                    memoryStream.Close();
+                    memoryStream.Dispose();
+                }
+                if (stream != null)
+                {
+                    stream.Close();
+                    stream.Dispose();
+                }
+            }
         }
 
         public void NotifyUserChangedAvatar(int userId)
         {
-            foreach (Models.Chat chat in Chats)
-            {
-                AvailableUser user = chat.FindUser(userId);
-                if (user != null)
-                {
-                    chat.DownloadAvatarAsync(user.SqlId);
-                }
-            }
+            AvailableUser user = Users.FirstOrDefault(u => u.Key == userId).Value;
+            if (user != null)
+                DownloadAvatarAsync(user);
         }
 
         public void NotifyСhatroomAvatarIsChanged(int chatId)

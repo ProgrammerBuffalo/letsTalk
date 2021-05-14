@@ -46,7 +46,7 @@
             x:Name="chat"
             UserName="{Binding Path=User.Name}"
             Description="{Binding Path=User.Description}"
-            Avatar="{Binding Path=Avatar}"
+            Avatar="{Binding Path=User.Image}"
             IsOnline="{Binding Path=User.IsOnline}"
             IsOnlineVisibility="Visible">
         </uc:ChatItem>
