@@ -54,14 +54,8 @@ namespace Client.Models
 
     public class FileMessage : Message
     {
-        private static string root;
         private string fileName;        
         private bool isLoaded;
-
-        //static FileMessage()
-        //{
-        //    root = AppDomain.CurrentDomain.BaseDirectory;
-        //}
 
         public FileMessage()
         {

@@ -13,9 +13,6 @@
     <u:PathToExtension x:Key="PathToExtension"/>
     <u:PathToName x:Key="PathToName"/>
     <u:TypeConverter x:Key="TypeConverter"/>
-    
-    
-    
 
     <SolidColorBrush x:Key="DownoadColor" Color="BlanchedAlmond"/>
 

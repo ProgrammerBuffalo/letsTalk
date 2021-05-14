@@ -229,22 +229,24 @@ namespace Client.ViewModels
 
         private void TextBox_EnterPressed(object obj)
         {
-            if (MessageText.Length < 1)
-                return;
-            mainVM.ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = MessageText, UserId = mainVM.Client.SqlId }, Chat.SqlId);
-            Chat.Messages.Add(new UserMessage(new TextMessage(MessageText, DateTime.Now)));
-            MessageText = "";
+            TextMessage message = (TextMessage)inputMessage;
+            if (String.IsNullOrEmpty(messageText)) return;
+            message.Date = DateTime.Now;
+            message.Text = messageText;
+            mainVM.ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = message.Text, UserId = mainVM.Client.SqlId }, Chat.SqlId);
+            Chat.Messages.Add(new UserMessage(InputMessage));
+            MessageText = null;
         }
 
         private void TextBox_KeyUp(object obj)
         {
-            if (MessageText.Length < 1)
+            if (String.IsNullOrEmpty(messageText))
                 mainVM.ChatClient.MessageIsWritingAsync(Chat.SqlId, null);
         }
 
         private void TextBox_KeyDown(object obj)
         {
-            if (MessageText.Length > 1)
+            if (String.IsNullOrEmpty(messageText))
                 mainVM.ChatClient.MessageIsWritingAsync(Chat.SqlId, mainVM.Client.SqlId);
         }
 
@@ -376,11 +378,6 @@ namespace Client.ViewModels
             }
         }
 
-        //private void Send(object param)
-        //{
-        //    sendType.Invoke(IsWritingText);
-        //}
-
         private void OpenFile(object param)
         {
             OpenFileDialog dialog = new OpenFileDialog();
@@ -391,15 +388,22 @@ namespace Client.ViewModels
                  + "|Zip files (*.zip)|*.zip";
             if (dialog.ShowDialog() == true)
             {
-                //sendType = SendFile;
                 IsWritingText = dialog.FileName;
-                InputMessage = new FileMessage() { FileName = dialog.FileName };
+                InputMessage = new FileMessage(dialog.FileName);
             }
         }
 
         private void SendFile(object param)
         {
+            //берем путь файла
+            FileMessage message = (FileMessage)inputMessage;
 
+            //отправка файла
+
+            //после отправки файла пользователь опять может писать текст
+            inputMessage.Date = DateTime.Now;
+            Chat.Messages.Add(new UserMessage(inputMessage));
+            InputMessage = new TextMessage();
         }
 
         private void CancelFile(object param)
@@ -410,11 +414,6 @@ namespace Client.ViewModels
         private void ShowMore(object param)
         {
             LoadMore();
-        }
-
-        private void SendText(string text)
-        {
-
         }
 
         private void SendFile(string path)

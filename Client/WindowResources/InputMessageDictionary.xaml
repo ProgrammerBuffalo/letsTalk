@@ -80,7 +80,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="TextDataTemplate">
-        <TextBox Text="{Binding Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        <TextBox Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.MessageText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.Chat.CanWrite}"
                  Style="{StaticResource InputTextBoxStyle}">
             <TextBox.InputBindings>
