@@ -50,8 +50,6 @@ namespace Client.Models
 
         public BitmapImage UserImage { get => userImage; set => Set(ref userImage, value); }
 
-        public Dictionary<int, AvailableUser> Users { get; set; }
-
         public async void DownloadAvatarAsync()
         {
             ChatService.DownloadRequest request = new ChatService.DownloadRequest(SqlId);
