@@ -50,12 +50,16 @@ namespace Client.Models
                                     case ".jpeg":
                                         if (sourceMessage is SessionSendedMessage)
                                         {
-                                            sourceMessage.Message = LoadImageFromClient(fileMessage);
+                                            sourceMessage.Message = LoadImageFromClient(fileMessage).Result;
                                             break;
                                         }
                                         sourceMessage.Message = LoadImageFromServer(fileMessage);
                                         break;
                                     default:
+                                        if (sourceMessage is SessionSendedMessage)
+                                        {
+                                            UploadFileToServer(fileMessage);
+                                        }
                                         fileMessage.IsLoaded = false;
                                         break;
                                 }
@@ -83,14 +87,22 @@ namespace Client.Models
             SqlId = sqlId;
         }
 
-        private ImageMessage LoadImageFromClient(FileMessage fileMessage)
+        private async System.Threading.Tasks.Task<ImageMessage> LoadImageFromClient(FileMessage fileMessage)
         {
             ImageMessage imageMessage = new ImageMessage(fileMessage.FileName, fileMessage.Date, fileMessage.StreamId);
 
             MemoryStream memoryStream = new MemoryStream();
             using (FileStream fileStream = new FileStream(fileMessage.FileName, FileMode.Open, FileAccess.Read))
             {
+                ChatService.UploadFileInfo uploadFileInfo = new ChatService.UploadFileInfo();
+                uploadFileInfo.FileName = fileMessage.FileName;
+                uploadFileInfo.FileStream = fileStream;
+                uploadFileInfo.Responsed_SqlId = ClientId;
+
+                ChatService.FileClient fileClient = new ChatService.FileClient();
                 fileStream.CopyTo(memoryStream);
+                fileStream.Position = 0;
+                await fileClient.FileUploadAsync(SqlId, uploadFileInfo.FileName, uploadFileInfo.Responsed_SqlId, uploadFileInfo.FileStream);
             }
 
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
@@ -108,6 +120,21 @@ namespace Client.Models
             });
             imageMessage.FileName = imageMessage.FileName.Substring(imageMessage.FileName.LastIndexOf("\\") + 1);
             return imageMessage;
+        }
+
+        private void UploadFileToServer(FileMessage fileMessage)
+        {
+            
+            using (FileStream fileStream = new FileStream(fileMessage.FileName, FileMode.Open, FileAccess.Read))
+            {
+                ChatService.UploadFileInfo uploadFileInfo = new ChatService.UploadFileInfo();
+                uploadFileInfo.FileName = fileMessage.FileName;
+                uploadFileInfo.FileStream = fileStream;
+                uploadFileInfo.Responsed_SqlId = ClientId;
+
+                ChatService.FileClient fileClient = new ChatService.FileClient();
+                fileClient.FileUploadAsync(SqlId, uploadFileInfo.FileName, uploadFileInfo.Responsed_SqlId, uploadFileInfo.FileStream);
+            }
         }
 
         private ImageMessage LoadImageFromServer(FileMessage fileMessage)
@@ -128,6 +155,7 @@ namespace Client.Models
 
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
+                    memoryStream.Position = 0;
                     var bitmapImage = new BitmapImage();
                     bitmapImage.BeginInit();
                     bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
@@ -151,6 +179,8 @@ namespace Client.Models
 
 
         public int SqlId { get; set; }
+
+        public int ClientId { get; set; }
 
         public ObservableCollection<SourceMessage> Messages { get => messages; set => Set(ref messages, value); }
 

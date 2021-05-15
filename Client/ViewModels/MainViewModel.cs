@@ -252,10 +252,15 @@ namespace Client.ViewModels
                 App.Current.Dispatcher.Invoke(() =>
                 {
                     List<AvailableUser> availableUsers = new List<AvailableUser>();
-                    foreach (var user in usersInChat)
+                    foreach (var item in usersInChat)
                     {
-                        if (user.UserSqlId != client.SqlId)
-                            availableUsers.Add(new AvailableUser(user.UserSqlId, user.UserName, user.IsOnline));
+                        AvailableUser user = Users.FirstOrDefault(u => u.Key == item.UserSqlId).Value;
+                        if (user == null)
+                        {
+                            user = new AvailableUser(item.UserSqlId, item.UserName, item.IsOnline);
+                            Users.Add(new KeyValuePair<int, AvailableUser>(user.SqlId, user));
+                        }
+                        availableUsers.Add(user);
                     }
 
                     Chats.Add(availableUsers.Count > 1 ? new ChatGroup(chatId, chatName, availableUsers) { CanWrite = true }
