@@ -47,6 +47,7 @@ namespace Client.ViewModels
         {
             this.mainVM = mainVM;
             Chat = mainVM.SelectedChat;
+            Chat.ClientId = mainVM.Client.SqlId;
             Settings = Settings.Instance;
 
             InputMessage = new TextMessage();
@@ -234,7 +235,7 @@ namespace Client.ViewModels
             message.Date = DateTime.Now;
             message.Text = messageText;
             mainVM.ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = message.Text, UserId = mainVM.Client.SqlId }, Chat.SqlId);
-            Chat.Messages.Add(new UserMessage(InputMessage));
+            Chat.Messages.Add(new SessionSendedMessage(message));
             MessageText = null;
         }
 
@@ -393,14 +394,13 @@ namespace Client.ViewModels
 
         private void SendFile(object param)
         {
-            //берем путь файла
             FileMessage message = (FileMessage)inputMessage;
 
-            //отправка файла
+            if(message.FileName.Length > 0)
+            {
+                Chat.Messages.Add(new SessionSendedMessage(message));
+            }
 
-            //после отправки файла пользователь опять может писать текст
-            inputMessage.Date = DateTime.Now;
-            Chat.Messages.Add(new UserMessage(inputMessage));
             InputMessage = new TextMessage();
         }
 
@@ -463,6 +463,7 @@ namespace Client.ViewModels
                     player.Close();
                 }
                 chat.Messages.Clear();
+                chat._messageOffset = 0;
                 chat._offsetDate = DateTime.Now;
             }
         }
