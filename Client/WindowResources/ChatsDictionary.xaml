@@ -61,14 +61,14 @@
         </DataTemplate.Triggers>-->
     </DataTemplate>
 
-    <!--<DataTemplate x:Key="ChatDataTemplate">
+    <DataTemplate x:Key="ChatDataTemplate">
         <uc:ChatItem
             UserName="{Binding Path=Name}"
             Description="{Binding Path=bbb}"
             Avatar="{Binding Path=Image}"
             IsOnlineVisibility="Hidden">
         </uc:ChatItem>
-    </DataTemplate>-->
+    </DataTemplate>
 
     <DataTemplate x:Key="ChatGroupDataTemplate">
         <uc:ChatItem
@@ -79,8 +79,7 @@
             IsOnlineVisibility="Hidden">
         </uc:ChatItem>
     </DataTemplate>
-    
-    
+   
 
     <utility:ChatDataTemplateSelector
                 x:Key="ChatDataTemplateSelector"

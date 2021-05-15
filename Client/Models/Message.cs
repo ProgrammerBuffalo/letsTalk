@@ -5,11 +5,11 @@ using System.Windows.Media.Imaging;
 namespace Client.Models
 {
     //сюда можешь добавить Id для сообшений
-    public class Message : INotifyPropertyChanged
+    public class Message : INotifyPropertyChanged, ICloneable
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private DateTime date;
+        protected DateTime date;
 
         public Message()
         {
@@ -22,6 +22,11 @@ namespace Client.Models
         }
 
         public DateTime Date { get => date; set => Set(ref date, value); }
+
+        public virtual object Clone()
+        {
+            return new Message(date);
+        }
 
         protected void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
         {
@@ -50,12 +55,17 @@ namespace Client.Models
         }
 
         public string Text { get => text; set => Set(ref text, value); }
+
+        public override object Clone()
+        {
+            return new TextMessage(text, date);
+        }
     }
 
     public class FileMessage : Message
     {
-        private string fileName;        
-        private bool isLoaded;
+        protected string fileName;
+        protected bool isLoaded;
 
         public FileMessage()
         {
@@ -77,9 +87,19 @@ namespace Client.Models
             StreamId = streamId;
         }
 
+        public FileMessage(string fileName, DateTime date, Guid streamdId, bool isLoaded) : this(fileName, date, streamdId)
+        {
+            IsLoaded = isLoaded;
+        }
+
         public Guid StreamId { get; set; }
         public string FileName { get => fileName; set => Set(ref fileName, value); }
         public bool IsLoaded { get => isLoaded; set => Set(ref isLoaded, value); }
+
+        public override object Clone()
+        {
+            return new FileMessage(fileName, date, StreamId, isLoaded);
+        }
     }
 
     public class ImageMessage : FileMessage
@@ -94,6 +114,15 @@ namespace Client.Models
             Bitmap = bitmap;
         }
 
+        public ImageMessage(string fileName, DateTime date, Guid streamId, bool isLoaded, BitmapImage image) : base(fileName, date, streamId, isLoaded)
+        {
+            Bitmap = bitmap;
+        }
+
+        public override object Clone()
+        {
+            return new ImageMessage(fileName, date, StreamId, bitmap);
+        }
     }
 
     public class MediaMessage : FileMessage
@@ -102,22 +131,35 @@ namespace Client.Models
         private long currentLength;
         private bool isPlaying;
 
-        public MediaMessage(string path) : base(path)
+        public MediaMessage(string fileName) : base(fileName)
         {
-            using (var shell = Microsoft.WindowsAPICodePack.Shell.ShellFile.FromFilePath(path))
+            using (var shell = Microsoft.WindowsAPICodePack.Shell.ShellFile.FromFilePath(fileName))
             {
                 Length = (long)shell.Properties.System.Media.Duration.Value.Value;
             }
         }
 
-        public MediaMessage(string path, DateTime date) : this(path)
+        public MediaMessage(string fileName, DateTime date) : this(fileName)
         {
             Date = date;
+        }
+
+        private MediaMessage(string fileName, DateTime date, Guid streamId, bool isLoaded, long lenght, long currentLength, bool isPlaying)
+            : base(fileName, date, streamId, isLoaded)
+        {
+            Length = lenght;
+            CurrentLength = currentLength;
+            IsPlaying = isPlaying;
         }
 
         public long Length { get => length; set => Set(ref length, value); }
         public long CurrentLength { get => currentLength; set => Set(ref currentLength, value); }
         public bool IsPlaying { get => isPlaying; set => Set(ref isPlaying, value); }
+
+        public override object Clone()
+        {
+            return new MediaMessage(fileName, date, StreamId, isLoaded, length, currentLength, isPlaying);
+        }
     }
 
 

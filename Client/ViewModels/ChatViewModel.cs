@@ -1,6 +1,5 @@
 ﻿using Client.Models;
 using Client.Utility;
-using GongSolutions.Wpf.DragDrop;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -207,7 +206,6 @@ namespace Client.ViewModels
                                     break;
                             }
                         }
-
                     }
                     return messagesFromChat;
                 }));
@@ -229,12 +227,9 @@ namespace Client.ViewModels
 
         private void TextBox_EnterPressed(object obj)
         {
-            TextMessage message = (TextMessage)inputMessage;
             if (String.IsNullOrEmpty(messageText)) return;
-            message.Date = DateTime.Now;
-            message.Text = messageText;
-            mainVM.ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = message.Text, UserId = mainVM.Client.SqlId }, Chat.SqlId);
-            Chat.Messages.Add(new UserMessage(InputMessage));
+            mainVM.ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = MessageText, UserId = mainVM.Client.SqlId }, Chat.SqlId);
+            Chat.Messages.Add(new UserMessage(new TextMessage(messageText, DateTime.Now)));
             MessageText = null;
         }
 
