@@ -71,7 +71,7 @@ namespace Client.ViewModels
 
         public ObservableCollection<KeyValuePair<int, AvailableUser>> Users { get; private set; }
         public ObservableCollection<Models.Chat> Chats { get => chats; set => Set(ref chats, value); }
-        public Models.Chat SelectedChat { get => selectedChat; set => Set(ref selectedChat, value); }
+        public Models.Chat SelectedChat { get => selectedChat; set { Set(ref selectedChat, value); if (selectedChat == null) RemoveUC.Invoke(currentView); } }
 
         public void LoadedWindow(object sender)
         {
@@ -141,16 +141,14 @@ namespace Client.ViewModels
 
         public void SelectedChatChanged(object param)
         {
-            if (selectedChat != null)
-            {
+            if(selectedChat != null)
                 RemoveUC.Invoke(currentView);
-                Views.ChatUC chatView = new Views.ChatUC();
-                ChatViewModel viewModel = new ChatViewModel(this);
-                chatView.getControl = new Views.ChatUC.GetControlDelegate(viewModel.SetScrollViewer);
-                chatView.DataContext = viewModel;
-                currentView = chatView;
-                AddUC.Invoke(currentView);
-            }
+            Views.ChatUC chatView = new Views.ChatUC();
+            ChatViewModel viewModel = new ChatViewModel(this);
+            chatView.getControl = new Views.ChatUC.GetControlDelegate(viewModel.SetScrollViewer);
+            chatView.DataContext = viewModel;
+            currentView = chatView;
+            AddUC.Invoke(currentView);
         }
 
         //private void AddUser(object param)
@@ -181,10 +179,10 @@ namespace Client.ViewModels
             AddUC.Invoke(currentView);
         }
 
-        private void UserLeftFromChatroom(int chatId, int userId)
+        private void RemoveUserFromChatroom(int chatId, int userId)
         {
             var chat = FindChatroom(chatId);
-            chat.UserLeavedChatroom(userId);
+            chat.UserLeft(userId);
         }
 
         private void UserOnlineState(int userId, bool state)
@@ -198,17 +196,9 @@ namespace Client.ViewModels
             }
         }
 
-        //private void UserAddedToChat(int chatId, int userId)
-        //{
-
-        //}
-
-        private void UserRemovedFromChat(int chatId, int userId)
+        private void UserRemovedFromChat(int chatId)
         {
-            if (userId == client.SqlId)
-                return;
             ChatGroup chat = FindChatroom(chatId) as ChatGroup;
-            chat.RemoveUser(chat.FindUser(userId));
         }
 
         private Models.Chat FindChatroom(int chatId)
@@ -271,9 +261,9 @@ namespace Client.ViewModels
             ChatClient.AddedUserToChatIsOnline(this.client.SqlId, chatId);
         }
 
-        public void NotifyUserIsRemovedFromChat(int userId, int chatId)
+        public void NotifyUserIsRemovedFromChat(int chatId)
         {
-            UserRemovedFromChat(chatId, userId);
+            UserRemovedFromChat(chatId);
         }
 
         public void UserJoinedToChatroom(int userId)
@@ -283,7 +273,12 @@ namespace Client.ViewModels
 
         public void UserLeftChatroom(int chatId, int userId)
         {
-            UserLeftFromChatroom(chatId, userId);
+            RemoveUserFromChatroom(chatId, userId);
+            if (chats.Where(c => c.FindUser(userId) != null).ToList().Count < 2)
+            {
+                KeyValuePair<int, AvailableUser> availableUser = Users.First(u => u.Key == userId);
+                Users.Remove(availableUser);
+            }
         }
 
         public void ReplyMessage(ServiceMessageText message, int chatroomId)

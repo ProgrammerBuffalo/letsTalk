@@ -196,7 +196,7 @@ namespace Client.Models
 
         public abstract SourceMessage GetMessageType(int clientId, int senderId, Message message);
 
-        public abstract void UserLeavedChatroom(int userId);
+        public abstract void UserLeft(int userId);
 
         public abstract void RemoveUser(AvailableUser user);
 
@@ -257,9 +257,10 @@ namespace Client.Models
             UserIsWriting = User.SqlId == userId ? User.Name + " is writing..." : "";
         }
 
-        public override void UserLeavedChatroom(int userId)
+        public override void UserLeft(int userId)
         {
             Messages.Add(SystemMessage.UserLeftChat(DateTime.Now, user.Name));
+            user = null;
         }
 
         public override void RemoveUser(AvailableUser user)
@@ -356,7 +357,7 @@ namespace Client.Models
             UserIsWriting = user.Name + " is writing...";
         }
 
-        public override void UserLeavedChatroom(int userId)
+        public override void UserLeft(int userId)
         {
             var user = FindUser(userId);
             Messages.Add(SystemMessage.UserLeftChat(DateTime.Now, user.Name));

@@ -142,10 +142,11 @@
                 </i:Interaction.Triggers>
             </TextBox>-->
 
-            <ContentControl Content="{Binding Path=InputMessage}"
+            <ContentControl IsEnabled="{Binding Path=Chat.CanWrite}"
+                            Content="{Binding Path=InputMessage}"
                             ContentTemplateSelector="{StaticResource InputMessageTemplateSelector}"/>
 
-            <Button Grid.Column="1" Content="File" FontSize="20" Background="{StaticResource ButtonBackground}" Command="{Binding OpenFileCommand}"/>
+            <Button Grid.Column="1" Content="File" FontSize="20" IsEnabled="{Binding Path=Chat.CanWrite}" Background="{StaticResource ButtonBackground}" Command="{Binding OpenFileCommand}"/>
             <!--<Button IsEnabled="{Binding Path=Chat.CanWrite}" Grid.Column="3" Content="Send" FontSize="20" Background="{StaticResource ButtonBackground}" Command="{Binding SendCommand}"/>-->
         </Grid>
     </Grid>

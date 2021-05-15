@@ -278,6 +278,7 @@ namespace Client.ViewModels
                 Chat.CanWrite = false;
                 chat.Messages.Clear();
                 mainVM.Chats.Remove(chat);
+                mainVM.SelectedChat = null;
             }
         }
 
