@@ -80,7 +80,7 @@ namespace letsTalk
 
         //Оповещение пользователя о его удалении с чатрума
         [OperationContract(IsOneWay = true)]
-        void NotifyUserIsRemovedFromChat(int userId, int chatId);
+        void NotifyUserIsRemovedFromChat(int chatId);
 
         //Оповещение пользователей, что пользователь присоединился/добавлен в чатрум
         [OperationContract(IsOneWay = true)]

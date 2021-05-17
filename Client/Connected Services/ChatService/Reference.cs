@@ -835,7 +835,7 @@ namespace Client.ChatService {
         void NotifyUserIsAddedToChat(int chatId, string chatName, Client.ChatService.UserInChat[] usersInChat);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/NotifyUserIsRemovedFromChat")]
-        void NotifyUserIsRemovedFromChat(int userId, int chatId);
+        void NotifyUserIsRemovedFromChat(int chatId);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/UserJoinedToChatroom")]
         void UserJoinedToChatroom(int userId);

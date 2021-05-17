@@ -30,6 +30,7 @@ namespace Client.ViewModels
         public EditGroupViewModel(MainViewModel mainVM)
         {
             this.mainVM = mainVM;
+            ChatClient = mainVM.ChatClient;
 
             Chat = (ChatGroup)mainVM.SelectedChat;
             Users = new ObservableCollection<AvailableUser>(Chat.Users);

@@ -1191,7 +1191,7 @@ namespace letsTalk
 
                     if (connectedUser != null)
                     {
-                        connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsRemovedFromChat(userId, chatId);
+                        connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsRemovedFromChat(chatId);
 
                         chatroomsInUsers.Where(users => users.Key.SqlID == userId)
                                         .Select(c => c.Value)
@@ -1287,7 +1287,7 @@ namespace letsTalk
                         {
                             if (user.UserContext.Channel != OperationContext.Current.Channel)
                             {
-                                user.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsRemovedFromChat(userId, chatId);
+                                user.UserContext.GetCallbackChannel<IChatCallback>().UserLeftChatroom(userId, chatId);
                             }
                             chatroomsInUsers[user].Remove(chatId);
                         }
