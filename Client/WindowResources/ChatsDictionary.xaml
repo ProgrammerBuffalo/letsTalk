@@ -59,6 +59,7 @@
                 <Setter TargetName="chat" Property="IsOnline" Value="False"/>
             </DataTrigger>
         </DataTemplate.Triggers>-->
+        
     </DataTemplate>
 
     <DataTemplate x:Key="ChatDataTemplate">

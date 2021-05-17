@@ -71,7 +71,7 @@ namespace Client.ViewModels
 
         public ObservableCollection<KeyValuePair<int, AvailableUser>> Users { get; private set; }
         public ObservableCollection<Models.Chat> Chats { get => chats; set => Set(ref chats, value); }
-        public Models.Chat SelectedChat { get => selectedChat; set { Set(ref selectedChat, value); if (selectedChat == null) RemoveUC.Invoke(currentView); } }
+        public Models.Chat SelectedChat { get => selectedChat; set { if (selectedChat == null) RemoveUC.Invoke(currentView); Set(ref selectedChat, value); } }
 
         public void LoadedWindow(object sender)
         {
@@ -141,7 +141,7 @@ namespace Client.ViewModels
 
         public void SelectedChatChanged(object param)
         {
-            if(selectedChat != null)
+            if (selectedChat != null)
                 RemoveUC.Invoke(currentView);
             Views.ChatUC chatView = new Views.ChatUC();
             ChatViewModel viewModel = new ChatViewModel(this);
@@ -182,7 +182,8 @@ namespace Client.ViewModels
         private void RemoveUserFromChatroom(int chatId, int userId)
         {
             var chat = FindChatroom(chatId);
-            chat.UserLeft(userId);
+            if (chat != null)
+                chat.UserLeft(userId);
         }
 
         private void UserOnlineState(int userId, bool state)
@@ -199,6 +200,19 @@ namespace Client.ViewModels
         private void UserRemovedFromChat(int chatId)
         {
             ChatGroup chat = FindChatroom(chatId) as ChatGroup;
+            if(chat != null)
+            {
+                List<int> usersOfChat = chat.Users.Select(u => u.SqlId).ToList();
+                foreach(var item in usersOfChat)
+                {
+                    int count = Chats.Select(c => c.FindUser(item)).ToList().Count;
+                    if (count < 2)
+                        Users.Remove(Users.First(u => u.Key == item));
+                }
+
+                chat.CanWrite = false;
+            }
+
         }
 
         private Models.Chat FindChatroom(int chatId)
@@ -244,6 +258,9 @@ namespace Client.ViewModels
                     List<AvailableUser> availableUsers = new List<AvailableUser>();
                     foreach (var item in usersInChat)
                     {
+                        if (item.UserSqlId == client.SqlId)
+                            continue;
+
                         AvailableUser user = Users.FirstOrDefault(u => u.Key == item.UserSqlId).Value;
                         if (user == null)
                         {
@@ -276,7 +293,7 @@ namespace Client.ViewModels
             RemoveUserFromChatroom(chatId, userId);
             if (chats.Where(c => c.FindUser(userId) != null).ToList().Count < 2)
             {
-                KeyValuePair<int, AvailableUser> availableUser = Users.First(u => u.Key == userId);
+                KeyValuePair<int, AvailableUser> availableUser = Users.FirstOrDefault(u => u.Key == userId);
                 Users.Remove(availableUser);
             }
         }
@@ -284,7 +301,9 @@ namespace Client.ViewModels
         public void ReplyMessage(ServiceMessageText message, int chatroomId)
         {
             var chat = FindChatroom(chatroomId);
-            if (chat != null)
+            if (SelectedChat == null)
+                return;
+            if (SelectedChat.Equals(chat))
             {
                 chat.Messages.Add(chat.GetMessageType(Client.SqlId, message.UserId, new TextMessage(message.Text, message.DateTime)));
             }
@@ -298,7 +317,7 @@ namespace Client.ViewModels
         public void NotifyUserSendedFileToChat(ServiceMessageFile serviceMessageFile, int chatroomId)
         {
             var chat = FindChatroom(chatroomId);
-            if (chat != null)
+            if (SelectedChat.Equals(chat))
                 chat.Messages.Add(chat.GetMessageType(Client.SqlId, serviceMessageFile.UserId, new FileMessage(serviceMessageFile.FileName, serviceMessageFile.DateTime, serviceMessageFile.StreamId)));
         }
 
@@ -316,11 +335,21 @@ namespace Client.ViewModels
                 foreach (Chatroom key in chatrooms.Keys)
                 {
                     bool canWrite = false;
-                    if (chatrooms[key].Length > 1)
+
+                    UserInChat requestedUser = chatrooms[key].FirstOrDefault(u => u.UserSqlId == client.SqlId);
+                    if (requestedUser != null)
                     {
+                        if(requestedUser.IsLeft)
+                            continue;
+                    }
+
+                    if (key.IsGroup)
+                    {
+
                         List<AvailableUser> availableUsers = new List<AvailableUser>();
                         foreach (UserInChat userInChat in chatrooms[key])
                         {
+
                             if (userInChat.UserSqlId == client.SqlId)
                             {
                                 canWrite = true;
@@ -333,14 +362,24 @@ namespace Client.ViewModels
                                 user = new AvailableUser(userInChat.UserSqlId, userInChat.UserName, userInChat.IsOnline);
                                 Users.Add(new KeyValuePair<int, AvailableUser>(user.SqlId, user));
                             }
+
                             availableUsers.Add(user);
                         }
-                        clientChatrooms.Add(availableUsers.Count > 1 ? new ChatGroup(key.ChatSqlId, key.ChatName, availableUsers) { CanWrite = canWrite }
-                                                                 : (Models.Chat)new ChatOne(key.ChatSqlId, availableUsers[0]) { CanWrite = canWrite });
+                        clientChatrooms.Add(new ChatGroup(key.ChatSqlId, key.ChatName, availableUsers) { CanWrite = canWrite });
                     }
                     else
                     {
-                        clientChatrooms.Add(new ChatOne(key.ChatSqlId) { CanWrite = canWrite });
+
+                        UserInChat friend = chatrooms[key].FirstOrDefault(usr => usr.UserSqlId != client.SqlId);
+                        AvailableUser user = Users.FirstOrDefault(u => u.Key == friend.UserSqlId).Value;
+
+                        if (user == null)
+                        {
+                            user = new AvailableUser(friend.UserSqlId, friend.UserName, friend.IsOnline);
+                            Users.Add(new KeyValuePair<int, AvailableUser>(user.SqlId, user));
+                        }
+
+                        clientChatrooms.Add(new ChatOne(key.ChatSqlId, user) { CanWrite = friend.IsLeft});
                     }
                 }
                 return clientChatrooms;

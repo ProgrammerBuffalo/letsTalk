@@ -39,7 +39,7 @@ namespace letsTalk
         void SendMessageText(ServiceMessageText message, int chatroomId);
 
         [OperationContract(IsOneWay = false)]
-        int CreateChatroom(string chatName, List<int> users);
+        int CreateChatroom(List<int> users, string chatName);
 
         [OperationContract(IsOneWay = true)]
         void DeleteChatroom(int chatId, int userId);

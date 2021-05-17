@@ -15,6 +15,10 @@ namespace letsTalk
 
         [DataMember]
         public string ChatName { get; set; }
+
+        [DataMember]
+        public bool IsGroup { get; set; }
+
     }
 
     public class UserInChat
@@ -27,5 +31,8 @@ namespace letsTalk
 
         [DataMember]
         public bool IsOnline { get; set; }
+
+        [DataMember]
+        public bool IsLeft { get; set; }
     }
 }

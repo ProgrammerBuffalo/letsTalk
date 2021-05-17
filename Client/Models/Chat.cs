@@ -244,6 +244,8 @@ namespace Client.Models
 
         public override bool SetOnlineState(int userId, bool state)
         {
+            if (user == null)
+                return false;
             if (user.SqlId == userId)
             {
                 user.IsOnline = state;
@@ -361,6 +363,7 @@ namespace Client.Models
         {
             var user = FindUser(userId);
             Messages.Add(SystemMessage.UserLeftChat(DateTime.Now, user.Name));
+            Users.Remove(user);
         }
 
         public override void RemoveUser(AvailableUser user)
