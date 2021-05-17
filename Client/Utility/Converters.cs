@@ -22,7 +22,7 @@ namespace Client.Utility
         }
     }
 
-    //получение типо файла 
+    //получение типа файла 
     class PathToExtension : System.Windows.Data.IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -43,7 +43,7 @@ namespace Client.Utility
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             string path = value.ToString();
-            return path.Substring(path.LastIndexOf('\\') + 1);
+            return path.Substring(0, path.LastIndexOf('.'));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -52,28 +52,12 @@ namespace Client.Utility
         }
     }
 
-    //получени полного пути файла 
+    //получени полного пути файла внутри сборки
     class FullPathConverter : System.Windows.Data.IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             return AppDomain.CurrentDomain.BaseDirectory + value.ToString();
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return value;
-        }
-    }
-
-    //для зеленого кружка в ChatItem если значение count больше чем 99 то получаем "99+" 
-    class CountConverter : System.Windows.Data.IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            int count = System.Convert.ToInt32(value);
-            if (count > 99) return "99+";
-            else return count;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -109,12 +93,14 @@ namespace Client.Utility
         }
     }
 
-    //надо убрать
-    class TempConverter : System.Windows.Data.IValueConverter
+    //конвертация строки с добовлением "..." в конец при большой длине строки
+    class FitStringConverter : System.Windows.Data.IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return value;
+            string str = value.ToString();
+            if (str.Length > 20) return value.ToString().Substring(0, 20) + "...";
+            else return str;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -123,4 +109,35 @@ namespace Client.Utility
         }
     }
 
+    class FitPathConverter : System.Windows.Data.IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            string path = value.ToString();
+            string name = path.Substring(0, path.LastIndexOf('.'));
+            if (name.Length > 18) return name.ToString().Substring(0, 18) + "...";
+            return name;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return value;
+        }
+    }
+
+    class FitDateConverter : System.Windows.Data.IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            DateTime date = (DateTime)value;
+            DateTime now = DateTime.Now;
+            if (date.Day == now.Day && date.Month == now.Month && date.Year == now.Year) return date.ToString("hh:mm");
+            else return date.ToString("dd/mm/yy");
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return value;
+        }
+    }
 }
