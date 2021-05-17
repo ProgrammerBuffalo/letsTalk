@@ -23,19 +23,25 @@ namespace Client.ViewModels
 
         private bool canDrop;
 
-        public ChatService.ChatClient ChatClient { get; set; }
+        private string name;
+        private string searchMembersText;
+        private string searchUsersText;
 
         public EditGroupViewModel(MainViewModel mainVM)
         {
             this.mainVM = mainVM;
 
             Chat = (ChatGroup)mainVM.SelectedChat;
+            Users = new ObservableCollection<AvailableUser>(Chat.Users);
+            Name = Chat.GroupName;
 
             RemoveMemberCommand = new Command(RemoveMember);
             AddMemberCommand = new Command(AddMember);
             DeleteChatCommand = new Command(DeleteChat);
             ChangeImageCommand = new Command(ChangeImage);
             ShowMoreCommand = new Command(ShowMore);
+            SaveNameCommand = new Command(SaveName);
+            SearchChangedCommand = new Command(SearchChanged);
 
             Users_MouseLeaveCommand = new Command(Users_MouseLeave);
             Users_PreviewDragEnterCommand = new Command(Users_PreviewDragEnter);
@@ -47,10 +53,18 @@ namespace Client.ViewModels
         public ICommand DeleteChatCommand { get; }
         public ICommand ChangeImageCommand { get; }
         public ICommand ShowMoreCommand { get; }
+        public ICommand SaveNameCommand { get; }
+        public ICommand SearchChangedCommand { get; }
 
         public ICommand Users_MouseLeaveCommand { get; }
         public ICommand Users_PreviewDragEnterCommand { get; }
         public ICommand Users_DragLeaveCommand { get; }
+
+        public ChatService.ChatClient ChatClient { get; set; }
+
+        public string Name { get => name; set => Set(ref name, value); }
+        public string SearchMembersText { get => searchMembersText; set => Set(ref searchMembersText, value); }
+        public string SearchUsersText { get => searchUsersText; set => Set(ref searchUsersText, value); }
 
         public ObservableCollection<AvailableUser> Users { get => users; set => Set(ref users, value); }
         public ObservableCollection<AvailableUser> AllUsers { get => allUsers; set => Set(ref allUsers, value); }
@@ -73,9 +87,36 @@ namespace Client.ViewModels
             //mainVM.Chats.Remove(mainVM.SelectedChat);
         }
 
+        private void SaveName(object param)
+        {
+            if (Name != null)
+            {
+                //функция для изменения имени чата в сервере
+                chat.GroupName = name;
+            }
+        }
+
+        private void SearchChanged(object param)
+        {
+            Users.Clear();
+            if (SearchMembersText == null || SearchMembersText == "")
+            {
+                Users = new ObservableCollection<AvailableUser>(Chat.Users);
+            }
+            else
+            {
+                foreach (var user in Chat.Users)
+                {
+                    if (user.Name.Contains(searchMembersText))
+                        Users.Add(user);
+                }
+            }
+        }
+
         private void ChangeImage(object param)
         {
             OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "Image files(*.png, *.jpg, *.jpeg)|*.png;*.jpg;*.jpeg";
             if (dialog.ShowDialog() == true)
             {
                 //тут метод сохранения нового фото на сервере

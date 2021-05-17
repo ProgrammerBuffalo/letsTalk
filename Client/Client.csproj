@@ -326,6 +326,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="WindowResources\LastMessageDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WindowResources\ListBoxUsersStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -469,6 +473,7 @@
     <Resource Include="files\avatar8.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\user.png" />
     <Resource Include="Resources\Extensions\bmp.png" />
     <Resource Include="Resources\Extensions\doc.png" />
     <Resource Include="Resources\Extensions\file.png" />
@@ -481,6 +486,9 @@
     <Content Include="files\Animals.wav" />
     <Content Include="files\control.wav" />
     <Content Include="files\justin-timberlake-cry-me-a-river.wav" />
+    <Resource Include="Resources\Extensions\png.png" />
+    <Resource Include="Resources\Extensions\jpg.png" />
+    <Resource Include="Resources\group.png" />
     <Content Include="Resources\Ringtons\alcatel_success.wav" />
     <Content Include="Resources\Ringtons\basic_whistle.wav" />
     <Content Include="Resources\Ringtons\doorslam.wav" />

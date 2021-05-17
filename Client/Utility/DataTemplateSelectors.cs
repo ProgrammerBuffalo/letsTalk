@@ -4,6 +4,7 @@ using System.Windows.Controls;
 
 namespace Client.Utility
 {
+    //выбор шаблона в зависимости от вида чатрума
     public class ChatDataTemplateSelector : DataTemplateSelector
     {
         public DataTemplate ChatOneDataTemplate { get; set; }
@@ -17,6 +18,7 @@ namespace Client.Utility
         }
     }
 
+    //выбор шаблона для отброжения сообшения в зависимости от вида сообщения
     public class MessageTemplateSelector : DataTemplateSelector
     {
         public DataTemplate TextDataTemplate { get; set; }
@@ -25,7 +27,6 @@ namespace Client.Utility
         public DataTemplate AudioDataTemplate { get; set; }
         public DataTemplate SystemMessageDataTemplate { get; set; }
 
-        // item это тот самый ListViewItem по которому мы выберим один из DateTemplate
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             Message message = ((SourceMessage)item).Message;
@@ -43,6 +44,7 @@ namespace Client.Utility
         }
     }
 
+    //выбор шаблона при отправке сообшения
     public class InputMessageTemplateSelector : DataTemplateSelector
     {
         public DataTemplate TextDataTemplate { get; set; }
@@ -52,7 +54,8 @@ namespace Client.Utility
         {
             Message message = (Message)item;
             if (message is TextMessage) return TextDataTemplate;
-            else return FileDataTemplate;
+            else if (message is FileMessage) return FileDataTemplate;
+            else return null;
         }
     }
 }

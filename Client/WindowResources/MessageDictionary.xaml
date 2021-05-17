@@ -16,6 +16,11 @@
 
     <SolidColorBrush x:Key="DownoadColor" Color="BlanchedAlmond"/>
 
+    <LinearGradientBrush x:Key="ImageDateBackground" EndPoint="1,1" MappingMode="RelativeToBoundingBox" StartPoint="0,0">
+        <GradientStop Color="#FF635A5A" Offset="1"/>
+        <GradientStop Color="White"/>
+    </LinearGradientBrush>
+
     <Style x:Key="OnlineEllipseStyle" TargetType="Ellipse">
         <Setter Property="Height" Value="15"/>
         <Setter Property="Width" Value="15"/>
@@ -190,18 +195,18 @@
                     <TextBlock x:Name="groupText" Text="{Binding Path=User.Name}" FontSize="15" Foreground="Black" FontWeight="DemiBold" Padding="10,0,10,0"/>
                 </Border>
                 
-                <!--<TextBlock x:Name="group" Text="{Binding Path=User.Name}" Grid.Row="0" Grid.Column="1" Margin="15,0,0,0" Visibility="Hidden" FontSize="15" Foreground="Green" FontWeight="DemiBold"/>-->
-
                 <Border x:Name="border" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Margin="10,20,0,0" HorizontalAlignment="Left" MaxHeight="300" MaxWidth="300" Width="{Binding ElementName=border, Path=Height}" BorderBrush="AliceBlue" BorderThickness="3">
                     <Grid>
                         <Image Source="{Binding Path=Message.Bitmap}" Stretch="Fill"/>
                         <Button x:Name="loader"
+                                Visibility="Hidden"
                                 Width="50" Height="50"
                                 VerticalAlignment="Center" HorizontalAlignment="Center"
                                 Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.DownloadFileCommand}"
                                 CommandParameter="{Binding Path=Message}"
                                 Template="{StaticResource DownloadButton}">
                         </Button>
+                        <Path Fill="{StaticResource ImageDateBackground}" Data="M63,28 L63,0 0,28" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
                         <TextBlock Margin="10, 2" Text="{Binding Path=Message.Date, StringFormat={}{0:hh:mm}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="White" FontSize="12"/>
                     </Grid>
                 </Border>
@@ -209,6 +214,10 @@
         </Grid>
 
         <DataTemplate.Triggers>
+            <Trigger SourceName="border" Property="IsMouseOver" Value="True">
+                <Setter TargetName="loader" Property="Visibility" Value="Visible"/>
+            </Trigger>
+            
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:UserMessage}">
                 <Setter TargetName="mainGrid" Property="Grid.Column" Value="1"/>
                 <Setter TargetName="mainGridCol1" Property="Width" Value="0"/>
@@ -273,19 +282,17 @@
                     <TextBlock x:Name="groupText" Text="{Binding Path=User.Name}" FontSize="15" Foreground="Black" FontWeight="DemiBold" Padding="10,0,10,0"/>
                 </Border>
                 
-                <!--<TextBlock x:Name="group" Text="{Binding Path=User.Name}" Grid.Row="0" Grid.Column="1" Margin="15,0,0,0" Visibility="Hidden" FontSize="15" Foreground="Green" FontWeight="DemiBold"/>-->
-
                 <Border x:Name="border" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Margin="5,20,0,0" MinWidth="250" Height="60" BorderBrush="AliceBlue" BorderThickness="3" CornerRadius="15">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition x:Name="col1" Width="40"/>
+                            <ColumnDefinition x:Name="col1" Width="0"/>
                             <ColumnDefinition Width="45"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
                         <Button x:Name="loader" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Width="35" Height="35" HorizontalContentAlignment="Center" Cursor="Hand" Template="{StaticResource DownloadButton}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.DownloadFileCommand}" CommandParameter="{Binding Path=Message}"/>
-                        <Image Grid.Column="1" x:Name="icon" Source="/Resources/Extensions/file.png" Width="40" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                        <TextBlock Grid.Column="2" Text="{Binding Path=Message.FileName}" FontSize="20" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                        <Image x:Name="icon" Grid.Column="1" Source="/Resources/Extensions/file.png" Width="40" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="2" Text="{Binding Path=Message.FileName, Converter={StaticResource PathToName}}" FontSize="20" Margin="5,0,0,0" VerticalAlignment="Center"/>
                         <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Path=Message.Date, StringFormat={}{0:hh:mm}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,15,0" Foreground="DarkSlateGray" FontSize="12"/>
                     </Grid>
                 </Border>
@@ -293,6 +300,11 @@
         </Grid>
 
         <DataTemplate.Triggers>
+            <Trigger SourceName="border" Property="IsMouseOver" Value="True">
+                <Setter TargetName="col1" Property="Width" Value="40"/>
+                <Setter TargetName="loader" Property="Visibility" Value="Visible"/>
+            </Trigger>
+            
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:UserMessage}">
                 <Setter TargetName="mainGrid" Property="Grid.Column" Value="1"/>
                 <Setter TargetName="mainGridCol1" Property="Width" Value="0"/>

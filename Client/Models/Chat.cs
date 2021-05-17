@@ -23,8 +23,8 @@ namespace Client.Models
         public BitmapImage Image { get => image; set => Set(ref image, value); }
         public bool CanWrite { get => canWrite; set => Set(ref canWrite, value); }
 
-
         private string userIsWriting;
+        private Message lastMessage;
 
         protected Chat()
         {
@@ -124,7 +124,7 @@ namespace Client.Models
 
         private void UploadFileToServer(FileMessage fileMessage)
         {
-            
+
             using (FileStream fileStream = new FileStream(fileMessage.FileName, FileMode.Open, FileAccess.Read))
             {
                 ChatService.UploadFileInfo uploadFileInfo = new ChatService.UploadFileInfo();
@@ -187,6 +187,8 @@ namespace Client.Models
         public int Count { get => count; set => Set(ref count, value); }
 
         public string UserIsWriting { get => userIsWriting; set => Set(ref userIsWriting, value); }
+
+        public Message LastMessage { get => lastMessage; set => Set(ref lastMessage, value); }
 
         public virtual BitmapImage Avatar { set; get; }
 

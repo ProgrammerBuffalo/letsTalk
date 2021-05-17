@@ -135,7 +135,8 @@ namespace Client.ViewModels
 
                     sqlId = mainVM.ChatClient.CreateChatroom(ChatName, users);
 
-                    chat = new ChatGroup(sqlId, ChatName, UsersToAdd) { CanWrite = true };
+                    BitmapImage image = new BitmapImage(new Uri("Resources/group.png", UriKind.Relative));
+                    chat = new ChatGroup(sqlId, ChatName, UsersToAdd) { CanWrite = true, Avatar = image };
                     mainVM.Chats.Add(chat);
                 }
                 else

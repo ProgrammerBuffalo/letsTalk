@@ -3,62 +3,61 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:utility="clr-namespace:Client.Utility"
-             xmlns:UC="clr-namespace:Client.UserControls"
+             xmlns:local="clr-namespace:Client.UserControls"
+             xmlns:UC="clr-namespace:Client.UserControls"   
              mc:Ignorable="d" 
-             Name="ui" d:DesignHeight="450" d:DesignWidth="800">
-
+             Name="ui" d:DesignHeight="100" d:DesignWidth="200">
     <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/WindowResources/ChatsDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
 
-        <utility:CountConverter x:Key="CountConverter"/>
+            <Storyboard x:Key="WrtingStoryboard">
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="isWritingGrid" Storyboard.TargetProperty="Visibility">
+                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}"/>
+                </ObjectAnimationUsingKeyFrames>
 
-        <ControlTemplate x:Key="MessageTemplate" TargetType="Control">
-            <Border x:Name="border" Width="20" Height="20" CornerRadius="45" VerticalAlignment="Top" HorizontalAlignment="Left" Background="DarkSeaGreen" BorderBrush="Black" BorderThickness="1">
-                <TextBlock Text="{Binding ElementName=ui, Path=Count, Converter={StaticResource CountConverter}}" FontSize="10" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            </Border>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="isWritingEllipse1" Storyboard.TargetProperty="Width" RepeatBehavior="Forever">
+                    <LinearDoubleKeyFrame KeyTime="0:0:1" Value="7"/>
+                    <LinearDoubleKeyFrame KeyTime="0:0:3" Value="7"/>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="isWritingEllipse1" Storyboard.TargetProperty="Height" RepeatBehavior="Forever">
+                    <LinearDoubleKeyFrame KeyTime="0:0:1" Value="7"/>
+                    <LinearDoubleKeyFrame KeyTime="0:0:3" Value="7"/>
+                </DoubleAnimationUsingKeyFrames>
 
-            <ControlTemplate.Triggers>
-                <DataTrigger Binding="{Binding ElementName=ui, Path=Count}" Value="0">
-                    <Setter TargetName="border" Property="Visibility" Value="Hidden"/>
-                </DataTrigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="isWritingEllipse2" Storyboard.TargetProperty="Width" RepeatBehavior="Forever">
+                    <LinearDoubleKeyFrame KeyTime="0:0:1" Value="0"/>
+                    <LinearDoubleKeyFrame KeyTime="0:0:2" Value="7"/>
+                    <LinearDoubleKeyFrame KeyTime="0:0:3" Value="7"/>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="isWritingEllipse2" Storyboard.TargetProperty="Height" RepeatBehavior="Forever">
+                    <LinearDoubleKeyFrame KeyTime="0:0:1" Value="0"/>
+                    <LinearDoubleKeyFrame KeyTime="0:0:2" Value="7"/>
+                    <LinearDoubleKeyFrame KeyTime="0:0:3" Value="7"/>
+                </DoubleAnimationUsingKeyFrames>
 
-        <!--<Style x:Key="ActivityStyle" TargetType="Ellipse">
-            <Setter Property="Stroke" Value="Black"/>
-            <Setter Property="StrokeThickness" Value="1"/>
-            <Setter Property="VerticalAlignment" Value="Bottom"/>
-            <Setter Property="HorizontalAlignment" Value="Right"/>
-            <Setter Property="Height" Value="15"/>
-            <Setter Property="Width" Value="15"/>
-
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=IsOnlineVisibility, ElementName=ui}" Value="Hidden">
-                    <Setter Property="Visibility" Value="Hidden"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Path=IsOnlineVisibility, ElementName=ui}" Value="Visible">
-                    <Setter Property="Visibility" Value="Visible"/>
-                </DataTrigger>
-
-                <DataTrigger Binding="{Binding Path=IsOnline, ElementName=ui}" Value="True">
-                    <Setter Property="Fill" Value="Green"/>
-                </DataTrigger>
-
-                <DataTrigger Binding="{Binding Path=IsOnline, ElementName=ui}" Value="False">
-                    <Setter Property="Fill" Value="Red"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>-->
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="isWritingEllipse3" Storyboard.TargetProperty="Width" RepeatBehavior="Forever">
+                    <LinearDoubleKeyFrame KeyTime="0:0:2" Value="0"/>
+                    <LinearDoubleKeyFrame KeyTime="0:0:3" Value="7"/>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="isWritingEllipse3" Storyboard.TargetProperty="Height" RepeatBehavior="Forever">
+                    <LinearDoubleKeyFrame KeyTime="0:0:2" Value="0"/>
+                    <LinearDoubleKeyFrame KeyTime="0:0:3" Value="7"/>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MaxWidth="60"/>
+            <ColumnDefinition Width="65"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
+            <RowDefinition Height="25"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
@@ -68,12 +67,46 @@
             </Ellipse.Fill>
         </Ellipse>
 
-        <Control Grid.Row="0" Grid.Column="0" Template="{StaticResource MessageTemplate}"/>
+        <Grid x:Name="isWritingGrid" Width="40" Visibility="Hidden" Height="20" Margin="20,0,0,0" Grid.ColumnSpan="2" HorizontalAlignment="Left">
+            <Grid Panel.ZIndex="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Ellipse x:Name="isWritingEllipse1" Grid.Column="0" Width="0" Height="0" Fill="DarkSeaGreen" Margin="0,0,0,5"/>
+                <Ellipse x:Name="isWritingEllipse2" Grid.Column="1" Width="0" Height="0" Fill="DarkSeaGreen" Margin="0,0,0,5"/>
+                <Ellipse x:Name="isWritingEllipse3" Grid.Column="2" Width="0" Height="0" Fill="DarkSeaGreen" Margin="0,0,0,5"/>
+            </Grid>
+
+            <Path Fill="AliceBlue">
+                <Path.Data>
+                    <CombinedGeometry GeometryCombineMode="Union">
+                        <CombinedGeometry.Geometry1>
+                            <RectangleGeometry Rect="0,0 40,15" RadiusX="3" RadiusY="3"/>
+                        </CombinedGeometry.Geometry1>
+                        <CombinedGeometry.Geometry2>
+                            <PathGeometry  Figures="M6,15 16,15 L11,20"/>
+                        </CombinedGeometry.Geometry2>
+                    </CombinedGeometry>
+                </Path.Data>
+            </Path>
+        </Grid>
 
         <UC:LightBulb Grid.RowSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="-10" Visibility="{Binding ElementName=ui, Path=IsOnlineVisibility}" IsOn="{Binding ElementName=ui, Path=IsOnline}"/>
 
-        <TextBlock Text="{Binding Path=UserName, ElementName=ui}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" FontWeight="DemiBold" FontSize="14"/>
+        <TextBlock Text="{Binding Path=UserName, ElementName=ui}" FontSize="{Binding ElementName=ui, Path=UserNameFontSize}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" FontWeight="DemiBold"/>
 
-        <TextBlock Text="{Binding Path=Description, ElementName=ui}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="DarkSlateGray" FontSize="14"/>
+        <ContentControl Grid.Row="1" Grid.Column="1" Content="{Binding Path=Description, ElementName=ui}" ContentTemplate="{Binding ElementName=ui, Path=DescriptionDataTemplate}" ContentTemplateSelector="{Binding ElementName=ui, Path=DescriptionDataTemplateSelector}" Margin="10,0,0,0"/>
     </Grid>
+
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="local:ChatItem.WritingOn">
+            <BeginStoryboard x:Name="WrtingBeginStoryboard" Storyboard="{StaticResource WrtingStoryboard}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="local:ChatItem.WritingOff">
+            <StopStoryboard BeginStoryboardName="WrtingBeginStoryboard"/>
+        </EventTrigger>
+    </UserControl.Triggers>
 </UserControl>

@@ -2,6 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:uc="clr-namespace:Client.UserControls"
                     xmlns:utility="clr-namespace:Client.Utility">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/WindowResources/LastMessageDictionary.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="OnlineEllipseStyle" TargetType="Ellipse">
         <Setter Property="Height" Value="15"/>
@@ -41,45 +44,39 @@
         </Setter>
     </Style>
 
+    <DataTemplate x:Key="ChatDataTemplate">
+        <uc:ChatItem
+            UserName="{Binding Path=Name}"
+            Avatar="{Binding Path=Image}"
+            IsOnlineVisibility="Hidden">
+        </uc:ChatItem>
+    </DataTemplate>
+
     <DataTemplate x:Key="ActivityChatDataTemplate">
         <uc:ChatItem
             x:Name="chat"
             UserName="{Binding Path=User.Name}"
-            Description="{Binding Path=User.Description}"
+            UserNameFontSize="18"
             Avatar="{Binding Path=User.Image}"
+            IsWriting="{Binding Path=UserIsWriting}"
             IsOnline="{Binding Path=User.IsOnline}"
-            IsOnlineVisibility="Visible">
-        </uc:ChatItem>
-
-        <!--<DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding Path=User.IsOnline}" Value="True">
-                <Setter TargetName="chat" Property="IsOnline" Value="True"/>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding Path=User.IsOnline}" Value="False">
-                <Setter TargetName="chat" Property="IsOnline" Value="False"/>
-            </DataTrigger>
-        </DataTemplate.Triggers>-->
-    </DataTemplate>
-
-    <DataTemplate x:Key="ChatDataTemplate">
-        <uc:ChatItem
-            UserName="{Binding Path=Name}"
-            Description="{Binding Path=bbb}"
-            Avatar="{Binding Path=Image}"
-            IsOnlineVisibility="Hidden">
+            IsOnlineVisibility="Visible"
+            Description="{Binding Path=LastMessage}"
+            DescriptionDataTemplateSelector="{StaticResource LastMessageTemplateSelector}">
         </uc:ChatItem>
     </DataTemplate>
 
     <DataTemplate x:Key="ChatGroupDataTemplate">
         <uc:ChatItem
             UserName="{Binding Path=GroupName}"
-            Description="{Binding Path=GroupDescription}"
+            UserNameFontSize="18"
             Avatar="{Binding Path=Avatar}"
-            Count="{Binding Path=Count}"
-            IsOnlineVisibility="Hidden">
+            IsWriting="{Binding Path=UserIsWriting}"
+            IsOnlineVisibility="Hidden"
+            Description="{Binding Path=LastMessage}"
+            DescriptionDataTemplateSelector="{StaticResource LastMessageTemplateSelector}">
         </uc:ChatItem>
     </DataTemplate>
-   
 
     <utility:ChatDataTemplateSelector
                 x:Key="ChatDataTemplateSelector"

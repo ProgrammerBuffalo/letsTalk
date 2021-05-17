@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
@@ -38,10 +39,8 @@
                          Height="{TemplateBinding Height}"
                          Cursor="{TemplateBinding Cursor}"
                          Stroke="{TemplateBinding Foreground}"
-                         StrokeThickness="3">
-                    <Ellipse.Fill>
-                        <ImageBrush ImageSource="{Binding Path=Chat.Image}"/>
-                    </Ellipse.Fill>
+                         StrokeThickness="3" 
+                         Fill="{Binding Path=Chat.Image}">
                 </Ellipse>
             </ControlTemplate>
         </ResourceDictionary>
@@ -59,7 +58,15 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <TextBox Grid.Row="0" Grid.Column="1" FontSize="20" Height="30" Margin="20,0" Text="{Binding Path=Chat.GroupName}"/>
+        <Grid Grid.Row="0" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding Path=Name}" FontSize="20" Height="40" Margin="10,0,0,0" />
+            <Button Grid.Column="1" Content="Save" Width="80" Height="30" Command="{Binding Path=SaveNameCommand}" Style="{StaticResource ButtonStyle}"/>
+        </Grid>
 
         <Button Width="50" Height="50" 
                 Cursor="Hand"
@@ -69,34 +76,66 @@
                 HorizontalAlignment="Left" Margin="20,0,0,0">
         </Button>
 
-        <ListView Grid.Row="1" Grid.Column="0" 
+        <Grid Grid.Row="1" Grid.Column="0" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>                
+            </Grid.RowDefinitions>
+
+            <TextBox Grid.Row="0"
+                     Text="{Binding Path=SearchMembersText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="20"
+                     metro:TextBoxHelper.ClearTextButton="True"
+                     Margin="10,0"
+                     Background="LightGoldenrodYellow">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding SearchChangedCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+
+            <ListView Grid.Row="1"
                   dd:DragDrop.DropHandler="{Binding}"
                   dd:DragDrop.IsDropTarget="True"
                   Margin="10"
-                  ItemsSource="{Binding Path=Chat.Users}"
+                  ItemsSource="{Binding Path=Users}"
                   ItemTemplate="{StaticResource MembersDataTemplate}"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   ScrollViewer.VerticalScrollBarVisibility="Auto">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseLeave">
-                    <i:InvokeCommandAction Command="{Binding Users_MouseLeaveCommand}"/>
-                </i:EventTrigger>
-                <i:EventTrigger EventName="PreviewDragEnter">
-                    <i:InvokeCommandAction Command="{Binding Users_PreviewDragEnterCommand}"/>
-                </i:EventTrigger>
-                <i:EventTrigger EventName="PreviewDragLeave">
-                    <i:InvokeCommandAction Command="{Binding Users_DragLeaveCommand}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </ListView>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseLeave">
+                        <i:InvokeCommandAction Command="{Binding Users_MouseLeaveCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="PreviewDragEnter">
+                        <i:InvokeCommandAction Command="{Binding Users_PreviewDragEnterCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="PreviewDragLeave">
+                        <i:InvokeCommandAction Command="{Binding Users_DragLeaveCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ListView>
+        </Grid>
 
-        <ListView Grid.Row="1" Grid.Column="1"
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBox Grid.Row="0" 
+                     Text="{Binding Path=SearchUsersText}" FontSize="20"
+                     metro:TextBoxHelper.ClearTextButton="True"
+                     Margin="10,0"
+                     Background="LightGoldenrodYellow"/> 
+            
+            <ListView Grid.Row="1"
                   dd:DragDrop.DragHandler="{Binding}"
                   dd:DragDrop.IsDragSource="True"
                   Margin="10"
                   ItemsSource="{Binding Path=AllUsers}"
-                  ItemTemplate="{StaticResource ChatDataTemplate}">            
-        </ListView>
+                  ItemTemplate="{StaticResource ChatDataTemplate}">
+            </ListView>
+        </Grid>
 
         <Button Grid.Row="2" Grid.Column="0"
                 Content="Delete chat"

@@ -1,14 +1,10 @@
 ﻿using Client.Utility;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel;
 using System.Windows.Media.Imaging;
 
 namespace Client.Models
 {
-    public enum Activity { Online, Offline, Busy }
-
     public class ClientUserInfo : System.ComponentModel.INotifyPropertyChanged
     {
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
@@ -18,7 +14,6 @@ namespace Client.Models
         private string userName;
         private string userDesc; // описание пользователя (Hey there i am using Lets Talk!!!)
         private BitmapImage userImage = null; // Аватарка
-        private Activity activity; // поле для показа подключенных и не подключенных клиентов
 
         //public static ClientUserInfo getInstance()
         //{
@@ -45,8 +40,6 @@ namespace Client.Models
         public string UserName { get => userName; set => Set(ref userName, value); }
 
         public string UserDesc { get => userDesc; set => Set(ref userDesc, value); }
-
-        public Activity Activity { get => activity; set => Set(ref activity, value); }
 
         public BitmapImage UserImage { get => userImage; set => Set(ref userImage, value); }
 

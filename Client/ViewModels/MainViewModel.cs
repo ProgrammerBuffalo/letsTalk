@@ -5,7 +5,6 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.ServiceModel;
@@ -138,7 +137,6 @@ namespace Client.ViewModels
             }
         }
 
-
         public void SelectedChatChanged(object param)
         {
             if (selectedChat != null)
@@ -153,15 +151,6 @@ namespace Client.ViewModels
             }
         }
 
-        //private void AddUser(object param)
-        //{
-        //    UserControl control = new Views.AddUserUC();
-        //    AddUserViewModel viewModel = new AddUserViewModel(ChatClient);
-        //    viewModel.AddChat += AddChatToChats;
-        //    control.DataContext = viewModel;
-        //    CurrentView = control;
-        //}
-
         private void CreateChat(object param)
         {
             RemoveUC.Invoke(currentView);
@@ -174,6 +163,11 @@ namespace Client.ViewModels
 
         private void Settings(object param)
         {
+            foreach (var item in chats)
+            {
+                item.UserIsWriting = null;
+                item.LastMessage = new FileMessage("aaa.docx", new DateTime(1999, 10, 10));
+            }
             RemoveUC.Invoke(currentView);
             UserControl control = new Views.SettingsUC();
             control.DataContext = new SettingsViewModel(Client);
@@ -309,6 +303,7 @@ namespace Client.ViewModels
 
         public void ClosedWindow(object sender)
         {
+
         }
 
         private async void LoadChatroomsAsync()
@@ -367,9 +362,9 @@ namespace Client.ViewModels
                     avatarClient.UserAvatarDownload(user.SqlId, out lenght, out stream);
                     if (lenght <= 0)
                         return;
-                    memoryStream = Utility.FileHelper.ReadFileByPart(stream);
+                    memoryStream = FileHelper.ReadFileByPart(stream);
 
-                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                    Application.Current.Dispatcher.Invoke(() =>
                     {
                         var bitmapImage = new BitmapImage();
                         bitmapImage.BeginInit();

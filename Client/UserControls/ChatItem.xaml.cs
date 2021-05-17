@@ -10,37 +10,42 @@ namespace Client.UserControls
     public partial class ChatItem : UserControl
     {
         static readonly DependencyProperty UserNameProperty;
-        static readonly DependencyProperty DescriptionProperty;
-        static readonly DependencyProperty CountProperty;
-        static readonly DependencyProperty CountVisibilityProperty;
-        static readonly DependencyProperty PathProperty;
+        static readonly DependencyProperty UserNameFontSizeProperty;
         static readonly DependencyProperty AvatarProperty;
-        //static readonly DependencyProperty ActivityProperty;
-        //static readonly DependencyProperty ActivityVisibilityProperty;
+        static readonly DependencyProperty IsWritingProperty;
         static readonly DependencyProperty IsOnlineProperty;
         static readonly DependencyProperty IsOnlineVisibilityProperty;
+
+        static readonly DependencyProperty DescriptionProperty;
+        static readonly DependencyProperty DescriptionDataTemplateProperty;
+        static readonly DependencyProperty DescriptionDataTemplateSelectorProperty;
+
+        static readonly RoutedEvent WritingOnEvent;
+        static readonly RoutedEvent WritingOffEvent;
 
         static ChatItem()
         {
             UserNameProperty = DependencyProperty.Register("UserName", typeof(string), typeof(ChatItem), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-            DescriptionProperty = DependencyProperty.Register("Description", typeof(string), typeof(ChatItem), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+            UserNameFontSizeProperty = DependencyProperty.Register("UserNameFontSize", typeof(float), typeof(ChatItem), new FrameworkPropertyMetadata(14f, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-            //ActivityProperty = DependencyProperty.Register("Activity", typeof(Models.Activity), typeof(ChatItem), new FrameworkPropertyMetadata(Models.Activity.Offline, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+            AvatarProperty = DependencyProperty.Register("Avatar", typeof(BitmapImage), typeof(ChatItem), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-            //ActivityVisibilityProperty = DependencyProperty.Register("ActivityVisibility", typeof(Visibility), typeof(ChatItem), new FrameworkPropertyMetadata(Visibility.Visible, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+            IsWritingProperty = DependencyProperty.Register("IsWriting", typeof(string), typeof(ChatItem), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, WritingChanged));
 
             IsOnlineProperty = DependencyProperty.Register("IsOnline", typeof(bool), typeof(ChatItem), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
             IsOnlineVisibilityProperty = DependencyProperty.Register("IsOnlineVisibility", typeof(Visibility), typeof(ChatItem), new FrameworkPropertyMetadata(Visibility.Visible, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-            CountProperty = DependencyProperty.Register("Count", typeof(short), typeof(ChatItem), new FrameworkPropertyMetadata((short)0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+            DescriptionProperty = DependencyProperty.Register("Description", typeof(object), typeof(ChatItem), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-            CountVisibilityProperty = DependencyProperty.Register("CountVisibility", typeof(Visibility), typeof(ChatItem), new FrameworkPropertyMetadata(Visibility.Hidden, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+            DescriptionDataTemplateProperty = DependencyProperty.Register("DescriptionDataTemplate", typeof(DataTemplate), typeof(ChatItem), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-            PathProperty = DependencyProperty.Register("Path", typeof(string), typeof(ChatItem), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+            DescriptionDataTemplateSelectorProperty = DependencyProperty.Register("DescriptionDataTemplateSelector", typeof(DataTemplateSelector), typeof(ChatItem), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-            AvatarProperty = DependencyProperty.Register("Avatar", typeof(BitmapImage), typeof(ChatItem), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+            WritingOnEvent = EventManager.RegisterRoutedEvent("WritingOn", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ChatItem));
+
+            WritingOffEvent = EventManager.RegisterRoutedEvent("WritingOff", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ChatItem));
         }
 
         public ChatItem() : base()
@@ -54,23 +59,23 @@ namespace Client.UserControls
             set => SetValue(UserNameProperty, value);
         }
 
-        public string Description
+        public float UserNameFontSize
         {
-            get => (string)GetValue(DescriptionProperty);
-            set => SetValue(DescriptionProperty, value);
+            get => (float)GetValue(UserNameFontSizeProperty);
+            set => SetValue(UserNameFontSizeProperty, value);
         }
 
-        //public Models.Activity Activity
-        //{
-        //    get => (Models.Activity)GetValue(ActivityProperty);
-        //    set => SetValue(ActivityProperty, value);
-        //}
+        public BitmapImage Avatar
+        {
+            get => (BitmapImage)GetValue(AvatarProperty);
+            set => SetValue(AvatarProperty, value);
+        }
 
-        //public Visibility ActivityVisibility
-        //{
-        //    get => (Visibility)GetValue(ActivityVisibilityProperty);
-        //    set => SetValue(ActivityVisibilityProperty, value);
-        //}
+        public string IsWriting
+        {
+            get => (string)GetValue(IsWritingProperty);
+            set => SetValue(IsWritingProperty, value);
+        }
 
         public bool IsOnline
         {
@@ -84,28 +89,41 @@ namespace Client.UserControls
             set => SetValue(IsOnlineVisibilityProperty, value);
         }
 
-        public short Count
+        public object Description
         {
-            get => (short)GetValue(CountProperty);
-            set => SetValue(CountProperty, value);
+            get => GetValue(DescriptionProperty);
+            set => SetValue(DescriptionProperty, value);
         }
 
-        public Visibility CountVisibility
+        public DataTemplate DescriptionDataTemplate
         {
-            get => (Visibility)GetValue(CountVisibilityProperty);
-            set => SetValue(CountVisibilityProperty, value);
+            get => (DataTemplate)GetValue(DescriptionDataTemplateProperty);
+            set => SetValue(DescriptionDataTemplateProperty, value);
         }
 
-        public BitmapImage Avatar
+        public DataTemplateSelector DescriptionDataTemplateSelector
         {
-            get => (BitmapImage)GetValue(AvatarProperty);
-            set => SetValue(AvatarProperty, value);
+            get => (DataTemplateSelector)GetValue(DescriptionDataTemplateSelectorProperty);
+            set => SetValue(DescriptionDataTemplateSelectorProperty, value);
         }
 
-        public string Path
+        public event RoutedEventHandler WritingOn
         {
-            get => (string)GetValue(PathProperty);
-            set => SetValue(PathProperty, value);
+            add => AddHandler(WritingOnEvent, value);
+            remove => RemoveHandler(WritingOnEvent, value);
+        }
+
+        public event RoutedEventHandler WritingOff
+        {
+            add => AddHandler(WritingOffEvent, value);
+            remove => RemoveHandler(WritingOffEvent, value);
+        }
+
+        private static void WritingChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        {
+            ChatItem item = (ChatItem)obj;
+            if (item.IsWriting == null) item.RaiseEvent(new RoutedEventArgs(WritingOffEvent));
+            else item.RaiseEvent(new RoutedEventArgs(WritingOnEvent));
         }
 
         public override void OnApplyTemplate()
