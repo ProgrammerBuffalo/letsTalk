@@ -374,7 +374,7 @@ namespace Client.ViewModels
                             Users.Add(new KeyValuePair<int, AvailableUser>(user.SqlId, user));
                         }
 
-                        clientChatrooms.Add(new ChatOne(key.ChatSqlId, user) { CanWrite = friend.IsLeft});
+                        clientChatrooms.Add(new ChatOne(key.ChatSqlId, user) { CanWrite = !friend.IsLeft});
                     }
                 }
                 return clientChatrooms;
