@@ -41,6 +41,12 @@
   <wsdl:message name="Chat_AddedUserToChatIsOnline_InputMessage">
     <wsdl:part name="parameters" element="tns:AddedUserToChatIsOnline" />
   </wsdl:message>
+  <wsdl:message name="Chat_AddedUserToChatIsOnline_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddedUserToChatIsOnlineResponse" />
+  </wsdl:message>
+  <wsdl:message name="Chat_AddedUserToChatIsOnline_AddChatExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/letsTalk" name="detail" element="q1:AddChatExceptionFault" />
+  </wsdl:message>
   <wsdl:message name="Chat_Connect_InputMessage">
     <wsdl:part name="parameters" element="tns:Connect" />
   </wsdl:message>
@@ -48,7 +54,7 @@
     <wsdl:part name="parameters" element="tns:ConnectResponse" />
   </wsdl:message>
   <wsdl:message name="Chat_Connect_ConnectionExceptionFaultFault_FaultMessage">
-    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/letsTalk" name="detail" element="q1:ConnectionExceptionFault" />
+    <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/letsTalk" name="detail" element="q2:ConnectionExceptionFault" />
   </wsdl:message>
   <wsdl:message name="Chat_FindAllChatroomsForClient_InputMessage">
     <wsdl:part name="parameters" element="tns:FindAllChatroomsForClient" />
@@ -116,6 +122,8 @@
     </wsdl:operation>
     <wsdl:operation name="AddedUserToChatIsOnline">
       <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/AddedUserToChatIsOnline" message="tns:Chat_AddedUserToChatIsOnline_InputMessage" />
+      <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/AddedUserToChatIsOnlineResponse" message="tns:Chat_AddedUserToChatIsOnline_OutputMessage" />
+      <wsdl:fault wsaw:Action="letsTalk.IChatService/Chat/AddedUserToChatIsOnlineAddChatExceptionFaultFault" name="AddChatExceptionFaultFault" message="tns:Chat_AddedUserToChatIsOnline_AddChatExceptionFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="Connect">
       <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/Connect" message="tns:Chat_Connect_InputMessage" />

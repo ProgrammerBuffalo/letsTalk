@@ -34,5 +34,8 @@ namespace letsTalk
 
         [DataMember]
         public bool IsLeft { get; set; }
+
+        [DataMember]
+        public DateTime LeaveDate { get; set; }
     }
 }

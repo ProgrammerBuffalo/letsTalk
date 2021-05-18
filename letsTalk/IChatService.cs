@@ -53,7 +53,8 @@ namespace letsTalk
         [OperationContract(IsOneWay = true)]
         void LeaveFromChatroom(int userId, int chatId);
 
-        [OperationContract(IsOneWay = true)]
+        [OperationContract(IsOneWay = false)]
+        [FaultContract(typeof(AddChatExceptionFault))]
         void AddedUserToChatIsOnline(int userId, int chatId);
 
         [OperationContract(IsOneWay = false)]
@@ -84,7 +85,7 @@ namespace letsTalk
 
         //Оповещение пользователей, что пользователь присоединился/добавлен в чатрум
         [OperationContract(IsOneWay = true)]
-        void UserJoinedToChatroom(int userId);
+        void UserJoinedToChatroom(int chatId, int userId, string userName);
 
         //Оповещение пользователей, что пользователь покинул группу
         [OperationContract(IsOneWay = true)]

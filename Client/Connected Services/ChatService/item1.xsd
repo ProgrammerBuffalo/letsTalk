@@ -74,6 +74,12 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="RulingMessage" nillable="true" type="tns:RulingMessage" />
+  <xs:complexType name="AddChatExceptionFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AddChatExceptionFault" nillable="true" type="tns:AddChatExceptionFault" />
   <xs:complexType name="ConnectionExceptionFault">
     <xs:sequence>
       <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
@@ -98,6 +104,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="IsLeft" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsOnline" type="xs:boolean" />
+      <xs:element minOccurs="0" name="LeaveDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="UserName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="UserSqlId" type="xs:int" />
     </xs:sequence>

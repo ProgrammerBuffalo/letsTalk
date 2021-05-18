@@ -24,5 +24,8 @@ namespace letsTalk
 
         [OperationContract(IsOneWay = false)]
         List<ServiceMessage> MessagesFromOneChat(int chatroomId, int userId, int offset, int count, DateTime offsetDate);
+
+        [OperationContract(IsOneWay = false)]
+        string FindUserName(int userId);
     }
 }

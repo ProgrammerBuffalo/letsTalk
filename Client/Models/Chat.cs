@@ -357,6 +357,8 @@ namespace Client.Models
         public override void UserLeft(int userId)
         {
             var user = FindUser(userId);
+            if (user == null)
+                return;
             Messages.Add(SystemMessage.UserLeftChat(DateTime.Now, user.Name));
             Users.Remove(user);
         }
@@ -390,7 +392,11 @@ namespace Client.Models
         {
             if (senderId == clientId)
                 return new UserMessage(message);
-            return new GroupMessage(message, GetUserById(senderId), colors[senderId]);
+            var user = GetUserById(senderId);
+            if (user != null)
+                return new GroupMessage(message, GetUserById(senderId), colors[senderId]);
+            else
+                return new GroupMessage(message, new ChatService.UnitClient().FindUserName(senderId), "red");
         }
     }
 }

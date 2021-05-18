@@ -103,7 +103,7 @@ namespace Client.ViewModels
             {
                 it.MoveNext();
                 AllUsers.Add(new AvailableUser(it.Current.Key, it.Current.Value));
-                LoadUserAvatarAsync(i);
+                LoadUserAvatarAsync();
             }
             offset += count;
         }
@@ -225,9 +225,10 @@ namespace Client.ViewModels
             }
         }
 
-        private async void LoadUserAvatarAsync(int index)
+        private async void LoadUserAvatarAsync()
         {
-            DownloadRequest downloadRequest = new DownloadRequest(AllUsers[index].SqlId);
+            AvailableUser availableUser = AllUsers[AllUsers.Count - 1];
+            DownloadRequest downloadRequest = new DownloadRequest(availableUser.SqlId);
             System.IO.Stream stream = null;
             System.IO.MemoryStream memoryStream = null;
             try
@@ -254,7 +255,7 @@ namespace Client.ViewModels
                             bitmapImage.StreamSource = memoryStream;
                             bitmapImage.EndInit();
 
-                            AllUsers[index].Image = bitmapImage;
+                            availableUser.Image = bitmapImage;
                         });
                     }
                 });

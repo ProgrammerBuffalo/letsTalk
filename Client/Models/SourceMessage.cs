@@ -74,6 +74,12 @@ namespace Client.Models
 
         }
 
+        public GroupMessage(Message message, string userName, string color) : base(message)
+        {
+            user = new AvailableUser(0, userName);
+            this.color = color;
+        }
+
         public GroupMessage(Message message, AvailableUser user, string color) : base(message)
         {
             User = user;
