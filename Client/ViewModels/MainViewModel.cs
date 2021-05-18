@@ -243,7 +243,7 @@ namespace Client.ViewModels
             UserOnlineState(sqlUserId, false);
         }
 
-        public void NotifyUserIsAddedToChat(int chatId, string chatName, ChatService.UserInChat[] usersInChat)
+        public void NotifyUserIsAddedToChat(int chatId, string chatName, ChatService.UserInChat[] usersInChat, bool isGroup)
         {
             Task.Run(() =>
             {
@@ -264,7 +264,8 @@ namespace Client.ViewModels
                         availableUsers.Add(user);
                     }
 
-                    Chats.Add(new ChatGroup(chatId, chatName, availableUsers) { CanWrite = true });
+                    Chats.Add(isGroup ? new ChatGroup(chatId, chatName, availableUsers) { CanWrite = true } :
+                                        (Models.Chat)new ChatOne(chatId, availableUsers.First()) { CanWrite = true });
                 });
 
                 ChatClient.AddedUserToChatIsOnline(this.client.SqlId, chatId);

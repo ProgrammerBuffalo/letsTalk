@@ -77,7 +77,7 @@ namespace letsTalk
 
         //Оповещение пользователя, о том, что он был добавлен в чатрум
         [OperationContract(IsOneWay = true)]
-        void NotifyUserIsAddedToChat(int chatId, string chatName, List<UserInChat> usersInChat);
+        void NotifyUserIsAddedToChat(int chatId, string chatName, List<UserInChat> usersInChat, bool isGroup);
 
         //Оповещение пользователя о его удалении с чатрума
         [OperationContract(IsOneWay = true)]

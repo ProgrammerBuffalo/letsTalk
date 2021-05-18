@@ -116,7 +116,7 @@ namespace Client.Models
 
         public static SystemMessage UserAdded(DateTime dateTime, string nickname)
         {
-            return new SystemMessage(new TextMessage(nickname + "added to chat" + "   " + dateTime.ToShortTimeString()));
+            return new SystemMessage(new TextMessage(nickname + " was added to chat" + "   " + dateTime.ToShortTimeString()));
         }
     }
 }

@@ -940,7 +940,7 @@ namespace Client.ChatService {
         void NotifyUserIsOffline(int sqlUserId);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/NotifyUserIsAddedToChat")]
-        void NotifyUserIsAddedToChat(int chatId, string chatName, Client.ChatService.UserInChat[] usersInChat);
+        void NotifyUserIsAddedToChat(int chatId, string chatName, Client.ChatService.UserInChat[] usersInChat, bool isGroup);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/NotifyUserIsRemovedFromChat")]
         void NotifyUserIsRemovedFromChat(int chatId);

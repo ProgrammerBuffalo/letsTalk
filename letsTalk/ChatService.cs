@@ -395,6 +395,7 @@ namespace letsTalk
         {
             int chat_id;
             string fullpathXML = "";
+            bool isGroup = false;
             List<UserInChat> usersInChat = new List<UserInChat>();
             try
             {
@@ -498,6 +499,10 @@ namespace letsTalk
                         sqlCommandTakeXML.Parameters.Add("@chatId", SqlDbType.Int).Value = chat_id;
                         fullpathXML = sqlCommandTakeXML.ExecuteScalar().ToString();
 
+                        SqlCommand sqlCommandChatType = new SqlCommand(@"SELECT IsGroup FROM Chatrooms WHERE Id = @IdChat", sqlConnection);
+                        sqlCommandChatType.Parameters.Add("@IdChat", SqlDbType.Int).Value = chat_id;
+
+                        isGroup = bool.Parse(sqlCommandChatType.ExecuteScalar().ToString());
                     }
                     trScope.Complete();
                 }
@@ -516,7 +521,7 @@ namespace letsTalk
                                 chatroomsInUsers[connectedUser].Add(chat_id);
                                 if (connectedUser.UserContext.Channel != OperationContext.Current.Channel)
                                 {
-                                    connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsAddedToChat(chat_id, chatName, usersInChat);
+                                    connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsAddedToChat(chat_id, chatName, usersInChat, isGroup);
                                     connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsOnline(user);
                                 }
                             }
@@ -1072,6 +1077,7 @@ namespace letsTalk
         //Добавление пользователя в чатрум
         public void AddUserToChatroom(int userId, int chatId)
         {
+            bool isGroup = false;
             try
             {
                 Console.WriteLine("Adding user to chatroom (" + OperationContext.Current.Channel.GetHashCode() + ")");
@@ -1134,6 +1140,12 @@ namespace letsTalk
                             usersInChat.Add(new UserInChat() { UserSqlId = userSqlId, UserName = userName, IsOnline = isOnline});
                         }
                     }
+
+
+                    SqlCommand sqlCommandChatType = new SqlCommand(@"SELECT IsGroup FROM Chatrooms WHERE Id = @IdChat", sqlConnection);
+                    sqlCommandChatType.Parameters.Add("@IdChat", SqlDbType.Int).Value = chatId;
+
+                    isGroup = bool.Parse(sqlCommandChatType.ExecuteScalar().ToString());
                 }
 
                 lock (lockerSyncObj)
@@ -1149,7 +1161,7 @@ namespace letsTalk
 
                         ConnectedUser connectedUser = chatroomsInUsers.Keys.First(u => u.SqlID == userId);
                         chatroomsInUsers[connectedUser].Add(chatId);
-                        connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsAddedToChat(chatId, chatName, usersInChat);
+                        connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserIsAddedToChat(chatId, chatName, usersInChat, isGroup);
 
                         Console.WriteLine("User joined callbacks...");
 

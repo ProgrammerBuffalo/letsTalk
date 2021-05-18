@@ -12,9 +12,11 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 namespace Client.ViewModels
-{
+{ 
+
     class EditGroupViewModel : INotifyPropertyChanged, IDropTarget
     {
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private ChatGroup chat;
@@ -45,6 +47,7 @@ namespace Client.ViewModels
             ShowMoreCommand = new Command(ShowMore);
             SaveNameCommand = new Command(SaveName);
             SearchChangedCommand = new Command(SearchChanged);
+            TextBoxSearch_EnterPressedCommand = new Command(SearchUsersFromDB);
 
             Users_MouseLeaveCommand = new Command(Users_MouseLeave);
             Users_PreviewDragEnterCommand = new Command(Users_PreviewDragEnter);
@@ -71,6 +74,7 @@ namespace Client.ViewModels
         public ICommand ShowMoreCommand { get; }
         public ICommand SaveNameCommand { get; }
         public ICommand SearchChangedCommand { get; }
+        public ICommand TextBoxSearch_EnterPressedCommand { get; }
 
         public ICommand Users_MouseLeaveCommand { get; }
         public ICommand Users_PreviewDragEnterCommand { get; }
@@ -109,19 +113,28 @@ namespace Client.ViewModels
 
         private void SearchChanged(object param)
         {
-            Users.Clear();
-            if (SearchMembersText == null || SearchMembersText == "")
+            if (SearchMembersText == "" || searchMembersText == null)
+                return;
+            List<AvailableUser> sortedUsers = new List<AvailableUser>();
+
+
+            for(int i = 0; i < Users.Count; i++)
             {
-                Users = new ObservableCollection<AvailableUser>(Chat.Users);
+                sortedUsers.AddRange(Users.Where(u => u.Name.Substring(0, SearchMembersText.Length <= u.Name.Length ? SearchMembersText.Length : 0).Contains(searchMembersText)).ToList());
             }
-            else
+
+            if (sortedUsers.Count < 1)
+                return;
+
+            for(int i = 0; i < sortedUsers.Count; i++)
             {
-                foreach (var user in Chat.Users)
-                {
-                    if (user.Name.Contains(searchMembersText))
-                        Users.Add(user);
-                }
+                Users.Move(Users.IndexOf(Users.First(u => u.SqlId == sortedUsers[i].SqlId)), 0);
             }
+        }
+
+        private void SearchUsersFromDB(object obj)
+        {
+            throw new NotImplementedException();
         }
 
         private void ChangeImage(object param)
