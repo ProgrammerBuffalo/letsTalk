@@ -8,12 +8,12 @@ namespace Client.UserControls
     /// </summary>
     public partial class LoadingUserControl : UserControl
     {
+        public static readonly DependencyProperty StateProperty; 
+        
         static LoadingUserControl()
         {
-            stateProperty = DependencyProperty.Register("State", typeof(LoaderState), typeof(LoadingUserControl), new FrameworkPropertyMetadata(LoaderState.Loading, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+            StateProperty = DependencyProperty.Register("State", typeof(LoaderState), typeof(LoadingUserControl), new FrameworkPropertyMetadata(LoaderState.Loading, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
         }
-        
-        public static readonly DependencyProperty stateProperty; 
 
         public LoadingUserControl()
         {
@@ -22,8 +22,8 @@ namespace Client.UserControls
 
         public LoaderState State
         {
-            get { return (LoaderState)GetValue(stateProperty); }
-            set { SetValue(stateProperty, value); }
+            get { return (LoaderState)GetValue(StateProperty); }
+            set { SetValue(StateProperty, value); }
         }        
     }
 

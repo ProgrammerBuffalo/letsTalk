@@ -202,7 +202,7 @@
 
         <Button Content="Back" Grid.Row="3" Grid.Column="1" Margin="10, 50, 10, 100" Style="{StaticResource ButtonStyle}" Command="{Binding BackCommand}"/>
 
-        <uc:LoadingUserControl Grid.RowSpan="4" Grid.ColumnSpan="2" State="{Binding Path=LoaderState}"  Visibility="{Binding Path=LoaderVisibility}"/>
+        <uc:LoadingUserControl Grid.RowSpan="4" Grid.ColumnSpan="2" State="{Binding Path=LoaderState}" Visibility="{Binding Path=LoaderVisibility}"/>
 
         <TextBlock Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
     </Grid>
