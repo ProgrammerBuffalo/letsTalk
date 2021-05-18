@@ -190,8 +190,6 @@ namespace Client.Models
 
         public Message LastMessage { get => lastMessage; set => Set(ref lastMessage, value); }
 
-        public virtual BitmapImage Avatar { set; get; }
-
         public abstract bool SetOnlineState(int userId, bool state);
 
         public abstract void MessageIsWriting(Nullable<int> userId);
@@ -292,6 +290,10 @@ namespace Client.Models
         private string groupName;
         private ObservableCollection<AvailableUser> users = new ObservableCollection<AvailableUser>();
         private Dictionary<int, string> colors = new Dictionary<int, string>();
+
+        private BitmapImage avatar;
+        public BitmapImage Avatar { get => avatar; set => Set(ref avatar, value); }
+
 
         static ChatGroup()
         {
@@ -394,7 +396,7 @@ namespace Client.Models
                 return new UserMessage(message);
             var user = GetUserById(senderId);
             if (user != null)
-                return new GroupMessage(message, GetUserById(senderId), colors[senderId]);
+                return new GroupMessage(message, user, "blue");
             else
                 return new GroupMessage(message, new ChatService.UnitClient().FindUserName(senderId), "red");
         }
