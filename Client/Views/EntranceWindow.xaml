@@ -128,12 +128,22 @@
             </Style>
 
             <DataTemplate x:Key="PhotoButtonDataTemplate">
-                <Icons:PackIconMaterialDesign Width="Auto" Height="Auto" Foreground="#FFDA0B" Kind="AddAPhoto"/>
+                <Grid>
+                    <Icons:PackIconMaterialDesign x:Name="icon" Width="Auto" Height="Auto" Foreground="#FFDA0B" Kind="AddAPhoto" Visibility="Hidden"/>
+
+                    <Button x:Name="btn" Width="30" Height="30" Content="close" Visibility="Visible" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,-50,-15,0" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.CancelImageCommand}"/>
+                </Grid>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SelectedImage}" Value="{x:Null}">
+                        <Setter TargetName="icon" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="btn" Property="Visibility" Value="Hidden"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
             </DataTemplate>
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid Background="{StaticResource MainBackground}"> 
+    <Grid Background="{StaticResource MainBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
@@ -152,7 +162,7 @@
                  Controls:TextBoxHelper.ClearTextButton="True"
                  Margin="15,15,5,15" FontSize="18"
                  Style="{StaticResource TextBoxStyle}" />
-        
+
         <uc:LoginWarning x:Name="login" Grid.Row="1" Style="{StaticResource LoginStyle}">
             <uc:LoginWarning.Text>
                 <Binding Path="Login">

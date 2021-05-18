@@ -117,7 +117,7 @@
                 <Border x:Name="border" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" BorderBrush="AliceBlue" BorderThickness="3" CornerRadius="15" Margin="10,20,0,0">
                     <Grid>
                         <TextBlock Text="{Binding Path=Message.Text}" TextWrapping="Wrap" Foreground="Black" FontSize="18" Padding="8,0,8,15"/>
-                        <TextBlock x:Name="date" Text="{Binding Path=Message.Date, StringFormat={}{0:hh:mm}}" Margin="10, 2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="DarkSlateGray" FontSize="12"/>
+                        <TextBlock x:Name="date" Text="{Binding Path=Message.Date, StringFormat={}{0:hh:mm}}" Margin="10, 2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="{StaticResource DateForeground}" FontSize="12" FontWeight="DemiBold"/>
                     </Grid>
                 </Border>
             </Grid>
@@ -206,8 +206,8 @@
                                 CommandParameter="{Binding Path=Message}"
                                 Template="{StaticResource DownloadButton}">
                         </Button>
-                        <Path Fill="{StaticResource ImageDateBackground}" Data="M63,28 L63,0 0,28" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
-                        <TextBlock Margin="10, 2" Text="{Binding Path=Message.Date, StringFormat={}{0:hh:mm}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="White" FontSize="12"/>
+                        <Path Fill="{StaticResource ImageDateBackground}" Data="M70,30 0,30 L70,0" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+                        <TextBlock Margin="10, 2" Text="{Binding Path=Message.Date, StringFormat={}{0:hh:mm}}" Foreground="{StaticResource DateForeground}" VerticalAlignment="Bottom" HorizontalAlignment="Right" FontSize="12" FontWeight="DemiBold"/>
                     </Grid>
                 </Border>
             </Grid>
@@ -293,7 +293,7 @@
                         <Button x:Name="loader" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Width="35" Height="35" HorizontalContentAlignment="Center" Cursor="Hand" Template="{StaticResource DownloadButton}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.DownloadFileCommand}" CommandParameter="{Binding Path=Message}"/>
                         <Image x:Name="icon" Grid.Column="1" Source="/Resources/Extensions/file.png" Width="40" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <TextBlock Grid.Column="2" Text="{Binding Path=Message.FileName, Converter={StaticResource PathToName}}" FontSize="20" Margin="5,0,0,0" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Path=Message.Date, StringFormat={}{0:hh:mm}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,15,0" Foreground="DarkSlateGray" FontSize="12"/>
+                        <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Path=Message.Date, StringFormat={}{0:hh:mm}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,15,0" Foreground="{StaticResource DateForeground}" FontSize="12" FontWeight="DemiBold"/>
                     </Grid>
                 </Border>
             </Grid>
@@ -428,7 +428,7 @@
                             <TextBlock Text="     "/>
                             <TextBlock Text="{Binding Path=Message.Length, Converter={StaticResource TicksToTime}}" FontSize="15"/>
                         </StackPanel>
-                        <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Path=Message.Date, StringFormat={}{0:hh:mm}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,15,0" Foreground="DarkSlateGray" FontSize="12"/>
+                        <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Path=Message.Date, StringFormat={}{0:hh:mm}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,15,0" Foreground="{StaticResource DateForeground}" FontSize="12" FontWeight="DemiBold"/>
                     </Grid>
                 </Border>
             </Grid>

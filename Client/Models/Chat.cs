@@ -256,7 +256,7 @@ namespace Client.Models
 
         public override void MessageIsWriting(Nullable<int> userId)
         {
-            UserIsWriting = User.SqlId == userId ? User.Name + " is writing..." : "";
+            UserIsWriting = User.SqlId == userId ? User.Name + " is writing..." : null;
         }
 
         public override void UserLeft(int userId)
@@ -288,7 +288,6 @@ namespace Client.Models
         private static string[] allColors;
 
         private string groupName;
-        private string groupDesc;
         private ObservableCollection<AvailableUser> users = new ObservableCollection<AvailableUser>();
         private Dictionary<int, string> colors = new Dictionary<int, string>();
 
@@ -320,13 +319,7 @@ namespace Client.Models
             }
         }
 
-        public ChatGroup(int sqlId, string groupName, string groupDesc, IEnumerable<AvailableUser> users) : this(sqlId, groupName, users)
-        {
-            GroupDesc = groupDesc;
-        }
-
         public string GroupName { get => groupName; set => Set(ref groupName, value); }
-        public string GroupDesc { get => groupDesc; set => Set(ref groupDesc, value); }
 
         public ObservableCollection<AvailableUser> Users { get => users; set => Set(ref users, value); }
 
@@ -353,7 +346,7 @@ namespace Client.Models
             var user = FindUser(userId);
             if (user == null)
             {
-                UserIsWriting = "";
+                UserIsWriting = null;
                 return;
             }
             UserIsWriting = user.Name + " is writing...";

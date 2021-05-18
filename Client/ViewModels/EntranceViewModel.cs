@@ -52,12 +52,14 @@ namespace Client.ViewModels
             RegistrateCommand = new Command(Registrate);
             SetPhotoCommand = new Command(SetPhoto);
             BackCommand = new Command(Back);
+            CancelImageCommand = new Command(CancelImage);
         }
 
         public ICommand SignInCommand { get; }
         public ICommand RegistrateCommand { get; }
         public ICommand SetPhotoCommand { get; }
         public ICommand BackCommand { get; }
+        public ICommand CancelImageCommand { get; }
 
         public bool IsSectionShown { get => isSectionShown; set => Set(ref isSectionShown, value); }
 
@@ -255,6 +257,11 @@ namespace Client.ViewModels
         {
             IsSectionShown = !IsSectionShown;
             if (uploadFileInfo != null && uploadFileInfo.FileStream != null) uploadFileInfo.FileStream.Dispose();
+        }
+
+        private void CancelImage(object param)
+        {
+            SelectedImage = null;
         }
 
         private bool IsInfoCorrect()

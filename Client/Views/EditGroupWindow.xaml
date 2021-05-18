@@ -133,7 +133,7 @@
                   dd:DragDrop.IsDragSource="True"
                   Margin="10"
                   ItemsSource="{Binding Path=AllUsers}"
-                  ItemTemplate="{StaticResource ChatDataTemplate}">
+                  ItemTemplate="{StaticResource UserDataTemplate}">
             </ListView>
         </Grid>
 

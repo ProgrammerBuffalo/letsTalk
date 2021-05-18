@@ -59,11 +59,11 @@
             dd:DragDrop.IsDropTarget="{Binding Path=AllUsersIsDropTarget}"
             dd:DragDrop.DragHandler="{Binding}"
             dd:DragDrop.DropHandler="{Binding}"
-            dd:DragDrop.DragAdornerTemplate="{StaticResource ChatDataTemplate}"
-            dd:DragDrop.DropAdornerTemplate="{StaticResource ChatDataTemplate}"
+            dd:DragDrop.DragAdornerTemplate="{StaticResource UserDataTemplate}"
+            dd:DragDrop.DropAdornerTemplate="{StaticResource UserDataTemplate}"
             ItemsSource="{Binding Path=AllUsers}"
             SelectedItem="{Binding Path=SelectedUser}"
-            ItemTemplate="{StaticResource ChatDataTemplate}"
+            ItemTemplate="{StaticResource UserDataTemplate}"
             ItemContainerStyle="{StaticResource ChatListViewItemStyle}"
             Margin="20" Background="White">
             <i:Interaction.Triggers>
@@ -109,11 +109,11 @@
             dd:DragDrop.IsDragSource="True"
             dd:DragDrop.DragHandler="{Binding}"
             dd:DragDrop.DropHandler="{Binding}"
-            dd:DragDrop.DragAdornerTemplate="{StaticResource ChatDataTemplate}"
-            dd:DragDrop.DropAdornerTemplate="{StaticResource ChatDataTemplate}"
+            dd:DragDrop.DragAdornerTemplate="{StaticResource UserDataTemplate}"
+            dd:DragDrop.DropAdornerTemplate="{StaticResource UserDataTemplate}"
             ItemsSource="{Binding Path=UsersToAdd}"
             SelectedItem="{Binding Path=SelectedUser}"
-            ItemTemplate="{StaticResource ChatDataTemplate}"
+            ItemTemplate="{StaticResource UserDataTemplate}"
             ItemContainerStyle="{StaticResource ChatListViewItemStyle}"
             Background="White" Margin="20">
             <i:Interaction.Triggers>

@@ -232,6 +232,7 @@ namespace Client.ViewModels
             mainVM.ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = MessageText, UserId = mainVM.Client.SqlId }, Chat.SqlId);
             Chat.Messages.Add(new UserMessage(new TextMessage(messageText, DateTime.Now)));
             MessageText = null;
+            Scroll.ScrollToBottom();
         }
 
         private void TextBox_KeyUp(object obj)
@@ -395,6 +396,7 @@ namespace Client.ViewModels
             if(message.FileName.Length > 0)
             {
                 Chat.Messages.Add(new SessionSendedMessage(message));
+                Scroll.ScrollToBottom();
             }
 
             InputMessage = new TextMessage();

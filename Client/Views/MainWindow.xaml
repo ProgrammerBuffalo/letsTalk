@@ -8,16 +8,7 @@
         xmlns:controls ="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:UC="clr-namespace:Client.UserControls"
         mc:Ignorable="d"
-        Title="letsTalkWindow" Height="700" Width="1200" WindowStartupLocation="CenterScreen">
-
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding LoadedWindowCommand}"/>
-        </i:EventTrigger>
-        <i:EventTrigger EventName="Closed">
-            <i:InvokeCommandAction Command="{Binding ClosedWindowCommand}"/>
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
+        Title="letsTalkWindow" Height="700" Width="1200" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" WindowStyle="None">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -86,46 +77,71 @@
                 </Setter>
             </Style>
 
-            <!--<Storyboard x:Key="HamburgerOpneAnim">
-                <DoubleAnimation Storyboard.TargetProperty="OpenPaneLength" From="70" To="250" Duration="0:0:0.5" Completed="DoubleAnimation_Completed"/>
-            </Storyboard>
-
-            <Storyboard x:Key="HamburgerCloseAnim">
-                <DoubleAnimation Storyboard.TargetProperty="CompactPaneLength" From="250" To="70" Duration="0:0:0.5" Completed="DoubleAnimation_Completed_1"/>
-            </Storyboard>-->
-
             <Style x:Key="HamburgerStyle" TargetType="controls:HamburgerMenu">
                 <Setter Property="IsPaneOpen" Value="False"/>
                 <Setter Property="Width" Value="250"/>
                 <Setter Property="OpenPaneLength" Value="250"/>
-                <Setter Property="CompactPaneLength" Value="70"/>
+                <Setter Property="CompactPaneLength" Value="80"/>
                 <Setter Property="PaneBackground" Value="{StaticResource HamburgerBackground}"/>
                 <Setter Property="PaneForeground" Value="Gray"/>
-
-                <!--<Style.Triggers>
-                    <Trigger Property="IsPaneOpen" Value="True">
-                        <Trigger.EnterActions>
-                            <BeginStoryboard Storyboard="{StaticResource HamburgerOpneAnim}"/>
-                        </Trigger.EnterActions>
-                    </Trigger>
-                    <Trigger Property="IsPaneOpen" Value="False">
-                        <Trigger.EnterActions>
-                            <BeginStoryboard Storyboard="{StaticResource HamburgerCloseAnim}"/>
-                        </Trigger.EnterActions>
-                    </Trigger>
-                </Style.Triggers>-->
             </Style>
 
+            <ControlTemplate x:Key="CloseButtonTemplate" TargetType="Button">
+                <Border Cursor="Hand" Background="Transparent">
+                    <icons:PackIconMaterialDesign x:Name="icon" Kind="Close" Foreground="{StaticResource ButtonBackground}" Width="25" Height="25"/>
+                </Border>
+                
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter TargetName="icon" Property="Foreground" Value="DarkOrange"/>
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+
+            <ControlTemplate x:Key="MaximizeButtonTemplate" TargetType="Button">
+                <Border Background="Transparent" Cursor="Hand">
+                    <icons:PackIconFontAwesome x:Name="icon" Kind="WindowMaximizeRegular" Foreground="{StaticResource ButtonBackground}" Width="25" Height="25"/>
+                </Border>
+
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter TargetName="icon" Property="Foreground" Value="DarkOrange"/>
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+
+            <ControlTemplate x:Key="MinimizeButtonTemplate" TargetType="Button">
+                <Border Background="Transparent" Cursor="Hand">
+                    <icons:PackIconFontAwesome x:Name="icon" Kind="WindowMinimizeRegular" Foreground="{StaticResource ButtonBackground}" Width="25" Height="25"/>
+                </Border>
+
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter TargetName="icon" Property="Foreground" Value="DarkOrange"/>
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
         </ResourceDictionary>
     </Window.Resources>
 
     <Grid x:Name="grid" Background="{StaticResource MainBackground}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="col1"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
 
+        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Click="MinimizedWindow_Click" Margin="0,0,20,0" Template="{StaticResource MinimizeButtonTemplate}"/>
+            <Button Click="MaximizedWindow_Click" Margin="0,0,20,0" Template="{StaticResource MaximizeButtonTemplate}"/>
+            <Button Click="CloseWindow_Click"  Margin="0,0,20,0" Template="{StaticResource CloseButtonTemplate}"/>
+        </StackPanel>
+
         <controls:HamburgerMenu x:Name="hamburgerMenu"
+                                 Grid.Row="1" Grid.Column="0"
                                  OptionsItemTemplate="{StaticResource HamburgerMenuOptionsTemplate}"
                                  OptionsItemContainerStyle="{StaticResource HamburgerOptionItemContainerStyle}"
                                  ItemContainerStyle="{StaticResource ChatListBoxItemStyle}"
@@ -152,12 +168,13 @@
 
             <controls:HamburgerMenu.HamburgerMenuHeaderTemplate>
                 <DataTemplate>
-                    <Grid Margin="25,0,0,0">
+                    <Grid Margin="30,0,0,0">
                         <UC:ChatItem UserName="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.Client.UserName}"
                                  Avatar="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.Client.UserImage}"
-                                 IsOnlineVisibility="Hidden"/>
+                                 IsOnlineVisibility="Hidden">
+                        </UC:ChatItem>
 
-                        <Button Cursor="Hand" Margin="5,5,0,0"
+                        <Button Cursor="Hand" Margin="7,7,0,0"
                                 Command="{Binding Path=DataContext.ChangeAvatarCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                                 Template="{StaticResource ButtonLoaderTemplate}"/>
                     </Grid>
@@ -172,6 +189,15 @@
         </controls:HamburgerMenu>
 
     </Grid>
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadedWindowCommand}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closed">
+            <i:InvokeCommandAction Command="{Binding ClosedWindowCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 </Window>
 
 

@@ -1,15 +1,17 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:utility="clr-namespace:Client.Utility"
-                    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-                    xmlns:dd="urn:gong-wpf-dragdrop">
+                    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/WindowResources/ThemeDictionary.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
 
     <utility:PathToExtension x:Key="PathToExtension"/>
     <utility:PathToName x:Key="PathToName"/>
 
     <Style x:Key="InputTextBoxStyle" TargetType="TextBox">
-        <Setter Property="Background" Value="DarkSlateGray"/>
-        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="{StaticResource InputTextBoxBackground}"/>
+        <Setter Property="Foreground" Value="{StaticResource InputTextBoxForeground}"/>
         <Setter Property="FontSize" Value="35"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>

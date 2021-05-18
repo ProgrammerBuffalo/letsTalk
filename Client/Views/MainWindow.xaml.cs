@@ -15,6 +15,7 @@
         public void AddUC(System.Windows.Controls.UserControl uc)
         {
             System.Windows.Controls.Grid.SetColumn(uc, 1);
+            System.Windows.Controls.Grid.SetRow(uc, 1);
             grid.Children.Add(uc);
         }
 
@@ -49,10 +50,21 @@
             }
         }
 
-        //private void DoubleAnimation_Completed(object sender, System.EventArgs e)
-        //{
-        //    col1.Width = new System.Windows.GridLength(hamburgerMenu.Width);
-        //    hamburgerMenu.OpenPaneLength = hamburgerMenu.Width;
-        //}
+        private void CloseWindow_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void MaximizedWindow_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (WindowState == System.Windows.WindowState.Maximized) WindowState = System.Windows.WindowState.Normal;
+            else WindowState = System.Windows.WindowState.Maximized;
+        }
+
+        private void MinimizedWindow_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            WindowState = System.Windows.WindowState.Minimized;
+        }
+
     }
 }

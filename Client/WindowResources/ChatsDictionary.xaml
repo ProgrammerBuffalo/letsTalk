@@ -27,7 +27,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
-                    <Border x:Name="border" Margin="0,5" Cursor="Hand">
+                    <Border x:Name="border" Cursor="Hand">
                         <ContentPresenter/>
                     </Border>
 
@@ -44,7 +44,7 @@
         </Setter>
     </Style>
 
-    <DataTemplate x:Key="ChatDataTemplate">
+    <DataTemplate x:Key="UserDataTemplate">
         <uc:ChatItem
             UserName="{Binding Path=Name}"
             Avatar="{Binding Path=Image}"
@@ -52,7 +52,7 @@
         </uc:ChatItem>
     </DataTemplate>
 
-    <DataTemplate x:Key="ActivityChatDataTemplate">
+    <DataTemplate x:Key="ChatDataTemplate">
         <uc:ChatItem
             x:Name="chat"
             UserName="{Binding Path=User.Name}"
@@ -62,7 +62,8 @@
             IsOnline="{Binding Path=User.IsOnline}"
             IsOnlineVisibility="Visible"
             Description="{Binding Path=LastMessage}"
-            DescriptionDataTemplateSelector="{StaticResource LastMessageTemplateSelector}">
+            DescriptionDataTemplateSelector="{StaticResource LastMessageTemplateSelector}"
+            Margin="2,2,0,0">
         </uc:ChatItem>
     </DataTemplate>
 
@@ -74,13 +75,14 @@
             IsWriting="{Binding Path=UserIsWriting}"
             IsOnlineVisibility="Hidden"
             Description="{Binding Path=LastMessage}"
-            DescriptionDataTemplateSelector="{StaticResource LastMessageTemplateSelector}">
+            DescriptionDataTemplateSelector="{StaticResource LastMessageTemplateSelector}"
+            Margin="2,0,0,0">
         </uc:ChatItem>
     </DataTemplate>
 
     <utility:ChatDataTemplateSelector
                 x:Key="ChatDataTemplateSelector"
-                ChatOneDataTemplate="{StaticResource ActivityChatDataTemplate}"
+                ChatOneDataTemplate="{StaticResource ChatDataTemplate}"
                 ChatGroupDataTemplate="{StaticResource ChatGroupDataTemplate}">
     </utility:ChatDataTemplateSelector>
 </ResourceDictionary>
