@@ -135,6 +135,7 @@
         <xs:element minOccurs="0" name="chatId" type="xs:int" />
         <xs:element minOccurs="0" name="chatName" nillable="true" type="xs:string" />
         <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/letsTalk" minOccurs="0" name="usersInChat" nillable="true" type="q4:ArrayOfUserInChat" />
+        <xs:element minOccurs="0" name="isGroup" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

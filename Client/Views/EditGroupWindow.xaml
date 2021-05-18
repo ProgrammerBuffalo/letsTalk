@@ -16,7 +16,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate x:Key="MembersDataTemplate">
-                <Grid Background="Bisque">
+                <Grid  Background="Bisque">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="60"/>
                         <ColumnDefinition Width="*"/>
@@ -77,16 +77,20 @@
         </Button>
 
         <Grid Grid.Row="1" Grid.Column="0" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="253*"/>
+                <ColumnDefinition Width="144*"/>
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
-                <RowDefinition Height="*"/>                
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <TextBox Grid.Row="0"
                      Text="{Binding Path=SearchMembersText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="20"
                      metro:TextBoxHelper.ClearTextButton="True"
                      Margin="10,0"
-                     Background="LightGoldenrodYellow">
+                     Background="LightGoldenrodYellow" Grid.ColumnSpan="2">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding SearchChangedCommand}"/>
@@ -101,7 +105,7 @@
                   ItemsSource="{Binding Path=Users}"
                   ItemTemplate="{StaticResource MembersDataTemplate}"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  ScrollViewer.VerticalScrollBarVisibility="Auto">
+                  ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="2">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseLeave">
                         <i:InvokeCommandAction Command="{Binding Users_MouseLeaveCommand}"/>
@@ -126,8 +130,12 @@
                      Text="{Binding Path=SearchUsersText}" FontSize="20"
                      metro:TextBoxHelper.ClearTextButton="True"
                      Margin="10,0"
-                     Background="LightGoldenrodYellow"/> 
-            
+                     Background="LightGoldenrodYellow">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding TextBoxSearch_EnterPressedCommand}"/>
+                </TextBox.InputBindings>
+            </TextBox>
+
             <ListView Grid.Row="1"
                   dd:DragDrop.DragHandler="{Binding}"
                   dd:DragDrop.IsDragSource="True"
