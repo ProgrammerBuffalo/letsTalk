@@ -40,7 +40,6 @@ namespace Client.ViewModels
             Name = Chat.GroupName;
 
             RemoveMemberCommand = new Command(RemoveMember);
-            AddMemberCommand = new Command(AddMember);
             DeleteChatCommand = new Command(DeleteChat);
             ChangeImageCommand = new Command(ChangeImage);
             ShowMoreCommand = new Command(ShowMore);
@@ -67,7 +66,6 @@ namespace Client.ViewModels
         }
 
         public ICommand RemoveMemberCommand { get; }
-        public ICommand AddMemberCommand { get; }
         public ICommand DeleteChatCommand { get; }
         public ICommand ChangeImageCommand { get; }
         public ICommand ShowMoreCommand { get; }
@@ -93,11 +91,6 @@ namespace Client.ViewModels
             AvailableUser user = (AvailableUser)param;
             mainVM.SelectedChat.RemoveUser(user);
             ChatClient.RemoveUserFromChatroom(user.SqlId, chat.SqlId);
-        }
-
-        private void AddMember(object param)
-        {
-            //Chat.Users.Add(user)
         }
 
         private void DeleteChat(object param)
@@ -155,7 +148,7 @@ namespace Client.ViewModels
             for (int i = 0; i < users.Count; i++)
             {
                 it.MoveNext();
-                if (Users.FirstOrDefault(u => u.SqlId == it.Current.Key) == null)
+                if (Users.FirstOrDefault(u => u.SqlId == it.Current.Key) == null && AllUsers.FirstOrDefault(u => u.SqlId == it.Current.Key) == null)
                 {
                     AllUsers.Add(new AvailableUser(it.Current.Key, it.Current.Value));
                     LoadUserAvatarAsync();
@@ -194,8 +187,16 @@ namespace Client.ViewModels
             AvailableUser sourceItem = dropInfo.Data as AvailableUser;
             if (sourceItem != null && canDrop)
             {
-                Users.Add(sourceItem);
-                AllUsers.Remove(sourceItem);
+                try
+                {
+                    ChatClient.AddUserToChatroom(sourceItem.SqlId, chat.SqlId);
+                    AllUsers.Remove(sourceItem);
+                    Users.Add(sourceItem);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
 
@@ -207,8 +208,8 @@ namespace Client.ViewModels
 
         private async void LoadUserAvatarAsync()
         {
-            int last = AllUsers.Count - 1;
-            ChatService.DownloadRequest downloadRequest = new ChatService.DownloadRequest(AllUsers[last].SqlId);
+            AvailableUser availableUser = AllUsers[AllUsers.Count - 1];
+            ChatService.DownloadRequest downloadRequest = new ChatService.DownloadRequest(availableUser.SqlId);
             System.IO.Stream stream = null;
             System.IO.MemoryStream memoryStream = null;
             try
@@ -235,7 +236,7 @@ namespace Client.ViewModels
                             bitmapImage.StreamSource = memoryStream;
                             bitmapImage.EndInit();
 
-                            AllUsers[last].Image = bitmapImage;
+                            availableUser.Image = bitmapImage;
                         });
                     }
                 });

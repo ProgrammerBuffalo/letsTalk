@@ -83,6 +83,11 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="AddedUserToChatIsOnlineResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="Connect">
     <xs:complexType>
       <xs:sequence>
@@ -143,7 +148,9 @@
   <xs:element name="UserJoinedToChatroom">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="chatId" type="xs:int" />
         <xs:element minOccurs="0" name="userId" type="xs:int" />
+        <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

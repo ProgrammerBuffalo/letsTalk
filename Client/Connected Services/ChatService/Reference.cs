@@ -205,6 +205,51 @@ namespace Client.ChatService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AddChatExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
+    [System.SerializableAttribute()]
+    public partial class AddChatExceptionFault : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MessageField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Message {
+            get {
+                return this.MessageField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MessageField, value) != true)) {
+                    this.MessageField = value;
+                    this.RaisePropertyChanged("Message");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ConnectionExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
     [System.SerializableAttribute()]
     public partial class ConnectionExceptionFault : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -341,6 +386,9 @@ namespace Client.ChatService {
         private bool IsOnlineField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime LeaveDateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string UserNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -378,6 +426,19 @@ namespace Client.ChatService {
                 if ((this.IsOnlineField.Equals(value) != true)) {
                     this.IsOnlineField = value;
                     this.RaisePropertyChanged("IsOnline");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime LeaveDate {
+            get {
+                return this.LeaveDateField;
+            }
+            set {
+                if ((this.LeaveDateField.Equals(value) != true)) {
+                    this.LeaveDateField = value;
+                    this.RaisePropertyChanged("LeaveDate");
                 }
             }
         }
@@ -726,6 +787,12 @@ namespace Client.ChatService {
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/MessagesFromOneChat", ReplyAction="letsTalk.IUnitService/Unit/MessagesFromOneChatResponse")]
         System.Threading.Tasks.Task<Client.ChatService.ServiceMessage[]> MessagesFromOneChatAsync(int chatroomId, int userId, int offset, int count, System.DateTime offsetDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/FindUserName", ReplyAction="letsTalk.IUnitService/Unit/FindUserNameResponse")]
+        string FindUserName(int userId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/FindUserName", ReplyAction="letsTalk.IUnitService/Unit/FindUserNameResponse")]
+        System.Threading.Tasks.Task<string> FindUserNameAsync(int userId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -786,6 +853,14 @@ namespace Client.ChatService {
         public System.Threading.Tasks.Task<Client.ChatService.ServiceMessage[]> MessagesFromOneChatAsync(int chatroomId, int userId, int offset, int count, System.DateTime offsetDate) {
             return base.Channel.MessagesFromOneChatAsync(chatroomId, userId, offset, count, offsetDate);
         }
+        
+        public string FindUserName(int userId) {
+            return base.Channel.FindUserName(userId);
+        }
+        
+        public System.Threading.Tasks.Task<string> FindUserNameAsync(int userId) {
+            return base.Channel.FindUserNameAsync(userId);
+        }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -834,10 +909,11 @@ namespace Client.ChatService {
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/LeaveFromChatroom")]
         System.Threading.Tasks.Task LeaveFromChatroomAsync(int userId, int chatId);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/AddedUserToChatIsOnline")]
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/AddedUserToChatIsOnline", ReplyAction="letsTalk.IChatService/Chat/AddedUserToChatIsOnlineResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(Client.ChatService.AddChatExceptionFault), Action="letsTalk.IChatService/Chat/AddedUserToChatIsOnlineAddChatExceptionFaultFault", Name="AddChatExceptionFault", Namespace="http://schemas.datacontract.org/2004/07/letsTalk")]
         void AddedUserToChatIsOnline(int userId, int chatId);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/AddedUserToChatIsOnline")]
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/AddedUserToChatIsOnline", ReplyAction="letsTalk.IChatService/Chat/AddedUserToChatIsOnlineResponse")]
         System.Threading.Tasks.Task AddedUserToChatIsOnlineAsync(int userId, int chatId);
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/Connect", ReplyAction="letsTalk.IChatService/Chat/ConnectResponse")]
@@ -870,7 +946,7 @@ namespace Client.ChatService {
         void NotifyUserIsRemovedFromChat(int chatId);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/UserJoinedToChatroom")]
-        void UserJoinedToChatroom(int userId);
+        void UserJoinedToChatroom(int chatId, int userId, string userName);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/UserLeftChatroom")]
         void UserLeftChatroom(int chatId, int userId);

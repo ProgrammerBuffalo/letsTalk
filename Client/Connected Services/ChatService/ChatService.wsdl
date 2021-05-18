@@ -136,6 +136,12 @@
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="AddChatExceptionFaultFault">
+        <soap12:fault use="literal" name="AddChatExceptionFaultFault" namespace="" />
+      </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="Connect">
       <soap12:operation soapAction="letsTalk.IChatService/Chat/Connect" style="document" />
@@ -266,6 +272,15 @@
     </wsdl:operation>
     <wsdl:operation name="MessagesFromOneChat">
       <soap12:operation soapAction="letsTalk.IUnitService/Unit/MessagesFromOneChat" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FindUserName">
+      <soap12:operation soapAction="letsTalk.IUnitService/Unit/FindUserName" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -32,6 +32,18 @@ namespace letsTalk
     }
 
     [DataContract]
+    public class AddChatExceptionFault
+    {
+        [DataMember]
+        public string Message { get; private set; }
+
+        public AddChatExceptionFault()
+        {
+            Message = "The user has not confirmed his exit";
+        }
+    }
+
+    [DataContract]
     public class AuthorizationExceptionFault
     {
         [DataMember]

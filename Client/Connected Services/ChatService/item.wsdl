@@ -42,6 +42,12 @@
   <wsdl:message name="Unit_MessagesFromOneChat_OutputMessage">
     <wsdl:part name="parameters" element="tns:MessagesFromOneChatResponse" />
   </wsdl:message>
+  <wsdl:message name="Unit_FindUserName_InputMessage">
+    <wsdl:part name="parameters" element="tns:FindUserName" />
+  </wsdl:message>
+  <wsdl:message name="Unit_FindUserName_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FindUserNameResponse" />
+  </wsdl:message>
   <wsdl:portType name="Unit">
     <wsdl:operation name="Authorization">
       <wsdl:input wsaw:Action="letsTalk.IUnitService/Unit/Authorization" message="tns:Unit_Authorization_InputMessage" />
@@ -61,6 +67,10 @@
     <wsdl:operation name="MessagesFromOneChat">
       <wsdl:input wsaw:Action="letsTalk.IUnitService/Unit/MessagesFromOneChat" message="tns:Unit_MessagesFromOneChat_InputMessage" />
       <wsdl:output wsaw:Action="letsTalk.IUnitService/Unit/MessagesFromOneChatResponse" message="tns:Unit_MessagesFromOneChat_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="FindUserName">
+      <wsdl:input wsaw:Action="letsTalk.IUnitService/Unit/FindUserName" message="tns:Unit_FindUserName_InputMessage" />
+      <wsdl:output wsaw:Action="letsTalk.IUnitService/Unit/FindUserNameResponse" message="tns:Unit_FindUserName_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>
