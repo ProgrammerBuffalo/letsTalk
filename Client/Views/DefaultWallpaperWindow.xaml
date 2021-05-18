@@ -1,11 +1,12 @@
-﻿<Window x:Class="Client.Views.DefaultWallpaperWindow"
+﻿<metro:MetroWindow x:Class="Client.Views.DefaultWallpaperWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"       
         mc:Ignorable="d"
-        Title="DefaultWallpaperWindow" Height="600" Width="820">
+        Title="Wallpaper" Height="600" Width="820">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -67,4 +68,4 @@
         <Button Grid.Column="0" Grid.Row="1" Content="Confirm wallpaper" Width="200" Height="40" Style="{StaticResource ButtonStyle}" Command="{Binding ConfirmWallpaperCommand}"/>
         <Button Grid.Column="1" Grid.Row="1" Content="Preview wallpaper" Width="200" Height="40" Style="{StaticResource ButtonStyle}" Command="{Binding PreviewWallpaperShowCommand}"/>
     </Grid>
-</Window>
+</metro:MetroWindow>

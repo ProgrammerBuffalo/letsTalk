@@ -153,7 +153,7 @@ namespace Client.ViewModels
                 {
                     this.memoryStream.Position = 0;
                     uploadFileInfo.FileName = fileName;
-
+                
                     uploadFileInfo.FileStream = memoryStream;
 
                     if (uploadFileInfo.FileStream.CanRead)

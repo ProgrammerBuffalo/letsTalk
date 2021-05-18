@@ -3,7 +3,7 @@
     /// <summary>
     /// Interaction logic for EntranceWindow.xaml
     /// </summary>
-    public partial class EntranceWindow : System.Windows.Window
+    public partial class EntranceWindow : MahApps.Metro.Controls.MetroWindow
     {
         public EntranceWindow()
         {

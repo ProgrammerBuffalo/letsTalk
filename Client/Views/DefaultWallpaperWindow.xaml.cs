@@ -3,7 +3,7 @@
     /// <summary>
     /// Interaction logic for DefaultWallpaperWindow.xaml
     /// </summary>
-    public partial class DefaultWallpaperWindow : System.Windows.Window
+    public partial class DefaultWallpaperWindow : MahApps.Metro.Controls.MetroWindow
     {
         public DefaultWallpaperWindow()
         {

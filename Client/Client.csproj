@@ -489,6 +489,7 @@
     <Resource Include="Resources\Extensions\png.png" />
     <Resource Include="Resources\Extensions\jpg.png" />
     <Resource Include="Resources\group.png" />
+    <Resource Include="Resources\aaa.png" />
     <Content Include="Resources\Ringtons\alcatel_success.wav" />
     <Content Include="Resources\Ringtons\basic_whistle.wav" />
     <Content Include="Resources\Ringtons\doorslam.wav" />

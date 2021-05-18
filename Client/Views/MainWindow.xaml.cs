@@ -3,7 +3,7 @@
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : System.Windows.Window
+    public partial class MainWindow : MahApps.Metro.Controls.MetroWindow
     {
         public MainWindow()
         {
@@ -15,7 +15,6 @@
         public void AddUC(System.Windows.Controls.UserControl uc)
         {
             System.Windows.Controls.Grid.SetColumn(uc, 1);
-            System.Windows.Controls.Grid.SetRow(uc, 1);
             grid.Children.Add(uc);
         }
 
@@ -49,22 +48,5 @@
                 col1.Width = new System.Windows.GridLength(hamburgerMenu.CompactPaneLength);
             }
         }
-
-        private void CloseWindow_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            Close();
-        }
-
-        private void MaximizedWindow_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            if (WindowState == System.Windows.WindowState.Maximized) WindowState = System.Windows.WindowState.Normal;
-            else WindowState = System.Windows.WindowState.Maximized;
-        }
-
-        private void MinimizedWindow_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            WindowState = System.Windows.WindowState.Minimized;
-        }
-
     }
 }

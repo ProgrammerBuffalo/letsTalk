@@ -1,4 +1,4 @@
-﻿<Window x:Class="Client.Views.EditGroupWindow"
+﻿<metro:MetroWindow x:Class="Client.Views.EditGroupWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,7 +7,7 @@
         xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
-        Title="EditGroupWindow" Height="450" Width="800">
+        Height="450" Width="800" Title="Edit">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -151,4 +151,4 @@
                 Style="{StaticResource ButtonStyle}">
         </Button>
     </Grid>
-</Window>
+</metro:MetroWindow>

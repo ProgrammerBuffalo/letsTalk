@@ -1,4 +1,4 @@
-﻿<Window x:Class="Client.Views.MainWindow"
+﻿<controls:MetroWindow x:Class="Client.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,7 +8,7 @@
         xmlns:controls ="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:UC="clr-namespace:Client.UserControls"
         mc:Ignorable="d"
-        Title="letsTalkWindow" Height="700" Width="1200" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" WindowStyle="None">
+        Title="letsTalkWindow" Height="700" Width="1200" WindowStartupLocation="CenterScreen" WindowTitleBrush="#57394a">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -88,9 +88,9 @@
 
             <ControlTemplate x:Key="CloseButtonTemplate" TargetType="Button">
                 <Border Cursor="Hand" Background="Transparent">
-                    <icons:PackIconMaterialDesign x:Name="icon" Kind="Close" Foreground="{StaticResource ButtonBackground}" Width="25" Height="25"/>
+                    <icons:PackIconMaterialDesign x:Name="icon" Kind="Close" Foreground="{StaticResource ButtonForeground}" Width="25" Height="25"/>
                 </Border>
-                
+
                 <ControlTemplate.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter TargetName="icon" Property="Foreground" Value="DarkOrange"/>
@@ -100,7 +100,7 @@
 
             <ControlTemplate x:Key="MaximizeButtonTemplate" TargetType="Button">
                 <Border Background="Transparent" Cursor="Hand">
-                    <icons:PackIconFontAwesome x:Name="icon" Kind="WindowMaximizeRegular" Foreground="{StaticResource ButtonBackground}" Width="25" Height="25"/>
+                    <icons:PackIconFontAwesome x:Name="icon" Kind="WindowMaximizeRegular" Foreground="{StaticResource ButtonForeground}" Width="25" Height="25"/>
                 </Border>
 
                 <ControlTemplate.Triggers>
@@ -112,7 +112,7 @@
 
             <ControlTemplate x:Key="MinimizeButtonTemplate" TargetType="Button">
                 <Border Background="Transparent" Cursor="Hand">
-                    <icons:PackIconFontAwesome x:Name="icon" Kind="WindowMinimizeRegular" Foreground="{StaticResource ButtonBackground}" Width="25" Height="25"/>
+                    <icons:PackIconFontAwesome x:Name="icon" Kind="WindowMinimizeRegular" Foreground="{StaticResource ButtonForeground}" Width="25" Height="25"/>
                 </Border>
 
                 <ControlTemplate.Triggers>
@@ -121,27 +121,23 @@
                     </Trigger>
                 </ControlTemplate.Triggers>
             </ControlTemplate>
+
+            <ControlTemplate x:Key="BorderButtonTemplate" TargetType="Button">
+                <Border Background="{StaticResource ButtonBackground}"/>
+            </ControlTemplate>
         </ResourceDictionary>
     </Window.Resources>
 
     <Grid x:Name="grid" Background="{StaticResource MainBackground}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="col1"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Click="MinimizedWindow_Click" Margin="0,0,20,0" Template="{StaticResource MinimizeButtonTemplate}"/>
-            <Button Click="MaximizedWindow_Click" Margin="0,0,20,0" Template="{StaticResource MaximizeButtonTemplate}"/>
-            <Button Click="CloseWindow_Click"  Margin="0,0,20,0" Template="{StaticResource CloseButtonTemplate}"/>
-        </StackPanel>
+        <Image Grid.Column="1" Source="/Resources/aaa.png" Margin="0,300,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
 
         <controls:HamburgerMenu x:Name="hamburgerMenu"
-                                 Grid.Row="1" Grid.Column="0"
+                                 Grid.Column="0"
                                  OptionsItemTemplate="{StaticResource HamburgerMenuOptionsTemplate}"
                                  OptionsItemContainerStyle="{StaticResource HamburgerOptionItemContainerStyle}"
                                  ItemContainerStyle="{StaticResource ChatListBoxItemStyle}"
@@ -198,28 +194,4 @@
             <i:InvokeCommandAction Command="{Binding ClosedWindowCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-</Window>
-
-
-
-
-
-
-
-<!--<controls:HamburgerMenu.ContentTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="48" />
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <Border Margin="-1 0 -1 0" Grid.Row="0">
-                            <TextBlock Text="{Binding Path=Name}"
-                                       HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       Foreground="Gray"/>
-                        </Border>
-                    </Grid>
-                </DataTemplate>
-            </controls:HamburgerMenu.ContentTemplate>-->
+</controls:MetroWindow>

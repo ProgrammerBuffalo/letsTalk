@@ -1,10 +1,11 @@
-﻿<Window x:Class="Client.Views.RingtonWindow"
+﻿<metro:MetroWindow x:Class="Client.Views.RingtonWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="RingtonWindow" Height="500" Width="300" ResizeMode="NoResize">
+        Title="Rington" Height="500" Width="300" ResizeMode="NoResize" WindowTitleBrush="#57394a">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -56,4 +57,4 @@
             
         </ListView>
     </GroupBox>
-</Window>
+</metro:MetroWindow>
