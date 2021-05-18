@@ -3,8 +3,10 @@ using Client.Utility;
 using GongSolutions.Wpf.DragDrop;
 using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -17,6 +19,7 @@ namespace Client.ViewModels
 
         private ChatGroup chat;
         private MainViewModel mainVM;
+        private int offset = 0;
 
         private ObservableCollection<AvailableUser> users;
         private ObservableCollection<AvailableUser> allUsers;
@@ -47,6 +50,20 @@ namespace Client.ViewModels
             Users_MouseLeaveCommand = new Command(Users_MouseLeave);
             Users_PreviewDragEnterCommand = new Command(Users_PreviewDragEnter);
             Users_DragLeaveCommand = new Command(Users_DragLeave);
+            Users = Chat.Users;
+            allUsers = new ObservableCollection<AvailableUser>();
+
+            Users.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(
+             delegate (object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+             {
+                 if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+                 {
+                     if (AllUsers.FirstOrDefault(u => u.SqlId == (e.OldItems[0] as AvailableUser).SqlId) == null)
+                     {
+                         AllUsers.Add(e.OldItems[0] as AvailableUser);
+                     }
+                 }
+             });
         }
 
         public ICommand RemoveMemberCommand { get; }
@@ -128,8 +145,23 @@ namespace Client.ViewModels
 
         private void ShowMore(object param)
         {
-            //foreach (var user in users)
-            //allUsers.Add(user);
+            ChatService.UnitClient unitClient = new ChatService.UnitClient();
+            Dictionary<int, string> users = unitClient.GetRegisteredUsers(15, offset, mainVM.Client.SqlId);
+
+            if (users.Count == 0)
+                return;
+
+            var it = users.GetEnumerator();
+            for (int i = 0; i < users.Count; i++)
+            {
+                it.MoveNext();
+                if (Users.FirstOrDefault(u => u.SqlId == it.Current.Key) == null)
+                {
+                    AllUsers.Add(new AvailableUser(it.Current.Key, it.Current.Value));
+                    LoadUserAvatarAsync();
+                }
+            }
+            offset += 15;
         }
 
         public void Users_MouseLeave(object param)
@@ -171,6 +203,65 @@ namespace Client.ViewModels
         {
             prop = value;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop_name));
+        }
+
+        private async void LoadUserAvatarAsync()
+        {
+            int last = AllUsers.Count - 1;
+            ChatService.DownloadRequest downloadRequest = new ChatService.DownloadRequest(AllUsers[last].SqlId);
+            System.IO.Stream stream = null;
+            System.IO.MemoryStream memoryStream = null;
+            try
+            {
+                var avatarClient = new ChatService.AvatarClient();
+                long lenght;
+
+                await System.Threading.Tasks.Task.Run(() =>
+                {
+                    avatarClient.UserAvatarDownload(downloadRequest.Requested_SqlId, out lenght, out stream);
+                    if (lenght > 0)
+                    {
+                        memoryStream = FileHelper.ReadFileByPart(stream);
+
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            var bitmapImage = new BitmapImage();
+
+                            memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
+                            bitmapImage.BeginInit();
+                            bitmapImage.DecodePixelWidth = 400;
+                            bitmapImage.DecodePixelHeight = 400;
+                            bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                            bitmapImage.StreamSource = memoryStream;
+                            bitmapImage.EndInit();
+
+                            AllUsers[last].Image = bitmapImage;
+                        });
+                    }
+                });
+            }
+            catch (System.ServiceModel.FaultException<ChatService.ConnectionExceptionFault> ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                if (memoryStream != null)
+                {
+                    memoryStream.Close();
+                    memoryStream.Dispose();
+                }
+
+                if (stream != null)
+                {
+                    stream.Close();
+                    stream.Dispose();
+                }
+            }
         }
     }
 }

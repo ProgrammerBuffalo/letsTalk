@@ -95,6 +95,9 @@ namespace Client.ViewModels
             UnitClient unitClient = new UnitClient();
             Dictionary<int, string> users = unitClient.GetRegisteredUsers(count, offset, mainVM.Client.SqlId);
 
+            if (users.Count == 0)
+                return;
+
             var it = users.GetEnumerator();
             for (int i = 0; i < users.Count; i++)
             {
@@ -120,7 +123,7 @@ namespace Client.ViewModels
             Models.Chat chat;
             if (usersToAdd.Count == 1)
             {
-                sqlId = mainVM.ChatClient.CreateChatroom(usersToAdd[0].Name, new int[] { mainVM.Client.SqlId, usersToAdd[0].SqlId });
+                sqlId = mainVM.ChatClient.CreateChatroom(new int[] { mainVM.Client.SqlId, usersToAdd[0].SqlId }, "");
                 chat = new ChatOne(sqlId, usersToAdd[0]) { CanWrite = true };
                 mainVM.Chats.Add(chat);
             }
@@ -133,7 +136,7 @@ namespace Client.ViewModels
                     for (int i = 1; i < users.Length; i++)
                         users[i] = usersToAdd[i - 1].SqlId;
 
-                    sqlId = mainVM.ChatClient.CreateChatroom(ChatName, users);
+                    sqlId = mainVM.ChatClient.CreateChatroom(users, ChatName);
 
                     BitmapImage image = new BitmapImage(new Uri("Resources/group.png", UriKind.Relative));
                     chat = new ChatGroup(sqlId, ChatName, UsersToAdd) { CanWrite = true, Avatar = image };

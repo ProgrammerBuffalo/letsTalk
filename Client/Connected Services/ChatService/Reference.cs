@@ -263,6 +263,9 @@ namespace Client.ChatService {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int ChatSqlIdField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsGroupField;
+        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -299,6 +302,19 @@ namespace Client.ChatService {
             }
         }
         
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsGroup {
+            get {
+                return this.IsGroupField;
+            }
+            set {
+                if ((this.IsGroupField.Equals(value) != true)) {
+                    this.IsGroupField = value;
+                    this.RaisePropertyChanged("IsGroup");
+                }
+            }
+        }
+        
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         
         protected void RaisePropertyChanged(string propertyName) {
@@ -319,6 +335,9 @@ namespace Client.ChatService {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsLeftField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsOnlineField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -334,6 +353,19 @@ namespace Client.ChatService {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsLeft {
+            get {
+                return this.IsLeftField;
+            }
+            set {
+                if ((this.IsLeftField.Equals(value) != true)) {
+                    this.IsLeftField = value;
+                    this.RaisePropertyChanged("IsLeft");
+                }
             }
         }
         
@@ -773,10 +805,10 @@ namespace Client.ChatService {
         System.Threading.Tasks.Task SendMessageTextAsync(Client.ChatService.ServiceMessageText message, int chatroomId);
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/CreateChatroom", ReplyAction="letsTalk.IChatService/Chat/CreateChatroomResponse")]
-        int CreateChatroom(string chatName, int[] users);
+        int CreateChatroom(int[] users, string chatName);
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/CreateChatroom", ReplyAction="letsTalk.IChatService/Chat/CreateChatroomResponse")]
-        System.Threading.Tasks.Task<int> CreateChatroomAsync(string chatName, int[] users);
+        System.Threading.Tasks.Task<int> CreateChatroomAsync(int[] users, string chatName);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/DeleteChatroom")]
         void DeleteChatroom(int chatId, int userId);
@@ -903,12 +935,12 @@ namespace Client.ChatService {
             return base.Channel.SendMessageTextAsync(message, chatroomId);
         }
         
-        public int CreateChatroom(string chatName, int[] users) {
-            return base.Channel.CreateChatroom(chatName, users);
+        public int CreateChatroom(int[] users, string chatName) {
+            return base.Channel.CreateChatroom(users, chatName);
         }
         
-        public System.Threading.Tasks.Task<int> CreateChatroomAsync(string chatName, int[] users) {
-            return base.Channel.CreateChatroomAsync(chatName, users);
+        public System.Threading.Tasks.Task<int> CreateChatroomAsync(int[] users, string chatName) {
+            return base.Channel.CreateChatroomAsync(users, chatName);
         }
         
         public void DeleteChatroom(int chatId, int userId) {

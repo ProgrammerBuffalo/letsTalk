@@ -84,6 +84,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="ChatName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ChatSqlId" type="xs:int" />
+      <xs:element minOccurs="0" name="IsGroup" type="xs:boolean" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Chatroom" nillable="true" type="tns:Chatroom" />
@@ -95,6 +96,7 @@
   <xs:element name="ArrayOfUserInChat" nillable="true" type="tns:ArrayOfUserInChat" />
   <xs:complexType name="UserInChat">
     <xs:sequence>
+      <xs:element minOccurs="0" name="IsLeft" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsOnline" type="xs:boolean" />
       <xs:element minOccurs="0" name="UserName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="UserSqlId" type="xs:int" />

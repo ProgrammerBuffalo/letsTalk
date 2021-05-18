@@ -65,6 +65,16 @@
             DescriptionDataTemplateSelector="{StaticResource LastMessageTemplateSelector}"
             Margin="2,2,0,0">
         </uc:ChatItem>
+
+        <!--<DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=User.IsOnline}" Value="True">
+                <Setter TargetName="chat" Property="IsOnline" Value="True"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=User.IsOnline}" Value="False">
+                <Setter TargetName="chat" Property="IsOnline" Value="False"/>
+            </DataTrigger>
+        </DataTemplate.Triggers>-->
+
     </DataTemplate>
 
     <DataTemplate x:Key="ChatGroupDataTemplate">

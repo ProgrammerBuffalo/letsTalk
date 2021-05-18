@@ -266,7 +266,7 @@ namespace Client.ViewModels
         private void EditChat(object param)
         {
             Views.EditGroupWindow window = new Views.EditGroupWindow();
-            window.DataContext = new EditGroupViewModel(mainVM);
+            window.DataContext = new EditGroupViewModel(mainVM);           
             window.ShowDialog();
         }
 
