@@ -52,7 +52,17 @@ namespace Client.ViewModels
                {
                    if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
                    {
-                       DownloadAvatarAsync(((KeyValuePair<int, AvailableUser>)e.NewItems[0]).Value);
+                       DownloadUserAvatarAsync(((KeyValuePair<int, AvailableUser>)e.NewItems[0]).Value);
+                   }
+               });
+
+            Chats.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(
+               delegate (object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+               {
+                   if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+                   {
+                       if(e.NewItems[0] is Models.ChatGroup)
+                        DownloadChatAvatarAsync(e.NewItems[0] as Models.ChatGroup);
                    }
                });
         }
@@ -72,12 +82,17 @@ namespace Client.ViewModels
         public ObservableCollection<Models.Chat> Chats { get => chats; set => Set(ref chats, value); }
         public Models.Chat SelectedChat { get => selectedChat; set { if (selectedChat == null) RemoveUC.Invoke(currentView); Set(ref selectedChat, value); } }
 
-        public void LoadedWindow(object sender)
+        public async void LoadedWindow(object sender)
         {
             try
             {
                 client.DownloadAvatarAsync();
-                LoadChatroomsAsync();
+                await LoadChatroomsAsync();
+                foreach (var item in chats)
+                {
+                    if (item is ChatGroup)
+                        DownloadChatAvatarAsync(item as ChatGroup);
+                }
             }
             catch (FaultException<ConnectionExceptionFault> ex)
             {
@@ -325,7 +340,7 @@ namespace Client.ViewModels
 
         }
 
-        private async void LoadChatroomsAsync()
+        private async Task LoadChatroomsAsync()
         {
             Dictionary<Chatroom, UserInChat[]> chatrooms = await ChatClient.FindAllChatroomsForClientAsync(client.SqlId);
             Chats = new ObservableCollection<Models.Chat>
@@ -385,15 +400,20 @@ namespace Client.ViewModels
                         else
                         {
                             user = new AvailableUser(friend.UserSqlId, friend.UserName, friend.IsOnline);
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                user.Image = new BitmapImage(new Uri("Resources/user.png", UriKind.Relative));
+                            });
                         }
                         clientChatrooms.Add(new ChatOne(key.ChatSqlId, user) { CanWrite = !friend.IsLeft});
                     }
                 }
                 return clientChatrooms;
             }));
+
         }
 
-        public async void DownloadAvatarAsync(AvailableUser user)
+        public async void DownloadUserAvatarAsync(AvailableUser user)
         {
             ChatService.DownloadRequest request = new ChatService.DownloadRequest(user.SqlId);
             var avatarClient = new ChatService.AvatarClient();
@@ -407,7 +427,13 @@ namespace Client.ViewModels
                 {
                     avatarClient.UserAvatarDownload(user.SqlId, out lenght, out stream);
                     if (lenght <= 0)
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            user.Image = new BitmapImage(new Uri("Resources/user.png", UriKind.Relative));
+                        });
                         return;
+                    }
                     memoryStream = FileHelper.ReadFileByPart(stream);
 
                     Application.Current.Dispatcher.Invoke(() =>
@@ -443,11 +469,67 @@ namespace Client.ViewModels
             }
         }
 
+        public async void DownloadChatAvatarAsync(Models.ChatGroup chat)
+        {
+            ChatService.DownloadRequest request = new ChatService.DownloadRequest(chat.SqlId);
+            var avatarClient = new ChatService.AvatarClient();
+            Stream stream = null;
+            MemoryStream memoryStream = null;
+            long lenght = 0;
+
+            try
+            {
+                await System.Threading.Tasks.Task.Run(() =>
+                {
+                    avatarClient.ChatAvatarDownload(chat.SqlId, out lenght, out stream);
+                    if (lenght <= 0)
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            chat.Avatar = new BitmapImage(new Uri("Resources/group.png", UriKind.Relative));
+                        });
+                        return;
+                    }
+                    memoryStream = FileHelper.ReadFileByPart(stream);
+
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        var bitmapImage = new BitmapImage();
+                        bitmapImage.BeginInit();
+                        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmapImage.StreamSource = memoryStream;
+                        bitmapImage.EndInit();
+
+                        chat.Image = bitmapImage;
+                    });
+
+                });
+
+            }
+            catch (System.ServiceModel.FaultException<ChatService.ConnectionExceptionFault> ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (memoryStream != null)
+                {
+                    memoryStream.Close();
+                    memoryStream.Dispose();
+                }
+                if (stream != null)
+                {
+                    stream.Close();
+                    stream.Dispose();
+                }
+            }
+        }
+
         public void NotifyUserChangedAvatar(int userId)
         {
             AvailableUser user = Users.FirstOrDefault(u => u.Key == userId).Value;
             if (user != null)
-                DownloadAvatarAsync(user);
+                DownloadUserAvatarAsync(user);
         }
 
         public void NotifyСhatroomAvatarIsChanged(int chatId)

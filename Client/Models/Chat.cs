@@ -292,6 +292,10 @@ namespace Client.Models
         private ObservableCollection<AvailableUser> users = new ObservableCollection<AvailableUser>();
         private Dictionary<int, string> colors = new Dictionary<int, string>();
 
+        private BitmapImage avatar;
+        public BitmapImage Avatar { get => avatar; set => Set(ref avatar, value); }
+
+
         static ChatGroup()
         {
             allColors = new string[13];
@@ -394,7 +398,7 @@ namespace Client.Models
                 return new UserMessage(message);
             var user = GetUserById(senderId);
             if (user != null)
-                return new GroupMessage(message, GetUserById(senderId), colors[senderId]);
+                return new GroupMessage(message, user, "blue");
             else
                 return new GroupMessage(message, new ChatService.UnitClient().FindUserName(senderId), "red");
         }
