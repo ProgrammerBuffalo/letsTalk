@@ -43,6 +43,9 @@ namespace Client.ViewModels
             CreateChatCommand = new Command(CreateChat);
             SettingsCommand = new Command(Settings);
             ChangeAvatarCommand = new Command(ChangeAvatar);
+            CancelImageCommand = new Command(CancelImage);
+
+            currentView = new Views.HelpUC();
 
             Users = new ObservableCollection<KeyValuePair<int, AvailableUser>>();
             Chats = new ObservableCollection<Models.Chat>();
@@ -74,6 +77,7 @@ namespace Client.ViewModels
         public ICommand SettingsCommand { get; }
 
         public ICommand ChangeAvatarCommand { get; }
+        public ICommand CancelImageCommand { get; }
 
         public ChatClient ChatClient { set; get; } // Сеанс
         public ClientUserInfo Client { get => client; set => Set(ref client, value); } // Вся информация о подключенном юзере
@@ -87,6 +91,7 @@ namespace Client.ViewModels
             try
             {
                 client.DownloadAvatarAsync();
+                AddUC.Invoke(currentView);
                 await LoadChatroomsAsync();
                 foreach (var item in chats)
                 {
@@ -105,6 +110,11 @@ namespace Client.ViewModels
             {
                 MessageBox.Show("avatar image could not be download");
             }
+        }
+
+        public void CancelImage(object param)
+        {
+            client.UserImage = new BitmapImage(new Uri("Resources/user.png", UriKind.Relative));
         }
 
         private async void ChangeAvatar(object obj)

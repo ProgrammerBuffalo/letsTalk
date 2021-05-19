@@ -235,6 +235,9 @@
     <Compile Include="Views\EntranceWindow.xaml.cs">
       <DependentUpon>EntranceWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\HelpUC.xaml.cs">
+      <DependentUpon>HelpUC.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -292,6 +295,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\EntranceWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HelpUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

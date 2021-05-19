@@ -18,6 +18,39 @@
                 <ResourceDictionary Source="/WindowResources/ButtonLoaderTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
+            <ControlTemplate x:Key="CancelButtonTemplate" TargetType="Button">
+                <icons:PackIconMaterialDesign Kind="Cancel" Background="Transparent" Width="25" Height="25" Foreground="{StaticResource ButtonForeground}" Cursor="Hand"/>
+            </ControlTemplate>
+
+            <ControlTemplate x:Key="ChangeImageTemplae" TargetType="Button">
+                <icons:PackIconMaterialDesign Kind="Photo" Background="Transparent" Width="25" Height="25" Foreground="{StaticResource ButtonForeground}" Cursor="Hand"/>
+            </ControlTemplate>
+
+            <!--<ControlTemplate x:Key="AvatarButton" TargetType="Button">
+                <Grid Background="Transparent">
+                    <Ellipse Width="{TemplateBinding Width}"
+                         Height="{TemplateBinding Height}"
+                         Cursor="{TemplateBinding Cursor}"
+                         Stroke="{TemplateBinding Foreground}"
+                         StrokeThickness="3">
+                        <Ellipse.Fill>
+                            <ImageBrush ImageSource="{Binding Path=Chat.Avatar}"/>
+                        </Ellipse.Fill>
+                    </Ellipse>                  
+                </Grid>
+
+                <ControlTemplate.Triggers>
+                    -->
+            <!--<Trigger Property="IsMouseOver" Value="True">
+                        <Setter TargetName="btn1" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="btn2" Property="Visibility" Value="Visible"/>
+                    </Trigger>-->
+            <!--
+                </ControlTemplate.Triggers>
+            </ControlTemplate>-->
+
+
+
             <DataTemplate x:Key="HamburgerMenuOptionsTemplate" DataType="{x:Type controls:HamburgerMenuIconItem}">
                 <WrapPanel Margin="5, 8" Cursor="Hand">
                     <ContentControl  x:Name="IconPart"
@@ -86,45 +119,9 @@
                 <Setter Property="PaneForeground" Value="Gray"/>
             </Style>
 
-            <ControlTemplate x:Key="CloseButtonTemplate" TargetType="Button">
-                <Border Cursor="Hand" Background="Transparent">
-                    <icons:PackIconMaterialDesign x:Name="icon" Kind="Close" Foreground="{StaticResource ButtonForeground}" Width="25" Height="25"/>
-                </Border>
-
-                <ControlTemplate.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter TargetName="icon" Property="Foreground" Value="DarkOrange"/>
-                    </Trigger>
-                </ControlTemplate.Triggers>
-            </ControlTemplate>
-
-            <ControlTemplate x:Key="MaximizeButtonTemplate" TargetType="Button">
-                <Border Background="Transparent" Cursor="Hand">
-                    <icons:PackIconFontAwesome x:Name="icon" Kind="WindowMaximizeRegular" Foreground="{StaticResource ButtonForeground}" Width="25" Height="25"/>
-                </Border>
-
-                <ControlTemplate.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter TargetName="icon" Property="Foreground" Value="DarkOrange"/>
-                    </Trigger>
-                </ControlTemplate.Triggers>
-            </ControlTemplate>
-
-            <ControlTemplate x:Key="MinimizeButtonTemplate" TargetType="Button">
-                <Border Background="Transparent" Cursor="Hand">
-                    <icons:PackIconFontAwesome x:Name="icon" Kind="WindowMinimizeRegular" Foreground="{StaticResource ButtonForeground}" Width="25" Height="25"/>
-                </Border>
-
-                <ControlTemplate.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter TargetName="icon" Property="Foreground" Value="DarkOrange"/>
-                    </Trigger>
-                </ControlTemplate.Triggers>
-            </ControlTemplate>
-
-            <ControlTemplate x:Key="BorderButtonTemplate" TargetType="Button">
+            <!--<ControlTemplate x:Key="BorderButtonTemplate" TargetType="Button">
                 <Border Background="{StaticResource ButtonBackground}"/>
-            </ControlTemplate>
+            </ControlTemplate>-->
         </ResourceDictionary>
     </Window.Resources>
 
@@ -133,8 +130,6 @@
             <ColumnDefinition x:Name="col1"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
-
-        <Image Grid.Column="1" Source="/Resources/aaa.png" Margin="0,300,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
 
         <controls:HamburgerMenu x:Name="hamburgerMenu"
                                  Grid.Column="0"
@@ -170,10 +165,17 @@
                                  IsOnlineVisibility="Hidden">
                         </UC:ChatItem>
 
-                        <Button Cursor="Hand" Margin="7,7,0,0"
-                                Command="{Binding Path=DataContext.ChangeAvatarCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                                Template="{StaticResource ButtonLoaderTemplate}"/>
+                        <Button x:Name="btn1" Margin="45,0,0,0" Visibility="Hidden" Template="{StaticResource ChangeImageTemplae}" Command="{Binding Path=DataContext.ChangeAvatarCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
+
+                        <Button x:Name="btn2" Margin="45,40,0,0" Visibility="Hidden" Template="{StaticResource CancelButtonTemplate}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.CancelImageCommand}"/>
                     </Grid>
+
+                    <DataTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="btn1" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="btn2" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                    </DataTemplate.Triggers>
                 </DataTemplate>
             </controls:HamburgerMenu.HamburgerMenuHeaderTemplate>
 
