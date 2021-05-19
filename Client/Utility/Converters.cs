@@ -3,7 +3,7 @@
 //конверторы служат для предоставления данных в болле удобной форме для пользователя
 //метод Convert преврашает данные из модели в данные для View 
 //метод ConvertBack преврашает данные веденные из View в данные модели 
-namespace Client.Utility
+namespace Client.Utility    
 {
     //перевод из тиков во время для отброжения длины трека
     class TicksToTime : System.Windows.Data.IValueConverter
