@@ -61,8 +61,8 @@ namespace Client.ViewModels
                {
                    if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
                    {
-                       if(e.NewItems[0] is Models.ChatGroup)
-                        DownloadChatAvatarAsync(e.NewItems[0] as Models.ChatGroup);
+                       if (e.NewItems[0] is Models.ChatGroup)
+                           DownloadChatAvatarAsync(e.NewItems[0] as Models.ChatGroup);
                    }
                });
         }
@@ -204,10 +204,10 @@ namespace Client.ViewModels
         private void UserRemovedFromChat(int chatId)
         {
             ChatGroup chat = FindChatroom(chatId) as ChatGroup;
-            if(chat != null)
+            if (chat != null)
             {
                 List<int> usersOfChat = chat.Users.Select(u => u.SqlId).ToList();
-                foreach(var item in usersOfChat)
+                foreach (var item in usersOfChat)
                 {
                     int count = Chats.Select(c => c.FindUser(item)).ToList().Count;
                     if (count < 2)
@@ -290,10 +290,10 @@ namespace Client.ViewModels
         public void UserJoinedToChatroom(int chatId, int userId, string userName)
         {
             var chat = Chats.FirstOrDefault(c => c.SqlId == chatId);
-            if(chat != null)
+            if (chat != null)
             {
                 AvailableUser user = Users.FirstOrDefault(u => u.Key == userId).Value;
-                if(user == null)
+                if (user == null)
                 {
                     user = new AvailableUser(userId, userName);
                     Users.Add(new KeyValuePair<int, AvailableUser>(userId, user));
@@ -308,6 +308,8 @@ namespace Client.ViewModels
             if (chats.Where(c => c.FindUser(userId) != null).ToList().Count < 2)
             {
                 KeyValuePair<int, AvailableUser> availableUser = Users.FirstOrDefault(u => u.Key == userId);
+                availableUser.Value.Image = null;
+                availableUser.Value.IsOnline = false;
                 Users.Remove(availableUser);
             }
         }
@@ -354,7 +356,7 @@ namespace Client.ViewModels
                     UserInChat requestedUser = chatrooms[key].FirstOrDefault(u => u.UserSqlId == client.SqlId);
                     if (requestedUser != null)
                     {
-                        if(requestedUser.IsLeft)
+                        if (requestedUser.IsLeft)
                             continue;
                     }
 
@@ -405,7 +407,7 @@ namespace Client.ViewModels
                                 user.Image = new BitmapImage(new Uri("Resources/user.png", UriKind.Relative));
                             });
                         }
-                        clientChatrooms.Add(new ChatOne(key.ChatSqlId, user) { CanWrite = !friend.IsLeft});
+                        clientChatrooms.Add(new ChatOne(key.ChatSqlId, user) { CanWrite = !friend.IsLeft });
                     }
                 }
                 return clientChatrooms;
@@ -500,7 +502,7 @@ namespace Client.ViewModels
                         bitmapImage.StreamSource = memoryStream;
                         bitmapImage.EndInit();
 
-                        chat.Image = bitmapImage;
+                        chat.Avatar = bitmapImage;
                     });
 
                 });

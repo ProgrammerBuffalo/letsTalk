@@ -292,10 +292,6 @@ namespace Client.Models
         private ObservableCollection<AvailableUser> users = new ObservableCollection<AvailableUser>();
         private Dictionary<int, string> colors = new Dictionary<int, string>();
 
-        private BitmapImage avatar;
-        public BitmapImage Avatar { get => avatar; set => Set(ref avatar, value); }
-
-
         static ChatGroup()
         {
             allColors = new string[13];
