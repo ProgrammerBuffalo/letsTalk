@@ -129,7 +129,7 @@
                             Content="{Binding Path=InputMessage}"
                             ContentTemplateSelector="{StaticResource InputMessageTemplateSelector}"/>
 
-            <Button Grid.Column="1" Content="File" FontSize="20" IsEnabled="{Binding Path=Chat.CanWrite}" Background="{StaticResource ButtonBackground}" Command="{Binding OpenFileCommand}"/>
+            <Button Grid.Column="1" Content="File" FontSize="20" IsEnabled="{Binding Path=Chat.CanWrite}" Background="{StaticResource ButtonBackground}" Foreground="{StaticResource ButtonForeground}" Command="{Binding OpenFileCommand}"/>
         </Grid>
     </Grid>
 

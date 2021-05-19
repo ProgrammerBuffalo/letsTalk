@@ -601,6 +601,7 @@ namespace letsTalk
                 lock (lockerSyncObj)
                 {
                     AddToXML(fullpath, message);
+                    message.DateTime = DateTime.Now;
                     Console.WriteLine("Sending message callbacks...");
                     foreach (ConnectedUser user in users)
                     {

@@ -213,6 +213,7 @@
     <Compile Include="Utility\DataTemplateSelectors.cs" />
     <Compile Include="Utility\FileHelper.cs" />
     <Compile Include="Utility\ImageCropper.cs" />
+    <Compile Include="Utility\MessageLoader.cs" />
     <Compile Include="Utility\MessageTemplateSelector.cs" />
     <Compile Include="Utility\UCHelper.cs" />
     <Compile Include="Utility\ValidationRules.cs" />

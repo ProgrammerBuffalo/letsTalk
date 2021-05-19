@@ -150,13 +150,13 @@
                 <controls:HamburgerMenuItemCollection>
                     <controls:HamburgerMenuIconItem Tag="UC2" Label="Create Chatroom" Command="{Binding CreateChatCommand}">
                         <controls:HamburgerMenuIconItem.Icon>
-                            <icons:PackIconMaterial  Kind="AccountMultiplePlus" Width="25" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <icons:PackIconMaterial  Kind="AccountMultiplePlus" Foreground="Wheat" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10, 0, 0, 0"/>
                         </controls:HamburgerMenuIconItem.Icon>
                     </controls:HamburgerMenuIconItem>
 
                     <controls:HamburgerMenuIconItem Tag="UCSettings" Label="Settings" Command="{Binding SettingsCommand}">
                         <controls:HamburgerMenuIconItem.Icon>
-                            <icons:PackIconMaterial  Kind="Shield" Width="25" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <icons:PackIconMaterial  Kind="Shield" Width="32" Foreground="Wheat" Height="32" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10, 0, 0, 0"/>
                         </controls:HamburgerMenuIconItem.Icon>
                     </controls:HamburgerMenuIconItem>
                 </controls:HamburgerMenuItemCollection>
