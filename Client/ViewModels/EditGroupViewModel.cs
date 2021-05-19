@@ -12,7 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 namespace Client.ViewModels
-{ 
+{
 
     class EditGroupViewModel : INotifyPropertyChanged, IDropTarget
     {
@@ -44,6 +44,7 @@ namespace Client.ViewModels
             RemoveMemberCommand = new Command(RemoveMember);
             DeleteChatCommand = new Command(DeleteChat);
             ChangeImageCommand = new Command(ChangeImage);
+            CancelImageCommand = new Command(CancelImage);
             ShowMoreCommand = new Command(ShowMore);
             SaveNameCommand = new Command(SaveName);
             SearchChangedCommand = new Command(SearchChanged);
@@ -71,6 +72,7 @@ namespace Client.ViewModels
         public ICommand RemoveMemberCommand { get; }
         public ICommand DeleteChatCommand { get; }
         public ICommand ChangeImageCommand { get; }
+        public ICommand CancelImageCommand { get; }
         public ICommand ShowMoreCommand { get; }
         public ICommand SaveNameCommand { get; }
         public ICommand SearchChangedCommand { get; }
@@ -118,7 +120,7 @@ namespace Client.ViewModels
             List<AvailableUser> sortedUsers = new List<AvailableUser>();
 
 
-            for(int i = 0; i < Users.Count; i++)
+            for (int i = 0; i < Users.Count; i++)
             {
                 sortedUsers.AddRange(Users.Where(u => u.Name.Substring(0, SearchMembersText.Length <= u.Name.Length ? SearchMembersText.Length : 0).Contains(searchMembersText)).ToList());
             }
@@ -126,7 +128,7 @@ namespace Client.ViewModels
             if (sortedUsers.Count < 1)
                 return;
 
-            for(int i = 0; i < sortedUsers.Count; i++)
+            for (int i = 0; i < sortedUsers.Count; i++)
             {
                 Users.Move(Users.IndexOf(Users.First(u => u.SqlId == sortedUsers[i].SqlId)), 0);
             }
@@ -144,9 +146,13 @@ namespace Client.ViewModels
             if (dialog.ShowDialog() == true)
             {
                 //тут метод сохранения нового фото на сервере
-                BitmapImage image = new BitmapImage(new Uri(dialog.FileName));
-                chat.Image = image;
+                chat.Avatar = new BitmapImage(new Uri(dialog.FileName));
             }
+        }
+
+        private void CancelImage(object param)
+        {
+            chat.Avatar = new BitmapImage(new Uri("Resources/group.png", UriKind.Relative));
         }
 
         private void ShowMore(object param)

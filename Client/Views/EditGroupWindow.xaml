@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:dd="urn:gong-wpf-dragdrop"
@@ -34,30 +35,99 @@
                 </Grid>
             </DataTemplate>
 
-            <ControlTemplate x:Key="EllipseButton" TargetType="Button">
-                <Ellipse Width="{TemplateBinding Width}"
+            <ControlTemplate x:Key="CancelButtonTemplate" TargetType="Button">
+                <icons:PackIconMaterialDesign Kind="Cancel" Background="Transparent" Width="25" Height="25" Foreground="{StaticResource ButtonBackground}" Cursor="Hand"/>
+            </ControlTemplate>
+
+            <ControlTemplate x:Key="ChangeImageTemplae" TargetType="Button">
+                <icons:PackIconMaterialDesign Kind="Photo" Background="Transparent" Width="25" Height="25" Foreground="{StaticResource ButtonBackground}" Cursor="Hand"/>
+            </ControlTemplate>
+
+            <ControlTemplate x:Key="AvatarButton" TargetType="Button">
+                <Grid Background="Transparent">
+                    <Ellipse Width="{TemplateBinding Width}"
                          Height="{TemplateBinding Height}"
                          Cursor="{TemplateBinding Cursor}"
                          Stroke="{TemplateBinding Foreground}"
-                         StrokeThickness="3" 
-                         Fill="{Binding Path=Chat.Image}">
-                </Ellipse>
+                         StrokeThickness="3">
+                        <Ellipse.Fill>
+                            <ImageBrush ImageSource="{Binding Path=Chat.Avatar}"/>
+                        </Ellipse.Fill>
+                    </Ellipse>
+
+                    <Button x:Name="btn1" Visibility="Hidden" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" Command="{Binding CancelImageCommand}" Template="{StaticResource CancelButtonTemplate}"/>
+                    <Button x:Name="btn2" Visibility="Hidden" Margin="0,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Command="{Binding ChangeImageCommand}" Template="{StaticResource ChangeImageTemplae}"/>
+                </Grid>
+
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter TargetName="btn1" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="btn2" Property="Visibility" Value="Visible"/>
+                    </Trigger>
+                </ControlTemplate.Triggers>
             </ControlTemplate>
         </ResourceDictionary>
-
     </Window.Resources>
 
     <Grid Background="{StaticResource MainBackground}">
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="4*"/>
-            <RowDefinition/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
+        <Button Grid.Row="0" Grid.Column="0"
+                Width="60" Height="60" 
+                Cursor="Hand"
+                Template="{StaticResource AvatarButton}"
+                HorizontalAlignment="Left" Margin="20,0,0,0">
+        </Button>
+
+        <TextBox Grid.Row="1" Grid.Column="0"
+                     Text="{Binding Path=SearchMembersText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="20"
+                     metro:TextBoxHelper.ClearTextButton="True"
+                     Margin="10,0" Height="45"
+                     Background="LightGoldenrodYellow">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="TextChanged">
+                    <i:InvokeCommandAction Command="{Binding SearchChangedCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </TextBox>
+
+        <ListView Grid.Row="2" Grid.Column="0"
+                  dd:DragDrop.DropHandler="{Binding}"
+                  dd:DragDrop.IsDropTarget="True"
+                  Margin="10"
+                  ItemsSource="{Binding Path=Users}"
+                  ItemTemplate="{StaticResource MembersDataTemplate}"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseLeave">
+                    <i:InvokeCommandAction Command="{Binding Users_MouseLeaveCommand}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="PreviewDragEnter">
+                    <i:InvokeCommandAction Command="{Binding Users_PreviewDragEnterCommand}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="PreviewDragLeave">
+                    <i:InvokeCommandAction Command="{Binding Users_DragLeaveCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ListView>
+        
+        <Button Grid.Row="3" Grid.Column="0"
+                Content="Delete chat"
+                Width="200" Height="30"
+                Command="{Binding DeleteChatCommand}"
+                Style="{StaticResource ButtonStyle}">
+        </Button>
+        
         <Grid Grid.Row="0" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -68,91 +138,25 @@
             <Button Grid.Column="1" Content="Save" Width="80" Height="30" Command="{Binding Path=SaveNameCommand}" Style="{StaticResource ButtonStyle}"/>
         </Grid>
 
-        <Button Width="50" Height="50" 
-                Cursor="Hand"
-                Template="{StaticResource EllipseButton}"
-                Command="{Binding ChangeImageCommand}"
-                Foreground="Black"
-                HorizontalAlignment="Left" Margin="20,0,0,0">
-        </Button>
-
-        <Grid Grid.Row="1" Grid.Column="0" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="253*"/>
-                <ColumnDefinition Width="144*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <TextBox Grid.Row="0"
-                     Text="{Binding Path=SearchMembersText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="20"
-                     metro:TextBoxHelper.ClearTextButton="True"
-                     Margin="10,0"
-                     Background="LightGoldenrodYellow" Grid.ColumnSpan="2">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="TextChanged">
-                        <i:InvokeCommandAction Command="{Binding SearchChangedCommand}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </TextBox>
-
-            <ListView Grid.Row="1"
-                  dd:DragDrop.DropHandler="{Binding}"
-                  dd:DragDrop.IsDropTarget="True"
-                  Margin="10"
-                  ItemsSource="{Binding Path=Users}"
-                  ItemTemplate="{StaticResource MembersDataTemplate}"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="2">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseLeave">
-                        <i:InvokeCommandAction Command="{Binding Users_MouseLeaveCommand}"/>
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="PreviewDragEnter">
-                        <i:InvokeCommandAction Command="{Binding Users_PreviewDragEnterCommand}"/>
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="PreviewDragLeave">
-                        <i:InvokeCommandAction Command="{Binding Users_DragLeaveCommand}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </ListView>
-        </Grid>
-
-        <Grid Grid.Row="1" Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <TextBox Grid.Row="0" 
+        <TextBox Grid.Row="1" Grid.Column="1" 
                      Text="{Binding Path=SearchUsersText}" FontSize="20"
                      metro:TextBoxHelper.ClearTextButton="True"
-                     Margin="10,0"
+                     Margin="10,0" Height="45"
                      Background="LightGoldenrodYellow">
-                <TextBox.InputBindings>
-                    <KeyBinding Key="Enter" Command="{Binding TextBoxSearch_EnterPressedCommand}"/>
-                </TextBox.InputBindings>
-            </TextBox>
+            <TextBox.InputBindings>
+                <KeyBinding Key="Enter" Command="{Binding TextBoxSearch_EnterPressedCommand}"/>
+            </TextBox.InputBindings>
+        </TextBox>
 
-            <ListView Grid.Row="1"
+        <ListView Grid.Row="2" Grid.Column="1"
                   dd:DragDrop.DragHandler="{Binding}"
                   dd:DragDrop.IsDragSource="True"
                   Margin="10"
                   ItemsSource="{Binding Path=AllUsers}"
                   ItemTemplate="{StaticResource UserDataTemplate}">
-            </ListView>
-        </Grid>
+        </ListView>
 
-        <Button Grid.Row="2" Grid.Column="0"
-                Content="Delete chat"
-                Width="200" Height="30"
-                Command="{Binding DeleteChatCommand}"
-                Style="{StaticResource ButtonStyle}">
-        </Button>
-
-        <Button Grid.Row="2" Grid.Column="1"
+        <Button Grid.Row="3" Grid.Column="1"
                 Content="Show more"
                 Width="200" Height="30"
                 Command="{Binding ShowMoreCommand}"

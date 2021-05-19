@@ -473,6 +473,7 @@
     <Resource Include="files\avatar8.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\x.png" />
     <Resource Include="Resources\user.png" />
     <Resource Include="Resources\Extensions\bmp.png" />
     <Resource Include="Resources\Extensions\doc.png" />

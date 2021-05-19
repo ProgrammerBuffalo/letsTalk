@@ -18,9 +18,9 @@ namespace Client.Models
         public int _messageOffset = 0;
         public DateTime _offsetDate = DateTime.Now;
 
-        private BitmapImage image;
+        //private BitmapImage image;
 
-        public BitmapImage Image { get => image; set => Set(ref image, value); }
+        //public BitmapImage Image { get => image; set => Set(ref image, value); }
         public bool CanWrite { get => canWrite; set => Set(ref canWrite, value); }
 
         private string userIsWriting;
@@ -190,8 +190,6 @@ namespace Client.Models
 
         public Message LastMessage { get => lastMessage; set => Set(ref lastMessage, value); }
 
-        public virtual BitmapImage Avatar { set; get; }
-
         public abstract bool SetOnlineState(int userId, bool state);
 
         public abstract void MessageIsWriting(Nullable<int> userId);
@@ -290,6 +288,7 @@ namespace Client.Models
         private static string[] allColors;
 
         private string groupName;
+        private BitmapImage avatar;
         private ObservableCollection<AvailableUser> users = new ObservableCollection<AvailableUser>();
         private Dictionary<int, string> colors = new Dictionary<int, string>();
 
@@ -322,6 +321,7 @@ namespace Client.Models
         }
 
         public string GroupName { get => groupName; set => Set(ref groupName, value); }
+        public BitmapImage Avatar { get => avatar; set => Set(ref avatar, value); }
 
         public ObservableCollection<AvailableUser> Users { get => users; set => Set(ref users, value); }
 

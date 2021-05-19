@@ -15,7 +15,7 @@
     <u:TypeConverter x:Key="TypeConverter"/>
 
     <SolidColorBrush x:Key="DownoadColor" Color="BlanchedAlmond"/>
-
+    
     <LinearGradientBrush x:Key="ImageDateBackground" EndPoint="1,1" MappingMode="RelativeToBoundingBox" StartPoint="0,0">
         <GradientStop Color="#FF635A5A" Offset="1"/>
         <GradientStop Color="White"/>
@@ -102,7 +102,7 @@
                 </Grid.RowDefinitions>
 
                 <Grid x:Name="ellipseGrid" Grid.Row="0" Grid.Column="0">
-                    <Ellipse Width="50" Height="50" StrokeThickness="3" Stroke="Black">
+                    <Ellipse x:Name="groupImage" Width="50" Height="50" StrokeThickness="3" Stroke="Black">
                         <Ellipse.Fill>
                             <ImageBrush ImageSource="{Binding Path=User.Image}"/>
                         </Ellipse.Fill>
@@ -124,6 +124,15 @@
         </Grid>
 
         <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=User.Image}" Value="{x:Null}">
+                <Setter TargetName="groupImage" Property="Fill">
+                    <Setter.Value>
+                        <ImageBrush ImageSource="/Resources/x.png"/>
+                    </Setter.Value>
+                </Setter>
+                <Setter TargetName="groupText" Property="Foreground" Value="Gray"/>
+            </DataTrigger>
+            
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:UserMessage}">
                 <Setter TargetName="mainGrid" Property="Grid.Column" Value="1"/>
                 <Setter TargetName="mainGridCol1" Property="Width" Value="0"/>
@@ -183,7 +192,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Grid x:Name="ellipseGrid" Grid.Row="0" Grid.Column="0">
-                    <Ellipse Width="50" Height="50" StrokeThickness="3" Stroke="Black">
+                    <Ellipse x:Name="groupImage" Width="50" Height="50" StrokeThickness="3" Stroke="Black">
                         <Ellipse.Fill>
                             <ImageBrush ImageSource="{Binding Path=User.Image}"/>
                         </Ellipse.Fill>
@@ -217,6 +226,14 @@
             <Trigger SourceName="border" Property="IsMouseOver" Value="True">
                 <Setter TargetName="loader" Property="Visibility" Value="Visible"/>
             </Trigger>
+            <DataTrigger Binding="{Binding Path=User.Image}" Value="{x:Null}">
+                <Setter TargetName="groupImage" Property="Fill">
+                    <Setter.Value>
+                        <ImageBrush ImageSource="/Resources/x.png"/>
+                    </Setter.Value>
+                </Setter>
+                <Setter TargetName="groupText" Property="Foreground" Value="Gray"/>
+            </DataTrigger>
             
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:UserMessage}">
                 <Setter TargetName="mainGrid" Property="Grid.Column" Value="1"/>
@@ -270,7 +287,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Grid x:Name="ellipseGrid" Grid.Row="0" Grid.Column="0">
-                    <Ellipse Width="50" Height="50" StrokeThickness="3" Stroke="Black">
+                    <Ellipse x:Name="groupImage" Width="50" Height="50" StrokeThickness="3" Stroke="Black">
                         <Ellipse.Fill>
                             <ImageBrush ImageSource="{Binding Path=User.Image}"/>
                         </Ellipse.Fill>
@@ -300,11 +317,19 @@
         </Grid>
 
         <DataTemplate.Triggers>
-            <Trigger SourceName="border" Property="IsMouseOver" Value="True">
-                <Setter TargetName="col1" Property="Width" Value="40"/>
-                <Setter TargetName="loader" Property="Visibility" Value="Visible"/>
-            </Trigger>
-            
+            <DataTrigger Binding="{Binding Path=User.Image}" Value="{x:Null}">
+                <Setter TargetName="groupImage" Property="Fill">
+                    <Setter.Value>
+                        <ImageBrush ImageSource="/Resources/x.png"/>
+                    </Setter.Value>
+                </Setter>
+                <Setter TargetName="groupText" Property="Foreground" Value="Gray"/>
+            </DataTrigger>
+
+            <DataTrigger Binding="{Binding Path=Message.IsLoaded}" Value="True">
+                <Setter TargetName="col1" Property="Width" Value="0"/>
+            </DataTrigger>
+
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:UserMessage}">
                 <Setter TargetName="mainGrid" Property="Grid.Column" Value="1"/>
                 <Setter TargetName="mainGridCol1" Property="Width" Value="0"/>
@@ -335,11 +360,7 @@
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Left"/>
                 <Setter TargetName="groupBorder" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="groupText" Property="Foreground" Value="{Binding Path=Color}"/>
-            </DataTrigger>
-
-            <DataTrigger Binding="{Binding Path=Message.IsLoaded}" Value="True">
-                <Setter TargetName="col1" Property="Width" Value="0"/>
-            </DataTrigger>
+            </DataTrigger>          
 
             <DataTrigger Binding="{Binding Path=Message.FileName, Converter={StaticResource PathToExtension}}" Value=".txt">
                 <Setter TargetName="icon" Property="Source" Value="/Resources/Extensions/txt.png"/>
@@ -386,7 +407,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Grid x:Name="ellipseGrid" Grid.Row="0" Grid.Column="0">
-                    <Ellipse Width="50" Height="50" StrokeThickness="3" Stroke="Black">
+                    <Ellipse x:Name="groupImage" Width="50" Height="50" StrokeThickness="3" Stroke="Black">
                         <Ellipse.Fill>
                             <ImageBrush ImageSource="{Binding Path=User.Image}"/>
                         </Ellipse.Fill>
@@ -435,6 +456,15 @@
         </Grid>
 
         <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=User.Image}" Value="{x:Null}">
+                <Setter TargetName="groupImage" Property="Fill">
+                    <Setter.Value>
+                        <ImageBrush ImageSource="/Resources/x.png"/>
+                    </Setter.Value>
+                </Setter>
+                <Setter TargetName="groupText" Property="Foreground" Value="Gray"/>
+            </DataTrigger>
+
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:UserMessage}">
                 <Setter TargetName="mainGrid" Property="Grid.Column" Value="1"/>
                 <Setter TargetName="ellipseGrid" Property="Visibility" Value="Collapsed"/>

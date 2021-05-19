@@ -372,19 +372,20 @@ namespace Client.ViewModels
                     }
                     else
                     {
-
                         UserInChat friend = chatrooms[key].FirstOrDefault(usr => usr.UserSqlId != client.SqlId);
                         AvailableUser user = Users.FirstOrDefault(u => u.Key == friend.UserSqlId).Value;
-                        if (friend.IsLeft)
+                        if (!friend.IsLeft)
                         {
-
                             if (user == null)
                             {
                                 user = new AvailableUser(friend.UserSqlId, friend.UserName, friend.IsOnline);
                                 Users.Add(new KeyValuePair<int, AvailableUser>(user.SqlId, user));
                             }
                         }
-
+                        else
+                        {
+                            user = new AvailableUser(friend.UserSqlId, friend.UserName, friend.IsOnline);
+                        }
                         clientChatrooms.Add(new ChatOne(key.ChatSqlId, user) { CanWrite = !friend.IsLeft});
                     }
                 }
