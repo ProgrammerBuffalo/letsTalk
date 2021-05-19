@@ -210,7 +210,15 @@ namespace Client.ViewModels
                 {
                     ChatClient.AddUserToChatroom(sourceItem.SqlId, chat.SqlId);
                     AllUsers.Remove(sourceItem);
-                    Users.Add(sourceItem);
+
+                    AvailableUser user = mainVM.Users.FirstOrDefault(u => u.Key == sourceItem.SqlId).Value;
+                    if (user == null)
+                    {
+                        user = new AvailableUser(user.SqlId, user.Name);
+                        mainVM.Users.Add(new KeyValuePair<int, AvailableUser>(user.SqlId, user));
+                    }
+
+                    this.Chat.AddMember(user);
                 }
                 catch (Exception ex)
                 {

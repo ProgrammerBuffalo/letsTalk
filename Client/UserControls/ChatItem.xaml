@@ -62,7 +62,7 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
-        <Ellipse Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Width="60" Height="60" StrokeThickness="1" Stroke="Black">
+        <Ellipse Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Width="60" Height="60" StrokeThickness="1" Stroke="#FFA89673">
             <Ellipse.Fill>
                 <ImageBrush ImageSource="{Binding Path=Avatar, ElementName=ui}"/>
             </Ellipse.Fill>

@@ -5,6 +5,7 @@ using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Input;
@@ -123,9 +124,24 @@ namespace Client.ViewModels
             Models.Chat chat;
             if (usersToAdd.Count == 1)
             {
-                sqlId = mainVM.ChatClient.CreateChatroom(new int[] { mainVM.Client.SqlId, usersToAdd[0].SqlId }, "");
-                chat = new ChatOne(sqlId, usersToAdd[0]) { CanWrite = true };
-                mainVM.Chats.Add(chat);
+                try
+                {
+                    sqlId = mainVM.ChatClient.CreateChatroom(new int[] { mainVM.Client.SqlId, usersToAdd[0].SqlId }, "");
+
+                    AvailableUser user = mainVM.Users.FirstOrDefault(u => u.Key == usersToAdd[0].SqlId).Value;
+                    if (user == null)
+                    {
+                        user = new AvailableUser(usersToAdd[0].SqlId, usersToAdd[0].Name);
+                        mainVM.Users.Add(new KeyValuePair<int, AvailableUser>(user.SqlId, user));
+                    }
+
+                    chat = new ChatOne(sqlId, usersToAdd[0]) { CanWrite = true };
+                    mainVM.Chats.Add(chat);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
             else
             {
@@ -136,11 +152,28 @@ namespace Client.ViewModels
                     for (int i = 1; i < users.Length; i++)
                         users[i] = usersToAdd[i - 1].SqlId;
 
-                    sqlId = mainVM.ChatClient.CreateChatroom(users, ChatName);
-
-                    BitmapImage image = new BitmapImage(new Uri("Resources/group.png", UriKind.Relative));
-                    chat = new ChatGroup(sqlId, ChatName, UsersToAdd) { CanWrite = true, Avatar = image };
-                    mainVM.Chats.Add(chat);
+                    try
+                    {
+                        sqlId = mainVM.ChatClient.CreateChatroom(users, ChatName);
+                        List<AvailableUser> availableUsers = new List<AvailableUser>();
+                        foreach (var item in usersToAdd)
+                        {
+                            AvailableUser user = mainVM.Users.FirstOrDefault(u => u.Key == item.SqlId).Value;
+                            if (user == null)
+                            {
+                                user = new AvailableUser(item.SqlId, item.Name);
+                                mainVM.Users.Add(new KeyValuePair<int, AvailableUser>(user.SqlId, user));
+                            }
+                            availableUsers.Add(user);
+                        }
+                        BitmapImage image = new BitmapImage(new Uri("Resources/group.png", UriKind.Relative));
+                        chat = new ChatGroup(sqlId, ChatName, availableUsers) { CanWrite = true, Avatar = image };
+                        mainVM.Chats.Add(chat);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
                 }
                 else
                 {

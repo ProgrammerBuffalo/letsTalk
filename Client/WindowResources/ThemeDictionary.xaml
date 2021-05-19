@@ -9,7 +9,7 @@
     <SolidColorBrush x:Key="UserMessageBackground" Color="#bbea86"/>
     <SolidColorBrush x:Key="HeaderTextForeground" Color="#575339"/>
     <SolidColorBrush x:Key="SourceMessageBackground" Color="#b586ea"/>
-    <SolidColorBrush x:Key="GroupBackground" Color="#86bbea"/>
+    <SolidColorBrush x:Key="GroupBackground" Color="#8738ab"/>
     <SolidColorBrush x:Key="DateForeground" Color="#57394a"/>
     <SolidColorBrush x:Key="WritingForeground" Color="#395753"/>
 

@@ -97,7 +97,10 @@ namespace Client.ViewModels
                 {
                     if (item is ChatGroup)
                         DownloadChatAvatarAsync(item as ChatGroup);
+
+                    item.LastMessage = await Utility.MessageLoader.LoadMessage(item, client.SqlId, 1, 1);
                 }
+
             }
             catch (FaultException<ConnectionExceptionFault> ex)
             {
@@ -318,15 +321,19 @@ namespace Client.ViewModels
             if (chats.Where(c => c.FindUser(userId) != null).ToList().Count < 2)
             {
                 KeyValuePair<int, AvailableUser> availableUser = Users.FirstOrDefault(u => u.Key == userId);
-                availableUser.Value.Image = null;
-                availableUser.Value.IsOnline = false;
-                Users.Remove(availableUser);
+                if (availableUser.Value != null)
+                {
+                    availableUser.Value.Image = null;
+                    availableUser.Value.IsOnline = false;
+                    Users.Remove(availableUser);
+                }
             }
         }
 
         public void ReplyMessage(ServiceMessageText message, int chatroomId)
         {
             var chat = FindChatroom(chatroomId);
+            chat.LastMessage = new TextMessage(message.Text, message.DateTime);
             if (SelectedChat == null)
                 return;
             if (SelectedChat.Equals(chat))
@@ -343,6 +350,7 @@ namespace Client.ViewModels
         public void NotifyUserSendedFileToChat(ServiceMessageFile serviceMessageFile, int chatroomId)
         {
             var chat = FindChatroom(chatroomId);
+            chat.LastMessage = new FileMessage(serviceMessageFile.FileName, serviceMessageFile.DateTime);
             if (SelectedChat.Equals(chat))
                 chat.Messages.Add(chat.GetMessageType(Client.SqlId, serviceMessageFile.UserId, new FileMessage(serviceMessageFile.FileName, serviceMessageFile.DateTime, serviceMessageFile.StreamId)));
         }
@@ -379,7 +387,14 @@ namespace Client.ViewModels
 
                             if (userInChat.UserSqlId == client.SqlId)
                             {
-                                canWrite = true;
+                                if (requestedUser.LeaveDate != DateTime.MinValue)
+                                {
+                                    canWrite = false;
+                                }
+                                else
+                                {
+                                    canWrite = true;
+                                }
                                 continue;
                             }
 
@@ -422,7 +437,6 @@ namespace Client.ViewModels
                 }
                 return clientChatrooms;
             }));
-
         }
 
         public async void DownloadUserAvatarAsync(AvailableUser user)

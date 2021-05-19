@@ -99,7 +99,7 @@ namespace Client.Utility
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             string str = value.ToString();
-            if (str.Length > 20) return value.ToString().Substring(0, 20) + "...";
+            if (str.Length > 13) return value.ToString().Substring(0, 13) + "...";
             else return str;
         }
 
@@ -131,8 +131,8 @@ namespace Client.Utility
         {
             DateTime date = (DateTime)value;
             DateTime now = DateTime.Now;
-            if (date.Day == now.Day && date.Month == now.Month && date.Year == now.Year) return date.ToString("HH:mm");
-            else return date.ToString("dd/mm/yy");
+            if (date.Day == now.Day && date.Month == now.Month && date.Year == now.Year) return date.ToString("HH:MM");
+            else return date.ToString("dd/MM/yy");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
