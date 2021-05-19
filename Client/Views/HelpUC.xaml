@@ -8,15 +8,16 @@
     <UserControl.Resources>
         <ResourceDictionary Source="/WindowResources/ThemeDictionary.xaml"/>
     </UserControl.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-
-        <TextBlock Text="Welcome to Lets Talk" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30" Foreground="{StaticResource ButtonBackground}"/>
-
-        <Image Grid.Row="1" Source="/Resources/aaa.png" Margin="0,300,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock TextWrapping="WrapWithOverflow" Text="Hello dear user, welcome to the LetsTalk chat app!"  FontSize="30" Foreground="{StaticResource ButtonBackground}" Margin="50, 15"/>
+            <TextBlock TextWrapping="WrapWithOverflow" Text="Select the chat you need from the menu list in order to start chatting or create a new one" FontSize="30"  Margin="50, 5" Foreground="{StaticResource ButtonBackground}"></TextBlock>
+        </StackPanel>
+        <Image Grid.Row="1" Source="/Resources/aaa.png" Margin="0, 20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
     </Grid>
 </UserControl>

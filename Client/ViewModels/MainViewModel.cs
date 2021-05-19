@@ -60,14 +60,15 @@ namespace Client.ViewModels
                });
 
             Chats.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(
-               delegate (object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-               {
-                   if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-                   {
-                       if (e.NewItems[0] is Models.ChatGroup)
-                           DownloadChatAvatarAsync(e.NewItems[0] as Models.ChatGroup);
-                   }
-               });
+             delegate (object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+             {
+                 if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+                 {
+                     if (e.NewItems[0] is Models.ChatGroup)
+                         DownloadChatAvatarAsync(e.NewItems[0] as Models.ChatGroup);
+                     Chats[Chats.IndexOf(e.NewItems[0] as Models.Chat)].LastMessage = new TextMessage("You are added", DateTime.Now);
+                 }
+             });
         }
 
         public ICommand LoadedWindowCommand { get; }
@@ -226,7 +227,7 @@ namespace Client.ViewModels
                     if (count < 2)
                         Users.Remove(Users.First(u => u.Key == item));
                 }
-
+                chat.LastMessage = new TextMessage("You are removed", DateTime.Now);
                 chat.CanWrite = false;
             }
 
@@ -287,7 +288,7 @@ namespace Client.ViewModels
                         availableUsers.Add(user);
                     }
 
-                    Chats.Add(isGroup ? new ChatGroup(chatId, chatName, availableUsers) { CanWrite = true } :
+                    this.Chats.Add(isGroup ? new ChatGroup(chatId, chatName, availableUsers) { CanWrite = true } :
                                         (Models.Chat)new ChatOne(chatId, availableUsers.First()) { CanWrite = true });
                 });
 
@@ -312,20 +313,24 @@ namespace Client.ViewModels
                     Users.Add(new KeyValuePair<int, AvailableUser>(userId, user));
                 }
                 (chat as ChatGroup).AddMember(user);
+                chat.LastMessage = SystemMessage.UserAdded(DateTime.Now, user.Name).Message;
             }
         }
 
         public void UserLeftChatroom(int chatId, int userId)
         {
+            var chat = chats.FirstOrDefault(c => c.SqlId == chatId);
+            if (chat != null)
+                chat.LastMessage = SystemMessage.UserLeftChat(DateTime.Now, new ChatService.UnitClient().FindUserName(userId)).Message;
             RemoveUserFromChatroom(chatId, userId);
             if (chats.Where(c => c.FindUser(userId) != null).ToList().Count < 2)
             {
-                KeyValuePair<int, AvailableUser> availableUser = Users.FirstOrDefault(u => u.Key == userId);
-                if (availableUser.Value != null)
+                Nullable<KeyValuePair<int, AvailableUser>> availableUser = Users.FirstOrDefault(u => u.Key == userId);
+                if (availableUser != null)
                 {
-                    availableUser.Value.Image = null;
-                    availableUser.Value.IsOnline = false;
-                    Users.Remove(availableUser);
+                    availableUser.Value.Value.Image = null;
+                    availableUser.Value.Value.IsOnline = false;
+                    Users.Remove(availableUser.Value);
                 }
             }
         }
@@ -363,8 +368,7 @@ namespace Client.ViewModels
         private async Task LoadChatroomsAsync()
         {
             Dictionary<Chatroom, UserInChat[]> chatrooms = await ChatClient.FindAllChatroomsForClientAsync(client.SqlId);
-            Chats = new ObservableCollection<Models.Chat>
-                (await System.Threading.Tasks.Task<List<Models.Chat>>.Run(() =>
+            await System.Threading.Tasks.Task.Run(() =>
             {
                 List<Models.Chat> clientChatrooms = new List<Models.Chat>();
                 foreach (Chatroom key in chatrooms.Keys)
@@ -410,7 +414,7 @@ namespace Client.ViewModels
 
                             availableUsers.Add(user);
                         }
-                        clientChatrooms.Add(new ChatGroup(key.ChatSqlId, key.ChatName, availableUsers) { CanWrite = canWrite });
+                        App.Current.Dispatcher.Invoke(() => Chats.Add(new ChatGroup(key.ChatSqlId, key.ChatName, availableUsers) { CanWrite = canWrite }));
                     }
                     else
                     {
@@ -432,11 +436,11 @@ namespace Client.ViewModels
                                 user.Image = new BitmapImage(new Uri("Resources/user.png", UriKind.Relative));
                             });
                         }
-                        clientChatrooms.Add(new ChatOne(key.ChatSqlId, user) { CanWrite = !friend.IsLeft });
+                        App.Current.Dispatcher.Invoke(() => Chats.Add(new ChatOne(key.ChatSqlId, user) { CanWrite = !friend.IsLeft }));
                     }
                 }
-                return clientChatrooms;
-            }));
+            });
+
         }
 
         public async void DownloadUserAvatarAsync(AvailableUser user)

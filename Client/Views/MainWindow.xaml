@@ -35,7 +35,8 @@
                     <TextBlock       x:Name="TextPart"
                                      VerticalAlignment="Center"
                                      FontSize="18"
-                                     Text="{Binding Path=Label}" />
+                                     Text="{Binding Path=Label}"
+                                     Foreground="Wheat"/>
                 </WrapPanel>
 
                 <DataTemplate.Triggers>

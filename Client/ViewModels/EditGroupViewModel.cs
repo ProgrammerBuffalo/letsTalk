@@ -56,17 +56,6 @@ namespace Client.ViewModels
             Users = Chat.Users;
             allUsers = new ObservableCollection<AvailableUser>();
 
-            Users.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(
-             delegate (object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-             {
-                 if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-                 {
-                     if (AllUsers.FirstOrDefault(u => u.SqlId == (e.OldItems[0] as AvailableUser).SqlId) == null)
-                     {
-                         AllUsers.Add(e.OldItems[0] as AvailableUser);
-                     }
-                 }
-             });
         }
 
         public ICommand RemoveMemberCommand { get; }
@@ -214,7 +203,7 @@ namespace Client.ViewModels
                     AvailableUser user = mainVM.Users.FirstOrDefault(u => u.Key == sourceItem.SqlId).Value;
                     if (user == null)
                     {
-                        user = new AvailableUser(user.SqlId, user.Name);
+                        user = new AvailableUser(sourceItem.SqlId, sourceItem.Name);
                         mainVM.Users.Add(new KeyValuePair<int, AvailableUser>(user.SqlId, user));
                     }
 
