@@ -18,69 +18,6 @@
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
     </Style>
 
-    <DataTemplate x:Key="FileDropTemplate">
-        <Ellipse x:Name="icon" Width="40" Height="40" StrokeThickness="2" Stroke="Black"/>
-
-        <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding Path=FileName, Converter={StaticResource PathToExtension}}" Value=".txt">
-                <Setter TargetName="icon" Property="Fill">
-                    <Setter.Value>
-                        <ImageBrush ImageSource="/Resources/Extensions/txt.png"/>
-                    </Setter.Value>
-                </Setter>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding Path=FileName, Converter={StaticResource PathToExtension}}" Value=".pdf">
-                <Setter TargetName="icon" Property="Fill">
-                    <Setter.Value>
-                        <ImageBrush ImageSource="/Resources/Extensions/pdf.png"/>
-                    </Setter.Value>
-                </Setter>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding Path=FileName, Converter={StaticResource PathToExtension}}" Value=".pptx">
-                <Setter TargetName="icon" Property="Fill">
-                    <Setter.Value>
-                        <ImageBrush ImageSource="/Resources/Extensions/ppt.png"/>
-                    </Setter.Value>
-                </Setter>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding Path=FileName, Converter={StaticResource PathToExtension}}" Value=".ppt">
-                <Setter TargetName="icon" Property="Fill">
-                    <Setter.Value>
-                        <ImageBrush ImageSource="/Resources/Extensions/ppt.png"/>
-                    </Setter.Value>
-                </Setter>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding Path=FileName, Converter={StaticResource PathToExtension}}" Value=".doc">
-                <Setter TargetName="icon" Property="Fill">
-                    <Setter.Value>
-                        <ImageBrush ImageSource="/Resources/Extensions/doc.png"/>
-                    </Setter.Value>
-                </Setter>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding Path=FileName, Converter={StaticResource PathToExtension}}" Value=".docx">
-                <Setter TargetName="icon" Property="Fill">
-                    <Setter.Value>
-                        <ImageBrush ImageSource="/Resources/Extensions/doc.png"/>
-                    </Setter.Value>
-                </Setter>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding Path=FileName, Converter={StaticResource PathToExtension}}" Value=".xls">
-                <Setter TargetName="icon" Property="Fill">
-                    <Setter.Value>
-                        <ImageBrush ImageSource="/Resources/Extensions/xls.png"/>
-                    </Setter.Value>
-                </Setter>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding Path=FileName, Converter={StaticResource PathToExtension}}" Value=".zip">
-                <Setter TargetName="icon" Property="Fill">
-                    <Setter.Value>
-                        <ImageBrush ImageSource="/Resources/Extensions/zip.png"/>
-                    </Setter.Value>
-                </Setter>
-            </DataTrigger>
-        </DataTemplate.Triggers>
-    </DataTemplate>
-
     <DataTemplate x:Key="TextDataTemplate">
         <TextBox Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.MessageText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.Chat.CanWrite}"

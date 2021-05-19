@@ -326,9 +326,9 @@
                 <Setter TargetName="groupText" Property="Foreground" Value="Gray"/>
             </DataTrigger>
 
-            <DataTrigger Binding="{Binding Path=Message.IsLoaded}" Value="True">
-                <Setter TargetName="col1" Property="Width" Value="0"/>
-            </DataTrigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="col1" Property="Width" Value="40"/>
+            </Trigger>
 
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:UserMessage}">
                 <Setter TargetName="mainGrid" Property="Grid.Column" Value="1"/>

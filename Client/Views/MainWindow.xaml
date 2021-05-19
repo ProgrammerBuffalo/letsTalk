@@ -26,31 +26,6 @@
                 <icons:PackIconMaterialDesign Kind="Photo" Background="Transparent" Width="25" Height="25" Foreground="{StaticResource ButtonForeground}" Cursor="Hand"/>
             </ControlTemplate>
 
-            <!--<ControlTemplate x:Key="AvatarButton" TargetType="Button">
-                <Grid Background="Transparent">
-                    <Ellipse Width="{TemplateBinding Width}"
-                         Height="{TemplateBinding Height}"
-                         Cursor="{TemplateBinding Cursor}"
-                         Stroke="{TemplateBinding Foreground}"
-                         StrokeThickness="3">
-                        <Ellipse.Fill>
-                            <ImageBrush ImageSource="{Binding Path=Chat.Avatar}"/>
-                        </Ellipse.Fill>
-                    </Ellipse>                  
-                </Grid>
-
-                <ControlTemplate.Triggers>
-                    -->
-            <!--<Trigger Property="IsMouseOver" Value="True">
-                        <Setter TargetName="btn1" Property="Visibility" Value="Visible"/>
-                        <Setter TargetName="btn2" Property="Visibility" Value="Visible"/>
-                    </Trigger>-->
-            <!--
-                </ControlTemplate.Triggers>
-            </ControlTemplate>-->
-
-
-
             <DataTemplate x:Key="HamburgerMenuOptionsTemplate" DataType="{x:Type controls:HamburgerMenuIconItem}">
                 <WrapPanel Margin="5, 8" Cursor="Hand">
                     <ContentControl  x:Name="IconPart"
