@@ -222,7 +222,6 @@ namespace Client.ViewModels
                     await LoadMore();
                     return;
                 }
-
             }
         }
 

@@ -357,16 +357,23 @@ namespace Client.Models
         public override void UserLeft(int userId)
         {
             var user = FindUser(userId);
-            if (user == null)
-                return;
-            Messages.Add(SystemMessage.UserLeftChat(DateTime.Now, user.Name));
-            Users.Remove(user);
+            if (user != null)
+            {
+                colors.Remove(userId);
+                Messages.Add(SystemMessage.UserLeftChat(DateTime.Now, user.Name));
+                Users.Remove(user);
+            }
         }
 
         public override void RemoveUser(AvailableUser user)
         {
             if (Users.Remove(user))
+            {
+                user.Image = null;
+                user.IsOnline = false;
                 Messages.Add(SystemMessage.UserRemoved(DateTime.Now, user.Name));
+                colors.Remove(user.SqlId);
+            }
         }
 
         public override AvailableUser FindUser(Nullable<int> userId)

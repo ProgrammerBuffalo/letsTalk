@@ -122,17 +122,8 @@
                 </Border>
             </Grid>
         </Grid>
-
-        <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding Path=User.Image}" Value="{x:Null}">
-                <Setter TargetName="groupImage" Property="Fill">
-                    <Setter.Value>
-                        <ImageBrush ImageSource="/Resources/x.png"/>
-                    </Setter.Value>
-                </Setter>
-                <Setter TargetName="groupText" Property="Foreground" Value="Gray"/>
-            </DataTrigger>
             
+        <DataTemplate.Triggers>            
             <DataTrigger Binding="{Binding BindsDirectlyToSource=True, Converter={StaticResource TypeConverter}}" Value="{x:Type models:UserMessage}">
                 <Setter TargetName="mainGrid" Property="Grid.Column" Value="1"/>
                 <Setter TargetName="mainGridCol1" Property="Width" Value="0"/>
@@ -170,6 +161,15 @@
                 <Setter TargetName="border" Property="Background" Value="#A6A2A6"/>
                 <Setter TargetName="border" Property="HorizontalAlignment" Value="Center"/>
                 <Setter TargetName="date" Property="Visibility" Value="Collapsed"></Setter>
+            </DataTrigger>
+
+            <DataTrigger Binding="{Binding Path=User.Image}" Value="{x:Null}">
+                <Setter TargetName="groupImage" Property="Fill">
+                    <Setter.Value>
+                        <ImageBrush ImageSource="/Resources/x.png"/>
+                    </Setter.Value>
+                </Setter>
+                <Setter TargetName="groupText" Property="Foreground" Value="Gray"/>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>

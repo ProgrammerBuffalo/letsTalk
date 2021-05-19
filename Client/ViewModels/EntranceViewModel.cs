@@ -95,7 +95,6 @@ namespace Client.ViewModels
                     viewModel.AddUC += window.AddUC;
                     viewModel.RemoveUC += window.RemoveUC;
                     window.DataContext = viewModel;
-                    //mainWindow.removeUCDelegate += viewModel.
                     window.Show();
                     entranceWindow.Close();
                 }

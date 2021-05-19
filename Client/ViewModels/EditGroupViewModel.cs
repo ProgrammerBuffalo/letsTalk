@@ -94,7 +94,7 @@ namespace Client.ViewModels
 
         private void RemoveMember(object param)
         {
-            AvailableUser user = (AvailableUser)param;
+            AvailableUser user = (AvailableUser)param;           
             mainVM.SelectedChat.RemoveUser(user);
             ChatClient.RemoveUserFromChatroom(user.SqlId, chat.SqlId);
         }
