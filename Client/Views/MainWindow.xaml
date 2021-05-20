@@ -58,10 +58,10 @@
 
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#CCCCFF"/>
+                                    <Setter TargetName="border" Property="Background" Value="#004d61"/>
                                 </Trigger>
                                 <Trigger Property="IsSelected" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="DarkSeaGreen"/>
+                                    <Setter TargetName="border" Property="Background" Value="#6b778d"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -144,8 +144,9 @@
                 <DataTemplate>
                     <Grid Margin="30,0,0,0">
                         <UC:ChatItem UserName="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.Client.UserName}"
-                                 Avatar="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.Client.UserImage}"
-                                 IsOnlineVisibility="Hidden">
+                                     UserNameForeground="{StaticResource ChatForeground}"
+                                     Avatar="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.Client.UserImage}"
+                                     IsOnlineVisibility="Hidden">
                         </UC:ChatItem>
 
                         <Button x:Name="btn1" Margin="45,0,0,0" Visibility="Hidden" Template="{StaticResource ChangeImageTemplae}" Command="{Binding Path=DataContext.ChangeAvatarCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
