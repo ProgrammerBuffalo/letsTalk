@@ -58,7 +58,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
@@ -97,7 +97,7 @@
 
         <UC:LightBulb Grid.RowSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="-10" Visibility="{Binding ElementName=ui, Path=IsOnlineVisibility}" IsOn="{Binding ElementName=ui, Path=IsOnline}"/>
 
-        <TextBlock Text="{Binding Path=UserName, ElementName=ui}" FontSize="{Binding ElementName=ui, Path=UserNameFontSize}" Foreground="{StaticResource ChatForeground}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0,0,0" FontWeight="DemiBold"/>
+        <TextBlock Text="{Binding Path=UserName, ElementName=ui}" FontSize="{Binding ElementName=ui, Path=UserNameFontSize}" Foreground="{StaticResource ChatForeground}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0,0,0" FontWeight="DemiBold" TextWrapping="Wrap"/>
 
         <ContentControl Grid.Row="1" Grid.Column="1" Content="{Binding Path=Description, ElementName=ui}" ContentTemplate="{Binding ElementName=ui, Path=DescriptionDataTemplate}" ContentTemplateSelector="{Binding ElementName=ui, Path=DescriptionDataTemplateSelector}" Margin="15,0,0,0"/>
     </Grid>

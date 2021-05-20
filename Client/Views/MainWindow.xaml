@@ -8,7 +8,8 @@
         xmlns:controls ="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:UC="clr-namespace:Client.UserControls"
         mc:Ignorable="d"
-        Title="letsTalkWindow" Height="700" Width="1200" WindowStartupLocation="CenterScreen" WindowTitleBrush="#57394a">
+        Title="letsTalkWindow" Height="700" Width="1200" MinHeight="500" MinWidth="800"
+        WindowStartupLocation="CenterScreen" WindowTitleBrush="#57394a">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -78,9 +79,18 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="ListBoxItem">
-                            <Border Margin="0,5" Cursor="Hand">
+                            <Border x:Name="border" Margin="0,5" Cursor="Hand">
                                 <ContentPresenter/>
                             </Border>
+
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Margin" Value="15,0"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="border" Property="Margin" Value="15,0"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
@@ -94,18 +104,24 @@
                 <Setter Property="PaneBackground" Value="{StaticResource HamburgerBackground}"/>
                 <Setter Property="PaneForeground" Value="Gray"/>
             </Style>
-
-            <!--<ControlTemplate x:Key="BorderButtonTemplate" TargetType="Button">
-                <Border Background="{StaticResource ButtonBackground}"/>
-            </ControlTemplate>-->
+            
         </ResourceDictionary>
     </Window.Resources>
 
     <Grid x:Name="grid" Background="{StaticResource MainBackground}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="col1"/>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+
+        <Button Grid.Column="1">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="0"/>
+                    <GradientStop Color="White" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
 
         <controls:HamburgerMenu x:Name="hamburgerMenu"
                                  Grid.Column="0"

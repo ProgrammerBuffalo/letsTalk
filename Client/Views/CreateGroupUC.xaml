@@ -38,8 +38,8 @@
             <TextBox Text="{Binding Path=SearchText}"
                 metro:TextBoxHelper.Watermark="Search users"
                 metro:TextBoxHelper.ClearTextButton="True"
-                Width="300" Height="50" Background="LightGoldenrodYellow"
-                VerticalAlignment="Center" HorizontalAlignment="Center"
+                Margin="10,0" Height="50" Background="LightGoldenrodYellow"
+                VerticalAlignment="Center"
                 FontSize="20">
             </TextBox>
 
@@ -96,8 +96,8 @@
             Grid.Row="0" Grid.Column="1"
             metro:TextBoxHelper.Watermark="Enter name of chat room"
             metro:TextBoxHelper.ClearTextButton="True"
-            Width="300" Height="50" Background="LightGoldenrodYellow"
-            VerticalAlignment="Center" HorizontalAlignment="Center"
+            Height="50" Background="LightGoldenrodYellow"
+            VerticalAlignment="Center" Margin="20,0"
             FontSize="20">
         </TextBox>
 
