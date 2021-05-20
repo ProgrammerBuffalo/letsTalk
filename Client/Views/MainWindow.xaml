@@ -86,10 +86,7 @@
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter TargetName="border" Property="Margin" Value="15,0"/>
-                                </Trigger>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter TargetName="border" Property="Margin" Value="15,0"/>
-                                </Trigger>
+                                </Trigger>                                
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
@@ -112,16 +109,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="col1"/>
             <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-
-        <Button Grid.Column="1">
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="Black" Offset="0"/>
-                    <GradientStop Color="White" Offset="1"/>
-                </LinearGradientBrush>
-            </Button.Background>
-        </Button>
+        </Grid.ColumnDefinitions>       
 
         <controls:HamburgerMenu x:Name="hamburgerMenu"
                                  Grid.Column="0"
