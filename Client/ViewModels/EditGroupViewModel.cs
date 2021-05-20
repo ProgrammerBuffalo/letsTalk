@@ -158,8 +158,9 @@ namespace Client.ViewModels
                 it.MoveNext();
                 if (Users.FirstOrDefault(u => u.SqlId == it.Current.Key) == null && AllUsers.FirstOrDefault(u => u.SqlId == it.Current.Key) == null)
                 {
-                    AllUsers.Add(new AvailableUser(it.Current.Key, it.Current.Value));
-                    LoadUserAvatarAsync();
+                    AvailableUser availableUser = new AvailableUser(it.Current.Key, it.Current.Value);
+                    AllUsers.Add(availableUser);
+                    mainVM.DownloadUserAvatarAsync(availableUser);
                 }
             }
             offset += 15;
@@ -220,65 +221,6 @@ namespace Client.ViewModels
         {
             prop = value;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop_name));
-        }
-
-        private async void LoadUserAvatarAsync()
-        {
-            AvailableUser availableUser = AllUsers[AllUsers.Count - 1];
-            ChatService.DownloadRequest downloadRequest = new ChatService.DownloadRequest(availableUser.SqlId);
-            System.IO.Stream stream = null;
-            System.IO.MemoryStream memoryStream = null;
-            try
-            {
-                var avatarClient = new ChatService.AvatarClient();
-                long lenght;
-
-                await System.Threading.Tasks.Task.Run(() =>
-                {
-                    avatarClient.UserAvatarDownload(downloadRequest.Requested_SqlId, out lenght, out stream);
-                    if (lenght > 0)
-                    {
-                        memoryStream = FileHelper.ReadFileByPart(stream);
-
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            var bitmapImage = new BitmapImage();
-
-                            memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
-                            bitmapImage.BeginInit();
-                            bitmapImage.DecodePixelWidth = 400;
-                            bitmapImage.DecodePixelHeight = 400;
-                            bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                            bitmapImage.StreamSource = memoryStream;
-                            bitmapImage.EndInit();
-
-                            availableUser.Image = bitmapImage;
-                        });
-                    }
-                });
-            }
-            catch (System.ServiceModel.FaultException<ChatService.ConnectionExceptionFault> ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                if (memoryStream != null)
-                {
-                    memoryStream.Close();
-                    memoryStream.Dispose();
-                }
-
-                if (stream != null)
-                {
-                    stream.Close();
-                    stream.Dispose();
-                }
-            }
-        }
+        }      
     }
 }

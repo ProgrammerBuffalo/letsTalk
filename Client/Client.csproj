@@ -215,6 +215,7 @@
     <Compile Include="Utility\ImageCropper.cs" />
     <Compile Include="Utility\MessageLoader.cs" />
     <Compile Include="Utility\MessageTemplateSelector.cs" />
+    <Compile Include="Utility\SortChatsExtension.cs" />
     <Compile Include="Utility\UCHelper.cs" />
     <Compile Include="Utility\ValidationRules.cs" />
     <Compile Include="ViewModels\CreateChatViewModel.cs" />

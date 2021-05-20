@@ -154,6 +154,7 @@ namespace Client.ViewModels
             if (String.IsNullOrEmpty(messageText)) return;
             mainVM.ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = MessageText, UserId = mainVM.Client.SqlId }, Chat.SqlId);
             Chat.Messages.Add(new UserMessage(new TextMessage(messageText, DateTime.Now)));
+            Chat.LastMessage = new TextMessage(messageText, DateTime.Now);
             MessageText = null;
             Scroll.ScrollToBottom();
         }
@@ -167,7 +168,9 @@ namespace Client.ViewModels
         private void TextBox_KeyDown(object obj)
         {
             if (String.IsNullOrEmpty(messageText))
+            {
                 mainVM.ChatClient.MessageIsWritingAsync(Chat.SqlId, mainVM.Client.SqlId);
+            }
         }
 
         private void MediaEnded(object sender, EventArgs e)
@@ -319,6 +322,7 @@ namespace Client.ViewModels
             if(message.FileName.Length > 0)
             {
                 Chat.Messages.Add(new SessionSendedMessage(message));
+                Chat.LastMessage = new FileMessage(message.FileName, DateTime.Now);
                 Scroll.ScrollToBottom();
             }
 

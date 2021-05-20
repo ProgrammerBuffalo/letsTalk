@@ -27,5 +27,8 @@ namespace letsTalk
 
         [OperationContract(IsOneWay = false)]
         string FindUserName(int userId);
+
+        [OperationContract(IsOneWay = false)]
+        DateTime FindUserJoin(int userId, int chatId);
     }
 }

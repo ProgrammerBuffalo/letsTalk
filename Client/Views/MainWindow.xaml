@@ -82,11 +82,14 @@
                             <Border x:Name="border" Margin="0,5" Cursor="Hand">
                                 <ContentPresenter/>
                             </Border>
-
+                            
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" Property="Margin" Value="15,0"/>
-                                </Trigger>                                
+                                    <Setter TargetName="border" Property="Background" Value="#004d61"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#6b778d"/>
+                                </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>

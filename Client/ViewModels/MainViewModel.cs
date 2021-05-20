@@ -66,7 +66,8 @@ namespace Client.ViewModels
                  {
                      if (e.NewItems[0] is Models.ChatGroup)
                          DownloadChatAvatarAsync(e.NewItems[0] as Models.ChatGroup);
-                     Chats[Chats.IndexOf(e.NewItems[0] as Models.Chat)].LastMessage = new TextMessage("You are added", DateTime.Now);
+                     Models.Chat chat = Chats[Chats.IndexOf(e.NewItems[0] as Models.Chat)];
+                     chat.LastMessage = new TextMessage("You are added", DateTime.Now);
                  }
              });
         }
@@ -100,7 +101,19 @@ namespace Client.ViewModels
                         DownloadChatAvatarAsync(item as ChatGroup);
 
                     item.LastMessage = await Utility.MessageLoader.LoadMessage(item, client.SqlId, 1, 1);
+                    if(item.LastMessage is TextMessage)
+                    {
+                        TextMessage textMessage = item.LastMessage as TextMessage;
+                        DateTime dateTime = DateTime.MinValue;
+                        if(DateTime.TryParse(textMessage.Text, out dateTime))
+                        {
+                            dateTime = new ChatService.UnitClient().FindUserJoin(this.client.SqlId, item.SqlId);
+                            item.LastMessage = new TextMessage("You are added", dateTime);
+                        }
+                    }
                 }
+
+                Chats.Sort((a, b) => { return b.LastMessage.Date.CompareTo(a.LastMessage.Date); });
 
             }
             catch (FaultException<ConnectionExceptionFault> ex)
@@ -228,6 +241,7 @@ namespace Client.ViewModels
                         Users.Remove(Users.First(u => u.Key == item));
                 }
                 chat.LastMessage = new TextMessage("You are removed", DateTime.Now);
+                Chats.Move(Chats.IndexOf(chat), 0);
                 chat.CanWrite = false;
             }
 
@@ -290,6 +304,8 @@ namespace Client.ViewModels
 
                     this.Chats.Add(isGroup ? new ChatGroup(chatId, chatName, availableUsers) { CanWrite = true } :
                                         (Models.Chat)new ChatOne(chatId, availableUsers.First()) { CanWrite = true });
+                    Chats.Move(Chats.IndexOf(Chats.Last()), 0);
+
                 });
 
                 ChatClient.AddedUserToChatIsOnline(this.client.SqlId, chatId);
@@ -339,6 +355,8 @@ namespace Client.ViewModels
         {
             var chat = FindChatroom(chatroomId);
             chat.LastMessage = new TextMessage(message.Text, message.DateTime);
+            Chats.Move(Chats.IndexOf(chat), 0);
+
             if (SelectedChat == null)
                 return;
             if (SelectedChat.Equals(chat))
@@ -356,6 +374,7 @@ namespace Client.ViewModels
         {
             var chat = FindChatroom(chatroomId);
             chat.LastMessage = new FileMessage(serviceMessageFile.FileName, serviceMessageFile.DateTime);
+            Chats.Move(Chats.IndexOf(chat), 0);
             if (SelectedChat.Equals(chat))
                 chat.Messages.Add(chat.GetMessageType(Client.SqlId, serviceMessageFile.UserId, new FileMessage(serviceMessageFile.FileName, serviceMessageFile.DateTime, serviceMessageFile.StreamId)));
         }

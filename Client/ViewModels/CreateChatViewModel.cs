@@ -1,4 +1,4 @@
-﻿using Client.ChatService;
+﻿    using Client.ChatService;
 using Client.Models;
 using Client.Utility;
 using GongSolutions.Wpf.DragDrop;
@@ -103,8 +103,9 @@ namespace Client.ViewModels
             for (int i = 0; i < users.Count; i++)
             {
                 it.MoveNext();
-                AllUsers.Add(new AvailableUser(it.Current.Key, it.Current.Value));
-                LoadUserAvatarAsync();
+                AvailableUser availableUser = new AvailableUser(it.Current.Key, it.Current.Value);
+                AllUsers.Add(availableUser);
+                mainVM.DownloadUserAvatarAsync(availableUser);
             }
             offset += count;
         }
@@ -136,7 +137,7 @@ namespace Client.ViewModels
                     }
 
                     chat = new ChatOne(sqlId, usersToAdd[0]) { CanWrite = true };
-                    mainVM.Chats.Add(chat);
+                    mainVM.Chats.Insert(0, chat);
                 }
                 catch (Exception ex)
                 {
@@ -168,7 +169,7 @@ namespace Client.ViewModels
                         }
                         BitmapImage image = new BitmapImage(new Uri("Resources/group.png", UriKind.Relative));
                         chat = new ChatGroup(sqlId, ChatName, availableUsers) { CanWrite = true, Avatar = image };
-                        mainVM.Chats.Add(chat);
+                        mainVM.Chats.Insert(0, chat);
                     }
                     catch (Exception ex)
                     {
@@ -254,65 +255,6 @@ namespace Client.ViewModels
                 {
                     AllUsers.Add(sourceItem);
                     UsersToAdd.Remove(sourceItem);
-                }
-            }
-        }
-
-        private async void LoadUserAvatarAsync()
-        {
-            AvailableUser availableUser = AllUsers[AllUsers.Count - 1];
-            DownloadRequest downloadRequest = new DownloadRequest(availableUser.SqlId);
-            System.IO.Stream stream = null;
-            System.IO.MemoryStream memoryStream = null;
-            try
-            {
-                var avatarClient = new AvatarClient();
-                long lenght;
-
-                await System.Threading.Tasks.Task.Run(() =>
-                {
-                    avatarClient.UserAvatarDownload(downloadRequest.Requested_SqlId, out lenght, out stream);
-                    if (lenght > 0)
-                    {
-                        memoryStream = FileHelper.ReadFileByPart(stream);
-
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            var bitmapImage = new BitmapImage();
-
-                            memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
-                            bitmapImage.BeginInit();
-                            bitmapImage.DecodePixelWidth = 400;
-                            bitmapImage.DecodePixelHeight = 400;
-                            bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                            bitmapImage.StreamSource = memoryStream;
-                            bitmapImage.EndInit();
-
-                            availableUser.Image = bitmapImage;
-                        });
-                    }
-                });
-            }
-            catch (FaultException<ConnectionExceptionFault> ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                if (memoryStream != null)
-                {
-                    memoryStream.Close();
-                    memoryStream.Dispose();
-                }
-
-                if (stream != null)
-                {
-                    stream.Close();
-                    stream.Dispose();
                 }
             }
         }

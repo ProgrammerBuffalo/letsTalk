@@ -793,6 +793,12 @@ namespace Client.ChatService {
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/FindUserName", ReplyAction="letsTalk.IUnitService/Unit/FindUserNameResponse")]
         System.Threading.Tasks.Task<string> FindUserNameAsync(int userId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/FindUserJoin", ReplyAction="letsTalk.IUnitService/Unit/FindUserJoinResponse")]
+        System.DateTime FindUserJoin(int userId, int chatId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/FindUserJoin", ReplyAction="letsTalk.IUnitService/Unit/FindUserJoinResponse")]
+        System.Threading.Tasks.Task<System.DateTime> FindUserJoinAsync(int userId, int chatId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -860,6 +866,14 @@ namespace Client.ChatService {
         
         public System.Threading.Tasks.Task<string> FindUserNameAsync(int userId) {
             return base.Channel.FindUserNameAsync(userId);
+        }
+        
+        public System.DateTime FindUserJoin(int userId, int chatId) {
+            return base.Channel.FindUserJoin(userId, chatId);
+        }
+        
+        public System.Threading.Tasks.Task<System.DateTime> FindUserJoinAsync(int userId, int chatId) {
+            return base.Channel.FindUserJoinAsync(userId, chatId);
         }
     }
     

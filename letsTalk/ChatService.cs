@@ -1538,5 +1538,30 @@ namespace letsTalk
             }
             return userName;
         }
+
+        public DateTime FindUserJoin(int userId, int chatId)
+        {
+            DateTime date = DateTime.MinValue;
+
+            try
+            {
+                using(SqlConnection sqlConnection = new SqlConnection(connection_string))
+                {
+                    sqlConnection.Open();
+
+                    SqlCommand sqlCommand = new SqlCommand(@"SELECT JoinDate FROM User_Chatroom WHERE Id_User = @userId AND Id_Chat = @chatId", sqlConnection);
+                    sqlCommand.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@chatId", SqlDbType.Int).Value = chatId;
+
+                    DateTime.TryParse(sqlCommand.ExecuteScalar().ToString(), out date);
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return date;
+        }
     }
 }

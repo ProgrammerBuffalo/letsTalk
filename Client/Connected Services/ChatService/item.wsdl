@@ -48,6 +48,12 @@
   <wsdl:message name="Unit_FindUserName_OutputMessage">
     <wsdl:part name="parameters" element="tns:FindUserNameResponse" />
   </wsdl:message>
+  <wsdl:message name="Unit_FindUserJoin_InputMessage">
+    <wsdl:part name="parameters" element="tns:FindUserJoin" />
+  </wsdl:message>
+  <wsdl:message name="Unit_FindUserJoin_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FindUserJoinResponse" />
+  </wsdl:message>
   <wsdl:portType name="Unit">
     <wsdl:operation name="Authorization">
       <wsdl:input wsaw:Action="letsTalk.IUnitService/Unit/Authorization" message="tns:Unit_Authorization_InputMessage" />
@@ -71,6 +77,10 @@
     <wsdl:operation name="FindUserName">
       <wsdl:input wsaw:Action="letsTalk.IUnitService/Unit/FindUserName" message="tns:Unit_FindUserName_InputMessage" />
       <wsdl:output wsaw:Action="letsTalk.IUnitService/Unit/FindUserNameResponse" message="tns:Unit_FindUserName_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="FindUserJoin">
+      <wsdl:input wsaw:Action="letsTalk.IUnitService/Unit/FindUserJoin" message="tns:Unit_FindUserJoin_InputMessage" />
+      <wsdl:output wsaw:Action="letsTalk.IUnitService/Unit/FindUserJoinResponse" message="tns:Unit_FindUserJoin_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

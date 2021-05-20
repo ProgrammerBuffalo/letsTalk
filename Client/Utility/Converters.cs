@@ -131,7 +131,7 @@ namespace Client.Utility
         {
             DateTime date = (DateTime)value;
             DateTime now = DateTime.Now;
-            if (date.Day == now.Day && date.Month == now.Month && date.Year == now.Year) return date.ToString("HH:MM");
+            if (date.Day == now.Day && date.Month == now.Month && date.Year == now.Year) return date.ToString("HH:mm");
             else return date.ToString("dd/MM/yy");
         }
 
