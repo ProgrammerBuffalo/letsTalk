@@ -4,7 +4,6 @@
     <SolidColorBrush x:Key="ChatForeground" Color="#eab586"/>
     <SolidColorBrush x:Key="HamburgerBackground" Color="#57394a"/>
     <SolidColorBrush x:Key="MainBackground2" Color="#eab586"/>
-    <SolidColorBrush x:Key="SourceMessageBackground1" Color="#e0c2c0"/>
     <SolidColorBrush x:Key="MainBackground" Color="#dbb0a0"/>
     <SolidColorBrush x:Key="UserMessageBackground" Color="#bbea86"/>
     <SolidColorBrush x:Key="HeaderTextForeground" Color="#575339"/>
@@ -13,6 +12,7 @@
     <SolidColorBrush x:Key="DateForeground" Color="#57394a"/>
     <SolidColorBrush x:Key="WritingForeground" Color="#395753"/>
     <SolidColorBrush x:Key="SettingsForeground" Color="#57394a"/>
+    <SolidColorBrush x:Key="ListViewBackground" Color="#e0c2c0"/>
 
     <SolidColorBrush x:Key="InputTextBoxBackground" Color="#e0c2c0"/>
     <SolidColorBrush x:Key="InputTextBoxForeground" Color="#57394a"/>

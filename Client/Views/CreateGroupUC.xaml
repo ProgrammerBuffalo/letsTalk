@@ -65,7 +65,7 @@
             SelectedItem="{Binding Path=SelectedUser}"
             ItemTemplate="{StaticResource UserDataTemplate}"
             ItemContainerStyle="{StaticResource ChatListViewItemStyle}"
-            Margin="20" Background="White">
+            Margin="20" Background="{StaticResource ListViewBackground}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseEnter">
                     <i:InvokeCommandAction Command="{Binding AllUsers_MouseEnterCommand}"/>
@@ -115,7 +115,7 @@
             SelectedItem="{Binding Path=SelectedUser}"
             ItemTemplate="{StaticResource UserDataTemplate}"
             ItemContainerStyle="{StaticResource ChatListViewItemStyle}"
-            Background="White" Margin="20">
+            Background="{StaticResource ListViewBackground}" Margin="20">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseEnter">
                     <i:InvokeCommandAction Command="{Binding UsersToAdd_MouseEnterCommand}"/>

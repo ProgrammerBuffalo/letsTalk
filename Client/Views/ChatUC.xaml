@@ -46,7 +46,7 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" MaxHeight="80">
+            <RowDefinition Height="50">
                 <RowDefinition.Style>
                     <Style TargetType="RowDefinition">
                         <Style.Triggers>
@@ -58,7 +58,7 @@
                 </RowDefinition.Style>
             </RowDefinition>
             <RowDefinition Height="8*"/>
-            <RowDefinition Height="*" MaxHeight="150"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
         <DockPanel LastChildFill="False" Background="{StaticResource MainBackground2}">

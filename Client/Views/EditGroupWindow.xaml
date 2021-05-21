@@ -17,7 +17,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate x:Key="MembersDataTemplate">
-                <Grid  Background="Bisque">
+                <Grid  Background="Bisque" Margin="5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="60"/>
                         <ColumnDefinition Width="*"/>
@@ -34,6 +34,18 @@
                     <Button Grid.Column="2" Content="Remove" Width="100" Height="25" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.RemoveMemberCommand}" CommandParameter="{Binding BindsDirectlyToSource=True}"/>
                 </Grid>
             </DataTemplate>
+
+            <Style x:Key="ListViewItemStyle" TargetType="ListViewItem">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListViewItem">
+                            <Border>
+                                <ContentPresenter/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
 
             <ControlTemplate x:Key="CancelButtonTemplate" TargetType="Button">
                 <icons:PackIconMaterialDesign Kind="Cancel" Background="Transparent" Width="25" Height="25" Foreground="{StaticResource ButtonBackground}" Cursor="Hand"/>
@@ -103,9 +115,10 @@
         <ListView Grid.Row="2" Grid.Column="0"
                   dd:DragDrop.DropHandler="{Binding}"
                   dd:DragDrop.IsDropTarget="True"
-                  Margin="10"
+                  Margin="10" Background="{StaticResource ListViewBackground}"
                   ItemsSource="{Binding Path=Users}"
                   ItemTemplate="{StaticResource MembersDataTemplate}"
+                  ItemContainerStyle="{StaticResource ListViewItemStyle}"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   ScrollViewer.VerticalScrollBarVisibility="Auto">
             <i:Interaction.Triggers>
@@ -151,9 +164,10 @@
         <ListView Grid.Row="2" Grid.Column="1"
                   dd:DragDrop.DragHandler="{Binding}"
                   dd:DragDrop.IsDragSource="True"
-                  Margin="10"
+                  Margin="10" Background="{StaticResource ListViewBackground}"
                   ItemsSource="{Binding Path=AllUsers}"
-                  ItemTemplate="{StaticResource UserDataTemplate}">
+                  ItemTemplate="{StaticResource UserDataTemplate}"
+                  ItemContainerStyle="{StaticResource ListViewItemStyle}">
         </ListView>
 
         <Button Grid.Row="3" Grid.Column="1"

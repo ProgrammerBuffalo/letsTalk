@@ -41,7 +41,7 @@
 
             <TextBlock Grid.Row="2" Text="Choose message download step" Style="{StaticResource HeaderStyle}"/>
 
-            <GroupBox Grid.Row="3" Style="{x:Null}">
+            <GroupBox x:Name="CountMessage" Grid.Row="3" Style="{x:Null}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -50,17 +50,17 @@
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
-                        <RadioButton Grid.Row="0" Grid.Column="0" IsChecked="{Binding Path=LoadCount1IsChecked}" Template="{StaticResource SlideRadioButtonTemplate}" Command="{Binding MessageLoadCountChangedCommand}" CommandParameter="{Binding ElementName=messageLoadCount1, Path=Text}"/>
+                        <RadioButton GroupName="CountMessage" Grid.Row="0" Grid.Column="0" IsChecked="{Binding Path=LoadCount1IsChecked}" Template="{StaticResource SlideRadioButtonTemplate}" Command="{Binding MessageLoadCountChangedCommand}" CommandParameter="{Binding ElementName=messageLoadCount1, Path=Text}"/>
                         <TextBlock x:Name="messageLoadCount1" Grid.Row="1" Grid.Column="0" Margin="20,0,0,0" Text="30" Style="{StaticResource TextBlockStyle}"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
-                        <RadioButton Grid.Row="0" Grid.Column="1" IsChecked="{Binding Path=LoadCount2IsChecked}" Template="{StaticResource SlideRadioButtonTemplate}" Command="{Binding MessageLoadCountChangedCommand}" CommandParameter="{Binding ElementName=messageLoadCount2, Path=Text}"/>
+                        <RadioButton GroupName="CountMessage" Grid.Row="0" Grid.Column="1" IsChecked="{Binding Path=LoadCount2IsChecked}" Template="{StaticResource SlideRadioButtonTemplate}" Command="{Binding MessageLoadCountChangedCommand}" CommandParameter="{Binding ElementName=messageLoadCount2, Path=Text}"/>
                         <TextBlock x:Name="messageLoadCount2" Grid.Row="1" Grid.Column="1" Margin="20,0,0,0" Text="50" Style="{StaticResource TextBlockStyle}"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="2" Orientation="Horizontal">
-                        <RadioButton Grid.Row="0" Grid.Column="2" IsChecked="{Binding Path=LoadCount3IsChecked}" Template="{StaticResource SlideRadioButtonTemplate}" Command="{Binding MessageLoadCountChangedCommand}" CommandParameter="{Binding ElementName=messageLoadCount3, Path=Text}"/>
+                        <RadioButton GroupName="CountMessage" Grid.Row="0" Grid.Column="2" IsChecked="{Binding Path=LoadCount3IsChecked}" Template="{StaticResource SlideRadioButtonTemplate}" Command="{Binding MessageLoadCountChangedCommand}" CommandParameter="{Binding ElementName=messageLoadCount3, Path=Text}"/>
                         <TextBlock x:Name="messageLoadCount3" Grid.Row="1" Grid.Column="2" Margin="20,0,0,0" Text="100" Style="{StaticResource TextBlockStyle}"/>
                     </StackPanel>
                 </Grid>

@@ -11,6 +11,8 @@ namespace Client.UserControls
     {
         static readonly DependencyProperty UserNameProperty;
         static readonly DependencyProperty UserNameFontSizeProperty;
+        static readonly DependencyProperty UserNameForegroundProperty;
+
         static readonly DependencyProperty AvatarProperty;
         static readonly DependencyProperty IsWritingProperty;
         static readonly DependencyProperty IsOnlineProperty;
@@ -28,6 +30,8 @@ namespace Client.UserControls
             UserNameProperty = DependencyProperty.Register("UserName", typeof(string), typeof(ChatItem), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
             UserNameFontSizeProperty = DependencyProperty.Register("UserNameFontSize", typeof(float), typeof(ChatItem), new FrameworkPropertyMetadata(14f, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+            UserNameForegroundProperty = DependencyProperty.Register("UserNameForeground", typeof(System.Windows.Media.Brush), typeof(ChatItem), new FrameworkPropertyMetadata(System.Windows.Media.Brushes.Black, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault)); ;
 
             AvatarProperty = DependencyProperty.Register("Avatar", typeof(BitmapImage), typeof(ChatItem), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
@@ -63,6 +67,12 @@ namespace Client.UserControls
         {
             get => (float)GetValue(UserNameFontSizeProperty);
             set => SetValue(UserNameFontSizeProperty, value);
+        }
+
+        public System.Windows.Media.Brush UserNameForeground
+        {
+            get => (System.Windows.Media.Brush)GetValue(UserNameForegroundProperty);
+            set => SetValue(UserNameForegroundProperty, value);
         }
 
         public BitmapImage Avatar

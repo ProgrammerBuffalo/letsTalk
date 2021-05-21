@@ -4,6 +4,7 @@
                     xmlns:utility="clr-namespace:Client.Utility">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/WindowResources/LastMessageDictionary.xaml"/>
+        <ResourceDictionary Source="/WindowResources/ThemeDictionary.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="OnlineEllipseStyle" TargetType="Ellipse">
@@ -47,6 +48,7 @@
     <DataTemplate x:Key="UserDataTemplate">
         <uc:ChatItem
             UserName="{Binding Path=Name}"
+            UserNameForeground="{StaticResource ButtonBackground}"
             Avatar="{Binding Path=Image}"
             IsOnlineVisibility="Hidden">
         </uc:ChatItem>
@@ -56,6 +58,7 @@
         <uc:ChatItem
             x:Name="chat"
             UserName="{Binding Path=User.Name}"
+            UserNameForeground="{StaticResource ChatForeground}"
             UserNameFontSize="18"
             Avatar="{Binding Path=User.Image}"
             IsWriting="{Binding Path=UserIsWriting}"
@@ -72,6 +75,7 @@
         <uc:ChatItem
             UserName="{Binding Path=GroupName}"
             UserNameFontSize="18"
+            UserNameForeground="{StaticResource ChatForeground}"
             Avatar="{Binding Path=Avatar}"
             IsWriting="{Binding Path=UserIsWriting}"
             IsOnlineVisibility="Hidden"
