@@ -64,11 +64,12 @@ namespace Client.ViewModels
              {
                  if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
                  {
+                     Models.Chat chat = Chats[Chats.IndexOf(e.NewItems[0] as Models.Chat)];
                      if (e.NewItems[0] is Models.ChatGroup)
                          DownloadChatAvatarAsync(e.NewItems[0] as Models.ChatGroup);
-                     Models.Chat chat = Chats[Chats.IndexOf(e.NewItems[0] as Models.Chat)];
                      chat.LastMessage = new TextMessage("You are added", DateTime.Now);
                  }
+              
              });
         }
 
@@ -129,11 +130,11 @@ namespace Client.ViewModels
         public void CancelImage(object param)
         {
             client.UserImage = new BitmapImage(new Uri("Resources/user.png", UriKind.Relative));
+            new ChatService.UnitClient().UserAvatarDelete(client.SqlId);
         }
 
         private async void ChangeAvatar(object obj)
         {
-            MessageBox.Show("!!!");
             UploadFileInfo uploadFileInfo = null;
 
             try
@@ -242,7 +243,7 @@ namespace Client.ViewModels
                 }
                 chat.LastMessage = new TextMessage("You are removed", DateTime.Now);
                 Chats.Move(Chats.IndexOf(chat), 0);
-                chat.CanWrite = false;
+                chat.CanWrite = false;                
             }
 
         }
@@ -339,7 +340,8 @@ namespace Client.ViewModels
             if (chat != null)
                 chat.LastMessage = SystemMessage.UserLeftChat(DateTime.Now, new ChatService.UnitClient().FindUserName(userId)).Message;
             RemoveUserFromChatroom(chatId, userId);
-            if (chats.Where(c => c.FindUser(userId) != null).ToList().Count < 2)
+
+            if (chats.Where(c => c.FindUser(userId) != null).ToList().Count < 1)
             {
                 Nullable<KeyValuePair<int, AvailableUser>> availableUser = Users.FirstOrDefault(u => u.Key == userId);
                 if (availableUser != null)
@@ -349,20 +351,25 @@ namespace Client.ViewModels
                     Users.Remove(availableUser.Value);
                 }
             }
+
         }
 
         public void ReplyMessage(ServiceMessageText message, int chatroomId)
         {
             var chat = FindChatroom(chatroomId);
             chat.LastMessage = new TextMessage(message.Text, message.DateTime);
-            Chats.Move(Chats.IndexOf(chat), 0);
+
+            if(Chats.IndexOf(chat) != 0)
+                Chats.Move(Chats.IndexOf(chat), 0);
 
             if (SelectedChat == null)
                 return;
+
             if (SelectedChat.Equals(chat))
             {
                 chat.Messages.Add(chat.GetMessageType(Client.SqlId, message.UserId, new TextMessage(message.Text, message.DateTime)));
             }
+
         }
 
         public void ReplyMessageIsWriting(Nullable<int> userSqlId, int chatSqlId)
@@ -374,7 +381,13 @@ namespace Client.ViewModels
         {
             var chat = FindChatroom(chatroomId);
             chat.LastMessage = new FileMessage(serviceMessageFile.FileName, serviceMessageFile.DateTime);
-            Chats.Move(Chats.IndexOf(chat), 0);
+
+            if (Chats.IndexOf(chat) != 0)
+                Chats.Move(Chats.IndexOf(chat), 0);
+
+            if (SelectedChat == null)
+                return;
+
             if (SelectedChat.Equals(chat))
                 chat.Messages.Add(chat.GetMessageType(Client.SqlId, serviceMessageFile.UserId, new FileMessage(serviceMessageFile.FileName, serviceMessageFile.DateTime, serviceMessageFile.StreamId)));
         }
@@ -583,7 +596,9 @@ namespace Client.ViewModels
 
         public void NotifyСhatroomAvatarIsChanged(int chatId)
         {
-            throw new NotImplementedException();
+            var chat = FindChatroom(chatId);
+            if (chat != null)
+                DownloadChatAvatarAsync(chat as ChatGroup);
         }
 
         public void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")

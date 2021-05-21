@@ -48,11 +48,14 @@ namespace Client.ViewModels
             Chat = mainVM.SelectedChat;
             Chat.ClientId = mainVM.Client.SqlId;
             Settings = Settings.Instance;
-
             InputMessage = new TextMessage();
             LoaderVisibility = Visibility.Hidden;
-
+            this.chat.Messages.Clear();
+            chat._messageCount = 15;
+            chat._messageOffset = 0;
+            chat._offsetDate = DateTime.Now;
             _countLeft = chat._messageCount;
+            
 
             //client = ClientUserInfo.getInstance();
             //ChatClient = chatClient;
@@ -149,13 +152,17 @@ namespace Client.ViewModels
             await Utility.MessageLoader.LoadMessage(this.Chat, mainVM.Client.SqlId, 30, 30);
         }
 
-        private void TextBox_EnterPressed(object obj)
+        private async void TextBox_EnterPressed(object obj)
         {
             if (String.IsNullOrEmpty(messageText)) return;
-            mainVM.ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = MessageText, UserId = mainVM.Client.SqlId }, Chat.SqlId);
+            await mainVM.ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = MessageText, UserId = mainVM.Client.SqlId }, Chat.SqlId);
             Chat.Messages.Add(new UserMessage(new TextMessage(messageText, DateTime.Now)));
             Chat.LastMessage = new TextMessage(messageText, DateTime.Now);
             MessageText = null;
+            if (mainVM.Chats.IndexOf(chat) != 0)
+            {
+                mainVM.Chats.Move(mainVM.Chats.IndexOf(chat), 0);
+            }
             Scroll.ScrollToBottom();
         }
 
@@ -192,7 +199,7 @@ namespace Client.ViewModels
         private void EditChat(object param)
         {
             Views.EditGroupWindow window = new Views.EditGroupWindow();
-            window.DataContext = new EditGroupViewModel(mainVM);           
+            window.DataContext = new EditGroupViewModel(mainVM);
             window.ShowDialog();
         }
 
@@ -319,10 +326,16 @@ namespace Client.ViewModels
         {
             FileMessage message = (FileMessage)inputMessage;
 
-            if(message.FileName.Length > 0)
+            if (message.FileName.Length > 0)
             {
                 Chat.Messages.Add(new SessionSendedMessage(message));
                 Chat.LastMessage = new FileMessage(message.FileName, DateTime.Now);
+
+                if (mainVM.Chats.IndexOf(chat) != 0)
+                {
+                    mainVM.Chats.Move(mainVM.Chats.IndexOf(chat), 0);
+                }
+
                 Scroll.ScrollToBottom();
             }
 
@@ -337,35 +350,6 @@ namespace Client.ViewModels
         private async void ShowMore(object param)
         {
             await LoadMore();
-        }
-
-        private void SendFile(string path)
-        {
-            string extn = path.Substring(path.LastIndexOf('.'));
-            if (extn == ".mp3" || extn == ".wave")
-            {
-                Chat.Messages.Add(new UserMessage(new MediaMessage(path, DateTime.Now)));
-                return;
-            }
-
-            ChatService.FileClient fileClient = new ChatService.FileClient();
-
-            FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
-            Guid stream_id = Guid.Empty;
-            try
-            {
-                if (fileStream.CanRead)
-                    stream_id = fileClient.FileUpload(Chat.SqlId, path, mainVM.Client.SqlId, fileStream);
-            }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
-            finally
-            {
-                if (fileStream != null)
-                {
-                    fileStream.Close();
-                }
-            }
-            Chat.Messages.Add(new SessionSendedMessage(new FileMessage(path, DateTime.Now, stream_id)));
         }
 
         private void MediaPosChanged(object param)
@@ -400,3 +384,35 @@ namespace Client.ViewModels
         }
     }
 }
+
+//private void SendFile(string path)
+//{
+//    string extn = path.Substring(path.LastIndexOf('.'));
+
+
+//    if (extn == ".mp3" || extn == ".wave")
+//    {
+//        Chat.Messages.Add(new UserMessage(new MediaMessage(path, DateTime.Now)));
+//        return;
+//    }
+
+//    ChatService.FileClient fileClient = new ChatService.FileClient();
+
+//    FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
+//    Guid stream_id = Guid.Empty;
+//    try
+//    {
+//        if (fileStream.CanRead)
+//            stream_id = fileClient.FileUpload(Chat.SqlId, path, mainVM.Client.SqlId, fileStream);
+//    }
+//    catch (Exception ex) { MessageBox.Show(ex.Message); }
+//    finally
+//    {
+//        if (fileStream != null)
+//        {
+//            fileStream.Close();
+//        }
+//    }
+
+//    Chat.Messages.Add(new SessionSendedMessage(new FileMessage(path, DateTime.Now, stream_id)));
+//}

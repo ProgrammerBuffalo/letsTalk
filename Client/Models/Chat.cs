@@ -18,9 +18,6 @@ namespace Client.Models
         public int _messageOffset = 0;
         public DateTime _offsetDate = DateTime.Now;
 
-        //private BitmapImage image;
-
-        //public BitmapImage Image { get => image; set => Set(ref image, value); }
         public bool CanWrite { get => canWrite; set => Set(ref canWrite, value); }
 
         private string userIsWriting;
@@ -34,6 +31,9 @@ namespace Client.Models
                     if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
                     {
                         if (e.NewItems[0] is SystemMessage)
+                            return;
+
+                        if (e.NewItems[0] is TextMessage)
                             return;
 
                         await System.Threading.Tasks.Task.Run(() =>

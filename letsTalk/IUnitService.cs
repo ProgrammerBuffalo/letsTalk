@@ -30,5 +30,11 @@ namespace letsTalk
 
         [OperationContract(IsOneWay = false)]
         DateTime FindUserJoin(int userId, int chatId);
+
+        [OperationContract(IsOneWay = true)]
+        void UserAvatarDelete(int userId);
+
+        [OperationContract(IsOneWay = true)]
+        void ChatAvatarDelete(int chatId);
     }
 }

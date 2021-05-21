@@ -297,6 +297,18 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="UserAvatarDelete">
+      <soap12:operation soapAction="letsTalk.IUnitService/Unit/UserAvatarDelete" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="ChatAvatarDelete">
+      <soap12:operation soapAction="letsTalk.IUnitService/Unit/ChatAvatarDelete" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="BasicHttpBinding_File" type="i2:File">
     <wsp:PolicyReference URI="#BasicHttpBinding_File_policy" />

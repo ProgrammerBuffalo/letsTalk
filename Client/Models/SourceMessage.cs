@@ -106,17 +106,17 @@ namespace Client.Models
 
         public static SystemMessage UserLeftChat(DateTime dateTime, string nickname)
         {
-            return new SystemMessage(new TextMessage(nickname + " left chat :(" + "   " + dateTime.ToShortTimeString()));
+            return new SystemMessage(new TextMessage(nickname + " left chat :(" + "   " + dateTime.ToShortTimeString(), dateTime));
         }
 
         public static SystemMessage UserRemoved(DateTime dateTime, string nickname)
         {
-            return new SystemMessage(new TextMessage(nickname + " was removed from chat" + "   " + dateTime.ToShortTimeString()));
+            return new SystemMessage(new TextMessage(nickname + " was removed from chat" + "   " + dateTime.ToShortTimeString(), dateTime));
         }
 
         public static SystemMessage UserAdded(DateTime dateTime, string nickname)
         {
-            return new SystemMessage(new TextMessage(nickname + " was added to chat" + "   " + dateTime.ToShortTimeString()));
+            return new SystemMessage(new TextMessage(nickname + " was added to chat" + "   " + dateTime.ToShortTimeString(), dateTime));
         }
     }
 }

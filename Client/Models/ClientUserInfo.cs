@@ -1,6 +1,8 @@
 ﻿using Client.Utility;
+using System;
 using System.IO;
 using System.ServiceModel;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace Client.Models
@@ -57,8 +59,14 @@ namespace Client.Models
                  {
                      avatarClient.UserAvatarDownload(SqlId, out lenght, out stream);
                      if (lenght <= 0)
+                     {
+                         Application.Current.Dispatcher.Invoke(() =>
+                         {
+                             UserImage = new BitmapImage(new Uri("Resources/user.png", UriKind.Relative));
+                         });
                          return;
-                     MemoryStream memoryStream = FileHelper.ReadFileByPart(stream);
+                     }
+                      MemoryStream memoryStream = FileHelper.ReadFileByPart(stream);
 
                      System.Windows.Application.Current.Dispatcher.Invoke(() =>
                      {

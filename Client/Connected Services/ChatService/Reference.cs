@@ -799,6 +799,18 @@ namespace Client.ChatService {
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/FindUserJoin", ReplyAction="letsTalk.IUnitService/Unit/FindUserJoinResponse")]
         System.Threading.Tasks.Task<System.DateTime> FindUserJoinAsync(int userId, int chatId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IUnitService/Unit/UserAvatarDelete")]
+        void UserAvatarDelete(int userId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IUnitService/Unit/UserAvatarDelete")]
+        System.Threading.Tasks.Task UserAvatarDeleteAsync(int userId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IUnitService/Unit/ChatAvatarDelete")]
+        void ChatAvatarDelete(int chatId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IUnitService/Unit/ChatAvatarDelete")]
+        System.Threading.Tasks.Task ChatAvatarDeleteAsync(int chatId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -874,6 +886,22 @@ namespace Client.ChatService {
         
         public System.Threading.Tasks.Task<System.DateTime> FindUserJoinAsync(int userId, int chatId) {
             return base.Channel.FindUserJoinAsync(userId, chatId);
+        }
+        
+        public void UserAvatarDelete(int userId) {
+            base.Channel.UserAvatarDelete(userId);
+        }
+        
+        public System.Threading.Tasks.Task UserAvatarDeleteAsync(int userId) {
+            return base.Channel.UserAvatarDeleteAsync(userId);
+        }
+        
+        public void ChatAvatarDelete(int chatId) {
+            base.Channel.ChatAvatarDelete(chatId);
+        }
+        
+        public System.Threading.Tasks.Task ChatAvatarDeleteAsync(int chatId) {
+            return base.Channel.ChatAvatarDeleteAsync(chatId);
         }
     }
     

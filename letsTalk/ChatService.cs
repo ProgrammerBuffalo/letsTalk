@@ -229,14 +229,10 @@ namespace letsTalk
 
                         if (exsistingAvatar != Guid.Empty)
                         {
-                            SqlCommand sqlCommandUpdateStreamIdToNull = new SqlCommand($@"UPDATE {selector} SET stream_id = null WHERE {selector}.Id = @Id", sqlConnection);
-                            sqlCommandUpdateStreamIdToNull.Parameters.Add("@Id", SqlDbType.Int).Value = uploadRequest.Responsed_SqlId;
+                            SqlCommand sqlCommand = new SqlCommand($"Delete{selector.Substring(0, selector.Length - 2)}Avatar", sqlConnection);
+                            sqlCommand.CommandType = CommandType.StoredProcedure;
+                            sqlCommand.Parameters.Add(selector == "Users" ? "@UserId" : "@ChatId", SqlDbType.Int).Value = uploadRequest.Responsed_SqlId;
 
-                            sqlCommandUpdateStreamIdToNull.ExecuteNonQuery();
-
-                            SqlCommand sqlCommand = new SqlCommand(@"DELETE FROM dbo.DataFT WHERE stream_id = @stream_id", sqlConnection);
-
-                            sqlCommand.Parameters.Add("@stream_id", SqlDbType.UniqueIdentifier).Value = exsistingAvatar;
                             sqlCommand.ExecuteNonQuery();
                         }
 
@@ -329,6 +325,83 @@ namespace letsTalk
                 Console.WriteLine(ex.Message);
             }
         }
+
+        public void UserAvatarDelete(int userId)
+        {
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(connection_string))
+                {
+                    sqlConnection.Open();
+                    SqlCommand sqlCommand = new SqlCommand("DeleteUserAvatar", sqlConnection);
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+
+                    sqlCommand.ExecuteNonQuery();
+                }
+
+                lock (lockerSyncObj)
+                {
+                    List<int> requestedChatrooms = chatroomsInUsers.FirstOrDefault(c => c.Key.SqlID == userId).Value;
+                    if (requestedChatrooms != null)
+                    {
+                        List<ConnectedUser> connectedFriends = chatroomsInUsers.Where
+                            (chiu => chiu.Value.Intersect(requestedChatrooms) != null).Select(u => u.Key).ToList();
+
+                        foreach (ConnectedUser connectedUser in connectedFriends)
+                        {
+                            if (connectedUser.UserContext.Channel != OperationContext.Current.Channel)
+                            {
+                                connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyUserChangedAvatar(userId);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public void ChatAvatarDelete(int chatId)
+        {
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(connection_string))
+                {
+                    sqlConnection.Open();
+                    SqlCommand sqlCommand = new SqlCommand("DeleteChatAvatar", sqlConnection);
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@ChatId", SqlDbType.Int).Value = chatId;
+
+                    sqlCommand.ExecuteNonQuery();
+                }
+
+                lock (lockerSyncObj)
+                {
+
+                    List<ConnectedUser> connectedUsers = chatroomsInUsers.Where(c => c.Value.Contains(chatId)).Select(u => u.Key).ToList();
+                    if (connectedUsers.Count > 0)
+                    {
+                     
+                        foreach (ConnectedUser connectedUser in connectedUsers)
+                        {
+                            if (connectedUser.UserContext.Channel != OperationContext.Current.Channel)
+                            {
+                                connectedUser.UserContext.GetCallbackChannel<IChatCallback>().NotifyСhatroomAvatarIsChanged(chatId);
+                            }
+                        }
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
 
         public void ChatAvatarUpload(UploadFileInfo uploadRequest)
         {
@@ -1079,6 +1152,14 @@ namespace letsTalk
         public void AddUserToChatroom(int userId, int chatId)
         {
             bool isGroup = false;
+             
+            var con_user = chatroomsInUsers.FirstOrDefault(u => u.Key.UserContext.Channel == OperationContext.Current.Channel).Key;
+            if(con_user != null)
+            {
+                if (!chatroomsInUsers.Where(cu => cu.Key.Equals(con_user)).Any(u => u.Value.Contains(chatId)))
+                    return;
+            }
+
             try
             {
                 Console.WriteLine("Adding user to chatroom (" + OperationContext.Current.Channel.GetHashCode() + ")");
@@ -1138,7 +1219,7 @@ namespace letsTalk
                             bool isOnline = false;
                             if (chatroomsInUsers.FirstOrDefault(cu => cu.Key.SqlID == userSqlId).Key != null)
                                 isOnline = true;
-                            usersInChat.Add(new UserInChat() { UserSqlId = userSqlId, UserName = userName, IsOnline = isOnline});
+                            usersInChat.Add(new UserInChat() { UserSqlId = userSqlId, UserName = userName, IsOnline = isOnline });
                         }
                     }
 
@@ -1270,6 +1351,13 @@ namespace letsTalk
         //Удаление пользователя из чатрума
         public void RemoveUserFromChatroom(int userId, int chatId)
         {
+            var con_user = chatroomsInUsers.FirstOrDefault(u => u.Key.UserContext.Channel == OperationContext.Current.Channel).Key;
+            if (con_user != null)
+            {
+                if (!chatroomsInUsers.Where(cu => cu.Key.Equals(con_user)).Any(u => u.Value.Contains(chatId)))
+                    return;
+            }
+
             RemoveUser(userId, chatId, RulingMessage.UserRemoved);
         }
 
@@ -1545,7 +1633,7 @@ namespace letsTalk
 
             try
             {
-                using(SqlConnection sqlConnection = new SqlConnection(connection_string))
+                using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                 {
                     sqlConnection.Open();
 
@@ -1556,12 +1644,17 @@ namespace letsTalk
                     DateTime.TryParse(sqlCommand.ExecuteScalar().ToString(), out date);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
 
             return date;
+        }
+
+        public void ChangeChatroomName(int sqlId, string newName)
+        {
+
         }
     }
 }

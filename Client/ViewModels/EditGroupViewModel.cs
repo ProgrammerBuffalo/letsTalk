@@ -43,7 +43,7 @@ namespace Client.ViewModels
 
             RemoveMemberCommand = new Command(RemoveMember);
             DeleteChatCommand = new Command(DeleteChat);
-            ChangeImageCommand = new Command(ChangeImage);
+            ChangeImageCommand = new Command(ChangeImageAsync);
             CancelImageCommand = new Command(CancelImage);
             ShowMoreCommand = new Command(ShowMore);
             SaveNameCommand = new Command(SaveName);
@@ -128,20 +128,58 @@ namespace Client.ViewModels
             throw new NotImplementedException();
         }
 
-        private void ChangeImage(object param)
+        private async void ChangeImageAsync(object param)
         {
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "Image files(*.png, *.jpg, *.jpeg)|*.png;*.jpg;*.jpeg";
-            if (dialog.ShowDialog() == true)
+            ChatService.UploadFileInfo uploadFileInfo = null;
+
+            try
             {
-                //тут метод сохранения нового фото на сервере
-                chat.Avatar = new BitmapImage(new Uri(dialog.FileName));
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Multiselect = false;
+                openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg; *.jpeg; *.png";
+                if (openFileDialog.ShowDialog() == true)
+                {
+
+                    System.IO.MemoryStream memoryStream = ImageCropper.GetCroppedImage(openFileDialog.FileName);
+                    memoryStream.Position = 0;
+
+                    uploadFileInfo = new ChatService.UploadFileInfo { FileName = openFileDialog.FileName, FileStream = memoryStream, Responsed_SqlId = chat.SqlId };
+                    ChatService.AvatarClient avatarClient = new ChatService.AvatarClient();
+
+                    if (uploadFileInfo.FileStream.CanRead)
+                        await avatarClient.ChatAvatarUploadAsync(uploadFileInfo.FileName, uploadFileInfo.Responsed_SqlId, uploadFileInfo.FileStream);
+
+                    memoryStream.Position = 0;
+
+                    var bitmap = new BitmapImage();
+
+                    bitmap.BeginInit();
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.StreamSource = memoryStream;
+                    bitmap.EndInit();
+
+                    chat.Avatar = bitmap;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                if (uploadFileInfo != null)
+                {
+                    if (uploadFileInfo.FileStream != null)
+                        uploadFileInfo.FileStream.Dispose();
+                }
             }
         }
 
         private void CancelImage(object param)
         {
             chat.Avatar = new BitmapImage(new Uri("Resources/group.png", UriKind.Relative));
+            ChatService.UnitClient unitClient = new ChatService.UnitClient();
+            unitClient.ChatAvatarDeleteAsync(chat.SqlId);
         }
 
         private void ShowMore(object param)
