@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Xml;
 
 namespace Client.Models
@@ -11,7 +12,9 @@ namespace Client.Models
         private int messageLoadCount;
         private string selectedWallpaper;
         private Rington selectedRington;
-        private bool notify;
+
+        private bool isUserMute;
+        private bool isGroupMute;
 
         private Settings()
         {
@@ -20,7 +23,8 @@ namespace Client.Models
 
             messageLoadCount = int.Parse(document.DocumentElement["MessageLoadCount"].InnerText);
             selectedWallpaper = document.DocumentElement["Wallpaper"].InnerText;
-            notify = bool.Parse(document.DocumentElement["Notify"].InnerText);
+            IsUserMute = bool.Parse(document.DocumentElement["IsUserMute"].InnerText);
+            IsGroupMute = bool.Parse(document.DocumentElement["IsGroupMute"].InnerText);
             selectedRington = new Rington();
             selectedRington.Path = document.DocumentElement["Rington"].InnerText;
             selectedRington.Name = document.DocumentElement["RingtonName"].InnerText;
@@ -38,12 +42,18 @@ namespace Client.Models
             Ringtons = new Rington[count];
             for (int i = 0; i < count; i++)
             {
-                Rington rington = new Rington();
-                rington.Name = document.DocumentElement.ChildNodes[1].ChildNodes[i].Attributes["Name"].InnerText;
-                rington.Path = document.DocumentElement.ChildNodes[1].ChildNodes[i].Attributes["Path"].InnerText;
-                Ringtons[i] = rington;
-                if (selectedRington.Name == rington.Name) rington.IsSelected = true;
+                Ringtons[i] = new Rington(document.DocumentElement.ChildNodes[1].ChildNodes[i].Attributes["Name"].InnerText,
+                    document.DocumentElement.ChildNodes[1].ChildNodes[i].Attributes["Path"].InnerText);
+                if (selectedRington.Name == Ringtons[i].Name) Ringtons[i].IsSelected = true;
             }
+
+            //подгрузка заглушенных чатов
+            //Mutes = new Dictionary<int, bool>();
+            //for (int i = 0; i < document.DocumentElement["Mutes"].ChildNodes.Count; i++)
+            //{
+            //    Mutes.Add(int.Parse(document.DocumentElement["Mutes"].ChildNodes[i].Attributes["Id"].InnerText),
+            //        bool.Parse(document.DocumentElement["Mutes"].ChildNodes[i].Attributes["IsMute"].InnerText));
+            //}
         }
 
         public static Settings Instance
@@ -69,6 +79,7 @@ namespace Client.Models
         }
         public string[] Wallpapers { get; }
         public Rington[] Ringtons { get; }
+        public Dictionary<int, bool> Mutes { get; }
 
         public string SelectedWallpaper
         {
@@ -97,16 +108,42 @@ namespace Client.Models
             }
         }
 
-        public bool Notify
+        //public bool Notify
+        //{
+        //    get => notify;
+        //    set
+        //    {
+        //        XmlDocument document = new XmlDocument();
+        //        document.Load("Settings/user-settings.xml");
+        //        document.DocumentElement["Notify"].InnerText = notify.ToString();
+        //        document.Save("Settings/user-settings.xml");
+        //        Set(ref notify, value);
+        //    }
+        //}
+
+        public bool IsUserMute
         {
-            get => notify;
+            get => isUserMute;
             set
             {
+                Set(ref isUserMute, value);
                 XmlDocument document = new XmlDocument();
                 document.Load("Settings/user-settings.xml");
-                document.DocumentElement["Notify"].InnerText = notify.ToString();
+                document.DocumentElement["IsUserMute"].InnerText = isUserMute.ToString();
                 document.Save("Settings/user-settings.xml");
-                Set(ref notify, value);
+            }
+        }
+
+        public bool IsGroupMute
+        {
+            get => isGroupMute;
+            set
+            {
+                Set(ref isGroupMute, value);
+                XmlDocument document = new XmlDocument();
+                document.Load("Settings/user-settings.xml");
+                document.DocumentElement["IsGroupMute"].InnerText = isGroupMute.ToString();
+                document.Save("Settings/user-settings.xml");
             }
         }
 

@@ -101,11 +101,11 @@ namespace Client.ViewModels
                         DownloadChatAvatarAsync(item as ChatGroup);
 
                     item.LastMessage = await Utility.MessageLoader.LoadMessage(item, client.SqlId, 1, 1);
-                    if(item.LastMessage is TextMessage)
+                    if (item.LastMessage is TextMessage)
                     {
                         TextMessage textMessage = item.LastMessage as TextMessage;
                         DateTime dateTime = DateTime.MinValue;
-                        if(DateTime.TryParse(textMessage.Text, out dateTime))
+                        if (DateTime.TryParse(textMessage.Text, out dateTime))
                         {
                             dateTime = new ChatService.UnitClient().FindUserJoin(this.client.SqlId, item.SqlId);
                             item.LastMessage = new TextMessage("You are added", dateTime);
@@ -354,15 +354,16 @@ namespace Client.ViewModels
         public void ReplyMessage(ServiceMessageText message, int chatroomId)
         {
             var chat = FindChatroom(chatroomId);
+            var temp = SelectedChat;
             chat.LastMessage = new TextMessage(message.Text, message.DateTime);
             Chats.Move(Chats.IndexOf(chat), 0);
 
-            if (SelectedChat == null)
-                return;
+            SelectedChat = temp;
+
+            if (SelectedChat == null) return;
+
             if (SelectedChat.Equals(chat))
-            {
                 chat.Messages.Add(chat.GetMessageType(Client.SqlId, message.UserId, new TextMessage(message.Text, message.DateTime)));
-            }
         }
 
         public void ReplyMessageIsWriting(Nullable<int> userSqlId, int chatSqlId)

@@ -18,13 +18,12 @@ namespace Client.Models
         public int _messageOffset = 0;
         public DateTime _offsetDate = DateTime.Now;
 
-        //private BitmapImage image;
-
-        //public BitmapImage Image { get => image; set => Set(ref image, value); }
         public bool CanWrite { get => canWrite; set => Set(ref canWrite, value); }
 
         private string userIsWriting;
         private Message lastMessage;
+
+        private bool isMute;
 
         protected Chat()
         {
@@ -69,7 +68,12 @@ namespace Client.Models
                 }
             );
         }
-
+        
+        protected Chat(int sqlId) : this()
+        {
+            SqlId = sqlId;
+        }
+        
         protected Chat(IEnumerable<SourceMessage> messages) : this()
         {
             Messages = new ObservableCollection<SourceMessage>();
@@ -77,15 +81,33 @@ namespace Client.Models
                 Messages.Add(message);
         }
 
-        protected Chat(IEnumerable<SourceMessage> messages, int count) : this(messages)
-        {
-            Count = count;
-        }
+       
 
-        protected Chat(int sqlId) : this()
-        {
-            SqlId = sqlId;
-        }
+        public int SqlId { get; set; }
+
+        public int ClientId { get; set; }
+
+        public ObservableCollection<SourceMessage> Messages { get => messages; set => Set(ref messages, value); }
+
+        public int Count { get => count; set => Set(ref count, value); }
+
+        public string UserIsWriting { get => userIsWriting; set => Set(ref userIsWriting, value); }
+
+        public Message LastMessage { get => lastMessage; set => Set(ref lastMessage, value); }
+
+        public bool IsMute { get => isMute; set => Set(ref isMute, value); }
+
+        public abstract bool SetOnlineState(int userId, bool state);
+
+        public abstract void MessageIsWriting(Nullable<int> userId);
+
+        public abstract SourceMessage GetMessageType(int clientId, int senderId, Message message);
+
+        public abstract void UserLeft(int userId);
+
+        public abstract void RemoveUser(AvailableUser user);
+
+        public abstract AvailableUser FindUser(Nullable<int> userId);
 
         private async System.Threading.Tasks.Task<ImageMessage> LoadImageFromClient(FileMessage fileMessage)
         {
@@ -176,33 +198,7 @@ namespace Client.Models
 
             return imageMessage;
         }
-
-
-        public int SqlId { get; set; }
-
-        public int ClientId { get; set; }
-
-        public ObservableCollection<SourceMessage> Messages { get => messages; set => Set(ref messages, value); }
-
-        public int Count { get => count; set => Set(ref count, value); }
-
-        public string UserIsWriting { get => userIsWriting; set => Set(ref userIsWriting, value); }
-
-        public Message LastMessage { get => lastMessage; set => Set(ref lastMessage, value); }
-
-        public abstract bool SetOnlineState(int userId, bool state);
-
-        public abstract void MessageIsWriting(Nullable<int> userId);
-
-        public abstract SourceMessage GetMessageType(int clientId, int senderId, Message message);
-
-        public abstract void UserLeft(int userId);
-
-        public abstract void RemoveUser(AvailableUser user);
-
-        public abstract AvailableUser FindUser(Nullable<int> userId);
-
-
+        
         protected void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
         {
             prop = value;
@@ -235,7 +231,7 @@ namespace Client.Models
             User = user;
         }
 
-        public ChatOne(IEnumerable<SourceMessage> messages, AvailableUser user, int count) : base(messages, count)
+        public ChatOne(IEnumerable<SourceMessage> messages, AvailableUser user) : base(messages)
         {
             User = user;
         }
