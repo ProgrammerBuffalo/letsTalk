@@ -1061,7 +1061,7 @@ namespace letsTalk
                         {
                             bool isGroup = sqlDataReader.GetBoolean(4);
                             DateTime dateTime = DateTime.MinValue;
-                            DateTime.TryParse(sqlDataReader.GetSqlDateTime(5).ToString(), out dateTime);
+ 
                             bool isLeft = sqlDataReader.GetBoolean(6);
                             string chatName = null;
                             if (isGroup)
@@ -1078,6 +1078,7 @@ namespace letsTalk
 
                             if (chat == null)
                             {
+
                                 usersInChatroom.Add(new Chatroom()
                                 {
                                     ChatSqlId = chatId,
@@ -1655,6 +1656,35 @@ namespace letsTalk
         public void ChangeChatroomName(int sqlId, string newName)
         {
 
+        }
+
+        public Dictionary<int, string> SearchUsersByName(string regex)
+        {
+            Dictionary<int, string> users = new Dictionary<int, string>();
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(connection_string))
+                {
+                    sqlConnection.Open();
+
+                    SqlCommand sqlCommand = new SqlCommand(@"SELECT Users.Id, Users.Name FROM Users WHERE Users.Name LIKE @regex + '%'", sqlConnection);
+                    sqlCommand.Parameters.Add("@regex", SqlDbType.NVarChar).Value = regex;
+
+                    using (SqlDataReader dataReader = sqlCommand.ExecuteReader())
+                    {
+                        while (dataReader.Read())
+                        {
+                            users.Add(dataReader.GetInt32(0), dataReader.GetString(1));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return users;
         }
     }
 }

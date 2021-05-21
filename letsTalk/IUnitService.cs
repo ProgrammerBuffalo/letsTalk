@@ -36,5 +36,8 @@ namespace letsTalk
 
         [OperationContract(IsOneWay = true)]
         void ChatAvatarDelete(int chatId);
+
+        [OperationContract(IsOneWay = false)]
+        Dictionary<int, string> SearchUsersByName(string regex);
     }
 }

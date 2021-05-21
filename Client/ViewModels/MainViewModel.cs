@@ -93,29 +93,15 @@ namespace Client.ViewModels
         {
             try
             {
-                client.DownloadAvatarAsync();
                 AddUC.Invoke(currentView);
+                client.DownloadAvatarAsync();
                 await LoadChatroomsAsync();
+
                 foreach (var item in chats)
                 {
                     if (item is ChatGroup)
-                        DownloadChatAvatarAsync(item as ChatGroup);
-
-                    item.LastMessage = await Utility.MessageLoader.LoadMessage(item, client.SqlId, 1, 1);
-                    if(item.LastMessage is TextMessage)
-                    {
-                        TextMessage textMessage = item.LastMessage as TextMessage;
-                        DateTime dateTime = DateTime.MinValue;
-                        if(DateTime.TryParse(textMessage.Text, out dateTime))
-                        {
-                            dateTime = new ChatService.UnitClient().FindUserJoin(this.client.SqlId, item.SqlId);
-                            item.LastMessage = new TextMessage("You are added", dateTime);
-                        }
-                    }
+                        DownloadChatAvatarAsync(item as ChatGroup);                 
                 }
-
-                Chats.Sort((a, b) => { return b.LastMessage.Date.CompareTo(a.LastMessage.Date); });
-
             }
             catch (FaultException<ConnectionExceptionFault> ex)
             {
@@ -400,7 +386,7 @@ namespace Client.ViewModels
         private async Task LoadChatroomsAsync()
         {
             Dictionary<Chatroom, UserInChat[]> chatrooms = await ChatClient.FindAllChatroomsForClientAsync(client.SqlId);
-            await System.Threading.Tasks.Task.Run(() =>
+            await System.Threading.Tasks.Task.Run(async () =>
             {
                 List<Models.Chat> clientChatrooms = new List<Models.Chat>();
                 foreach (Chatroom key in chatrooms.Keys)
@@ -446,7 +432,7 @@ namespace Client.ViewModels
 
                             availableUsers.Add(user);
                         }
-                        App.Current.Dispatcher.Invoke(() => Chats.Add(new ChatGroup(key.ChatSqlId, key.ChatName, availableUsers) { CanWrite = canWrite }));
+                        clientChatrooms.Add(new ChatGroup(key.ChatSqlId, key.ChatName, availableUsers) { CanWrite = canWrite });
                     }
                     else
                     {
@@ -468,9 +454,34 @@ namespace Client.ViewModels
                                 user.Image = new BitmapImage(new Uri("Resources/user.png", UriKind.Relative));
                             });
                         }
-                        App.Current.Dispatcher.Invoke(() => Chats.Add(new ChatOne(key.ChatSqlId, user) { CanWrite = !friend.IsLeft }));
+                        clientChatrooms.Add(new ChatOne(key.ChatSqlId, user) { CanWrite = !friend.IsLeft });
                     }
                 }
+
+                foreach (var item in clientChatrooms)
+                {
+                    item.LastMessage = await Utility.MessageLoader.LoadMessage(item, client.SqlId, 1, 1);
+                    if (item.LastMessage is TextMessage)
+                    {
+                        TextMessage textMessage = item.LastMessage as TextMessage;
+                        DateTime dateTime = DateTime.MinValue;
+                        if (DateTime.TryParse(textMessage.Text, out dateTime))
+                        {
+                            dateTime = new ChatService.UnitClient().FindUserJoin(this.client.SqlId, item.SqlId);
+                            item.LastMessage = new TextMessage("You are added", dateTime);
+                        }
+                    }
+                }
+                clientChatrooms.Sort((a, b) => { return b.LastMessage.Date.CompareTo(a.LastMessage.Date); });
+
+                App.Current.Dispatcher.Invoke(() =>
+                {
+
+                    foreach (var item in clientChatrooms)
+                    {
+                        Chats.Add(item);
+                    }
+                });
             });
 
         }

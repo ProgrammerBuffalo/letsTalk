@@ -125,7 +125,25 @@ namespace Client.ViewModels
 
         private void SearchUsersFromDB(object obj)
         {
-            throw new NotImplementedException();
+            offset = 0;
+
+            ChatService.UnitClient unitClient = new ChatService.UnitClient();
+            Dictionary<int, string> users = unitClient.SearchUsersByName(SearchUsersText);
+
+            if (users.Count == 0)
+                return;
+
+            var it = users.GetEnumerator();
+            for (int i = 0; i < users.Count; i++)
+            {
+                it.MoveNext();
+                if (Users.FirstOrDefault(u => u.SqlId == it.Current.Key) == null && AllUsers.FirstOrDefault(u => u.SqlId == it.Current.Key) == null)
+                {
+                    AvailableUser availableUser = new AvailableUser(it.Current.Key, it.Current.Value);
+                    AllUsers.Add(availableUser);
+                    mainVM.DownloadUserAvatarAsync(availableUser);
+                }
+            }
         }
 
         private async void ChangeImageAsync(object param)

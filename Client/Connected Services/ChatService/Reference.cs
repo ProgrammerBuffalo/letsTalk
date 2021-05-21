@@ -811,6 +811,12 @@ namespace Client.ChatService {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IUnitService/Unit/ChatAvatarDelete")]
         System.Threading.Tasks.Task ChatAvatarDeleteAsync(int chatId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/SearchUsersByName", ReplyAction="letsTalk.IUnitService/Unit/SearchUsersByNameResponse")]
+        System.Collections.Generic.Dictionary<int, string> SearchUsersByName(string regex);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/SearchUsersByName", ReplyAction="letsTalk.IUnitService/Unit/SearchUsersByNameResponse")]
+        System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> SearchUsersByNameAsync(string regex);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -903,6 +909,14 @@ namespace Client.ChatService {
         public System.Threading.Tasks.Task ChatAvatarDeleteAsync(int chatId) {
             return base.Channel.ChatAvatarDeleteAsync(chatId);
         }
+        
+        public System.Collections.Generic.Dictionary<int, string> SearchUsersByName(string regex) {
+            return base.Channel.SearchUsersByName(regex);
+        }
+        
+        public System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> SearchUsersByNameAsync(string regex) {
+            return base.Channel.SearchUsersByNameAsync(regex);
+        }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -970,6 +984,12 @@ namespace Client.ChatService {
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/FindAllChatroomsForClient", ReplyAction="letsTalk.IChatService/Chat/FindAllChatroomsForClientResponse")]
         System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<Client.ChatService.Chatroom, Client.ChatService.UserInChat[]>> FindAllChatroomsForClientAsync(int userSqlId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/ChangeChatroomName")]
+        void ChangeChatroomName(int sqlId, string newName);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/ChangeChatroomName")]
+        System.Threading.Tasks.Task ChangeChatroomNameAsync(int sqlId, string newName);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1115,6 +1135,14 @@ namespace Client.ChatService {
         
         public System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<Client.ChatService.Chatroom, Client.ChatService.UserInChat[]>> FindAllChatroomsForClientAsync(int userSqlId) {
             return base.Channel.FindAllChatroomsForClientAsync(userSqlId);
+        }
+        
+        public void ChangeChatroomName(int sqlId, string newName) {
+            base.Channel.ChangeChatroomName(sqlId, newName);
+        }
+        
+        public System.Threading.Tasks.Task ChangeChatroomNameAsync(int sqlId, string newName) {
+            return base.Channel.ChangeChatroomNameAsync(sqlId, newName);
         }
     }
     
