@@ -62,6 +62,9 @@
   <wsdl:message name="Chat_FindAllChatroomsForClient_OutputMessage">
     <wsdl:part name="parameters" element="tns:FindAllChatroomsForClientResponse" />
   </wsdl:message>
+  <wsdl:message name="Chat_ChangeChatroomName_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeChatroomName" />
+  </wsdl:message>
   <wsdl:message name="Chat_NotifyUserIsOnline_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:NotifyUserIsOnline" />
   </wsdl:message>
@@ -133,6 +136,9 @@
     <wsdl:operation name="FindAllChatroomsForClient">
       <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/FindAllChatroomsForClient" message="tns:Chat_FindAllChatroomsForClient_InputMessage" />
       <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/FindAllChatroomsForClientResponse" message="tns:Chat_FindAllChatroomsForClient_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangeChatroomName">
+      <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/ChangeChatroomName" message="tns:Chat_ChangeChatroomName_InputMessage" />
     </wsdl:operation>
     <wsdl:operation name="NotifyUserIsOnline">
       <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/NotifyUserIsOnline" message="tns:Chat_NotifyUserIsOnline_OutputCallbackMessage" />

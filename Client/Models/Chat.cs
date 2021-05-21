@@ -35,6 +35,9 @@ namespace Client.Models
                         if (e.NewItems[0] is SystemMessage)
                             return;
 
+                        if (e.NewItems[0] is TextMessage)
+                            return;
+
                         await System.Threading.Tasks.Task.Run(() =>
                         {
                             SourceMessage sourceMessage = e.NewItems[0] as SourceMessage;

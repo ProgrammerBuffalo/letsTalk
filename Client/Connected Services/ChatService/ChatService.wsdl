@@ -164,6 +164,12 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="ChangeChatroomName">
+      <soap12:operation soapAction="letsTalk.IChatService/Chat/ChangeChatroomName" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
     <wsdl:operation name="NotifyUserIsOnline">
       <soap12:operation soapAction="letsTalk.IChatService/Chat/NotifyUserIsOnline" style="document" />
       <wsdl:output>
@@ -290,6 +296,27 @@
     </wsdl:operation>
     <wsdl:operation name="FindUserJoin">
       <soap12:operation soapAction="letsTalk.IUnitService/Unit/FindUserJoin" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UserAvatarDelete">
+      <soap12:operation soapAction="letsTalk.IUnitService/Unit/UserAvatarDelete" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="ChatAvatarDelete">
+      <soap12:operation soapAction="letsTalk.IUnitService/Unit/ChatAvatarDelete" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="SearchUsersByName">
+      <soap12:operation soapAction="letsTalk.IUnitService/Unit/SearchUsersByName" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

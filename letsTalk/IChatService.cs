@@ -63,6 +63,9 @@ namespace letsTalk
 
         [OperationContract(IsOneWay = false)]
         Dictionary<Chatroom, List<UserInChat>> FindAllChatroomsForClient(int userSqlId);
+
+        [OperationContract(IsOneWay = true)]
+        void ChangeChatroomName(int sqlId, string newName);
     }
 
     public interface IChatCallback
@@ -110,5 +113,6 @@ namespace letsTalk
         //Оповещение пользователей, что была изменена аватарка клиента
         [OperationContract(IsOneWay = true)]
         void NotifyСhatroomAvatarIsChanged(int chatId);
+
     }
 }

@@ -54,6 +54,18 @@
   <wsdl:message name="Unit_FindUserJoin_OutputMessage">
     <wsdl:part name="parameters" element="tns:FindUserJoinResponse" />
   </wsdl:message>
+  <wsdl:message name="Unit_UserAvatarDelete_InputMessage">
+    <wsdl:part name="parameters" element="tns:UserAvatarDelete" />
+  </wsdl:message>
+  <wsdl:message name="Unit_ChatAvatarDelete_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChatAvatarDelete" />
+  </wsdl:message>
+  <wsdl:message name="Unit_SearchUsersByName_InputMessage">
+    <wsdl:part name="parameters" element="tns:SearchUsersByName" />
+  </wsdl:message>
+  <wsdl:message name="Unit_SearchUsersByName_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SearchUsersByNameResponse" />
+  </wsdl:message>
   <wsdl:portType name="Unit">
     <wsdl:operation name="Authorization">
       <wsdl:input wsaw:Action="letsTalk.IUnitService/Unit/Authorization" message="tns:Unit_Authorization_InputMessage" />
@@ -81,6 +93,16 @@
     <wsdl:operation name="FindUserJoin">
       <wsdl:input wsaw:Action="letsTalk.IUnitService/Unit/FindUserJoin" message="tns:Unit_FindUserJoin_InputMessage" />
       <wsdl:output wsaw:Action="letsTalk.IUnitService/Unit/FindUserJoinResponse" message="tns:Unit_FindUserJoin_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UserAvatarDelete">
+      <wsdl:input wsaw:Action="letsTalk.IUnitService/Unit/UserAvatarDelete" message="tns:Unit_UserAvatarDelete_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ChatAvatarDelete">
+      <wsdl:input wsaw:Action="letsTalk.IUnitService/Unit/ChatAvatarDelete" message="tns:Unit_ChatAvatarDelete_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchUsersByName">
+      <wsdl:input wsaw:Action="letsTalk.IUnitService/Unit/SearchUsersByName" message="tns:Unit_SearchUsersByName_InputMessage" />
+      <wsdl:output wsaw:Action="letsTalk.IUnitService/Unit/SearchUsersByNameResponse" message="tns:Unit_SearchUsersByName_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

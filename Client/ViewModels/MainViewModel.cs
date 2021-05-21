@@ -64,11 +64,12 @@ namespace Client.ViewModels
              {
                  if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
                  {
+                     Models.Chat chat = Chats[Chats.IndexOf(e.NewItems[0] as Models.Chat)];
                      if (e.NewItems[0] is Models.ChatGroup)
                          DownloadChatAvatarAsync(e.NewItems[0] as Models.ChatGroup);
-                     Models.Chat chat = Chats[Chats.IndexOf(e.NewItems[0] as Models.Chat)];
                      chat.LastMessage = new TextMessage("You are added", DateTime.Now);
                  }
+              
              });
         }
 
@@ -92,29 +93,15 @@ namespace Client.ViewModels
         {
             try
             {
-                client.DownloadAvatarAsync();
                 AddUC.Invoke(currentView);
+                client.DownloadAvatarAsync();
                 await LoadChatroomsAsync();
+
                 foreach (var item in chats)
                 {
                     if (item is ChatGroup)
-                        DownloadChatAvatarAsync(item as ChatGroup);
-
-                    item.LastMessage = await Utility.MessageLoader.LoadMessage(item, client.SqlId, 1, 1);
-                    if (item.LastMessage is TextMessage)
-                    {
-                        TextMessage textMessage = item.LastMessage as TextMessage;
-                        DateTime dateTime = DateTime.MinValue;
-                        if (DateTime.TryParse(textMessage.Text, out dateTime))
-                        {
-                            dateTime = new ChatService.UnitClient().FindUserJoin(this.client.SqlId, item.SqlId);
-                            item.LastMessage = new TextMessage("You are added", dateTime);
-                        }
-                    }
+                        DownloadChatAvatarAsync(item as ChatGroup);                 
                 }
-
-                Chats.Sort((a, b) => { return b.LastMessage.Date.CompareTo(a.LastMessage.Date); });
-
             }
             catch (FaultException<ConnectionExceptionFault> ex)
             {
@@ -129,11 +116,11 @@ namespace Client.ViewModels
         public void CancelImage(object param)
         {
             client.UserImage = new BitmapImage(new Uri("Resources/user.png", UriKind.Relative));
+            new ChatService.UnitClient().UserAvatarDelete(client.SqlId);
         }
 
         private async void ChangeAvatar(object obj)
         {
-            MessageBox.Show("!!!");
             UploadFileInfo uploadFileInfo = null;
 
             try
@@ -242,7 +229,7 @@ namespace Client.ViewModels
                 }
                 chat.LastMessage = new TextMessage("You are removed", DateTime.Now);
                 Chats.Move(Chats.IndexOf(chat), 0);
-                chat.CanWrite = false;
+                chat.CanWrite = false;                
             }
 
         }
@@ -339,7 +326,8 @@ namespace Client.ViewModels
             if (chat != null)
                 chat.LastMessage = SystemMessage.UserLeftChat(DateTime.Now, new ChatService.UnitClient().FindUserName(userId)).Message;
             RemoveUserFromChatroom(chatId, userId);
-            if (chats.Where(c => c.FindUser(userId) != null).ToList().Count < 2)
+
+            if (chats.Where(c => c.FindUser(userId) != null).ToList().Count < 1)
             {
                 Nullable<KeyValuePair<int, AvailableUser>> availableUser = Users.FirstOrDefault(u => u.Key == userId);
                 if (availableUser != null)
@@ -349,6 +337,7 @@ namespace Client.ViewModels
                     Users.Remove(availableUser.Value);
                 }
             }
+
         }
 
         public void ReplyMessage(ServiceMessageText message, int chatroomId)
@@ -356,14 +345,17 @@ namespace Client.ViewModels
             var chat = FindChatroom(chatroomId);
             var temp = SelectedChat;
             chat.LastMessage = new TextMessage(message.Text, message.DateTime);
-            Chats.Move(Chats.IndexOf(chat), 0);
 
-            SelectedChat = temp;
+            if(Chats.IndexOf(chat) != 0)
+                Chats.Move(Chats.IndexOf(chat), 0);
 
-            if (SelectedChat == null) return;
+            if (SelectedChat == null)
+                return;
 
             if (SelectedChat.Equals(chat))
                 chat.Messages.Add(chat.GetMessageType(Client.SqlId, message.UserId, new TextMessage(message.Text, message.DateTime)));
+            }
+
         }
 
         public void ReplyMessageIsWriting(Nullable<int> userSqlId, int chatSqlId)
@@ -375,7 +367,13 @@ namespace Client.ViewModels
         {
             var chat = FindChatroom(chatroomId);
             chat.LastMessage = new FileMessage(serviceMessageFile.FileName, serviceMessageFile.DateTime);
-            Chats.Move(Chats.IndexOf(chat), 0);
+
+            if (Chats.IndexOf(chat) != 0)
+                Chats.Move(Chats.IndexOf(chat), 0);
+
+            if (SelectedChat == null)
+                return;
+
             if (SelectedChat.Equals(chat))
                 chat.Messages.Add(chat.GetMessageType(Client.SqlId, serviceMessageFile.UserId, new FileMessage(serviceMessageFile.FileName, serviceMessageFile.DateTime, serviceMessageFile.StreamId)));
         }
@@ -388,7 +386,7 @@ namespace Client.ViewModels
         private async Task LoadChatroomsAsync()
         {
             Dictionary<Chatroom, UserInChat[]> chatrooms = await ChatClient.FindAllChatroomsForClientAsync(client.SqlId);
-            await System.Threading.Tasks.Task.Run(() =>
+            await System.Threading.Tasks.Task.Run(async () =>
             {
                 List<Models.Chat> clientChatrooms = new List<Models.Chat>();
                 foreach (Chatroom key in chatrooms.Keys)
@@ -434,7 +432,7 @@ namespace Client.ViewModels
 
                             availableUsers.Add(user);
                         }
-                        App.Current.Dispatcher.Invoke(() => Chats.Add(new ChatGroup(key.ChatSqlId, key.ChatName, availableUsers) { CanWrite = canWrite }));
+                        clientChatrooms.Add(new ChatGroup(key.ChatSqlId, key.ChatName, availableUsers) { CanWrite = canWrite });
                     }
                     else
                     {
@@ -456,9 +454,34 @@ namespace Client.ViewModels
                                 user.Image = new BitmapImage(new Uri("Resources/user.png", UriKind.Relative));
                             });
                         }
-                        App.Current.Dispatcher.Invoke(() => Chats.Add(new ChatOne(key.ChatSqlId, user) { CanWrite = !friend.IsLeft }));
+                        clientChatrooms.Add(new ChatOne(key.ChatSqlId, user) { CanWrite = !friend.IsLeft });
                     }
                 }
+
+                foreach (var item in clientChatrooms)
+                {
+                    item.LastMessage = await Utility.MessageLoader.LoadMessage(item, client.SqlId, 1, 1);
+                    if (item.LastMessage is TextMessage)
+                    {
+                        TextMessage textMessage = item.LastMessage as TextMessage;
+                        DateTime dateTime = DateTime.MinValue;
+                        if (DateTime.TryParse(textMessage.Text, out dateTime))
+                        {
+                            dateTime = new ChatService.UnitClient().FindUserJoin(this.client.SqlId, item.SqlId);
+                            item.LastMessage = new TextMessage("You are added", dateTime);
+                        }
+                    }
+                }
+                clientChatrooms.Sort((a, b) => { return b.LastMessage.Date.CompareTo(a.LastMessage.Date); });
+
+                App.Current.Dispatcher.Invoke(() =>
+                {
+
+                    foreach (var item in clientChatrooms)
+                    {
+                        Chats.Add(item);
+                    }
+                });
             });
 
         }
@@ -584,7 +607,9 @@ namespace Client.ViewModels
 
         public void NotifyСhatroomAvatarIsChanged(int chatId)
         {
-            throw new NotImplementedException();
+            var chat = FindChatroom(chatId);
+            if (chat != null)
+                DownloadChatAvatarAsync(chat as ChatGroup);
         }
 
         public void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
