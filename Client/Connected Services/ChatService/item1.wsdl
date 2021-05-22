@@ -23,6 +23,9 @@
   <wsdl:message name="Chat_CreateChatroom_OutputMessage">
     <wsdl:part name="parameters" element="tns:CreateChatroomResponse" />
   </wsdl:message>
+  <wsdl:message name="Chat_CreateChatroom_ChatroomAlreadyExistExceptionFaultFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/letsTalk" name="detail" element="q1:ChatroomAlreadyExistExceptionFault" />
+  </wsdl:message>
   <wsdl:message name="Chat_DeleteChatroom_InputMessage">
     <wsdl:part name="parameters" element="tns:DeleteChatroom" />
   </wsdl:message>
@@ -45,7 +48,7 @@
     <wsdl:part name="parameters" element="tns:AddedUserToChatIsOnlineResponse" />
   </wsdl:message>
   <wsdl:message name="Chat_AddedUserToChatIsOnline_AddChatExceptionFaultFault_FaultMessage">
-    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/letsTalk" name="detail" element="q1:AddChatExceptionFault" />
+    <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/letsTalk" name="detail" element="q2:AddChatExceptionFault" />
   </wsdl:message>
   <wsdl:message name="Chat_Connect_InputMessage">
     <wsdl:part name="parameters" element="tns:Connect" />
@@ -54,7 +57,7 @@
     <wsdl:part name="parameters" element="tns:ConnectResponse" />
   </wsdl:message>
   <wsdl:message name="Chat_Connect_ConnectionExceptionFaultFault_FaultMessage">
-    <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/letsTalk" name="detail" element="q2:ConnectionExceptionFault" />
+    <wsdl:part xmlns:q3="http://schemas.datacontract.org/2004/07/letsTalk" name="detail" element="q3:ConnectionExceptionFault" />
   </wsdl:message>
   <wsdl:message name="Chat_FindAllChatroomsForClient_InputMessage">
     <wsdl:part name="parameters" element="tns:FindAllChatroomsForClient" />
@@ -109,6 +112,7 @@
     <wsdl:operation name="CreateChatroom">
       <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/CreateChatroom" message="tns:Chat_CreateChatroom_InputMessage" />
       <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/CreateChatroomResponse" message="tns:Chat_CreateChatroom_OutputMessage" />
+      <wsdl:fault wsaw:Action="letsTalk.IChatService/Chat/CreateChatroomChatroomAlreadyExistExceptionFaultFault" name="ChatroomAlreadyExistExceptionFaultFault" message="tns:Chat_CreateChatroom_ChatroomAlreadyExistExceptionFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="DeleteChatroom">
       <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/DeleteChatroom" message="tns:Chat_DeleteChatroom_InputMessage" />

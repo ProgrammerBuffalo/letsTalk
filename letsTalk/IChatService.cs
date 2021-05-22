@@ -39,6 +39,7 @@ namespace letsTalk
         void SendMessageText(ServiceMessageText message, int chatroomId);
 
         [OperationContract(IsOneWay = false)]
+        [FaultContract(typeof(ChatroomAlreadyExistExceptionFault))]    
         int CreateChatroom(List<int> users, string chatName);
 
         [OperationContract(IsOneWay = true)]

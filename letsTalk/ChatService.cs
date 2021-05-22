@@ -511,7 +511,17 @@ namespace letsTalk
                         sqlCommandAddUsersToChatroom.Parameters.Add(parameter);
                         sqlCommandAddUsersToChatroom.Parameters.Add("@ChatID", SqlDbType.Int).Value = chat_id;
 
-                        sqlCommandAddUsersToChatroom.ExecuteNonQuery();
+                        try
+                        {
+                            sqlCommandAddUsersToChatroom.ExecuteNonQuery();
+                        }
+                        catch (Exception)
+                        {
+                            ChatroomAlreadyExistExceptionFault chatroomAlreadyExistExceptionFault = new ChatroomAlreadyExistExceptionFault();
+
+                            throw new FaultException<ChatroomAlreadyExistExceptionFault>(chatroomAlreadyExistExceptionFault, chatroomAlreadyExistExceptionFault.Message);
+
+                        }
 
                         SqlCommand sqlCommandAddFileForContentXML = new SqlCommand(@"INSERT INTO DataFT(file_stream, name, path_locator)                                                                                  
                                                                                      OUTPUT INSERTED.stream_id
@@ -604,6 +614,10 @@ namespace letsTalk
 
                 Console.WriteLine("Chatroom has been created (" + OperationContext.Current.Channel.GetHashCode() + ")");
                 return chat_id;
+            }
+            catch(FaultException<ChatroomAlreadyExistExceptionFault> fe)
+            {
+                throw fe;
             }
             catch (Exception ex)
             {

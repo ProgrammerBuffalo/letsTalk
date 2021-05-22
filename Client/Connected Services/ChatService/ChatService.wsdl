@@ -103,6 +103,9 @@
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
+      <wsdl:fault name="ChatroomAlreadyExistExceptionFaultFault">
+        <soap12:fault use="literal" name="ChatroomAlreadyExistExceptionFaultFault" namespace="" />
+      </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="DeleteChatroom">
       <soap12:operation soapAction="letsTalk.IChatService/Chat/DeleteChatroom" style="document" />
