@@ -659,25 +659,13 @@ namespace Client.ViewModels
 
         private void Notify(Models.Chat chat)
         {
-            if (!mainWindow.IsActive && settings.CanNotify)
+            if (!mainWindow.IsVisible && settings.CanNotify)
             {
                 UserControls.NotifyUC notifyUC = new UserControls.NotifyUC();
                 notifyUC.DataContext = chat;
                 notifyManager.Show(notifyUC, "", new TimeSpan(0, 0, 5));
-
-                if (chat.CanNotify(settings))
-                    settings.PlayRington(chat.GetNotifyPath(settings));
             }
         }
-        //private void Notify()
-        //{
-        //    if (!mainWindow.IsActive && settings.CanNotify)
-        //    {
-        //        UserControls.NotifyUC notifyUC = new UserControls.NotifyUC();
-        //        notifyUC.DataContext = new Models.ChatGroup(1, "EldarGroup", new AvailableUser[0] { }) { Avatar = new BitmapImage(new Uri("files/avatar2.png", UriKind.Relative)), LastMessage = new FileMessage("lalala.ppt") };
-        //        notifyManager.Show(notifyUC, "", new TimeSpan(0, 0, 8));
-        //    }
-        //}
 
         public void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
         {
