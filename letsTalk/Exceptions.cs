@@ -44,6 +44,19 @@ namespace letsTalk
     }
 
     [DataContract]
+    public class ChatroomAlreadyExistExceptionFault
+    {
+        [DataMember]
+        public string Message { get; private set; }
+
+        public ChatroomAlreadyExistExceptionFault()
+        {
+            Message = "Chatroom already exsists, cannot create a new one";
+        }
+
+    }
+
+    [DataContract]
     public class AuthorizationExceptionFault
     {
         [DataMember]

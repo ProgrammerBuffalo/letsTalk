@@ -139,6 +139,10 @@ namespace Client.ViewModels
                     chat = new ChatOne(sqlId, usersToAdd[0]) { CanWrite = true };
                     mainVM.Chats.Insert(0, chat);
                 }
+                catch(FaultException<ChatroomAlreadyExistExceptionFault> fe)
+                {
+                    MessageBox.Show(fe.Message);
+                }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);

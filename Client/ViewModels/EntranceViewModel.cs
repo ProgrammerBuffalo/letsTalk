@@ -98,10 +98,14 @@ namespace Client.ViewModels
                     window.Show();
                     entranceWindow.Close();
                 }
-                catch (FaultException<ChatService.AuthorizationExceptionFault> ex)
+                catch (FaultException<ChatService.ConnectionExceptionFault> ex)
                 {
                     System.Windows.MessageBox.Show(ex.Message);
                     Info = ex.Message;
+                }
+                catch(Exception ex)
+                {
+                    System.Windows.MessageBox.Show(ex.Message);
                 }
             }
             else
