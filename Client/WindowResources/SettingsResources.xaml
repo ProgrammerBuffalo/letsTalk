@@ -12,6 +12,14 @@
         <Setter Property="FontWeight" Value="Bold"/>
     </Style>
 
+    <Style x:Key="MiniHeaderStyle" TargetType="TextBlock">
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontWeight" Value="DemiBold"/>
+        <Setter Property="Foreground" Value="MintCream"/>
+    </Style>
+
     <Style x:Key="ButtonSettingsStyle" BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
         <Setter Property="Height" Value="40"/>
         <Setter Property="MinWidth" Value="120"/>

@@ -32,9 +32,9 @@ namespace Client.ViewModels
         private Chat chat;
 
         private MediaMessage curMediaMessage;
-        private MediaPlayer player;
+        //private MediaPlayer player;
 
-        private Timer timer;
+        //private Timer timer;
 
         private string isWritingText;
         private string messageText = "";
@@ -42,43 +42,50 @@ namespace Client.ViewModels
         private Visibility loaderVisibility;
         private Message inputMessage;
 
+        private bool? isMute;
+
         public ChatViewModel(MainViewModel mainVM)
         {
             this.mainVM = mainVM;
             Chat = mainVM.SelectedChat;
             Chat.ClientId = mainVM.Client.SqlId;
+
             Settings = Settings.Instance;
+            IsMute = Settings.GetMute(chat.SqlId);
+
             InputMessage = new TextMessage();
-            LoaderVisibility = Visibility.Hidden;
             this.chat.Messages.Clear();
+
             chat._messageCount = 15;
             chat._messageOffset = 0;
             chat._offsetDate = DateTime.Now;
             _countLeft = chat._messageCount;
-            
+
+            LoaderVisibility = Visibility.Hidden;
 
             //client = ClientUserInfo.getInstance();
             //ChatClient = chatClient;
             //sendType = SendText;
 
-            player = new MediaPlayer();
-            player.MediaEnded += MediaEnded;
+            //player = new MediaPlayer();
+            //player.MediaEnded += MediaEnded;
 
-            timer = new Timer();
-            timer.Elapsed += MediaPosTimer;
-            timer.Interval = 500;
+            //timer = new Timer();
+            //timer.Elapsed += MediaPosTimer;
+            //timer.Interval = 500;
 
             TextBox_KeyDownCommand = new Command(TextBox_KeyDown);
             TextBox_KeyUpCommand = new Command(TextBox_KeyUp);
             TextBox_EnterPressedCommand = new Command(TextBox_EnterPressed);
 
-            MediaPlayCommand = new Command(MediaPlay);
-            MediaPosChangedCommand = new Command(MediaPosChanged);
+            //MediaPlayCommand = new Command(MediaPlay);
+            //MediaPosChangedCommand = new Command(MediaPosChanged);
             //SendCommand = new Command(Send);
             OpenFileCommand = new Command(OpenFile);
             UnloadCommand = new Command(Unload);
             LoadCommand = new Command(Load);
 
+            MuteChangedCommand = new Command(MuteChanged);
             EditChatCommand = new Command(EditChat);
             LeaveChatCommand = new Command(LeaveChat);
 
@@ -93,13 +100,14 @@ namespace Client.ViewModels
         public ICommand TextBox_KeyUpCommand { get; }
         public ICommand TextBox_EnterPressedCommand { get; }
 
-        public ICommand MediaPlayCommand { get; }
-        public ICommand MediaPosChangedCommand { get; }
+        //public ICommand MediaPlayCommand { get; }
+        //public ICommand MediaPosChangedCommand { get; }
         //public ICommand SendCommand { get; }
         public ICommand OpenFileCommand { get; }
         public ICommand OpenSmileCommand { get; }
         public ICommand UnloadCommand { get; }
 
+        public ICommand MuteChangedCommand { get; }
         public ICommand EditChatCommand { get; }
         public ICommand LeaveChatCommand { get; }
 
@@ -110,13 +118,15 @@ namespace Client.ViewModels
 
         public Chat Chat { get => chat; set => Set(ref chat, value); }
         public Settings Settings { get; }
-        public string IsWritingText { get => isWritingText; set => Set(ref isWritingText, value); }
 
+        public string IsWritingText { get => isWritingText; set => Set(ref isWritingText, value); }
         public Message InputMessage { get => inputMessage; set => Set(ref inputMessage, value); }
         public string MessageText { get => messageText; set => Set(ref messageText, value); }
-        public System.Windows.Controls.ScrollViewer Scroll { get; set; }
+        public bool? IsMute { get => isMute; set => Set(ref isMute, value); }
 
         public Visibility LoaderVisibility { get => loaderVisibility; set => Set(ref loaderVisibility, value); }
+        public System.Windows.Controls.ScrollViewer Scroll { get; set; }
+
 
         public void SetScrollViewer(ref System.Windows.Controls.ScrollViewer scroll)
         {
@@ -180,20 +190,25 @@ namespace Client.ViewModels
             }
         }
 
-        private void MediaEnded(object sender, EventArgs e)
-        {
-            player.Close();
-            timer.Stop();
-            curMediaMessage.CurrentLength = 0;
-            curMediaMessage.IsPlaying = false;
-        }
+        //private void MediaEnded(object sender, EventArgs e)
+        //{
+        //    player.Close();
+        //    timer.Stop();
+        //    curMediaMessage.CurrentLength = 0;
+        //    curMediaMessage.IsPlaying = false;
+        //}
 
-        private void MediaPosTimer(object sender, EventArgs e)
+        //private void MediaPosTimer(object sender, EventArgs e)
+        //{
+        //    App.Current.Dispatcher.Invoke(() =>
+        //    {
+        //        curMediaMessage.CurrentLength = player.Position.Ticks;
+        //    });
+        //}
+
+        private void MuteChanged(object param)
         {
-            App.Current.Dispatcher.Invoke(() =>
-            {
-                curMediaMessage.CurrentLength = player.Position.Ticks;
-            });
+            Settings.AddMute(chat.SqlId, isMute);
         }
 
         private void EditChat(object param)
@@ -269,43 +284,43 @@ namespace Client.ViewModels
             }
         }
 
-        private void MediaPlay(object param)
-        {
-            MediaMessage message = (MediaMessage)((SourceMessage)param).Message;
-            if (player.Source == null)
-            {
-                curMediaMessage = message;
-                player.Open(new Uri(message.FileName, UriKind.Absolute));
-                player.Position = TimeSpan.FromTicks(message.CurrentLength);
-                player.Play();
-                timer.Start();
-                curMediaMessage.IsPlaying = true;
-            }
-            else if (message != curMediaMessage)
-            {
-                curMediaMessage.IsPlaying = false;
-                curMediaMessage.CurrentLength = 0;
-                player.Close();
-                player.Open(new Uri(message.FileName, UriKind.Absolute));
-                player.Position = TimeSpan.FromTicks(message.CurrentLength);
-                player.Play();
-                timer.Start();
-                curMediaMessage = message;
-                curMediaMessage.IsPlaying = true;
-            }
-            else if (curMediaMessage.IsPlaying)
-            {
-                player.Pause();
-                timer.Stop();
-                curMediaMessage.IsPlaying = false;
-            }
-            else
-            {
-                player.Play();
-                timer.Start();
-                curMediaMessage.IsPlaying = true;
-            }
-        }
+        //private void MediaPlay(object param)
+        //{
+        //    MediaMessage message = (MediaMessage)((SourceMessage)param).Message;
+        //    if (player.Source == null)
+        //    {
+        //        curMediaMessage = message;
+        //        player.Open(new Uri(message.FileName, UriKind.Absolute));
+        //        player.Position = TimeSpan.FromTicks(message.CurrentLength);
+        //        player.Play();
+        //        timer.Start();
+        //        curMediaMessage.IsPlaying = true;
+        //    }
+        //    else if (message != curMediaMessage)
+        //    {
+        //        curMediaMessage.IsPlaying = false;
+        //        curMediaMessage.CurrentLength = 0;
+        //        player.Close();
+        //        player.Open(new Uri(message.FileName, UriKind.Absolute));
+        //        player.Position = TimeSpan.FromTicks(message.CurrentLength);
+        //        player.Play();
+        //        timer.Start();
+        //        curMediaMessage = message;
+        //        curMediaMessage.IsPlaying = true;
+        //    }
+        //    else if (curMediaMessage.IsPlaying)
+        //    {
+        //        player.Pause();
+        //        timer.Stop();
+        //        curMediaMessage.IsPlaying = false;
+        //    }
+        //    else
+        //    {
+        //        player.Play();
+        //        timer.Start();
+        //        curMediaMessage.IsPlaying = true;
+        //    }
+        //}
 
         private void OpenFile(object param)
         {
@@ -352,12 +367,12 @@ namespace Client.ViewModels
             await LoadMore();
         }
 
-        private void MediaPosChanged(object param)
-        {
-            MediaMessage message = (MediaMessage)((SourceMessage)param).Message;
-            if (message == curMediaMessage)
-                player.Position = TimeSpan.FromTicks(message.CurrentLength);
-        }
+        //private void MediaPosChanged(object param)
+        //{
+        //    MediaMessage message = (MediaMessage)((SourceMessage)param).Message;
+        //    if (message == curMediaMessage)
+        //        player.Position = TimeSpan.FromTicks(message.CurrentLength);
+        //}
 
         private void Unload(object param)
         {
@@ -369,7 +384,7 @@ namespace Client.ViewModels
                     curMediaMessage.IsPlaying = false;
                     curMediaMessage.CurrentLength = 0;
                     curMediaMessage = null;
-                    player.Close();
+                    //player.Close();
                 }
                 chat.Messages.Clear();
                 chat._messageOffset = 0;
@@ -384,35 +399,3 @@ namespace Client.ViewModels
         }
     }
 }
-
-//private void SendFile(string path)
-//{
-//    string extn = path.Substring(path.LastIndexOf('.'));
-
-
-//    if (extn == ".mp3" || extn == ".wave")
-//    {
-//        Chat.Messages.Add(new UserMessage(new MediaMessage(path, DateTime.Now)));
-//        return;
-//    }
-
-//    ChatService.FileClient fileClient = new ChatService.FileClient();
-
-//    FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
-//    Guid stream_id = Guid.Empty;
-//    try
-//    {
-//        if (fileStream.CanRead)
-//            stream_id = fileClient.FileUpload(Chat.SqlId, path, mainVM.Client.SqlId, fileStream);
-//    }
-//    catch (Exception ex) { MessageBox.Show(ex.Message); }
-//    finally
-//    {
-//        if (fileStream != null)
-//        {
-//            fileStream.Close();
-//        }
-//    }
-
-//    Chat.Messages.Add(new SessionSendedMessage(new FileMessage(path, DateTime.Now, stream_id)));
-//}

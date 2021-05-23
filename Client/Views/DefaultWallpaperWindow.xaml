@@ -52,7 +52,7 @@
         <ListView Background="AntiqueWhite"
             x:Name="wallpapers"
             Grid.ColumnSpan="2"
-            ItemsSource="{Binding Path=Settings.Wallpapers}"
+            ItemsSource="{Binding Path=DefautWallpapers}"
             ItemContainerStyle="{StaticResource WallpaperContainerStyle}"
             ItemsPanel="{StaticResource WallpaperItemTemplate}"
             ItemTemplate="{StaticResource WallpaperDataTemplate}"

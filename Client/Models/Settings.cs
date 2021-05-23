@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Windows.Media;
 using System.Xml;
 
 namespace Client.Models
@@ -11,49 +13,35 @@ namespace Client.Models
         private static Settings instance;
         private int messageLoadCount;
         private string selectedWallpaper;
-        private Rington selectedRington;
+        private Rington selectedUserRington;
+        private Rington selectedGroupRington;
 
-        private bool isUserMute;
-        private bool isGroupMute;
+        private bool canNotify;
+        private bool canUserNotify;
+        private bool canGroupNotify;
+
+        private MediaPlayer player;
 
         private Settings()
         {
+            player = new MediaPlayer();
+
             XmlDocument document = new XmlDocument();
             document.Load("Settings/user-settings.xml");
 
             messageLoadCount = int.Parse(document.DocumentElement["MessageLoadCount"].InnerText);
             selectedWallpaper = document.DocumentElement["Wallpaper"].InnerText;
-            IsUserMute = bool.Parse(document.DocumentElement["IsUserMute"].InnerText);
-            IsGroupMute = bool.Parse(document.DocumentElement["IsGroupMute"].InnerText);
-            selectedRington = new Rington();
-            selectedRington.Path = document.DocumentElement["Rington"].InnerText;
-            selectedRington.Name = document.DocumentElement["RingtonName"].InnerText;
+            canNotify = bool.Parse(document.DocumentElement["CanNotify"].InnerText);
+            canUserNotify = bool.Parse(document.DocumentElement["CanUserNotify"].InnerText);
+            canGroupNotify = bool.Parse(document.DocumentElement["CanGroupNotify"].InnerText);
 
-            document.Load("Settings/settings.xml");
+            selectedUserRington = new Rington();
+            selectedUserRington.Name = document.DocumentElement["UserRington"].Attributes["Name"].InnerText;
+            selectedUserRington.Path = document.DocumentElement["UserRington"].Attributes["Path"].InnerText;
 
-            //подгрузака обоев
-            int count = document.DocumentElement.ChildNodes[0].ChildNodes.Count;
-            Wallpapers = new string[count];
-            for (int i = 0; i < count; i++)
-                Wallpapers[i] = document.DocumentElement.ChildNodes[0].ChildNodes[i].InnerText;
-
-            //подгрузка рингтонов
-            count = document.DocumentElement.ChildNodes[1].ChildNodes.Count;
-            Ringtons = new Rington[count];
-            for (int i = 0; i < count; i++)
-            {
-                Ringtons[i] = new Rington(document.DocumentElement.ChildNodes[1].ChildNodes[i].Attributes["Name"].InnerText,
-                    document.DocumentElement.ChildNodes[1].ChildNodes[i].Attributes["Path"].InnerText);
-                if (selectedRington.Name == Ringtons[i].Name) Ringtons[i].IsSelected = true;
-            }
-
-            //подгрузка заглушенных чатов
-            //Mutes = new Dictionary<int, bool>();
-            //for (int i = 0; i < document.DocumentElement["Mutes"].ChildNodes.Count; i++)
-            //{
-            //    Mutes.Add(int.Parse(document.DocumentElement["Mutes"].ChildNodes[i].Attributes["Id"].InnerText),
-            //        bool.Parse(document.DocumentElement["Mutes"].ChildNodes[i].Attributes["IsMute"].InnerText));
-            //}
+            selectedGroupRington = new Rington();
+            selectedGroupRington.Name = document.DocumentElement["GroupRington"].Attributes["Name"].InnerText;
+            selectedGroupRington.Path = document.DocumentElement["GroupRington"].Attributes["Path"].InnerText;
         }
 
         public static Settings Instance
@@ -77,9 +65,6 @@ namespace Client.Models
                 document.Save("Settings/user-settings.xml");
             }
         }
-        public string[] Wallpapers { get; }
-        public Rington[] Ringtons { get; }
-        public Dictionary<int, bool> Mutes { get; }
 
         public string SelectedWallpaper
         {
@@ -94,57 +79,168 @@ namespace Client.Models
             }
         }
 
-        public Rington SelectedRington
+        public Rington SelectedUserRington
         {
-            get => selectedRington;
+            get => selectedUserRington;
             set
             {
-                Set(ref selectedRington, value);
+                Set(ref selectedUserRington, value);
                 XmlDocument document = new XmlDocument();
                 document.Load("Settings/user-settings.xml");
-                document.DocumentElement["Rington"].InnerText = selectedRington.Path;
-                document.DocumentElement["RingtonName"].InnerText = selectedRington.Name;
+                document.DocumentElement["UserRington"].Attributes["Name"].InnerText = value.Name;
+                document.DocumentElement["UserRington"].Attributes["Path"].InnerText = value.Path;
                 document.Save("Settings/user-settings.xml");
             }
         }
 
-        //public bool Notify
-        //{
-        //    get => notify;
-        //    set
-        //    {
-        //        XmlDocument document = new XmlDocument();
-        //        document.Load("Settings/user-settings.xml");
-        //        document.DocumentElement["Notify"].InnerText = notify.ToString();
-        //        document.Save("Settings/user-settings.xml");
-        //        Set(ref notify, value);
-        //    }
-        //}
-
-        public bool IsUserMute
+        public Rington SelectedGroupRington
         {
-            get => isUserMute;
+            get => selectedGroupRington;
             set
             {
-                Set(ref isUserMute, value);
+                Set(ref selectedGroupRington, value);
                 XmlDocument document = new XmlDocument();
                 document.Load("Settings/user-settings.xml");
-                document.DocumentElement["IsUserMute"].InnerText = isUserMute.ToString();
+                document.DocumentElement["GroupRington"].Attributes["Name"].InnerText = value.Name;
+                document.DocumentElement["GroupRington"].Attributes["Path"].InnerText = value.Path;
                 document.Save("Settings/user-settings.xml");
             }
         }
 
-        public bool IsGroupMute
+        public bool CanNotify
         {
-            get => isGroupMute;
+            get => canNotify;
             set
             {
-                Set(ref isGroupMute, value);
+                Set(ref canNotify, value);
                 XmlDocument document = new XmlDocument();
                 document.Load("Settings/user-settings.xml");
-                document.DocumentElement["IsGroupMute"].InnerText = isGroupMute.ToString();
+                document.DocumentElement["CanNotify"].InnerText = canNotify.ToString();
                 document.Save("Settings/user-settings.xml");
             }
+        }
+
+        public bool CanUserNotify
+        {
+            get => canUserNotify;
+            set
+            {
+                Set(ref canUserNotify, value);
+                XmlDocument document = new XmlDocument();
+                document.Load("Settings/user-settings.xml");
+                document.DocumentElement["CanUserNotify"].InnerText = canUserNotify.ToString();
+                document.Save("Settings/user-settings.xml");
+            }
+        }
+
+        public bool CanGroupNotify
+        {
+            get => canGroupNotify;
+            set
+            {
+                Set(ref canGroupNotify, value);
+                XmlDocument document = new XmlDocument();
+                document.Load("Settings/user-settings.xml");
+                document.DocumentElement["CanGroupNotify"].InnerText = canGroupNotify.ToString();
+                document.Save("Settings/user-settings.xml");
+            }
+        }
+
+        public IEnumerable<Rington> GetRingtons()
+        {
+            XmlDocument document = new XmlDocument();
+            document.Load("Settings/settings.xml");
+            Rington[] ringtons = new Rington[document.DocumentElement["Ringtons"].ChildNodes.Count];
+            for (int i = 0; i < ringtons.Length; i++)
+            {
+                Rington rington = new Rington();
+                rington.Name = document.DocumentElement["Ringtons"].ChildNodes[i].Attributes["Name"].InnerText;
+                rington.Path = document.DocumentElement["Ringtons"].ChildNodes[i].Attributes["Path"].InnerText;
+                ringtons[i] = rington;
+            }
+            return ringtons;
+        }
+
+        public IEnumerable<string> GetWallpapers()
+        {
+            XmlDocument document = new XmlDocument();
+            document.Load("Settings/settings.xml");
+            string[] paths = new string[document.DocumentElement["Wallpapers"].ChildNodes.Count];
+            for (int i = 0; i < paths.Length; i++)
+                paths[i] = document.DocumentElement["Wallpapers"].ChildNodes[i].InnerText;
+            return paths;
+        }
+
+        private void AddNotify(XmlDocument document, int chatId, bool? canNotify)
+        {
+            XmlElement element = document.CreateElement("Notify");
+
+            XmlAttribute attr = document.CreateAttribute("ChatId");
+            attr.InnerText = chatId.ToString();
+            element.Attributes.Append(attr);
+
+            attr = document.CreateAttribute("CanNotify");
+            if (canNotify == null) attr.InnerText = "";
+            else attr.InnerText = canNotify.Value.ToString();
+            element.Attributes.Append(attr);
+
+            document.DocumentElement["Notifes"].AppendChild(element);
+            document.Save("Settings/user-settings.xml");
+        }
+
+        public bool? GetMute(int chatId)
+        {
+            XmlDocument document = new XmlDocument();
+            document.Load("Settings/user-settings.xml");
+            foreach (XmlNode mute in document.DocumentElement["Notifes"])
+            {
+                if (int.Parse(mute.Attributes["ChatId"].InnerText) == chatId)
+                {
+                    if (mute.Attributes["CanNotify"].InnerText == "") return null;
+                    else return new Nullable<bool>(bool.Parse(mute.Attributes["CanNotify"].InnerText));
+                }
+            }
+            return null;
+        }
+
+        public void RemoveMute(int id)
+        {
+            XmlDocument document = new XmlDocument();
+            document.Load("Settings/user-settings.xml");
+            for (int i = 0; i < document.DocumentElement["Mutes"].ChildNodes.Count; i++)
+            {
+                if (int.Parse(document.DocumentElement["Mutes"].ChildNodes[i].Attributes["Id"].InnerText) == id)
+                {
+                    document.DocumentElement["Mutes"].RemoveChild(document.DocumentElement["Mutes"].ChildNodes[i]);
+                    return;
+                }
+            }
+        }
+
+        public void AddMute(int chatId, bool? isMute)
+        {
+            XmlDocument document = new XmlDocument();
+            document.Load("Settings/user-settings.xml");
+            for (int i = 0; i < document.DocumentElement["Notifes"].ChildNodes.Count; i++)
+            {
+                if (int.Parse(document.DocumentElement["Notifes"].ChildNodes[i].Attributes["ChatId"].InnerText) == chatId)
+                {
+                    if (isMute == null)
+                        document.DocumentElement["Notifes"].ChildNodes[i].Attributes["CanNotify"].InnerText = "";
+                    else
+                        document.DocumentElement["Notifes"].ChildNodes[i].Attributes["CanNotify"].InnerText = isMute.Value.ToString();
+                    document.Save("Settings/user-settings.xml");
+                    return;
+                }
+            }
+            AddNotify(document, chatId, isMute);
+        }
+
+        public void PlayRington(string path)
+        {
+            player.Close();
+            player.Open(new Uri(path, UriKind.Relative));
+            player.Play();
         }
 
         private void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
@@ -154,3 +250,34 @@ namespace Client.Models
         }
     }
 }
+
+
+//selectedRington = new Rington();
+//selectedRington.Path = document.DocumentElement["Rington"].InnerText;
+//selectedRington.Name = document.DocumentElement["RingtonName"].InnerText;
+
+//подгрузка заглушенных чатов
+//Mutes = new Dictionary<int, bool?>();
+//for (int i = 0; i < document.DocumentElement["Mutes"].ChildNodes.Count; i++)
+//{
+//    Mutes.Add(int.Parse(document.DocumentElement["Mutes"].ChildNodes[i].Attributes["Id"].InnerText),
+//        bool.Parse(document.DocumentElement["Mutes"].ChildNodes[i].Attributes["IsMute"].InnerText));
+//}
+
+//document.Load("Settings/settings.xml");
+
+//подгрузака обоев
+//int count = document.DocumentElement.ChildNodes[0].ChildNodes.Count;
+//Wallpapers = new string[count];
+//for (int i = 0; i < count; i++)
+//    Wallpapers[i] = document.DocumentElement.ChildNodes[0].ChildNodes[i].InnerText;
+
+//подгрузка рингтонов
+//count = document.DocumentElement.ChildNodes[1].ChildNodes.Count;
+//Ringtons = new Rington[count];
+//for (int i = 0; i < count; i++)
+//{
+//    Ringtons[i] = new Rington(document.DocumentElement.ChildNodes[1].ChildNodes[i].Attributes["Name"].InnerText,
+//        document.DocumentElement.ChildNodes[1].ChildNodes[i].Attributes["Path"].InnerText);
+//    if (selectedRington.Name == Ringtons[i].Name) Ringtons[i].IsSelected = true;
+//}

@@ -4,6 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
         Title="Rington" Height="500" Width="300" ResizeMode="NoResize" WindowTitleBrush="#57394a">
     <Window.Resources>
@@ -16,8 +17,8 @@
     </Window.Resources>
 
     <GroupBox Style="{x:Null}" x:Name="ringtons" Background="{StaticResource MainBackground}">
-        <ListView SelectedItem="{Binding Path=Settings.SelectedRington}"
-                  ItemsSource="{Binding Path=Settings.Ringtons}"
+        <ListView SelectedItem="{Binding Path=SelectedRington}"
+                  ItemsSource="{Binding Path=Ringtons}"
                   Background="{StaticResource MainBackground}"
                   SelectionMode="Single">
             <ListView.ItemTemplate>
@@ -27,7 +28,7 @@
                         <RadioButton x:Name="radio" GroupName="ringtons" Cursor="Hand"
                                      IsChecked="{Binding Path=IsSelected}"
                                      Template="{StaticResource SlideRadioButtonTemplate}"
-                                     Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.PlayRingtonCommand}"
+                                     Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.RingtonChangedCommand}"
                                      CommandParameter="{Binding BindsDirectlyToSource=True}">
                         </RadioButton>
                     </StackPanel>
@@ -39,7 +40,7 @@
                     </DataTemplate.Triggers>
                 </DataTemplate>
             </ListView.ItemTemplate>
-            
+
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="Template">
@@ -53,8 +54,12 @@
                     </Setter>
                 </Style>
             </ListView.ItemContainerStyle>
-            
-            
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding RingtonChangedCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
         </ListView>
     </GroupBox>
 </metro:MetroWindow>

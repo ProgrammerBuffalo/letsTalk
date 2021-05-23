@@ -23,8 +23,6 @@ namespace Client.Models
         private string userIsWriting;
         private Message lastMessage;
 
-        private bool isMute;
-
         protected Chat()
         {
             Messages.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(
@@ -71,12 +69,12 @@ namespace Client.Models
                 }
             );
         }
-        
+
         protected Chat(int sqlId) : this()
         {
             SqlId = sqlId;
         }
-        
+
         protected Chat(IEnumerable<SourceMessage> messages) : this()
         {
             Messages = new ObservableCollection<SourceMessage>();
@@ -84,7 +82,6 @@ namespace Client.Models
                 Messages.Add(message);
         }
 
-       
 
         public int SqlId { get; set; }
 
@@ -98,8 +95,6 @@ namespace Client.Models
 
         public Message LastMessage { get => lastMessage; set => Set(ref lastMessage, value); }
 
-        public bool IsMute { get => isMute; set => Set(ref isMute, value); }
-
         public abstract bool SetOnlineState(int userId, bool state);
 
         public abstract void MessageIsWriting(Nullable<int> userId);
@@ -111,6 +106,10 @@ namespace Client.Models
         public abstract void RemoveUser(AvailableUser user);
 
         public abstract AvailableUser FindUser(Nullable<int> userId);
+
+        public abstract bool CanNotify(Settings settings);
+
+        public abstract string GetNotifyPath(Settings settings);
 
         private async System.Threading.Tasks.Task<ImageMessage> LoadImageFromClient(FileMessage fileMessage)
         {
@@ -201,7 +200,7 @@ namespace Client.Models
 
             return imageMessage;
         }
-        
+
         protected void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
         {
             prop = value;
@@ -279,6 +278,18 @@ namespace Client.Models
         public override AvailableUser FindUser(int? userId)
         {
             return user;
+        }
+
+        public override bool CanNotify(Settings settings)
+        {
+            var notify = settings.GetMute(SqlId);
+            if (notify == null) return settings.CanUserNotify;
+            else return notify.Value;
+        }
+
+        public override string GetNotifyPath(Settings settings)
+        {
+            return settings.SelectedUserRington.Path;
         }
     }
 
@@ -400,6 +411,18 @@ namespace Client.Models
                 return new GroupMessage(message, user, colors[senderId]);
             else
                 return new GroupMessage(message, new ChatService.UnitClient().FindUserName(senderId), "red");
+        }
+
+        public override bool CanNotify(Settings settings)
+        {
+            var notify = settings.GetMute(SqlId);
+            if (notify == null) return settings.CanGroupNotify;
+            else return notify.Value;
+        }
+
+        public override string GetNotifyPath(Settings settings)
+        {
+            return settings.SelectedGroupRington.Path;
         }
     }
 }

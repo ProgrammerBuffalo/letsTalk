@@ -8,6 +8,8 @@
         public MainWindow()
         {
             InitializeComponent();
+            App.Current.MainWindow = this;
+            App.Current.ShutdownMode = System.Windows.ShutdownMode.OnMainWindowClose;
             hamburgerMenu.HamburgerButtonClick += HamburgerMenu_HamburgerButtonClick;
             hamburgerMenu.Loaded += HamburgerMenu_Loaded;
         }

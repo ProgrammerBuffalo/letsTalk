@@ -132,7 +132,7 @@
                         </controls:HamburgerMenuIconItem.Icon>
                     </controls:HamburgerMenuIconItem>
 
-                    <controls:HamburgerMenuIconItem Tag="UCSettings" Label="Settings" Command="{Binding SettingsCommand}">
+                    <controls:HamburgerMenuIconItem Tag="UCSettings" Label="Settings" Command="{Binding SettingsShowCommand}">
                         <controls:HamburgerMenuIconItem.Icon>
                             <icons:PackIconMaterial  Kind="Shield" Width="32" Foreground="Wheat" Height="32" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10, 0, 0, 0"/>
                         </controls:HamburgerMenuIconItem.Icon>
@@ -175,9 +175,6 @@
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadedWindowCommand}"/>
-        </i:EventTrigger>
-        <i:EventTrigger EventName="Closed">
-            <i:InvokeCommandAction Command="{Binding ClosedWindowCommand}"/>
-        </i:EventTrigger>
+        </i:EventTrigger>        
     </i:Interaction.Triggers>
 </controls:MetroWindow>

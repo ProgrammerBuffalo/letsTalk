@@ -25,6 +25,8 @@
                 <RowDefinition MinHeight="50"/>
                 <RowDefinition Height="40"/>
                 <RowDefinition />
+                <RowDefinition Height="40"/>
+                <RowDefinition MinHeight="100"/>
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0" Text="User profile" Style="{StaticResource HeaderStyle}" />
@@ -76,6 +78,45 @@
 
                 <Button Grid.Column="0" Content="Default wallpapers" Command="{Binding DefaultWallpaperShowCommand}" Style="{StaticResource ButtonSettingsStyle}"/>
                 <Button Grid.Column="1" Content="Select from device" Command="{Binding DeviceWallpaperShowCommand}" Style="{StaticResource ButtonSettingsStyle}"/>
+            </Grid>
+
+            <TextBlock Grid.Row="6" Text="Choose rington" Style="{StaticResource HeaderStyle}"/>
+            <TextBlock Grid.Row="6" Margin="60,0,0,0" FontSize="15" Text="Can notify"/>
+            <CheckBox Grid.Row="6" IsChecked="{Binding Path=Settings.CanNotify}" Template="{StaticResource SliderCheckBoxTemplate}"/>
+
+            <Grid Grid.Row="7">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Style="{StaticResource MiniHeaderStyle}">
+                        <Run Text="Selected rington for user chats: "/>
+                        <Run Text="{Binding Path=Settings.SelectedUserRington.Name}"/>
+                    </TextBlock>
+
+                    <Button Content="Change rington" Style="{StaticResource ButtonSettingsStyle}" Command="{Binding UserRingtonChangeCommand}"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox IsChecked="{Binding Path=Settings.CanUserNotify}" Template="{StaticResource SliderCheckBoxTemplate}"/>
+                        <TextBlock Text="Enable user notify" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1">
+                    <TextBlock Style="{StaticResource MiniHeaderStyle}">
+                        <Run Text="Selcted rington for group chats"/>
+                        <Run Text="{Binding Path=Settings.SelectedGroupRington.Name}"/>
+                    </TextBlock>
+
+                    <Button Content="Change rington" Style="{StaticResource ButtonSettingsStyle}" Command="{Binding GroupRingtonChangeCommand}"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox IsChecked="{Binding Path=Settings.CanGroupNotify}" Template="{StaticResource SliderCheckBoxTemplate}"/>
+                        <TextBlock Text="Enable group notify" VerticalAlignment="Center" />
+                    </StackPanel>
+                </StackPanel>
             </Grid>
 
             <icons:PackIconFontAwesome Width="48"

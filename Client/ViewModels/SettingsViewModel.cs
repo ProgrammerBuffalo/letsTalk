@@ -5,7 +5,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace Client.ViewModels
 {
@@ -14,10 +13,11 @@ namespace Client.ViewModels
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 
         private Settings settings;
+        
         private Views.DefaultWallpaperWindow wallpaperWindow;
         private Views.PreviewWallpaperWindow previewWallpaperWindow;
         private string selectedWallpaper;
-        private MediaPlayer player;
+        
         private bool loadCount1IsChecked;
         private bool loadCount2IsChecked;
         private bool loadCount3IsChecked;
@@ -28,7 +28,6 @@ namespace Client.ViewModels
         {
             Client = client;
             settings = Settings.Instance;
-            player = new MediaPlayer();
 
             MessageLoadCountChangedCommand = new Command(MessageLoadCountChanged);
             DefaultWallpaperShowCommand = new Command(DefaultWallpaperShow);
@@ -37,8 +36,8 @@ namespace Client.ViewModels
             PreviewWallpaperShowCommand = new Command(PreviewWallpaperShow);
             ConfirmWallpaperCommand = new Command(ConfirmWallpaper);
             DefaultRingtonShowCommand = new Command(DefaultRingtonShow);
-            DeviceRingtonShowCommand = new Command(DeviceRingtonShow);
-            PlayRingtonCommand = new Command(PlayRington);
+            UserRingtonChangeCommand = new Command(UserRingtonShow);
+            GroupRingtonChangeCommand = new Command(GroupRingtonShow);
 
             Messages = new ObservableCollection<SourceMessage>();
             Messages.Add(new SourceMessage(new TextMessage("Hello")));
@@ -58,20 +57,19 @@ namespace Client.ViewModels
         public ICommand DeviceRingtonShowCommand { get; }
         public ICommand ConfirmWallpaperCommand { get; }
         public ICommand PreviewWallpaperShowCommand { get; }
-        public ICommand PlayRingtonCommand { get; }
+        public ICommand UserRingtonChangeCommand { get; }
+        public ICommand GroupRingtonChangeCommand { get; }
+
 
         public ClientUserInfo Client { get; }
         public Settings Settings { get => settings; set => Set(ref settings, value); }
-        public string[] DefautWallpapers { get; }
-        public string[] DefaultRingtons { get; }
-        public string[] DefaultRingtonNames { get; }
+        public ObservableCollection<string> DefautWallpapers { get; private set; }
         public ObservableCollection<SourceMessage> Messages { get; }
         public string SelectedWallpaper { get => selectedWallpaper; set => Set(ref selectedWallpaper, value); }
 
         public bool LoadCount1IsChecked { get => loadCount1IsChecked; set => Set(ref loadCount1IsChecked, value); }
         public bool LoadCount2IsChecked { get => loadCount2IsChecked; set => Set(ref loadCount2IsChecked, value); }
         public bool LoadCount3IsChecked { get => loadCount3IsChecked; set => Set(ref loadCount3IsChecked, value); }
-
 
         private void MessageLoadCountChanged(object param)
         {
@@ -81,6 +79,7 @@ namespace Client.ViewModels
         private void DefaultWallpaperShow(object param)
         {
             isFromDevice = false;
+            DefautWallpapers = new ObservableCollection<string>(settings.GetWallpapers());
             wallpaperWindow = new Views.DefaultWallpaperWindow();
             wallpaperWindow.DataContext = this;
             wallpaperWindow.ShowDialog();
@@ -154,29 +153,19 @@ namespace Client.ViewModels
             window.ShowDialog();
         }
 
-        private void DeviceRingtonShow(object param)
+        private void UserRingtonShow(object param)
         {
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "Audio files (*.mp3,*.wav)|*.mp3;*.wav";
-            if (dialog.ShowDialog() == true)
-            {
-                foreach (var file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "Settings\\Rington"))
-                    File.Delete(file);
-
-                string fileName = dialog.FileName.Substring(dialog.FileName.LastIndexOf('\\') + 1);
-                string path = AppDomain.CurrentDomain.BaseDirectory + "Settings\\Rington\\" + fileName;
-                File.Copy(dialog.FileName, path);
-                settings.SelectedRington = new Rington(fileName, dialog.FileName);
-            }
+            Views.RingtonWindow window = new Views.RingtonWindow();
+            window.DataContext = new UserRingtonsViewModel(settings);
+            window.ShowDialog();
         }
 
-        private void PlayRington(object param)
+        private void GroupRingtonShow(object param)
         {
-            Rington rington = (Rington)param;
-            settings.SelectedRington = rington;
-            player.Open(new Uri(AppDomain.CurrentDomain.BaseDirectory + rington.Path));
-            player.Play();
-        }
+            Views.RingtonWindow window = new Views.RingtonWindow();
+            window.DataContext = new GroupRingtonsViewModel(settings);
+            window.ShowDialog();
+        }        
 
         private void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
         {
@@ -185,3 +174,29 @@ namespace Client.ViewModels
         }
     }
 }
+
+
+
+//private void PlayRington(object param)
+//{
+//Rington rington = (Rington)param;
+//settings.SelectedRington = rington;
+//player.Open(new Uri(AppDomain.CurrentDomain.BaseDirectory + rington.Path));
+//player.Play();
+//}
+
+//private void DeviceRingtonShow(object param)
+//{
+//    OpenFileDialog dialog = new OpenFileDialog();
+//    dialog.Filter = "Audio files (*.mp3,*.wav)|*.mp3;*.wav";
+//    if (dialog.ShowDialog() == true)
+//    {
+//        foreach (var file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "Settings\\Rington"))
+//            File.Delete(file);
+
+//        string fileName = dialog.FileName.Substring(dialog.FileName.LastIndexOf('\\') + 1);
+//        string path = AppDomain.CurrentDomain.BaseDirectory + "Settings\\Rington\\" + fileName;
+//        File.Copy(dialog.FileName, path);
+//        //settings.SelectedRington = new Rington(fileName, dialog.FileName);
+//    }
+//}

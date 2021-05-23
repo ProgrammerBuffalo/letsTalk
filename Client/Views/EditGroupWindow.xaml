@@ -152,7 +152,7 @@
         </Grid>
 
         <TextBox Grid.Row="1" Grid.Column="1" 
-                     Text="{Binding Path=SearchUsersText}" FontSize="20"
+                     Text="{Binding Path=SearchUsersText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="20"
                      metro:TextBoxHelper.ClearTextButton="True"
                      Margin="10,0" Height="45"
                      Background="LightGoldenrodYellow">

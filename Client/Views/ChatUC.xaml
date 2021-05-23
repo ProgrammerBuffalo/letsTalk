@@ -77,6 +77,8 @@
                 </Button.Style>
             </Button>
             <Button DockPanel.Dock="Right" Content="Leave" Margin="5" Style="{StaticResource ButtonStyle}" Command="{Binding LeaveChatCommand}"/>
+
+            <CheckBox IsChecked="{Binding Path=IsMute}" Command="{Binding MuteChangedCommand}" Cursor="Hand" IsThreeState="True"/>
         </DockPanel>
 
         <Image Grid.Row="1" VerticalAlignment="Top" Margin="0,10,0,0" Source="/Resources/loader.png" Visibility="{Binding Path=LoaderVisibility}" Width="50" Height="50" Panel.ZIndex="1">
