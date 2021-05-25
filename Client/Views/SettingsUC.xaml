@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:icons ="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
-             d:DesignHeight="500" d:DesignWidth="500">
+             d:DesignHeight="500" d:DesignWidth="700">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -38,7 +38,7 @@
                     </Ellipse.Fill>
                 </Ellipse>
 
-                <TextBlock Grid.Column="0" Text="asd as" Margin="20,0,0,0" Style="{StaticResource TextBlockStyle}" />
+                <TextBlock Grid.Column="0" Text="{Binding Path=Client.UserName}" Margin="20,0,0,0" Style="{StaticResource TextBlockStyle}" />
             </StackPanel>
 
             <TextBlock Grid.Row="2" Text="Choose message download step" Style="{StaticResource HeaderStyle}"/>
@@ -80,8 +80,8 @@
                 <Button Grid.Column="1" Content="Select from device" Command="{Binding DeviceWallpaperShowCommand}" Style="{StaticResource ButtonSettingsStyle}"/>
             </Grid>
 
-            <TextBlock Grid.Row="6" Text="Choose rington" Style="{StaticResource HeaderStyle}"/>
-            <TextBlock Grid.Row="6" Margin="60,0,0,0" FontSize="15" Text="Can notify"/>
+            <TextBlock Grid.Row="6" Text="Notifications" Style="{StaticResource HeaderStyle}"/>
+            <TextBlock Grid.Row="6" Margin="80,0,0,0" FontSize="15" Text="Can notify" VerticalAlignment="Center"/>
             <CheckBox Grid.Row="6" IsChecked="{Binding Path=Settings.CanNotify}" Template="{StaticResource SliderCheckBoxTemplate}"/>
 
             <Grid Grid.Row="7">
@@ -92,7 +92,7 @@
 
                 <StackPanel Grid.Column="0">
                     <TextBlock Style="{StaticResource MiniHeaderStyle}">
-                        <Run Text="Selected rington for user chats: "/>
+                        <Run Text="user chats ringtons: "/>
                         <Run Text="{Binding Path=Settings.SelectedUserRington.Name}"/>
                     </TextBlock>
 
@@ -106,7 +106,7 @@
 
                 <StackPanel Grid.Column="1">
                     <TextBlock Style="{StaticResource MiniHeaderStyle}">
-                        <Run Text="Selcted rington for group chats"/>
+                        <Run Text="group chats rington:"/>
                         <Run Text="{Binding Path=Settings.SelectedGroupRington.Name}"/>
                     </TextBlock>
 

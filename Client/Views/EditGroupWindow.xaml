@@ -78,6 +78,7 @@
                     </Trigger>
                 </ControlTemplate.Triggers>
             </ControlTemplate>
+
         </ResourceDictionary>
     </Window.Resources>
 
@@ -133,14 +134,7 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </ListView>
-        
-        <Button Grid.Row="3" Grid.Column="0"
-                Content="Delete chat"
-                Width="200" Height="30"
-                Command="{Binding DeleteChatCommand}"
-                Style="{StaticResource ButtonStyle}">
-        </Button>
-        
+
         <Grid Grid.Row="0" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>

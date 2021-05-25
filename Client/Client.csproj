@@ -220,14 +220,12 @@
     <Compile Include="UserControls\PasswordWarning.xaml.cs">
       <DependentUpon>PasswordWarning.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utility\ChatDataTemplateSelector.cs" />
     <Compile Include="Utility\Command.cs" />
     <Compile Include="Utility\Converters.cs" />
     <Compile Include="Utility\DataTemplateSelectors.cs" />
     <Compile Include="Utility\FileHelper.cs" />
     <Compile Include="Utility\ImageCropper.cs" />
     <Compile Include="Utility\MessageLoader.cs" />
-    <Compile Include="Utility\MessageTemplateSelector.cs" />
     <Compile Include="Utility\SortChatsExtension.cs" />
     <Compile Include="Utility\UCHelper.cs" />
     <Compile Include="Utility\ValidationRules.cs" />
@@ -243,6 +241,9 @@
     </Compile>
     <Compile Include="Views\DefaultWallpaperWindow.xaml.cs">
       <DependentUpon>DefaultWallpaperWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DialogWindow.xaml.cs">
+      <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EditGroupWindow.xaml.cs">
       <DependentUpon>EditGroupWindow.xaml</DependentUpon>
@@ -306,6 +307,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DefaultWallpaperWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DialogWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

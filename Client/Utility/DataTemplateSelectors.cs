@@ -58,12 +58,4 @@ namespace Client.Utility
             else return null;
         }
     }
-
-    //public class NotifyTemplateSelector : DataTemplateSelector
-    //{
-    //    public override DataTemplate SelectTemplate(object item, DependencyObject container)
-    //    {
-    //        return base.SelectTemplate(item, container);
-    //    }
-    //}
 }

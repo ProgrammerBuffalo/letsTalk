@@ -8,8 +8,8 @@
         xmlns:controls ="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:UC="clr-namespace:Client.UserControls"
         mc:Ignorable="d"
-        Title="letsTalkWindow" Height="700" Width="1200" MinHeight="500" MinWidth="800"
-        WindowStartupLocation="CenterScreen" WindowTitleBrush="#57394a">
+        Title="letsTalkWindow" Height="700" Width="1200" MinHeight="500" MinWidth="800" 
+        WindowStartupLocation="CenterScreen" WindowTitleBrush="#57394a" WindowState="{Binding WindowState}">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -175,6 +175,9 @@
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadedWindowCommand}"/>
-        </i:EventTrigger>        
+        </i:EventTrigger>
+        <i:EventTrigger EventName="StateChanged">
+            <i:InvokeCommandAction Command="{Binding WindowStateChangedCommand}"/>
+        </i:EventTrigger>
     </i:Interaction.Triggers>
 </controls:MetroWindow>

@@ -39,10 +39,9 @@ namespace Client.ViewModels
         private string isWritingText;
         private string messageText = "";
 
+        private bool? canNotify;
         private Visibility loaderVisibility;
         private Message inputMessage;
-
-        private bool? isMute;
 
         public ChatViewModel(MainViewModel mainVM)
         {
@@ -51,10 +50,10 @@ namespace Client.ViewModels
             Chat.ClientId = mainVM.Client.SqlId;
 
             Settings = Settings.Instance;
-            IsMute = Settings.GetMute(chat.SqlId);
+            CanNotify = Settings.GetMute(chat.SqlId);
 
             InputMessage = new TextMessage();
-            this.chat.Messages.Clear();
+            chat.Messages.Clear();
 
             chat._messageCount = 15;
             chat._messageOffset = 0;
@@ -85,7 +84,7 @@ namespace Client.ViewModels
             UnloadCommand = new Command(Unload);
             LoadCommand = new Command(Load);
 
-            MuteChangedCommand = new Command(MuteChanged);
+            CanNotifyChangedCommand = new Command(CanNotifyChanged);
             EditChatCommand = new Command(EditChat);
             LeaveChatCommand = new Command(LeaveChat);
 
@@ -107,7 +106,7 @@ namespace Client.ViewModels
         public ICommand OpenSmileCommand { get; }
         public ICommand UnloadCommand { get; }
 
-        public ICommand MuteChangedCommand { get; }
+        public ICommand CanNotifyChangedCommand { get; }
         public ICommand EditChatCommand { get; }
         public ICommand LeaveChatCommand { get; }
 
@@ -122,7 +121,7 @@ namespace Client.ViewModels
         public string IsWritingText { get => isWritingText; set => Set(ref isWritingText, value); }
         public Message InputMessage { get => inputMessage; set => Set(ref inputMessage, value); }
         public string MessageText { get => messageText; set => Set(ref messageText, value); }
-        public bool? IsMute { get => isMute; set => Set(ref isMute, value); }
+        public bool? CanNotify { get => canNotify; set => Set(ref canNotify, value); }
 
         public Visibility LoaderVisibility { get => loaderVisibility; set => Set(ref loaderVisibility, value); }
         public System.Windows.Controls.ScrollViewer Scroll { get; set; }
@@ -206,9 +205,9 @@ namespace Client.ViewModels
         //    });
         //}
 
-        private void MuteChanged(object param)
+        private void CanNotifyChanged(object param)
         {
-            Settings.AddMute(chat.SqlId, isMute);
+            Settings.AddMute(chat.SqlId, canNotify);
         }
 
         private void EditChat(object param)

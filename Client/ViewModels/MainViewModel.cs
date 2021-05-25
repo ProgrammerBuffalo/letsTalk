@@ -1,7 +1,6 @@
 ﻿using Client.ChatService;
 using Client.Models;
 using Client.Utility;
-using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,13 +8,10 @@ using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Notifications.Wpf;
-using Forms = System.Windows.Forms;
-
 namespace Client.ViewModels
 {
     public class MainViewModel : System.ComponentModel.INotifyPropertyChanged, ChatCallback, IHelperUC
@@ -33,7 +29,7 @@ namespace Client.ViewModels
         private Models.Chat selectedChat;
 
         private UserControl currentView;
-        private Forms.NotifyIcon icon;
+        private System.Windows.Forms.NotifyIcon icon;
 
         private NotificationManager notifyManager;
         private Views.MainWindow mainWindow;
@@ -83,13 +79,13 @@ namespace Client.ViewModels
 
             notifyManager = new NotificationManager();
 
-            icon = new Forms.NotifyIcon();
+            icon = new System.Windows.Forms.NotifyIcon();
             icon.Visible = true;
             icon.Text = "lets Talk";
             icon.Icon = new System.Drawing.Icon(AppDomain.CurrentDomain.BaseDirectory + "Resources/logo.ico");
-            icon.ContextMenuStrip = new Forms.ContextMenuStrip();
+            icon.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
             icon.MouseClick += ActivateWindow; ;
-            Forms.ToolStripButton toolStrip = new Forms.ToolStripButton();
+            System.Windows.Forms.ToolStripButton toolStrip = new System.Windows.Forms.ToolStripButton();
             toolStrip.Text = "Exit";
             toolStrip.Click += ExitFromTray; ;
             icon.ContextMenuStrip.Items.Add(toolStrip);
@@ -127,11 +123,11 @@ namespace Client.ViewModels
             }
             catch (FaultException<ConnectionExceptionFault> ex)
             {
-                MessageBox.Show(ex.Message);
+                System.Windows.MessageBox.Show(ex.Message);
             }
             catch (IOException)
             {
-                MessageBox.Show("avatar image could not be download");
+                System.Windows.MessageBox.Show("avatar image could not be download");
             }
         }
 
@@ -147,7 +143,7 @@ namespace Client.ViewModels
 
             try
             {
-                OpenFileDialog openFileDialog = new OpenFileDialog();
+                Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
                 openFileDialog.Multiselect = false;
                 openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg; *.jpeg; *.png";
                 if (openFileDialog.ShowDialog() == true)
@@ -252,6 +248,7 @@ namespace Client.ViewModels
                 chat.LastMessage = new TextMessage("You are removed", DateTime.Now);
                 Chats.Move(Chats.IndexOf(chat), 0);
                 chat.CanWrite = false;
+                settings.RemoveMute(chatId);
             }
 
         }
@@ -343,6 +340,7 @@ namespace Client.ViewModels
             if (chat != null)
                 chat.LastMessage = SystemMessage.UserLeftChat(DateTime.Now, new ChatService.UnitClient().FindUserName(userId)).Message;
             RemoveUserFromChatroom(chatId, userId);
+            settings.RemoveMute(chatId);
 
             if (chats.Where(c => c.FindUser(userId) != null).ToList().Count < 1)
             {
@@ -365,11 +363,20 @@ namespace Client.ViewModels
                 Chats.Move(Chats.IndexOf(chat), 0);
 
             if (chat.Equals(SelectedChat))
+            {
                 chat.Messages.Add(chat.GetMessageType(Client.SqlId, message.UserId, new TextMessage(message.Text, message.DateTime)));
-            else if ((chat.CanNotify(settings)))
+                if (!mainWindow.IsVisible && settings.CanNotify)
+                {
+                    if (chat.CanNotify(settings))
+                        settings.PlayRington(chat.GetNotifyPath(settings));
+                    Notify(chat);
+                }
+            }
+            else if (chat.CanNotify(settings))
+            {
                 settings.PlayRington(chat.GetNotifyPath(settings));
-
-            Notify(chat);
+                if (!mainWindow.IsVisible && settings.CanNotify) Notify(chat);
+            }
         }
 
         public void ReplyMessageIsWriting(Nullable<int> userSqlId, int chatSqlId)
@@ -386,11 +393,21 @@ namespace Client.ViewModels
                 Chats.Move(Chats.IndexOf(chat), 0);
 
             if (chat.Equals(SelectedChat))
+            {
                 chat.Messages.Add(chat.GetMessageType(Client.SqlId, serviceMessageFile.UserId, new FileMessage(serviceMessageFile.FileName, serviceMessageFile.DateTime, serviceMessageFile.StreamId)));
+                if (!mainWindow.IsVisible && settings.CanNotify)
+                {
+                    if (chat.CanNotify(settings))
+                        settings.PlayRington(chat.GetNotifyPath(settings));
+                    Notify(chat);
+                }
+            }
             else if (chat.CanNotify(settings))
-                settings.PlayRington(chat.GetNotifyPath(settings));
-
-            Notify(chat);
+            {
+                if (chat.CanNotify(settings))
+                    settings.PlayRington(chat.GetNotifyPath(settings));
+                if (!mainWindow.IsVisible && settings.CanNotify) Notify(chat);
+            }
         }
 
         private async Task LoadChatroomsAsync()
@@ -459,7 +476,7 @@ namespace Client.ViewModels
                         else
                         {
                             user = new AvailableUser(friend.UserSqlId, friend.UserName, friend.IsOnline);
-                            Application.Current.Dispatcher.Invoke(() =>
+                            System.Windows.Application.Current.Dispatcher.Invoke(() =>
                             {
                                 user.Image = new BitmapImage(new Uri("Resources/user.png", UriKind.Relative));
                             });
@@ -501,7 +518,7 @@ namespace Client.ViewModels
                     avatarClient.UserAvatarDownload(user.SqlId, out lenght, out stream);
                     if (lenght <= 0)
                     {
-                        Application.Current.Dispatcher.Invoke(() =>
+                        System.Windows.Application.Current.Dispatcher.Invoke(() =>
                         {
                             user.Image = new BitmapImage(new Uri("Resources/user.png", UriKind.Relative));
                         });
@@ -509,7 +526,7 @@ namespace Client.ViewModels
                     }
                     memoryStream = FileHelper.ReadFileByPart(stream);
 
-                    Application.Current.Dispatcher.Invoke(() =>
+                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
                     {
                         var bitmapImage = new BitmapImage();
                         bitmapImage.BeginInit();
@@ -557,7 +574,7 @@ namespace Client.ViewModels
                     avatarClient.ChatAvatarDownload(chat.SqlId, out lenght, out stream);
                     if (lenght <= 0)
                     {
-                        Application.Current.Dispatcher.Invoke(() =>
+                        System.Windows.Application.Current.Dispatcher.Invoke(() =>
                         {
                             chat.Avatar = new BitmapImage(new Uri("Resources/group.png", UriKind.Relative));
                         });
@@ -565,7 +582,7 @@ namespace Client.ViewModels
                     }
                     memoryStream = FileHelper.ReadFileByPart(stream);
 
-                    Application.Current.Dispatcher.Invoke(() =>
+                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
                     {
                         var bitmapImage = new BitmapImage();
                         bitmapImage.BeginInit();
@@ -627,9 +644,9 @@ namespace Client.ViewModels
             mainWindow.Close();
         }
 
-        private void ActivateWindow(object sender, Forms.MouseEventArgs e)
+        private void ActivateWindow(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            if (e.Button == Forms.MouseButtons.Left)
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
                 mainWindow.Show();
                 mainWindow.Closing += WindowClosing;
@@ -638,12 +655,9 @@ namespace Client.ViewModels
 
         private void Notify(Models.Chat chat)
         {
-            if (!mainWindow.IsVisible && settings.CanNotify)
-            {
-                UserControls.NotifyUC notifyUC = new UserControls.NotifyUC();
-                notifyUC.DataContext = chat;
-                notifyManager.Show(notifyUC, "", new TimeSpan(0, 0, 5));
-            }
+            UserControls.NotifyUC notifyUC = new UserControls.NotifyUC();
+            notifyUC.DataContext = chat;
+            notifyManager.Show(notifyUC, "", new TimeSpan(0, 0, 5));
         }
 
         public void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")

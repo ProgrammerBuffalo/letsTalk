@@ -55,7 +55,6 @@ namespace Client.ViewModels
             Users_DragLeaveCommand = new Command(Users_DragLeave);
             Users = Chat.Users;
             allUsers = new ObservableCollection<AvailableUser>();
-
         }
 
         public ICommand RemoveMemberCommand { get; }
@@ -83,7 +82,7 @@ namespace Client.ViewModels
 
         private void RemoveMember(object param)
         {
-            AvailableUser user = (AvailableUser)param;           
+            AvailableUser user = (AvailableUser)param;
             mainVM.SelectedChat.RemoveUser(user);
             ChatClient.RemoveUserFromChatroom(user.SqlId, chat.SqlId);
         }
@@ -222,17 +221,17 @@ namespace Client.ViewModels
             offset += 15;
         }
 
-        public void Users_MouseLeave(object param)
+        private void Users_MouseLeave(object param)
         {
             canDrop = false;
         }
 
-        public void Users_PreviewDragEnter(object param)
+        private void Users_PreviewDragEnter(object param)
         {
             canDrop = true;
         }
 
-        public void Users_DragLeave(object param)
+        private void Users_DragLeave(object param)
         {
             canDrop = false;
         }
@@ -277,6 +276,6 @@ namespace Client.ViewModels
         {
             prop = value;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop_name));
-        }      
+        }
     }
 }
