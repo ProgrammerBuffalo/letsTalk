@@ -200,16 +200,16 @@ namespace Client.Models
                     else return new Nullable<bool>(bool.Parse(mute.Attributes["CanNotify"].InnerText));
                 }
             }
-            return null;
+            return new Nullable<bool>();
         }
 
-        public void RemoveMute(int id)
+        public void RemoveMute(int chatId)
         {
             XmlDocument document = new XmlDocument();
             document.Load("Settings/user-settings.xml");
             for (int i = 0; i < document.DocumentElement["Mutes"].ChildNodes.Count; i++)
             {
-                if (int.Parse(document.DocumentElement["Mutes"].ChildNodes[i].Attributes["Id"].InnerText) == id)
+                if (int.Parse(document.DocumentElement["Mutes"].ChildNodes[i].Attributes["Id"].InnerText) == chatId)
                 {
                     document.DocumentElement["Mutes"].RemoveChild(document.DocumentElement["Mutes"].ChildNodes[i]);
                     return;
@@ -250,34 +250,3 @@ namespace Client.Models
         }
     }
 }
-
-
-//selectedRington = new Rington();
-//selectedRington.Path = document.DocumentElement["Rington"].InnerText;
-//selectedRington.Name = document.DocumentElement["RingtonName"].InnerText;
-
-//подгрузка заглушенных чатов
-//Mutes = new Dictionary<int, bool?>();
-//for (int i = 0; i < document.DocumentElement["Mutes"].ChildNodes.Count; i++)
-//{
-//    Mutes.Add(int.Parse(document.DocumentElement["Mutes"].ChildNodes[i].Attributes["Id"].InnerText),
-//        bool.Parse(document.DocumentElement["Mutes"].ChildNodes[i].Attributes["IsMute"].InnerText));
-//}
-
-//document.Load("Settings/settings.xml");
-
-//подгрузака обоев
-//int count = document.DocumentElement.ChildNodes[0].ChildNodes.Count;
-//Wallpapers = new string[count];
-//for (int i = 0; i < count; i++)
-//    Wallpapers[i] = document.DocumentElement.ChildNodes[0].ChildNodes[i].InnerText;
-
-//подгрузка рингтонов
-//count = document.DocumentElement.ChildNodes[1].ChildNodes.Count;
-//Ringtons = new Rington[count];
-//for (int i = 0; i < count; i++)
-//{
-//    Ringtons[i] = new Rington(document.DocumentElement.ChildNodes[1].ChildNodes[i].Attributes["Name"].InnerText,
-//        document.DocumentElement.ChildNodes[1].ChildNodes[i].Attributes["Path"].InnerText);
-//    if (selectedRington.Name == Ringtons[i].Name) Ringtons[i].IsSelected = true;
-//}

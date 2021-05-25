@@ -24,6 +24,24 @@ namespace Client.Views
             var border = (Border)VisualTreeHelper.GetChild(chatListView, 0);
             scroll = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
             getControl.Invoke(ref scroll);
+            CanNotifyText();
+        }
+
+        private void canNotifyCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            CanNotifyText();
+        }
+
+        private void CanNotifyText()
+        {
+            if (canNotifyCheckBox.IsChecked.HasValue)
+            {
+                if (canNotifyCheckBox.IsChecked.Value)
+                    canNotifyText.Text = "rington is on";
+                else if (!canNotifyCheckBox.IsChecked.Value)
+                    canNotifyText.Text = "rington is off";
+            }
+            else canNotifyText.Text = "global settings";
         }
     }
 }

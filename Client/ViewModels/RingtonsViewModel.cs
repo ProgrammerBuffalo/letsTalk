@@ -48,8 +48,12 @@ namespace Client.ViewModels
 
         private void UserRingtonChanged(object param)
         {
-            settings.SelectedUserRington = (Rington)param;
-            settings.PlayRington(settings.SelectedUserRington.Path);
+            Rington rington = (Rington)param;
+            if(rington != null)
+            {
+                settings.SelectedUserRington = rington;
+                settings.PlayRington(settings.SelectedUserRington.Path);
+            }
         }
     }
 
@@ -69,8 +73,12 @@ namespace Client.ViewModels
 
         private void GroupRingtonChanged(object param)
         {
-            settings.SelectedGroupRington = (Rington)param;
-            settings.PlayRington(settings.SelectedGroupRington.Path);
+            Rington rington = (Rington)param;
+            if(rington != null)
+            {
+                settings.SelectedGroupRington = (Rington)param;
+                settings.PlayRington(settings.SelectedGroupRington.Path);
+            }
         }
     }
 }
