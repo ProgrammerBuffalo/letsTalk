@@ -42,9 +42,6 @@ namespace letsTalk
         [FaultContract(typeof(ChatroomAlreadyExistExceptionFault))]    
         int CreateChatroom(List<int> users, string chatName);
 
-        [OperationContract(IsOneWay = true)]
-        void DeleteChatroom(int chatId, int userId);
-
         [OperationContract(IsOneWay = false)]
         void AddUserToChatroom(int userId, int chatId);
 

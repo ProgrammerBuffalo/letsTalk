@@ -195,7 +195,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="EmilToDo.cs" />
     <Compile Include="Models\AvailableUser.cs" />
     <Compile Include="Models\Chat.cs" />
     <Compile Include="Models\ClientUserInfo.cs" />

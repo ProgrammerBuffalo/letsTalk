@@ -107,12 +107,6 @@
         <soap12:fault use="literal" name="ChatroomAlreadyExistExceptionFaultFault" namespace="" />
       </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="DeleteChatroom">
-      <soap12:operation soapAction="letsTalk.IChatService/Chat/DeleteChatroom" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-    </wsdl:operation>
     <wsdl:operation name="AddUserToChatroom">
       <soap12:operation soapAction="letsTalk.IChatService/Chat/AddUserToChatroom" style="document" />
       <wsdl:input>
@@ -415,7 +409,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8302/Chat</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>LAPTOP-39BIREFL\user</Upn>
+          <Upn>HP-EliteBook\Elman</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
@@ -424,7 +418,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8302/Unit</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>LAPTOP-39BIREFL\user</Upn>
+          <Upn>HP-EliteBook\Elman</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

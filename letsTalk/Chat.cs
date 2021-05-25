@@ -21,6 +21,7 @@ namespace letsTalk
 
     }
 
+    [DataContract]
     public class UserInChat
     {
         [DataMember]

@@ -13,7 +13,8 @@ namespace letsTalk
         [EnumMember] UserJoined = 1,
         [EnumMember] UserLeft = 2,
         [EnumMember] UserRemoved = 3,
-        [EnumMember] ChatroomDelete = 4
+        [EnumMember] ChatroomDelete = 4,
+        [EnumMember] ChatroomCreate = 5,
     }
 
     [DataContract]

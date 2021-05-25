@@ -69,6 +69,9 @@ namespace Client.Utility
                                 case ChatService.RulingMessage.UserRemoved:
                                     messagesFromChat.Add(Models.SystemMessage.UserRemoved(systemMessage.DateTime, systemMessage.UserNickname));
                                     break;
+                                case ChatService.RulingMessage.ChatroomCreate:
+                                    messagesFromChat.Add(Models.SystemMessage.ChatroomCreated(systemMessage.DateTime));
+                                    break;
                             }
                         }
                     }

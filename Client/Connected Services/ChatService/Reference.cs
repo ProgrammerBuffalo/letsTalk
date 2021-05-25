@@ -201,6 +201,9 @@ namespace Client.ChatService {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ChatroomDelete = 4,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ChatroomCreate = 5,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -987,12 +990,6 @@ namespace Client.ChatService {
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/CreateChatroom", ReplyAction="letsTalk.IChatService/Chat/CreateChatroomResponse")]
         System.Threading.Tasks.Task<int> CreateChatroomAsync(int[] users, string chatName);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/DeleteChatroom")]
-        void DeleteChatroom(int chatId, int userId);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IChatService/Chat/DeleteChatroom")]
-        System.Threading.Tasks.Task DeleteChatroomAsync(int chatId, int userId);
-        
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IChatService/Chat/AddUserToChatroom", ReplyAction="letsTalk.IChatService/Chat/AddUserToChatroomResponse")]
         void AddUserToChatroom(int userId, int chatId);
         
@@ -1125,14 +1122,6 @@ namespace Client.ChatService {
         
         public System.Threading.Tasks.Task<int> CreateChatroomAsync(int[] users, string chatName) {
             return base.Channel.CreateChatroomAsync(users, chatName);
-        }
-        
-        public void DeleteChatroom(int chatId, int userId) {
-            base.Channel.DeleteChatroom(chatId, userId);
-        }
-        
-        public System.Threading.Tasks.Task DeleteChatroomAsync(int chatId, int userId) {
-            return base.Channel.DeleteChatroomAsync(chatId, userId);
         }
         
         public void AddUserToChatroom(int userId, int chatId) {

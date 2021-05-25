@@ -118,5 +118,10 @@ namespace Client.Models
         {
             return new SystemMessage(new TextMessage(nickname + " was added to chat" + "   " + dateTime.ToShortTimeString(), dateTime));
         }
+
+        public static SystemMessage ChatroomCreated(DateTime dateTime)
+        {
+            return new SystemMessage(new TextMessage("Chatroom was created " + dateTime.ToShortTimeString(), dateTime));
+        }
     }
 }

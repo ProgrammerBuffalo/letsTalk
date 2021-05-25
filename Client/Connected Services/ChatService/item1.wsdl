@@ -26,9 +26,6 @@
   <wsdl:message name="Chat_CreateChatroom_ChatroomAlreadyExistExceptionFaultFault_FaultMessage">
     <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/letsTalk" name="detail" element="q1:ChatroomAlreadyExistExceptionFault" />
   </wsdl:message>
-  <wsdl:message name="Chat_DeleteChatroom_InputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteChatroom" />
-  </wsdl:message>
   <wsdl:message name="Chat_AddUserToChatroom_InputMessage">
     <wsdl:part name="parameters" element="tns:AddUserToChatroom" />
   </wsdl:message>
@@ -113,9 +110,6 @@
       <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/CreateChatroom" message="tns:Chat_CreateChatroom_InputMessage" />
       <wsdl:output wsaw:Action="letsTalk.IChatService/Chat/CreateChatroomResponse" message="tns:Chat_CreateChatroom_OutputMessage" />
       <wsdl:fault wsaw:Action="letsTalk.IChatService/Chat/CreateChatroomChatroomAlreadyExistExceptionFaultFault" name="ChatroomAlreadyExistExceptionFaultFault" message="tns:Chat_CreateChatroom_ChatroomAlreadyExistExceptionFaultFault_FaultMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="DeleteChatroom">
-      <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/DeleteChatroom" message="tns:Chat_DeleteChatroom_InputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AddUserToChatroom">
       <wsdl:input wsaw:Action="letsTalk.IChatService/Chat/AddUserToChatroom" message="tns:Chat_AddUserToChatroom_InputMessage" />
