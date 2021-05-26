@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="letsTalk.ChatService">
+    <Position X="5.25" Y="0.5" Width="3" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAUEqAAAAASCAISBIAggApGAAlCAACEAECQASAAEEQI=</HashCode>
+      <FileName>ChatService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Orientation="Left" Position="0.1" />
+  </Class>
+  <Interface Name="letsTalk.IChatService">
+    <Position X="6.75" Y="2.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAEIAAAAAQAAACAAAgAAoAAAACAACAAAAAAQAAAAQA=</HashCode>
+      <FileName>IChatService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="letsTalk.IFileService">
+    <Position X="9.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IFileService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="letsTalk.IAvatarService">
+    <Position X="4.5" Y="3.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAABAAAAAAAAAgAAAAAAACAAAAAEAAA=</HashCode>
+      <FileName>IFileService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="letsTalk.IUnitService">
+    <Position X="2.5" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAiAAAAAACAIAAIAAAAAAAAEAAAAAAAAAACAAEEAA=</HashCode>
+      <FileName>IUnitService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

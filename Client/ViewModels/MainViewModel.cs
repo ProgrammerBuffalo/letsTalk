@@ -73,7 +73,6 @@ namespace Client.ViewModels
                      Models.Chat chat = Chats[Chats.IndexOf(e.NewItems[0] as Models.Chat)];
                      if (e.NewItems[0] is Models.ChatGroup)
                          DownloadChatAvatarAsync(e.NewItems[0] as Models.ChatGroup);
-                     chat.LastMessage = new TextMessage("You are added", DateTime.Now);
                  }
 
              });
@@ -262,16 +261,6 @@ namespace Client.ViewModels
             return null;
         }
 
-        //private void AddChatToChats(Models.Chat chat)
-        //{
-        //    Chats.Add(chat);
-        //}
-
-        //private void RemoveChatFromChats(Models.Chat chat)
-        //{
-        //    Chats.Remove(chat);
-        //}
-
         private void ChatIsWriting(int chatId, int? userId)
         {
             var chat = FindChatroom(chatId);
@@ -299,6 +288,11 @@ namespace Client.ViewModels
                     {
                         if (item.UserSqlId == client.SqlId)
                             continue;
+
+                        if(item.LeaveDate != DateTime.MinValue)
+                        {
+                            continue;
+                        }
 
                         AvailableUser user = Users.FirstOrDefault(u => u.Key == item.UserSqlId).Value;
                         if (user == null)
@@ -350,12 +344,12 @@ namespace Client.ViewModels
 
             if (chats.Where(c => c.FindUser(userId) != null).ToList().Count < 1)
             {
-                Nullable<KeyValuePair<int, AvailableUser>> availableUser = Users.FirstOrDefault(u => u.Key == userId);
-                if (availableUser != null)
+                KeyValuePair<int, AvailableUser> availableUser = Users.FirstOrDefault(u => u.Key == userId);
+                if (availableUser.Value != null)
                 {
-                    availableUser.Value.Value.Image = null;
-                    availableUser.Value.Value.IsOnline = false;
-                    Users.Remove(availableUser.Value);
+                    availableUser.Value.Image = null;
+                    availableUser.Value.IsOnline = false;
+                    Users.Remove(availableUser);
                 }
             }
         }
@@ -494,16 +488,6 @@ namespace Client.ViewModels
                 foreach (var item in clientChatrooms)
                 {
                     item.LastMessage = await Utility.MessageLoader.LoadMessage(item, client.SqlId, 1, 1);
-                    if (item.LastMessage is TextMessage)
-                    {
-                        TextMessage textMessage = item.LastMessage as TextMessage;
-                        DateTime dateTime = DateTime.MinValue;
-                        if (DateTime.TryParse(textMessage.Text, out dateTime))
-                        {
-                            dateTime = new ChatService.UnitClient().FindUserJoin(this.client.SqlId, item.SqlId);
-                            item.LastMessage = new TextMessage("You are added", dateTime);
-                        }
-                    }
                 }
                 clientChatrooms.Sort((a, b) => { return b.LastMessage.Date.CompareTo(a.LastMessage.Date); });
 

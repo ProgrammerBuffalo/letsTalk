@@ -239,7 +239,7 @@ namespace letsTalk
                         SqlCommand sqlCommandAddAvatar = new SqlCommand($@" INSERT INTO DataFT(file_stream, name, path_locator)
                                                                         OUTPUT INSERTED.stream_id, GET_FILESTREAM_TRANSACTION_CONTEXT(),
                                                                         INSERTED.file_stream.PathName()
-                                                                        VALUES(CAST('' as varbinary(MAX)), @name, dbo.GetPathLocatorForChild('{selector}Avatars'))", sqlConnection);
+                                                                        VALUES(CAST('' as varbinary(MAX)), @name, dbo.GetParentPathLocator('{selector}Avatars'))", sqlConnection);
 
                         sqlCommandAddAvatar.CommandType = CommandType.Text;
 
@@ -525,7 +525,7 @@ namespace letsTalk
 
                         SqlCommand sqlCommandAddFileForContentXML = new SqlCommand(@"INSERT INTO DataFT(file_stream, name, path_locator)                                                                                  
                                                                                      OUTPUT INSERTED.stream_id
-                                                                                     VALUES(CAST('' as varbinary(MAX)), @name, dbo.GetPathLocatorForChild('Messages'))", sqlConnection);
+                                                                                     VALUES(CAST('' as varbinary(MAX)), @name, dbo.GetParentPathLocator('Messages'))", sqlConnection);
 
                         sqlCommandAddFileForContentXML.CommandType = CommandType.Text;
 
@@ -592,6 +592,7 @@ namespace letsTalk
                 lock (lockerSyncObj)
                 {
                     XmlCreation(fullpathXML);
+                    AddToXML(fullpathXML, new ServiceMessageManage() { RulingMessage = RulingMessage.ChatroomCreate, UserNickname = "" });
 
                     Console.WriteLine("Users added to chat callbacks...");
 
@@ -1075,7 +1076,8 @@ namespace letsTalk
                         {
                             bool isGroup = sqlDataReader.GetBoolean(4);
                             DateTime dateTime = DateTime.MinValue;
- 
+                            DateTime.TryParse(sqlDataReader.GetSqlDateTime(5).ToString(), out dateTime);
+
                             bool isLeft = sqlDataReader.GetBoolean(6);
                             string chatName = null;
                             if (isGroup)
@@ -1222,7 +1224,7 @@ namespace letsTalk
 
                     userNickname = sqlCommandUserName.ExecuteScalar().ToString();
 
-                    SqlCommand sqlCommandFindUsersInChat = new SqlCommand(@"SELECT Users.Id, Users.Name FROM User_Chatroom INNER JOIN Users ON User_Chatroom.Id_User = Users.Id WHERE Id_Chat = @IdChat", sqlConnection);
+                    SqlCommand sqlCommandFindUsersInChat = new SqlCommand(@"SELECT Users.Id, Users.Name, User_Chatroom.LeaveDate FROM User_Chatroom INNER JOIN Users ON User_Chatroom.Id_User = Users.Id WHERE Id_Chat = @IdChat", sqlConnection);
                     sqlCommandFindUsersInChat.Parameters.Add("@IdChat", SqlDbType.Int).Value = chatId;
 
                     using (SqlDataReader sqlDataReader = sqlCommandFindUsersInChat.ExecuteReader())
@@ -1231,10 +1233,12 @@ namespace letsTalk
                         {
                             int userSqlId = sqlDataReader.GetInt32(0);
                             string userName = sqlDataReader.GetString(1);
+                            DateTime dateTime = DateTime.MinValue;
+                            DateTime.TryParse(sqlDataReader.GetSqlDateTime(2).ToString(), out dateTime);
                             bool isOnline = false;
                             if (chatroomsInUsers.FirstOrDefault(cu => cu.Key.SqlID == userSqlId).Key != null)
                                 isOnline = true;
-                            usersInChat.Add(new UserInChat() { UserSqlId = userSqlId, UserName = userName, IsOnline = isOnline });
+                            usersInChat.Add(new UserInChat() { UserSqlId = userSqlId, UserName = userName, IsOnline = isOnline, LeaveDate = dateTime });
                         }
                     }
 
@@ -1382,56 +1386,6 @@ namespace letsTalk
             RemoveUser(userId, chatId, RulingMessage.UserLeft);
         }
 
-        //Полное удаление чатрума
-        public void DeleteChatroom(int chatId, int userId)
-        {
-            try
-            {
-                Console.WriteLine("Deleting chatroom (" + OperationContext.Current.Channel.GetHashCode() + ")");
-
-                using (SqlConnection sqlConnection = new SqlConnection(connection_string))
-                {
-                    sqlConnection.Open();
-
-                    DateTime leaveDate;
-
-                    SqlCommand sqlCommandDeleteChatroom = new SqlCommand(@"UPDATE User_Chatroom WHERE ChatID = @ChatID SET LeaveDate = GETDATE() OUTPUT INSERTED.LeaveDate", sqlConnection);
-                    sqlCommandDeleteChatroom.CommandType = CommandType.Text;
-
-                    sqlCommandDeleteChatroom.Parameters.Add("@ChatID", SqlDbType.Int).Value = chatId;
-                    using (SqlDataReader sqlDataReader = sqlCommandDeleteChatroom.ExecuteReader())
-                    {
-                        sqlDataReader.Read();
-                        leaveDate = sqlDataReader.GetDateTime(0);
-                    }
-
-                    SqlCommand sqlCommandUserName = new SqlCommand(@"SELECT Name FROM Users WHERE Id = @Id", sqlConnection);
-                    sqlCommandUserName.Parameters.Add("@Id", SqlDbType.Int).Value = userId;
-
-                    string userNickname = sqlCommandUserName.ExecuteScalar().ToString();
-
-                    lock (lockerSyncObj)
-                    {
-                        foreach (ConnectedUser user in chatroomsInUsers.Keys)
-                        {
-                            if (user.UserContext.Channel != OperationContext.Current.Channel)
-                            {
-                                user.UserContext.GetCallbackChannel<IChatCallback>().UserLeftChatroom(userId, chatId);
-                            }
-                            chatroomsInUsers[user].Remove(chatId);
-                        }
-
-                    }
-                }
-                Console.WriteLine("Chatroom is deleted (" + OperationContext.Current.Channel.GetHashCode() + ")");
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-        }
-
         //Отправка файла с чатрума на сервер
         public FileFromChatDownloadRequest FileUpload(UploadFromChatToServer chatToServer)
         {
@@ -1452,7 +1406,7 @@ namespace letsTalk
                         SqlCommand sqlCommandAddFileToDataFT = new SqlCommand($@" INSERT INTO DataFT(file_stream, name, path_locator)
                                                                                   OUTPUT INSERTED.stream_id, GET_FILESTREAM_TRANSACTION_CONTEXT(),
                                                                                   INSERTED.file_stream.PathName()
-                                                                                  VALUES(CAST('' as varbinary(MAX)), @name, dbo.GetPathLocatorForChild('MessageFiles'))", sqlConnection);
+                                                                                  VALUES(CAST('' as varbinary(MAX)), @name, dbo.GetParentPathLocator('MessageFiles'))", sqlConnection);
 
                         sqlCommandAddFileToDataFT.CommandType = CommandType.Text;
 
