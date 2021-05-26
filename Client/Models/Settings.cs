@@ -207,11 +207,12 @@ namespace Client.Models
         {
             XmlDocument document = new XmlDocument();
             document.Load("Settings/user-settings.xml");
-            for (int i = 0; i < document.DocumentElement["Mutes"].ChildNodes.Count; i++)
+            for (int i = 0; i < document.DocumentElement["Notifes"].ChildNodes.Count; i++)
             {
-                if (int.Parse(document.DocumentElement["Mutes"].ChildNodes[i].Attributes["Id"].InnerText) == chatId)
+                if (int.Parse(document.DocumentElement["Notifes"].ChildNodes[i].Attributes["ChatId"].InnerText) == chatId)
                 {
-                    document.DocumentElement["Mutes"].RemoveChild(document.DocumentElement["Mutes"].ChildNodes[i]);
+                    document.DocumentElement["Notifes"].RemoveChild(document.DocumentElement["Notify"].ChildNodes[i]);
+                    document.Save("Settings/user-settings.xml");
                     return;
                 }
             }
