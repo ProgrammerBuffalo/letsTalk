@@ -256,7 +256,7 @@ namespace Client.ViewModels
 
         private void Back(object param)
         {
-            formIsEnabled = true;
+            formIsEnabled = false;
             //IsSectionShown = !IsSectionShown;
             if (uploadFileInfo != null && uploadFileInfo.FileStream != null) uploadFileInfo.FileStream.Dispose();
         }
