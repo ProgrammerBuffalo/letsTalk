@@ -124,6 +124,7 @@ namespace Client.Views
             isLoginError = false;
             isPassError = false;
             registr.IsEnabled = false;
+            isSignIn = false;
         }
 
         private void back_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -145,6 +146,7 @@ namespace Client.Views
             passWarn.Visibility = System.Windows.Visibility.Hidden;
             isLoginError = false;
             isPassError = false;
+            isSignIn = true;
         }
 
         private void CanRegistr()
