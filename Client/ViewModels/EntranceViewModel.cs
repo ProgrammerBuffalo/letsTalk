@@ -32,9 +32,9 @@ namespace Client.ViewModels
         private string login;
         private string password;
 
-        private bool nameIsWarning;
-        private bool loginIsWarning;
-        private bool passwordIsWarning;
+        //private bool nameIsWarning;
+        //private bool loginIsWarning;
+        //private bool passwordIsWarning;
 
         private System.Windows.Visibility loaderVisbility;
         private LoaderState loaderState;
@@ -45,7 +45,7 @@ namespace Client.ViewModels
         {
             entranceWindow = window;
 
-            IsSectionShown = false;
+            //IsSectionShown = false;
             LoaderVisibility = System.Windows.Visibility.Collapsed;
 
             SignInCommand = new Command(SignIn);
@@ -61,7 +61,7 @@ namespace Client.ViewModels
         public ICommand BackCommand { get; }
         public ICommand CancelImageCommand { get; }
 
-        public bool IsSectionShown { get => isSectionShown; set => Set(ref isSectionShown, value); }
+        //public bool IsSectionShown { get => isSectionShown; set => Set(ref isSectionShown, value); }
 
         public string Info { get => info; set => Set(ref info, value); }
 
@@ -71,12 +71,12 @@ namespace Client.ViewModels
         public string Login { get => login; set => Set(ref login, value); }
         public string Password { get => password; set => Set(ref password, value); }
 
-        public bool NameIsWarning { get => nameIsWarning; set => Set(ref nameIsWarning, value); }
-        public bool LoginIsWarning { get => loginIsWarning; set => Set(ref loginIsWarning, value); }
-        public bool PasswordIsWarning { get => passwordIsWarning; set => Set(ref passwordIsWarning, value); }
+        //public bool NameIsWarning { get => nameIsWarning; set => Set(ref nameIsWarning, value); }
+        //public bool LoginIsWarning { get => loginIsWarning; set => Set(ref loginIsWarning, value); }
+        //public bool PasswordIsWarning { get => passwordIsWarning; set => Set(ref passwordIsWarning, value); }
 
         // бывший main grid visibility
-        public bool FormIsEnabled { get => formIsEnabled; set => Set(ref formIsEnabled, value); }
+        //public bool FormIsEnabled { get => formIsEnabled; set => Set(ref formIsEnabled, value); }
 
         public LoaderState LoaderState { get => loaderState; set => Set(ref loaderState, value); }
         public System.Windows.Visibility LoaderVisibility { get => loaderVisbility; set => Set(ref loaderVisbility, value); }
@@ -103,7 +103,7 @@ namespace Client.ViewModels
                     System.Windows.MessageBox.Show(ex.Message);
                     Info = ex.Message;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     System.Windows.MessageBox.Show(ex.Message);
                 }
@@ -116,9 +116,9 @@ namespace Client.ViewModels
 
         private async void Registrate(object param)
         {
-            if (IsSectionShown)
+            if (true)
             {
-                FormIsEnabled = false;
+                //FormIsEnabled = false;
                 ChatService.ServerUserInfo registrationInfo = new ChatService.ServerUserInfo()
                 {
                     Name = Name,
@@ -136,12 +136,11 @@ namespace Client.ViewModels
                     await Task.Delay(1000); // нужен для того чтобы анимация закончилась до конца
 
                     LoaderVisibility = System.Windows.Visibility.Collapsed;
-                    FormIsEnabled = !FormIsEnabled;
+                    //FormIsEnabled = !FormIsEnabled;
                 }
             }
-            IsSectionShown = true;
+            //IsSectionShown = true;
         }
-
 
         private async void MakeRegister(ChatService.ServerUserInfo registrationInfo)
         {
@@ -156,7 +155,7 @@ namespace Client.ViewModels
                 {
                     this.memoryStream.Position = 0;
                     uploadFileInfo.FileName = fileName;
-                
+
                     uploadFileInfo.FileStream = memoryStream;
 
                     if (uploadFileInfo.FileStream.CanRead)
@@ -258,7 +257,7 @@ namespace Client.ViewModels
 
         private void Back(object param)
         {
-            IsSectionShown = !IsSectionShown;
+            //IsSectionShown = !IsSectionShown;
             if (uploadFileInfo != null && uploadFileInfo.FileStream != null) uploadFileInfo.FileStream.Dispose();
         }
 

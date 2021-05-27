@@ -105,7 +105,7 @@
 
                 <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
                     <CheckBox IsChecked="{Binding Path=Settings.CanUserNotify}" Template="{StaticResource SliderCheckBoxTemplate}"/>
-                    <TextBlock Text="Enable user ringtons" VerticalAlignment="Center"/>
+                    <TextBlock Text="Enable user ringtons" VerticalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
 
                 <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource MiniHeaderStyle}" TextWrapping="Wrap">
@@ -117,7 +117,7 @@
 
                 <StackPanel Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Horizontal">
                     <CheckBox IsChecked="{Binding Path=Settings.CanGroupNotify}" Template="{StaticResource SliderCheckBoxTemplate}"/>
-                    <TextBlock Text="Enable group ringtons" VerticalAlignment="Center" />
+                    <TextBlock Text="Enable group ringtons" VerticalAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
             </Grid>
 

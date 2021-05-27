@@ -16,7 +16,7 @@
                 <ResourceDictionary Source="/WindowResources/ThemeDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-            <Style x:Key="ColumnStyle" TargetType="ColumnDefinition">
+            <!--<Style x:Key="ColumnStyle" TargetType="ColumnDefinition">
                 <Setter Property="ColumnDefinition.Width" Value="0"/>
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="True">
@@ -26,9 +26,9 @@
                         <Setter Property="Width" Value="0" />
                     </DataTrigger>
                 </Style.Triggers>
-            </Style>
+            </Style>-->
 
-            <Style x:Key="TextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource MahApps.Styles.TextBox}">
+            <!--<Style x:Key="TextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource MahApps.Styles.TextBox}">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="true">
                         <Setter Property="TextBox.Visibility" Value="Visible" />
@@ -37,9 +37,9 @@
                         <Setter Property="TextBox.Visibility" Value="Collapsed" />
                     </DataTrigger>
                 </Style.Triggers>
-            </Style>
+            </Style>-->
 
-            <Style x:Key="LoginStyle" TargetType="uc:LoginWarning">
+            <!--<Style x:Key="LoginStyle" TargetType="uc:LoginWarning">
                 <Setter Property="Height" Value="40"/>
                 <Setter Property="FontSize" Value="18"/>
                 <Setter Property="Margin" Value="15, 0, 5, 0"/>
@@ -51,9 +51,9 @@
                         <Setter Property="ErrorText" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
                     </Trigger>
                 </Style.Triggers>
-            </Style>
+            </Style>-->
 
-            <Style x:Key="PasswordStyle" TargetType="uc:PasswordWarning">
+            <!--<Style x:Key="PasswordStyle" TargetType="uc:PasswordWarning">
                 <Setter Property="Height" Value="40"/>
                 <Setter Property="FontSize" Value="18"/>
                 <Setter Property="Margin" Value="15, 0, 5, 0"/>
@@ -65,9 +65,9 @@
                         <Setter Property="ErrorText" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
                     </Trigger>
                 </Style.Triggers>
-            </Style>
+            </Style>-->
 
-            <Style x:Key="ButtonSignInStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+            <!--<Style x:Key="ButtonSignInStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
                 <Setter Property="Visibility" Value="Visible"/>
                 <Setter Property="IsEnabled" Value="False"/>
                 <Style.Triggers>
@@ -93,9 +93,9 @@
                         </MultiDataTrigger.Setters>
                     </MultiDataTrigger>
                 </Style.Triggers>
-            </Style>
+            </Style>-->
 
-            <Style x:Key="ButtonRegistrateStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+            <!--<Style x:Key="ButtonRegistrateStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
                 <Setter Property="Grid.Column" Value="1"/>
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="false">
@@ -125,7 +125,7 @@
                         </MultiDataTrigger.Setters>
                     </MultiDataTrigger>
                 </Style.Triggers>
-            </Style>
+            </Style>-->
 
             <DataTemplate x:Key="PhotoButtonDataTemplate">
                 <Grid>
@@ -140,6 +140,55 @@
                     </DataTrigger>
                 </DataTemplate.Triggers>
             </DataTemplate>
+
+            <ControlTemplate x:Key="ButtonTemplate1" TargetType="Button">
+                <Border x:Name="border" Background="{StaticResource ButtonBackground}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" CornerRadius="5" BorderBrush="#cccccc" BorderThickness="2" Cursor="Hand">
+                    <ContentPresenter TextBlock.Foreground="{StaticResource ButtonForeground}" VerticalAlignment="Center" HorizontalAlignment="Center" TextBlock.FontSize="18"/>
+                </Border>
+
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter TargetName="border" Property="Background" Value="Red"/>
+                        <Setter TargetName="border" Property="BorderBrush" Value="Black"/>
+                    </Trigger>
+
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter TargetName="border" Property="Background" Value="Green"/>
+                        <Setter TargetName="border" Property="BorderBrush" Value="Black"/>
+                    </Trigger>
+
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter TargetName="border" Property="Background" Value="Yellow"/>
+                        <Setter TargetName="border" Property="BorderBrush" Value="Black"/>
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+
+            <Style x:Key="WarnStyle" TargetType="Icons:PackIconMaterialDesign">
+                <Setter Property="Width" Value="30"/>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="Margin" Value="0,0,5,0"/>
+                <Setter Property="Foreground" Value="DarkRed"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="Kind" Value="Warning"/>
+                <Setter Property="Visibility" Value="Hidden"/>
+            </Style>
+
+            <Style x:Key="TextBoxStyle" TargetType="TextBox">
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="Height" Value="40"/>
+                <Setter Property="Controls:TextBoxHelper.ClearTextButton" Value="True"/>
+            </Style>
+
+            <Style x:Key="PassBoxStyle" TargetType="PasswordBox">
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="Height" Value="40"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="Controls:TextBoxHelper.ClearTextButton" Value="True"/>
+            </Style>
+
         </ResourceDictionary>
     </Window.Resources>
 
@@ -153,17 +202,32 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Style="{StaticResource ColumnStyle}"/>
+            <ColumnDefinition x:Name="col2" Width="0"/>
         </Grid.ColumnDefinitions>
 
-        <TextBox Text="{Binding Path=Name}" 
-                 Grid.Row="0" Grid.Column="0"
+        <!--<TextBox Grid.Row="0" Grid.Column="0" Width="250"
                  Controls:TextBoxHelper.Watermark="Your Name"
                  Controls:TextBoxHelper.ClearTextButton="True"
-                 Margin="15,15,5,15" FontSize="18"
-                 Style="{StaticResource TextBoxStyle}" />
+                 Margin="15,15,5,15" HorizontalAlignment="Left" FontSize="18"
+                 Style="{StaticResource TextBoxStyle}">
+            <TextBox.Text>
+                <Binding Path="Name">
+                    <Binding.ValidationRules>
+                        <utility:NameRules/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>-->
 
-        <uc:LoginWarning x:Name="login" Grid.Row="1" Style="{StaticResource LoginStyle}">
+        <TextBox x:Name="nameText" Text="{Binding Path=Name}" Grid.Row="0" Grid.Column="0" Visibility="Hidden" Controls:TextBoxHelper.ClearTextButton="True" Controls:TextBoxHelper.Watermark="Your Name" Height="50" FontSize="20" Margin="15,0,5,0" HorizontalAlignment="Left" Width="320" TextChanged="nameText_TextChanged"/>
+        <Icons:PackIconMaterialDesign x:Name="nameWarn" Grid.Column="0" Grid.Row="0" Style="{StaticResource WarnStyle}"/>
+
+        <TextBox x:Name="loginText" Text="{Binding Path=Login}" Grid.Row="1" Grid.Column="0" Margin="15,0,5,0" Controls:TextBoxHelper.ClearTextButton="True" Controls:TextBoxHelper.Watermark="Login" Height="50" FontSize="20" HorizontalAlignment="Left" Width="320" TextChanged="loginText_TextChanged"/>
+        <Icons:PackIconMaterialDesign x:Name="loginWarn" Grid.Column="0" Grid.Row="1" Style="{StaticResource WarnStyle}"/>
+
+        <TextBox x:Name="passText" Text="{Binding Path=Password}" Grid.Row="2" Grid.Column="0" Margin="15,0,5,0" Controls:TextBoxHelper.Watermark="Password" Controls:TextBoxHelper.ClearTextButton="True" Height="50" FontSize="20" HorizontalAlignment="Left" Width="320" TextChanged="passText_TextChanged"/>
+        <Icons:PackIconMaterialDesign x:Name="passWarn" Grid.Column="0" Grid.Row="2" Style="{StaticResource WarnStyle}"/>
+        <!--<uc:LoginWarning x:Name="login" Grid.Row="1" Style="{StaticResource LoginStyle}">
             <uc:LoginWarning.Text>
                 <Binding Path="Login">
                     <Binding.ValidationRules>
@@ -171,9 +235,9 @@
                     </Binding.ValidationRules>
                 </Binding>
             </uc:LoginWarning.Text>
-        </uc:LoginWarning>
+        </uc:LoginWarning>-->
 
-        <uc:PasswordWarning x:Name="password" Grid.Row="2" Style="{StaticResource PasswordStyle}">
+        <!--<uc:PasswordWarning x:Name="password" Grid.Row="2" Style="{StaticResource PasswordStyle}">
             <uc:PasswordWarning.Text>
                 <Binding Path="Password">
                     <Binding.ValidationRules>
@@ -181,7 +245,7 @@
                     </Binding.ValidationRules>
                 </Binding>
             </uc:PasswordWarning.Text>
-        </uc:PasswordWarning>
+        </uc:PasswordWarning>-->
 
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
@@ -189,9 +253,9 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
-            <Button x:Name="signIn" Content="Sign In" Grid.Column="0" Margin="10, 50, 10, 100" Style="{StaticResource ButtonSignInStyle}" Command="{Binding SignInCommand}"/>
+            <Button x:Name="signIn" Content="Sign In" Grid.Column="0" Margin="10, 50, 10, 100" Template="{StaticResource ButtonTemplate1}" Command="{Binding SignInCommand}"/>
 
-            <Button Content="Registrate" Margin="10, 50, 10, 100" Style="{StaticResource ButtonRegistrateStyle}" Command="{Binding RegistrateCommand}"/>
+            <Button x:Name="registr" Content="Registrate" Grid.Column="1" Margin="10, 50, 10, 100" Command="{Binding RegistrateCommand}" Click="registr_Click" Template="{StaticResource ButtonTemplate1}"/>
         </Grid>
 
         <Button Grid.Column="1" Grid.RowSpan="3" Margin="5, 15" Padding="15 30" Command="{Binding SetPhotoCommand}" ContentTemplate="{StaticResource PhotoButtonDataTemplate}">
@@ -200,11 +264,11 @@
             </Button.Background>
         </Button>
 
-        <Button Content="Back" Grid.Row="3" Grid.Column="1" Margin="10, 50, 10, 100" Style="{StaticResource ButtonStyle}" Command="{Binding BackCommand}"/>
+        <Button x:Name="back" Content="Back" Grid.Row="3" Grid.Column="1" Margin="10, 50, 10, 100" Style="{StaticResource ButtonStyle}" Command="{Binding BackCommand}" Click="back_Click"/>
 
         <uc:LoadingUserControl Grid.RowSpan="4" Grid.ColumnSpan="2" State="{Binding Path=LoaderState}" Visibility="{Binding Path=LoaderVisibility}"/>
 
-        <TextBlock Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
+        <!--<TextBlock Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" />-->
     </Grid>
 
 </Controls:MetroWindow>
