@@ -142,6 +142,7 @@ namespace Client.Views
             nameText.Text = "";
             loginText.Text = "";
             passText.Text = "";
+            nameWarn.Visibility = System.Windows.Visibility.Hidden;
             loginWarn.Visibility = System.Windows.Visibility.Hidden;
             passWarn.Visibility = System.Windows.Visibility.Hidden;
             isLoginError = false;
