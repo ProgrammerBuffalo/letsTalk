@@ -131,6 +131,14 @@ namespace letsTalk
 
                 sqlTransaction.Commit();
             }
+            catch(FaultException<LoginExceptionFault> lf)
+            {
+                throw lf;
+            }
+            catch(FaultException<NicknameExceptionFault> nf)
+            {
+                throw nf;
+            }
             catch (SqlException sqlEx)
             {
                 sqlTransaction.Rollback();

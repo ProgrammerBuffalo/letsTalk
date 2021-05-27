@@ -8,8 +8,8 @@
         xmlns:controls ="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:UC="clr-namespace:Client.UserControls"
         mc:Ignorable="d"
-        Title="letsTalkWindow" Height="700" Width="1200" MinHeight="500" MinWidth="800" 
-        WindowStartupLocation="CenterScreen" WindowTitleBrush="#57394a" WindowState="{Binding WindowState}">
+        Title="letsTalk" Height="700" Width="1200" MinHeight="500" MinWidth="800" 
+        WindowStartupLocation="CenterScreen" GlowBrush="#8738ab" WindowTitleBrush="#57394a" WindowState="{Binding WindowState}">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -82,7 +82,7 @@
                             <Border x:Name="border" Margin="0,5" Cursor="Hand">
                                 <ContentPresenter/>
                             </Border>
-                            
+
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter TargetName="border" Property="Background" Value="#004d61"/>
@@ -104,7 +104,7 @@
                 <Setter Property="PaneBackground" Value="{StaticResource HamburgerBackground}"/>
                 <Setter Property="PaneForeground" Value="Gray"/>
             </Style>
-            
+
         </ResourceDictionary>
     </Window.Resources>
 
@@ -112,7 +112,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="col1"/>
             <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>       
+        </Grid.ColumnDefinitions>
 
         <controls:HamburgerMenu x:Name="hamburgerMenu"
                                  Grid.Column="0"
@@ -131,43 +131,37 @@
                             <icons:PackIconMaterial  Kind="AccountMultiplePlus" Foreground="Wheat" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10, 0, 0, 0"/>
                         </controls:HamburgerMenuIconItem.Icon>
                     </controls:HamburgerMenuIconItem>
-
-                    <controls:HamburgerMenuIconItem Tag="UCSettings" Label="Settings" Command="{Binding SettingsShowCommand}">
-                        <controls:HamburgerMenuIconItem.Icon>
-                            <icons:PackIconMaterial  Kind="Shield" Width="32" Foreground="Wheat" Height="32" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10, 0, 0, 0"/>
-                        </controls:HamburgerMenuIconItem.Icon>
-                    </controls:HamburgerMenuIconItem>
                 </controls:HamburgerMenuItemCollection>
             </controls:HamburgerMenu.OptionsItemsSource>
 
             <controls:HamburgerMenu.HamburgerMenuHeaderTemplate>
-                <DataTemplate>
-                    <Grid Margin="30,0,0,0">
-                        <UC:ChatItem UserName="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.Client.UserName}"
+                    <DataTemplate>
+                        <Grid Margin="30,0,0,0">
+                            <UC:ChatItem UserName="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.Client.UserName}"
                                      UserNameForeground="{StaticResource ChatForeground}"
                                      Avatar="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.Client.UserImage}"
                                      IsOnlineVisibility="Hidden">
-                        </UC:ChatItem>
+                            </UC:ChatItem>
 
-                        <Button x:Name="btn1" Margin="45,0,0,0" Visibility="Hidden" Template="{StaticResource ChangeImageTemplae}" Command="{Binding Path=DataContext.ChangeAvatarCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
+                            <Button x:Name="btn1" Margin="45,0,0,0" Visibility="Hidden" Template="{StaticResource ChangeImageTemplae}" Command="{Binding Path=DataContext.ChangeAvatarCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
 
-                        <Button x:Name="btn2" Margin="45,40,0,0" Visibility="Hidden" Template="{StaticResource CancelButtonTemplate}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.CancelImageCommand}"/>
-                    </Grid>
+                            <Button x:Name="btn2" Margin="45,40,0,0" Visibility="Hidden" Template="{StaticResource CancelButtonTemplate}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.CancelImageCommand}"/>
+                        </Grid>
 
-                    <DataTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="btn1" Property="Visibility" Value="Visible"/>
-                            <Setter TargetName="btn2" Property="Visibility" Value="Visible"/>
-                        </Trigger>
-                    </DataTemplate.Triggers>
-                </DataTemplate>
-            </controls:HamburgerMenu.HamburgerMenuHeaderTemplate>
+                        <DataTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="btn1" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="btn2" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </controls:HamburgerMenu.HamburgerMenuHeaderTemplate>
 
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="ItemClick">
-                    <i:InvokeCommandAction Command="{Binding SelectedChatChangedCommand}" CommandParameter="{Binding ElementName=hamburgerMenu, Path=SelectedItem}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="ItemClick">
+                        <i:InvokeCommandAction Command="{Binding SelectedChatChangedCommand}" CommandParameter="{Binding ElementName=hamburgerMenu, Path=SelectedItem}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
         </controls:HamburgerMenu>
 
     </Grid>
@@ -180,4 +174,29 @@
             <i:InvokeCommandAction Command="{Binding WindowStateChangedCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
+
+    <controls:MetroWindow.RightWindowCommands>
+        <controls:WindowCommands>
+            <Button Command="{Binding SettingsShowCommand}" Content="Settings">
+                <Button.ContentTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <icons:PackIconMaterial Kind="Cog" Width="22"
+                                        Height="22"
+                                        FontWeight="Bold"
+                                        Foreground="#ffd1e8"
+                                        VerticalAlignment="Center"
+                                         />
+                            <TextBlock Margin="4 0 0 0"
+                                       FontWeight="Bold"
+                                       Foreground="#ffd1e8"
+                                       VerticalAlignment="Center"
+                                       Text="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </Button.ContentTemplate>
+            </Button>
+        </controls:WindowCommands>
+    </controls:MetroWindow.RightWindowCommands>
+
 </controls:MetroWindow>

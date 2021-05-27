@@ -208,7 +208,7 @@ namespace Client.ViewModels
 
         private void SettingsShow(object param)
         {
-            RemoveUC.Invoke(currentView);
+            RemoveUC.Invoke(currentView);            
             UserControl control = new Views.SettingsUC();
             control.DataContext = new SettingsViewModel(Client);
             currentView = control;

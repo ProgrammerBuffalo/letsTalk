@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Drawing;
 using System.Windows.Media.Imaging;
+using System.Windows;
 
 namespace Client.ViewModels
 {
@@ -103,7 +104,7 @@ namespace Client.ViewModels
                     System.Windows.MessageBox.Show(ex.Message);
                     Info = ex.Message;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     System.Windows.MessageBox.Show(ex.Message);
                 }
@@ -125,19 +126,17 @@ namespace Client.ViewModels
                     Login = Login,
                     Password = Password
                 };
-                if (IsInfoCorrect())
-                {
-                    LoaderVisibility = System.Windows.Visibility.Visible;
-                    LoaderState = LoaderState.Loading;
 
-                    MakeRegister(registrationInfo);
-                    LoaderState = LoaderState.Success;
+                LoaderVisibility = System.Windows.Visibility.Visible;
+                LoaderState = LoaderState.Loading;
 
-                    await Task.Delay(1000); // нужен для того чтобы анимация закончилась до конца
+                MakeRegister(registrationInfo);
+                LoaderState = LoaderState.Success;
 
-                    LoaderVisibility = System.Windows.Visibility.Collapsed;
-                    FormIsEnabled = !FormIsEnabled;
-                }
+                await Task.Delay(1000); // нужен для того чтобы анимация закончилась до конца
+
+                LoaderVisibility = System.Windows.Visibility.Collapsed;
+                FormIsEnabled = !FormIsEnabled;
             }
             IsSectionShown = true;
         }
@@ -156,7 +155,7 @@ namespace Client.ViewModels
                 {
                     this.memoryStream.Position = 0;
                     uploadFileInfo.FileName = fileName;
-                
+
                     uploadFileInfo.FileStream = memoryStream;
 
                     if (uploadFileInfo.FileStream.CanRead)
@@ -166,28 +165,27 @@ namespace Client.ViewModels
             catch (FaultException<ChatService.LoginExceptionFault> ex)
             {
                 LoaderState = LoaderState.Fault;
-                Info = ex.Message;
+                MessageBox.Show(ex.Message);
             }
             catch (FaultException<ChatService.NicknameExceptionFault> ex)
             {
                 LoaderState = LoaderState.Fault;
-                Info = ex.Message;
+                MessageBox.Show(ex.Message);
             }
             catch (FaultException<ChatService.StreamExceptionFault> ex)
             {
                 LoaderState = LoaderState.Fault;
-                Info = ex.Message;
+                MessageBox.Show(ex.Message);
             }
             catch (FaultException<ChatService.AuthorizationExceptionFault> ex)
             {
                 LoaderState = LoaderState.Fault;
-                Info = ex.Message;
+                MessageBox.Show(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                System.Windows.MessageBox.Show(ex.Message);
                 LoaderState = LoaderState.Fault;
-                Info = "Something wrong with server";
+                MessageBox.Show("Something wrong with server");
             }
             finally
             {
@@ -265,11 +263,6 @@ namespace Client.ViewModels
         private void CancelImage(object param)
         {
             SelectedImage = null;
-        }
-
-        private bool IsInfoCorrect()
-        {
-            return true;
         }
 
         public void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
