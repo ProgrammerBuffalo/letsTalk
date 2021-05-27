@@ -219,13 +219,13 @@
             </TextBox.Text>
         </TextBox>-->
 
-        <TextBox x:Name="nameText" Text="{Binding Path=Name}" Grid.Row="0" Grid.Column="0" Visibility="Hidden" Controls:TextBoxHelper.ClearTextButton="True" Controls:TextBoxHelper.Watermark="Your Name" Height="50" FontSize="20" Margin="15,0,5,0" HorizontalAlignment="Left" Width="320" TextChanged="nameText_TextChanged"/>
+        <TextBox x:Name="nameText" Text="{Binding Path=Name}" Grid.Row="0" Grid.Column="0" Visibility="Hidden" Controls:TextBoxHelper.ClearTextButton="True" Controls:TextBoxHelper.Watermark="Your Name" Height="40" FontSize="20" Margin="15,0,5,0" HorizontalAlignment="Left" Width="320" TextChanged="nameText_TextChanged"/>
         <Icons:PackIconMaterialDesign x:Name="nameWarn" Grid.Column="0" Grid.Row="0" Style="{StaticResource WarnStyle}"/>
 
-        <TextBox x:Name="loginText" Text="{Binding Path=Login}" Grid.Row="1" Grid.Column="0" Margin="15,0,5,0" Controls:TextBoxHelper.ClearTextButton="True" Controls:TextBoxHelper.Watermark="Login" Height="50" FontSize="20" HorizontalAlignment="Left" Width="320" TextChanged="loginText_TextChanged"/>
+        <TextBox x:Name="loginText" Text="{Binding Path=Login}" Grid.Row="1" Grid.Column="0" Margin="15,0,5,0" Controls:TextBoxHelper.ClearTextButton="True" Controls:TextBoxHelper.Watermark="Login" Height="40" FontSize="20" HorizontalAlignment="Left" Width="320" TextChanged="loginText_TextChanged"/>
         <Icons:PackIconMaterialDesign x:Name="loginWarn" Grid.Column="0" Grid.Row="1" Style="{StaticResource WarnStyle}"/>
 
-        <TextBox x:Name="passText" Text="{Binding Path=Password}" Grid.Row="2" Grid.Column="0" Margin="15,0,5,0" Controls:TextBoxHelper.Watermark="Password" Controls:TextBoxHelper.ClearTextButton="True" Height="50" FontSize="20" HorizontalAlignment="Left" Width="320" TextChanged="passText_TextChanged"/>
+        <TextBox x:Name="passText" Text="{Binding Path=Password}" Grid.Row="2" Grid.Column="0" Margin="15,0,5,0" Controls:TextBoxHelper.Watermark="Password" Controls:TextBoxHelper.ClearTextButton="True" Height="40" FontSize="20" HorizontalAlignment="Left" Width="320" TextChanged="passText_TextChanged"/>
         <Icons:PackIconMaterialDesign x:Name="passWarn" Grid.Column="0" Grid.Row="2" Style="{StaticResource WarnStyle}"/>
         <!--<uc:LoginWarning x:Name="login" Grid.Row="1" Style="{StaticResource LoginStyle}">
             <uc:LoginWarning.Text>

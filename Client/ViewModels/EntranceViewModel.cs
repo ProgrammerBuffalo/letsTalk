@@ -117,7 +117,7 @@ namespace Client.ViewModels
 
         private async void Registrate(object param)
         {
-            if (true)
+            if (formIsEnabled)
             {
                 //FormIsEnabled = false;
                 ChatService.ServerUserInfo registrationInfo = new ChatService.ServerUserInfo()
@@ -135,10 +135,10 @@ namespace Client.ViewModels
 
                 await Task.Delay(1000); // нужен для того чтобы анимация закончилась до конца
 
-                    LoaderVisibility = System.Windows.Visibility.Collapsed;
-                    //FormIsEnabled = !FormIsEnabled;
-                }
+                LoaderVisibility = System.Windows.Visibility.Collapsed;
+                //FormIsEnabled = !FormIsEnabled;
             }
+            formIsEnabled = true;
             //IsSectionShown = true;
         }
 
@@ -256,6 +256,7 @@ namespace Client.ViewModels
 
         private void Back(object param)
         {
+            formIsEnabled = true;
             //IsSectionShown = !IsSectionShown;
             if (uploadFileInfo != null && uploadFileInfo.FileStream != null) uploadFileInfo.FileStream.Dispose();
         }
