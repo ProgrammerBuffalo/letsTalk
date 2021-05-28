@@ -211,14 +211,8 @@
     <Compile Include="UserControls\LoadingUserControl.xaml.cs">
       <DependentUpon>LoadingUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\LoginWarning.xaml.cs">
-      <DependentUpon>LoginWarning.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\NotifyUC.xaml.cs">
       <DependentUpon>NotifyUC.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\PasswordWarning.xaml.cs">
-      <DependentUpon>PasswordWarning.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utility\Command.cs" />
     <Compile Include="Utility\Converters.cs" />
@@ -290,15 +284,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\LoginWarning.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserControls\NotifyUC.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\PasswordWarning.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

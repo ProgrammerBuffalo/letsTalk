@@ -21,142 +21,124 @@ namespace Client.Views
             authorizationRules = new Utility.AuthorizationRules();
             nameRules = new Utility.NameRules();
             isSignIn = true;
-            signIn.IsEnabled = false;
+            signIn.IsEnabled = true;
         }
 
         private void nameText_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            var error = nameRules.Validate(nameText.Text, null);
-            if (error.IsValid)
-            {
-                if (isNameError)
-                {
-                    nameWarn.Visibility = System.Windows.Visibility.Hidden;
-                    nameText.Width = nameText.ActualWidth + 30;
-                    isNameError = false;
-                }
-                if (isSignIn) CanLogin();
-                else CanRegistr();
-            }
-            else
-            {
-                nameWarn.ToolTip = error.ErrorContent;
-                if (!isNameError)
-                {
-                    nameWarn.Visibility = System.Windows.Visibility.Visible;
-                    nameText.Width = nameText.ActualWidth - 30;
-                    isNameError = true;
-                }
-                if (isSignIn) signIn.IsEnabled = false;
-                else registr.IsEnabled = false;
-            }
+            //var error = nameRules.Validate(nameText.Text, null);
+            //if (error.IsValid)
+            //{
+            //    nameWarn.Visibility = System.Windows.Visibility.Hidden;
+            //    col1.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
+            //    isNameError = false;
+            //    CanRegistr();
+            //}
+            //else
+            //{
+            //    nameWarn.ToolTip = error.ErrorContent;
+            //    nameWarn.Visibility = System.Windows.Visibility.Visible;
+            //    col1.Width = new System.Windows.GridLength(40, System.Windows.GridUnitType.Pixel);
+            //    isNameError = true;
+            //    if (isSignIn) signIn.IsEnabled = false;
+            //    else registr.IsEnabled = false;
+            //}
         }
 
         private void loginText_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            var error = authorizationRules.Validate(loginText.Text, null);
-            if (error.IsValid)
-            {
-                if (isLoginError)
-                {
-                    loginWarn.Visibility = System.Windows.Visibility.Hidden;
-                    loginText.Width = loginText.ActualWidth + 30;
-                    isLoginError = false;
-                }
-                if (isSignIn) CanLogin();
-                else CanRegistr();
+            //var error = authorizationRules.Validate(loginText.Text, null);
+            //if (error.IsValid)
+            //{
+            //    loginWarn.Visibility = System.Windows.Visibility.Hidden;
+            //    col2.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
+            //    isLoginError = false;
+            //    if (isSignIn) CanLogin();
+            //    else CanRegistr();
 
-            }
-            else
-            {
-                loginWarn.ToolTip = error.ErrorContent;
-                if (!isLoginError)
-                {
-                    loginWarn.Visibility = System.Windows.Visibility.Visible;
-                    loginText.Width = loginText.ActualWidth - 30;
-                    isLoginError = true;
-                }
-                if (isSignIn) signIn.IsEnabled = false;
-                else registr.IsEnabled = false;
-            }
+            //}
+            //else
+            //{
+            //    loginWarn.ToolTip = error.ErrorContent;
+            //    loginWarn.Visibility = System.Windows.Visibility.Visible;
+            //    col2.Width = new System.Windows.GridLength(40, System.Windows.GridUnitType.Pixel);
+            //    isLoginError = true;
+            //    if (isSignIn) signIn.IsEnabled = false;
+            //    else registr.IsEnabled = false;
+            //}
         }
 
         private void passText_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            var error = authorizationRules.Validate(passText.Text, null);
-            if (error.IsValid)
-            {
-                if (isPassError)
-                {
-                    passWarn.Visibility = System.Windows.Visibility.Hidden;
-                    passText.Width = passText.ActualWidth + 30;
-                    isPassError = false;
-                }
-                if (isSignIn) CanLogin();
-                else CanRegistr();
-            }
-            else
-            {
-                passWarn.ToolTip = error.ErrorContent;
-                if (!isPassError)
-                {
-                    passWarn.Visibility = System.Windows.Visibility.Visible;
-                    passText.Width = passText.ActualWidth - 30;
-                    isPassError = true;
-                }
-                if (isSignIn) signIn.IsEnabled = false;
-                else registr.IsEnabled = false;
-            }
+            //var error = authorizationRules.Validate(passText.Text, null);
+            //if (error.IsValid)
+            //{
+            //    passWarn.Visibility = System.Windows.Visibility.Hidden;
+            //    col3.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
+            //    isPassError = false;
+            //    if (isSignIn) CanLogin();
+            //    else CanRegistr();
+            //}
+            //else
+            //{
+            //    passWarn.ToolTip = error.ErrorContent;
+            //    passWarn.Visibility = System.Windows.Visibility.Visible;
+            //    col3.Width = new System.Windows.GridLength(40, System.Windows.GridUnitType.Pixel);
+            //    isPassError = true;
+            //    if (isSignIn) signIn.IsEnabled = false;
+            //    else registr.IsEnabled = false;
+            //}
         }
 
         private void registr_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             nameText.Visibility = System.Windows.Visibility.Visible;
             back.Visibility = System.Windows.Visibility.Visible;
-            col2.Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star);
+            mainCol2.Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star);
             signIn.Visibility = System.Windows.Visibility.Hidden;
             Grid.SetColumnSpan(registr, 2);
             Grid.SetColumn(registr, 0);
-            nameText.Width = 200;
-            loginText.Width = 200;
-            passText.Width = 200;
+            col1.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
+            col2.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
+            col3.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
             loginWarn.Visibility = System.Windows.Visibility.Hidden;
             passWarn.Visibility = System.Windows.Visibility.Hidden;
             isSignIn = false;
-            isLoginError = false;
-            isPassError = false;
-            registr.IsEnabled = false;
+            registr.IsEnabled = true;
         }
 
         private void back_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             nameText.Visibility = System.Windows.Visibility.Hidden;
             back.Visibility = System.Windows.Visibility.Hidden;
-            col2.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
+            mainCol2.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
             signIn.Visibility = System.Windows.Visibility.Visible;
             Grid.SetColumnSpan(registr, 1);
             Grid.SetColumn(registr, 1);
-            nameText.Width = 320;
-            loginText.Width = 320;
-            passText.Width = 320;
+            col1.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
+            col2.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
+            col3.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
             nameWarn.Visibility = System.Windows.Visibility.Hidden;
             loginWarn.Visibility = System.Windows.Visibility.Hidden;
             passWarn.Visibility = System.Windows.Visibility.Hidden;
             registr.IsEnabled = true;
             isSignIn = true;
-            isLoginError = false;
-            isPassError = false;
         }
 
         private void CanRegistr()
         {
-            if (isNameError || isLoginError || isPassError) registr.IsEnabled = false;
+            if (isNameError || isLoginError || isPassError ||
+                string.IsNullOrWhiteSpace(nameText.Text) ||
+                string.IsNullOrWhiteSpace(loginText.Text) ||
+                string.IsNullOrWhiteSpace(passText.Text)) registr.IsEnabled = false;
             else registr.IsEnabled = true;
         }
 
         private void CanLogin()
         {
-            if (isLoginError || isPassError) signIn.IsEnabled = false;
+            if (isLoginError || isPassError ||
+                string.IsNullOrWhiteSpace(loginText.Text) ||
+                string.IsNullOrWhiteSpace(passText.Text)) signIn.IsEnabled = false;
             else signIn.IsEnabled = true;
         }
     }

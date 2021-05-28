@@ -161,6 +161,7 @@ namespace Client.ViewModels
                     if (uploadFileInfo.FileStream.CanRead)
                         await avatarClient.UserAvatarUploadAsync(uploadFileInfo.FileName, UserId, uploadFileInfo.FileStream);
                 }
+                Models.Settings.Instance.AddUser(UserId);
             }
             catch (FaultException<ChatService.LoginExceptionFault> ex)
             {

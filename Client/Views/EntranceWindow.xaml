@@ -6,7 +6,6 @@
         xmlns:Controls ="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:Icons ="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:uc="clr-namespace:Client.UserControls"
-        xmlns:utility="clr-namespace:Client.Utility"
         mc:Ignorable="d"
         Title="Entrance" Height="450" Width="350" ResizeMode="NoResize" WindowTitleBrush="#57394a">
 
@@ -15,117 +14,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/WindowResources/ThemeDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
-            <!--<Style x:Key="ColumnStyle" TargetType="ColumnDefinition">
-                <Setter Property="ColumnDefinition.Width" Value="0"/>
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="True">
-                        <Setter Property="Width" Value="1*" />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="False">
-                        <Setter Property="Width" Value="0" />
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>-->
-
-            <!--<Style x:Key="TextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource MahApps.Styles.TextBox}">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="true">
-                        <Setter Property="TextBox.Visibility" Value="Visible" />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="false">
-                        <Setter Property="TextBox.Visibility" Value="Collapsed" />
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>-->
-
-            <!--<Style x:Key="LoginStyle" TargetType="uc:LoginWarning">
-                <Setter Property="Height" Value="40"/>
-                <Setter Property="FontSize" Value="18"/>
-                <Setter Property="Margin" Value="15, 0, 5, 0"/>
-
-                <Style.Triggers>
-                    <Trigger Property="Validation.HasError" Value="True">
-                        <Setter Property="IsWarning" Value="True"/>
-                        <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/>
-                        <Setter Property="ErrorText" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
-                    </Trigger>
-                </Style.Triggers>
-            </Style>-->
-
-            <!--<Style x:Key="PasswordStyle" TargetType="uc:PasswordWarning">
-                <Setter Property="Height" Value="40"/>
-                <Setter Property="FontSize" Value="18"/>
-                <Setter Property="Margin" Value="15, 0, 5, 0"/>
-
-                <Style.Triggers>
-                    <Trigger Property="Validation.HasError" Value="True">
-                        <Setter Property="IsWarning" Value="True"/>
-                        <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/>
-                        <Setter Property="ErrorText" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
-                    </Trigger>
-                </Style.Triggers>
-            </Style>-->
-
-            <!--<Style x:Key="ButtonSignInStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
-                <Setter Property="Visibility" Value="Visible"/>
-                <Setter Property="IsEnabled" Value="False"/>
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="false">
-                        <Setter Property="Visibility" Value="Visible" />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="true">
-                        <Setter Property="Visibility" Value="Collapsed" />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding ElementName=login, Path=IsWarning}" Value="True">
-                        <Setter Property="IsEnabled" Value="False"/>
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding ElementName=password, Path=IsWarning}" Value="True">
-                        <Setter Property="IsEnabled" Value="False"/>
-                    </DataTrigger>
-                    <MultiDataTrigger>
-                        <MultiDataTrigger.Conditions>
-                            <Condition Binding="{Binding ElementName=login, Path=IsWarning}" Value="False"/>
-                            <Condition Binding="{Binding ElementName=password, Path=IsWarning}" Value="False"/>
-                        </MultiDataTrigger.Conditions>
-                        <MultiDataTrigger.Setters>
-                            <Setter Property="IsEnabled" Value="True"/>
-                        </MultiDataTrigger.Setters>
-                    </MultiDataTrigger>
-                </Style.Triggers>
-            </Style>-->
-
-            <!--<Style x:Key="ButtonRegistrateStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
-                <Setter Property="Grid.Column" Value="1"/>
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="false">
-                        <Setter Property="Grid.Column" Value="1" />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=DataContext.IsSectionShown, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Value="true">
-                        <Setter Property="Grid.Column" Value="0" />
-                        <Setter Property="Grid.ColumnSpan" Value="2"/>
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding ElementName=name, Path=IsWarning}" Value="True">
-                        <Setter Property="IsEnabled" Value="False"/>
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding ElementName=login, Path=IsWarning}" Value="True">
-                        <Setter Property="IsEnabled" Value="False"/>
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding ElementName=password, Path=IsWarning}" Value="True">
-                        <Setter Property="IsEnabled" Value="False"/>
-                    </DataTrigger>
-                    <MultiDataTrigger>
-                        <MultiDataTrigger.Conditions>
-                            <Condition Binding="{Binding ElementName=name, Path=IsWarning}" Value="False"/>
-                            <Condition Binding="{Binding ElementName=login, Path=IsWarning}" Value="False"/>
-                            <Condition Binding="{Binding ElementName=password, Path=IsWarning}" Value="False"/>
-                        </MultiDataTrigger.Conditions>
-                        <MultiDataTrigger.Setters>
-                            <Setter Property="IsEnabled" Value="True"/>
-                        </MultiDataTrigger.Setters>
-                    </MultiDataTrigger>
-                </Style.Triggers>
-            </Style>-->
 
             <DataTemplate x:Key="PhotoButtonDataTemplate">
                 <Grid>
@@ -140,29 +28,6 @@
                     </DataTrigger>
                 </DataTemplate.Triggers>
             </DataTemplate>
-
-            <ControlTemplate x:Key="ButtonTemplate1" TargetType="Button">
-                <Border x:Name="border" Background="{StaticResource ButtonBackground}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" CornerRadius="5" BorderBrush="#cccccc" BorderThickness="2" Cursor="Hand">
-                    <ContentPresenter TextBlock.Foreground="{StaticResource ButtonForeground}" VerticalAlignment="Center" HorizontalAlignment="Center" TextBlock.FontSize="18"/>
-                </Border>
-
-                <ControlTemplate.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter TargetName="border" Property="Background" Value="Red"/>
-                        <Setter TargetName="border" Property="BorderBrush" Value="Black"/>
-                    </Trigger>
-
-                    <Trigger Property="IsPressed" Value="True">
-                        <Setter TargetName="border" Property="Background" Value="Green"/>
-                        <Setter TargetName="border" Property="BorderBrush" Value="Black"/>
-                    </Trigger>
-
-                    <Trigger Property="IsEnabled" Value="False">
-                        <Setter TargetName="border" Property="Background" Value="Yellow"/>
-                        <Setter TargetName="border" Property="BorderBrush" Value="Black"/>
-                    </Trigger>
-                </ControlTemplate.Triggers>
-            </ControlTemplate>
 
             <Style x:Key="WarnStyle" TargetType="Icons:PackIconMaterialDesign">
                 <Setter Property="Width" Value="30"/>
@@ -202,50 +67,38 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
-            <ColumnDefinition x:Name="col2" Width="0"/>
+            <ColumnDefinition x:Name="mainCol2" Width="0"/>
         </Grid.ColumnDefinitions>
 
-        <!--<TextBox Grid.Row="0" Grid.Column="0" Width="250"
-                 Controls:TextBoxHelper.Watermark="Your Name"
-                 Controls:TextBoxHelper.ClearTextButton="True"
-                 Margin="15,15,5,15" HorizontalAlignment="Left" FontSize="18"
-                 Style="{StaticResource TextBoxStyle}">
-            <TextBox.Text>
-                <Binding Path="Name">
-                    <Binding.ValidationRules>
-                        <utility:NameRules/>
-                    </Binding.ValidationRules>
-                </Binding>
-            </TextBox.Text>
-        </TextBox>-->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition x:Name="col1" Width="0"/>
+            </Grid.ColumnDefinitions>
 
-        <TextBox x:Name="nameText" Text="{Binding Path=Name}" Grid.Row="0" Grid.Column="0" Visibility="Hidden" Controls:TextBoxHelper.ClearTextButton="True" Controls:TextBoxHelper.Watermark="Your Name" Height="40" FontSize="20" Margin="15,0,5,0" HorizontalAlignment="Left" Width="320" TextChanged="nameText_TextChanged"/>
-        <Icons:PackIconMaterialDesign x:Name="nameWarn" Grid.Column="0" Grid.Row="0" Style="{StaticResource WarnStyle}"/>
+            <TextBox x:Name="nameText" Text="{Binding Path=Name}" Grid.Column="0" Visibility="Hidden" Controls:TextBoxHelper.ClearTextButton="True" Controls:TextBoxHelper.Watermark="Your Name" Height="40" FontSize="20" Margin="15,0,5,0" TextChanged="nameText_TextChanged"/>
+            <Icons:PackIconMaterialDesign x:Name="nameWarn" Grid.Column="1" Style="{StaticResource WarnStyle}"/>
+        </Grid>
 
-        <TextBox x:Name="loginText" Text="{Binding Path=Login}" Grid.Row="1" Grid.Column="0" Margin="15,0,5,0" Controls:TextBoxHelper.ClearTextButton="True" Controls:TextBoxHelper.Watermark="Login" Height="40" FontSize="20" HorizontalAlignment="Left" Width="320" TextChanged="loginText_TextChanged"/>
-        <Icons:PackIconMaterialDesign x:Name="loginWarn" Grid.Column="0" Grid.Row="1" Style="{StaticResource WarnStyle}"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition x:Name="col2" Width="0"/>
+            </Grid.ColumnDefinitions>
 
-        <TextBox x:Name="passText" Text="{Binding Path=Password}" Grid.Row="2" Grid.Column="0" Margin="15,0,5,0" Controls:TextBoxHelper.Watermark="Password" Controls:TextBoxHelper.ClearTextButton="True" Height="40" FontSize="20" HorizontalAlignment="Left" Width="320" TextChanged="passText_TextChanged"/>
-        <Icons:PackIconMaterialDesign x:Name="passWarn" Grid.Column="0" Grid.Row="2" Style="{StaticResource WarnStyle}"/>
-        <!--<uc:LoginWarning x:Name="login" Grid.Row="1" Style="{StaticResource LoginStyle}">
-            <uc:LoginWarning.Text>
-                <Binding Path="Login">
-                    <Binding.ValidationRules>
-                        <utility:AuthorizationRules/>
-                    </Binding.ValidationRules>
-                </Binding>
-            </uc:LoginWarning.Text>
-        </uc:LoginWarning>-->
+            <TextBox x:Name="loginText" Text="{Binding Path=Login}" Grid.Column="0" Margin="15,0,5,0" Controls:TextBoxHelper.ClearTextButton="True" Controls:TextBoxHelper.Watermark="Login" Height="40" FontSize="20" TextChanged="loginText_TextChanged"/>
+            <Icons:PackIconMaterialDesign x:Name="loginWarn" Grid.Column="1" Style="{StaticResource WarnStyle}"/>
+        </Grid>
 
-        <!--<uc:PasswordWarning x:Name="password" Grid.Row="2" Style="{StaticResource PasswordStyle}">
-            <uc:PasswordWarning.Text>
-                <Binding Path="Password">
-                    <Binding.ValidationRules>
-                        <utility:AuthorizationRules/>
-                    </Binding.ValidationRules>
-                </Binding>
-            </uc:PasswordWarning.Text>
-        </uc:PasswordWarning>-->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition x:Name="col3" Width="0"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox x:Name="passText" Text="{Binding Path=Password}" Grid.Column="0" Margin="15,0,5,0" Controls:TextBoxHelper.Watermark="Password" Controls:TextBoxHelper.ClearTextButton="True" Height="40" FontSize="20" TextChanged="passText_TextChanged"/>
+            <Icons:PackIconMaterialDesign x:Name="passWarn" Grid.Column="1" Style="{StaticResource WarnStyle}"/>
+        </Grid>
 
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
@@ -253,9 +106,9 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
-            <Button x:Name="signIn" Content="Sign In" Grid.Column="0" Margin="10, 50, 10, 100" Template="{StaticResource ButtonTemplate1}" Command="{Binding SignInCommand}"/>
+            <Button x:Name="signIn" Content="Sign In" Grid.Column="0" Margin="10, 50, 10, 100" Template="{StaticResource ButtonTemplate}" Command="{Binding SignInCommand}"/>
 
-            <Button x:Name="registr" Content="Registrate" Grid.Column="1" Margin="10, 50, 10, 100" Command="{Binding RegistrateCommand}" Click="registr_Click" Template="{StaticResource ButtonTemplate1}"/>
+            <Button x:Name="registr" Content="Registrate" Grid.Column="1" Margin="10, 50, 10, 100" Command="{Binding RegistrateCommand}" Template="{StaticResource ButtonTemplate}" Click="registr_Click"/>
         </Grid>
 
         <Button Grid.Column="1" Grid.RowSpan="3" Margin="5, 15" Padding="15 30" Command="{Binding SetPhotoCommand}" ContentTemplate="{StaticResource PhotoButtonDataTemplate}">

@@ -43,6 +43,7 @@ namespace Client.ViewModels
             Client = new ClientUserInfo(sqlId, name);
             ChatClient.Connect(sqlId, name);
             settings = Settings.Instance;
+            settings.LoadSettings(sqlId);
 
             LoadedWindowCommand = new Command(LoadedWindow);
             SelectedChatChangedCommand = new Command(SelectedChatChanged);
