@@ -28,23 +28,26 @@
 
     <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
         <Border x:Name="border" Background="{StaticResource ButtonBackground}" HorizontalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" CornerRadius="5" BorderBrush="#cccccc" BorderThickness="2" Cursor="Hand">
-            <ContentPresenter TextBlock.Foreground="{StaticResource ButtonForeground}" VerticalAlignment="Center" HorizontalAlignment="Center" TextBlock.FontSize="18"/>
+            <ContentPresenter x:Name="content" TextBlock.Foreground="{StaticResource ButtonForeground}" VerticalAlignment="Center" HorizontalAlignment="Center" TextBlock.FontSize="18"/>
         </Border>
 
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="border" Property="Background" Value="Red"/>
-                <Setter TargetName="border" Property="BorderBrush" Value="Black"/>
+                <Setter TargetName="border" Property="Background" Value="#422b37"/>
+                <Setter TargetName="border" Property="BorderBrush" Value="#260033"/>
+                <Setter TargetName="content" Property="TextBlock.Foreground" Value="#dadada"></Setter>
             </Trigger>
 
             <Trigger Property="IsPressed" Value="True">
-                <Setter TargetName="border" Property="Background" Value="Green"/>
+                <Setter TargetName="border" Property="Background" Value="#6b778d"/>
                 <Setter TargetName="border" Property="BorderBrush" Value="Black"/>
+                <Setter TargetName="content" Property="TextBlock.Foreground" Value="#dadada"></Setter>
             </Trigger>
 
             <Trigger Property="IsEnabled" Value="False">
-                <Setter TargetName="border" Property="Background" Value="Yellow"/>
-                <Setter TargetName="border" Property="BorderBrush" Value="Black"/>
+                <Setter TargetName="border" Property="Background" Value="#dadada"/>
+                <Setter TargetName="border" Property="BorderBrush" Value="#fff7f7"/>
+                <Setter TargetName="content" Property="TextBlock.Foreground" Value="#fff7f7"></Setter>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
