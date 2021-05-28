@@ -98,13 +98,23 @@ namespace Client.Views
             signIn.Visibility = System.Windows.Visibility.Hidden;
             Grid.SetColumnSpan(registr, 2);
             Grid.SetColumn(registr, 0);
-            col1.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
-            col2.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
-            col3.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
-            loginWarn.Visibility = System.Windows.Visibility.Hidden;
-            passWarn.Visibility = System.Windows.Visibility.Hidden;
+
+            if (isNameError)
+            {
+                col1.Width = new System.Windows.GridLength(40, System.Windows.GridUnitType.Pixel);
+                nameWarn.Visibility = System.Windows.Visibility.Visible;
+            }
+            else col1.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
+
+            if (isLoginError) col2.Width = new System.Windows.GridLength(40, System.Windows.GridUnitType.Pixel);
+            else col2.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
+
+            if (isPassError) col3.Width = new System.Windows.GridLength(40, System.Windows.GridUnitType.Pixel);
+            else col3.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
+            //loginWarn.Visibility = System.Windows.Visibility.Hidden;
+            //passWarn.Visibility = System.Windows.Visibility.Hidden;
             isSignIn = false;
-            registr.IsEnabled = false;         
+            registr.IsEnabled = false;
         }
 
         private void back_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -115,12 +125,18 @@ namespace Client.Views
             signIn.Visibility = System.Windows.Visibility.Visible;
             Grid.SetColumnSpan(registr, 1);
             Grid.SetColumn(registr, 1);
-            col1.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
-            col2.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
-            col3.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
+
+            if (isLoginError) col2.Width = new System.Windows.GridLength(40, System.Windows.GridUnitType.Pixel);
+            else col2.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
+
+            if (isPassError) col3.Width = new System.Windows.GridLength(40, System.Windows.GridUnitType.Pixel);
+            else col3.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
+            //col1.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
+            //col2.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
+            //col3.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
             nameWarn.Visibility = System.Windows.Visibility.Hidden;
-            loginWarn.Visibility = System.Windows.Visibility.Hidden;
-            passWarn.Visibility = System.Windows.Visibility.Hidden;
+            //loginWarn.Visibility = System.Windows.Visibility.Hidden;
+            //passWarn.Visibility = System.Windows.Visibility.Hidden;
             registr.IsEnabled = true;
             isSignIn = true;
             nameText.Text = "";
