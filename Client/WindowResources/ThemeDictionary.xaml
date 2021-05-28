@@ -27,7 +27,11 @@
     </Style>
 
     <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
-        <Border x:Name="border" Background="{StaticResource ButtonBackground}" HorizontalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" CornerRadius="5" BorderBrush="#cccccc" BorderThickness="2" Cursor="Hand">
+        <Border x:Name="border" HorizontalAlignment="Stretch" 
+                Height="{TemplateBinding Height}" MinHeight="{TemplateBinding MinHeight}" MaxHeight="{TemplateBinding MaxHeight}"
+                Width="{TemplateBinding Width}" MinWidth="{TemplateBinding MinWidth}" MaxWidth="{TemplateBinding MaxWidth}" 
+                CornerRadius="5" Cursor="Hand"
+                Background="{StaticResource ButtonBackground}" BorderBrush="#cccccc" BorderThickness="2" >
             <ContentPresenter x:Name="content" TextBlock.Foreground="{StaticResource ButtonForeground}" VerticalAlignment="Center" HorizontalAlignment="Center" TextBlock.FontSize="18"/>
         </Border>
 
@@ -51,5 +55,4 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-
 </ResourceDictionary>

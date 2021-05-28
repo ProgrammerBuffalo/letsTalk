@@ -174,29 +174,3 @@ namespace Client.ViewModels
         }
     }
 }
-
-
-
-//private void PlayRington(object param)
-//{
-//Rington rington = (Rington)param;
-//settings.SelectedRington = rington;
-//player.Open(new Uri(AppDomain.CurrentDomain.BaseDirectory + rington.Path));
-//player.Play();
-//}
-
-//private void DeviceRingtonShow(object param)
-//{
-//    OpenFileDialog dialog = new OpenFileDialog();
-//    dialog.Filter = "Audio files (*.mp3,*.wav)|*.mp3;*.wav";
-//    if (dialog.ShowDialog() == true)
-//    {
-//        foreach (var file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "Settings\\Rington"))
-//            File.Delete(file);
-
-//        string fileName = dialog.FileName.Substring(dialog.FileName.LastIndexOf('\\') + 1);
-//        string path = AppDomain.CurrentDomain.BaseDirectory + "Settings\\Rington\\" + fileName;
-//        File.Copy(dialog.FileName, path);
-//        //settings.SelectedRington = new Rington(fileName, dialog.FileName);
-//    }
-//}

@@ -40,7 +40,7 @@
                 FontSize="20"
                 Width="300" Height="40"
                 VerticalAlignment="Center" HorizontalAlignment="Center"
-                Style="{StaticResource ButtonStyle}"
+                Template="{StaticResource ButtonTemplate}"
                 Command="{Binding ConfirmWallpaperCommand}">
         </Button>
     </Grid>

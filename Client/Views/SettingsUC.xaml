@@ -76,8 +76,8 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0" Content="Default wallpapers" Command="{Binding DefaultWallpaperShowCommand}" Style="{StaticResource ButtonSettingsStyle}"/>
-                <Button Grid.Column="1" Content="Select from device" Command="{Binding DeviceWallpaperShowCommand}" Style="{StaticResource ButtonSettingsStyle}"/>
+                <Button Grid.Column="0" Content="Default wallpapers" Command="{Binding DefaultWallpaperShowCommand}" Style="{StaticResource ButtonSettingsStyle}" Template="{StaticResource ButtonTemplate}"/>
+                <Button Grid.Column="1" Content="Select from device" Command="{Binding DeviceWallpaperShowCommand}" Style="{StaticResource ButtonSettingsStyle}" Template="{StaticResource ButtonTemplate}"/>
             </Grid>
 
             <TextBlock Grid.Row="6" Text="Notifications" Style="{StaticResource HeaderStyle}"/>
@@ -101,7 +101,7 @@
                         <Run Text="{Binding Path=Settings.SelectedUserRington.Name}"/>
                 </TextBlock>
 
-                <Button Grid.Column="1" Grid.Row="0" Content="Change" Style="{StaticResource ButtonSettingsStyle}" Command="{Binding UserRingtonChangeCommand}"/>
+                <Button Grid.Column="1" Grid.Row="0" Content="Change" Style="{StaticResource ButtonSettingsStyle}" Template="{StaticResource ButtonTemplate}" Command="{Binding UserRingtonChangeCommand}"/>
 
                 <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
                     <CheckBox IsChecked="{Binding Path=Settings.CanUserNotify}" Template="{StaticResource SliderCheckBoxTemplate}"/>
@@ -113,7 +113,7 @@
                         <Run Text="{Binding Path=Settings.SelectedGroupRington.Name}"/>
                 </TextBlock>
 
-                <Button Grid.Column="3" Grid.Row="0" Content="Change" Style="{StaticResource ButtonSettingsStyle}" Command="{Binding GroupRingtonChangeCommand}"/>
+                <Button Grid.Column="3" Grid.Row="0" Content="Change" Style="{StaticResource ButtonSettingsStyle}" Template="{StaticResource ButtonTemplate}" Command="{Binding GroupRingtonChangeCommand}"/>
 
                 <StackPanel Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Horizontal">
                     <CheckBox IsChecked="{Binding Path=Settings.CanGroupNotify}" Template="{StaticResource SliderCheckBoxTemplate}"/>

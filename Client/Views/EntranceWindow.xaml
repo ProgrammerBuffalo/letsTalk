@@ -47,13 +47,6 @@
                 <Setter Property="Controls:TextBoxHelper.ClearTextButton" Value="True"/>
             </Style>
 
-            <Style x:Key="PassBoxStyle" TargetType="PasswordBox">
-                <Setter Property="FontSize" Value="18"/>
-                <Setter Property="Height" Value="40"/>
-                <Setter Property="HorizontalAlignment" Value="Left"/>
-                <Setter Property="Controls:TextBoxHelper.ClearTextButton" Value="True"/>
-            </Style>
-
         </ResourceDictionary>
     </Window.Resources>
 
@@ -108,7 +101,7 @@
 
             <Button x:Name="signIn" Content="Sign In" Grid.Column="0" Margin="10, 50, 10, 100" Template="{StaticResource ButtonTemplate}" Command="{Binding SignInCommand}"/>
 
-            <Button x:Name="registr" Content="Registrate" Grid.Column="1" Margin="10, 50, 10, 100" Command="{Binding RegistrateCommand}" Template="{StaticResource ButtonTemplate}" Click="registr_Click"/>
+            <Button x:Name="registr" Content="Registrate" Grid.Column="1" Margin="10, 50, 10, 100" Template="{StaticResource ButtonTemplate}" Command="{Binding RegistrateCommand}" Click="registr_Click"/>
         </Grid>
 
         <Button Grid.Column="1" Grid.RowSpan="3" Margin="5, 15" Padding="15 30" Command="{Binding SetPhotoCommand}" ContentTemplate="{StaticResource PhotoButtonDataTemplate}">
@@ -117,11 +110,9 @@
             </Button.Background>
         </Button>
 
-        <Button x:Name="back" Content="Back" Grid.Row="3" Grid.Column="1" Margin="10, 50, 10, 100" Style="{StaticResource ButtonStyle}" Command="{Binding BackCommand}" Click="back_Click"/>
+        <Button x:Name="back" Content="Back" Grid.Row="3" Grid.Column="1" Margin="10, 50, 10, 100" Template="{StaticResource ButtonTemplate}" Command="{Binding BackCommand}" Click="back_Click"/>
 
         <uc:LoadingUserControl Grid.RowSpan="4" Grid.ColumnSpan="2" State="{Binding Path=LoaderState}" Visibility="{Binding Path=LoaderVisibility}"/>
-
-        <!--<TextBlock Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" />-->
     </Grid>
 
 </Controls:MetroWindow>

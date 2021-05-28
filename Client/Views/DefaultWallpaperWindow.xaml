@@ -65,7 +65,7 @@
             </i:Interaction.Triggers>
         </ListView>
 
-        <Button Grid.Column="0" Grid.Row="1" Content="Confirm wallpaper" Width="200" Height="40" Style="{StaticResource ButtonStyle}" Command="{Binding ConfirmWallpaperCommand}"/>
-        <Button Grid.Column="1" Grid.Row="1" Content="Preview wallpaper" Width="200" Height="40" Style="{StaticResource ButtonStyle}" Command="{Binding PreviewWallpaperShowCommand}"/>
+        <Button Grid.Column="0" Grid.Row="1" Content="Confirm wallpaper" Width="200" Height="40" Template="{StaticResource ButtonTemplate}" Command="{Binding ConfirmWallpaperCommand}"/>
+        <Button Grid.Column="1" Grid.Row="1" Content="Preview wallpaper" Width="200" Height="40" Template="{StaticResource ButtonTemplate}" Command="{Binding PreviewWallpaperShowCommand}"/>
     </Grid>
 </metro:MetroWindow>

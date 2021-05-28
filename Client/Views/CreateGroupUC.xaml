@@ -46,7 +46,7 @@
             <Button Grid.Column="1" 
                     Content="Search"
                     Margin="10" MaxHeight="50" MaxWidth="200"
-                    Style="{StaticResource ButtonStyle}"
+                    Template="{StaticResource ButtonTemplate}"
                     Command="{Binding SearchCommand}">
             </Button>
         </Grid>
@@ -87,7 +87,7 @@
             Content="Show More"
             Width="150" Height="50"
             VerticalAlignment="Center" HorizontalAlignment="Center"
-            Style="{StaticResource ButtonStyle}"
+            Template="{StaticResource ButtonTemplate}"
             Command="{Binding ShowMoreCommand}">
         </Button>
 
@@ -136,7 +136,7 @@
                 Content="Create Group"
                 Width="100" Height="50"
                 VerticalAlignment="Center" HorizontalAlignment="Center" 
-                Style="{StaticResource ButtonStyle}"
+                Template="{StaticResource ButtonTemplate}"
                 Command="{Binding CreateGroupCommand}">
         </Button>
     </Grid>
