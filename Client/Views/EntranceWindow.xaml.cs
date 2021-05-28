@@ -111,8 +111,6 @@ namespace Client.Views
 
             if (isPassError) col3.Width = new System.Windows.GridLength(40, System.Windows.GridUnitType.Pixel);
             else col3.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
-            //loginWarn.Visibility = System.Windows.Visibility.Hidden;
-            //passWarn.Visibility = System.Windows.Visibility.Hidden;
             isSignIn = false;
             registr.IsEnabled = false;
         }
@@ -131,12 +129,7 @@ namespace Client.Views
 
             if (isPassError) col3.Width = new System.Windows.GridLength(40, System.Windows.GridUnitType.Pixel);
             else col3.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
-            //col1.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
-            //col2.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
-            //col3.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
             nameWarn.Visibility = System.Windows.Visibility.Hidden;
-            //loginWarn.Visibility = System.Windows.Visibility.Hidden;
-            //passWarn.Visibility = System.Windows.Visibility.Hidden;
             registr.IsEnabled = true;
             isSignIn = true;
             nameText.Text = "";
