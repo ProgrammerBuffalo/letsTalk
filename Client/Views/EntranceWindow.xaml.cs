@@ -104,7 +104,7 @@ namespace Client.Views
             loginWarn.Visibility = System.Windows.Visibility.Hidden;
             passWarn.Visibility = System.Windows.Visibility.Hidden;
             isSignIn = false;
-            registr.IsEnabled = false;
+            registr.IsEnabled = false;         
         }
 
         private void back_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -123,6 +123,8 @@ namespace Client.Views
             passWarn.Visibility = System.Windows.Visibility.Hidden;
             registr.IsEnabled = true;
             isSignIn = true;
+            nameText.Text = "";
+            nameWarn.Visibility = System.Windows.Visibility.Hidden;
         }
 
         private void CanRegistr()
