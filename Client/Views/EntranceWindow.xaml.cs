@@ -125,6 +125,7 @@ namespace Client.Views
             isSignIn = true;
             nameText.Text = "";
             nameWarn.Visibility = System.Windows.Visibility.Hidden;
+            CanLogin();
         }
 
         private void CanRegistr()
