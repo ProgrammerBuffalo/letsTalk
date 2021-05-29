@@ -17,7 +17,7 @@
 
             <DataTemplate x:Key="PhotoButtonDataTemplate">
                 <Grid>
-                    <Icons:PackIconMaterialDesign x:Name="icon" Width="Auto" Height="Auto" Foreground="#FFDA0B" Kind="AddAPhoto" Visibility="Hidden"/>
+                    <Icons:PackIconMaterialDesign x:Name="icon" Width="Auto" Height="Auto" Foreground="#57394a" Kind="AddAPhoto" Visibility="Hidden"/>
 
                     <Button x:Name="btn" Width="30" Height="30" Content="close" Visibility="Visible" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,-50,-15,0" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.CancelImageCommand}"/>
                 </Grid>
@@ -89,7 +89,7 @@
                 <ColumnDefinition x:Name="col3" Width="0"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="passText" Text="{Binding Path=Password}" Grid.Column="0" Margin="15,0,5,0" Controls:TextBoxHelper.Watermark="Password" Controls:TextBoxHelper.ClearTextButton="True" Height="40" FontSize="20" TextChanged="passText_TextChanged"/>
+            <PasswordBox x:Name="passText" Grid.Column="0" Margin="15,0,5,0" Controls:TextBoxHelper.Watermark="Password" Controls:TextBoxHelper.ClearTextButton="True" Height="40" FontSize="20" PasswordChanged="passText_TextChanged"/>
             <Icons:PackIconMaterialDesign x:Name="passWarn" Grid.Column="1" Style="{StaticResource WarnStyle}"/>
         </Grid>
 

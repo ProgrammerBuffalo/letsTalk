@@ -114,7 +114,7 @@
             <TextBlock DockPanel.Dock="Left" Margin="20,0,0,0" Text="{Binding Path=Chat.UserIsWriting}" FontSize="30" Foreground="{StaticResource WritingForeground}"/>
 
             <Image DockPanel.Dock="Right" Style="{StaticResource AvatarImageStyle}"/>
-            <Button IsEnabled="{Binding Path=Chat.CanWrite}" DockPanel.Dock="Right" Content="Edit chat" Margin="0,0,10,0" Height="40" Template="{StaticResource ButtonTemplate}" Command="{Binding EditChatCommand}">
+            <Button IsEnabled="{Binding Path=Chat.CanWrite}" DockPanel.Dock="Right" Content="Edit chat" Margin="0,5,25,5" Height="40" Template="{StaticResource ButtonTemplate}" Command="{Binding EditChatCommand}" Width="100">
                 <Button.Style>
                     <Style BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
                         <Style.Triggers>
@@ -125,9 +125,9 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button DockPanel.Dock="Right" Content="Leave" Margin="0,0,10,0" Height="40" Template="{StaticResource ButtonTemplate}" Command="{Binding LeaveChatCommand}"/>
+            <Button DockPanel.Dock="Right" Content="Leave" Margin="0,5,15,5" Height="40" Template="{StaticResource ButtonTemplate}" Command="{Binding LeaveChatCommand}" Width="100"/>
 
-            <CheckBox x:Name="canNotifyCheckBox" IsChecked="{Binding Path=CanNotify}" Cursor="Hand" IsThreeState="True" DockPanel.Dock="Right" Margin="0,0,10,0" Template="{StaticResource ModernCheckBox}" Command="{Binding CanNotifyChangedCommand}" Click="canNotifyCheckBox_Click"/>
+            <CheckBox x:Name="canNotifyCheckBox" IsChecked="{Binding Path=CanNotify}" Cursor="Hand" IsThreeState="True" DockPanel.Dock="Right" Margin="0,0,25,0" Template="{StaticResource ModernCheckBox}" Command="{Binding CanNotifyChangedCommand}" Click="canNotifyCheckBox_Click"/>
 
             <TextBlock x:Name="canNotifyText" Text="" DockPanel.Dock="Right" Margin="0,0,10,0" VerticalAlignment="Center" FontSize="14"/>
         </DockPanel>
