@@ -68,28 +68,6 @@ namespace Client.Views
             }
         }
 
-        private void passText_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            var error = authorizationRules.Validate(passText.Text, null);
-            if (error.IsValid)
-            {
-                passWarn.Visibility = System.Windows.Visibility.Hidden;
-                col3.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
-                isPassError = false;
-                if (isSignIn) CanLogin();
-                else CanRegistr();
-            }
-            else
-            {
-                passWarn.ToolTip = error.ErrorContent;
-                passWarn.Visibility = System.Windows.Visibility.Visible;
-                col3.Width = new System.Windows.GridLength(40, System.Windows.GridUnitType.Pixel);
-                isPassError = true;
-                if (isSignIn) signIn.IsEnabled = false;
-                else registr.IsEnabled = false;
-            }
-        }
-
         private void registr_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             nameText.Visibility = System.Windows.Visibility.Visible;
@@ -142,7 +120,7 @@ namespace Client.Views
             if (isNameError || isLoginError || isPassError ||
                 string.IsNullOrWhiteSpace(nameText.Text) ||
                 string.IsNullOrWhiteSpace(loginText.Text) ||
-                string.IsNullOrWhiteSpace(passText.Text)) registr.IsEnabled = false;
+                string.IsNullOrWhiteSpace(passText.Password)) registr.IsEnabled = false;
             else registr.IsEnabled = true;
         }
 
@@ -150,8 +128,31 @@ namespace Client.Views
         {
             if (isLoginError || isPassError ||
                 string.IsNullOrWhiteSpace(loginText.Text) ||
-                string.IsNullOrWhiteSpace(passText.Text)) signIn.IsEnabled = false;
+                string.IsNullOrWhiteSpace(passText.Password)) signIn.IsEnabled = false;
             else signIn.IsEnabled = true;
+        }
+
+        private void passText_TextChanged(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ((ViewModels.EntranceViewModel)this.DataContext).Password = ((PasswordBox)sender).Password;
+            var error = authorizationRules.Validate(passText.Password, null);
+            if (error.IsValid)
+            {
+                passWarn.Visibility = System.Windows.Visibility.Hidden;
+                col3.Width = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
+                isPassError = false;
+                if (isSignIn) CanLogin();
+                else CanRegistr();
+            }
+            else
+            {
+                passWarn.ToolTip = error.ErrorContent;
+                passWarn.Visibility = System.Windows.Visibility.Visible;
+                col3.Width = new System.Windows.GridLength(40, System.Windows.GridUnitType.Pixel);
+                isPassError = true;
+                if (isSignIn) signIn.IsEnabled = false;
+                else registr.IsEnabled = false;
+            }
         }
     }
 }

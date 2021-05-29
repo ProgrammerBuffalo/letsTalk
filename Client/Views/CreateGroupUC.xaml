@@ -85,7 +85,7 @@
         <Button 
             Grid.Row="3" Grid.Column="0"
             Content="Show More"
-            Width="150" Height="50"
+            Width="250" Height="50"
             VerticalAlignment="Center" HorizontalAlignment="Center"
             Template="{StaticResource ButtonTemplate}"
             Command="{Binding ShowMoreCommand}">
@@ -134,7 +134,7 @@
 
         <Button Grid.Row="3" Grid.Column="1"
                 Content="Create Group"
-                Width="100" Height="50"
+                Width="250" Height="50"
                 VerticalAlignment="Center" HorizontalAlignment="Center" 
                 Template="{StaticResource ButtonTemplate}"
                 Command="{Binding CreateGroupCommand}">
