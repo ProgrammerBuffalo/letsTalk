@@ -32,7 +32,7 @@
                 Width="{TemplateBinding Width}" MinWidth="{TemplateBinding MinWidth}" MaxWidth="{TemplateBinding MaxWidth}" 
                 CornerRadius="5" Cursor="Hand"
                 Background="{StaticResource ButtonBackground}" BorderBrush="#cccccc" BorderThickness="2" >
-            <ContentPresenter x:Name="content" TextBlock.Foreground="{StaticResource ButtonForeground}" VerticalAlignment="Center" HorizontalAlignment="Center" TextBlock.FontSize="18"/>
+            <ContentPresenter x:Name="content" TextBlock.Foreground="{StaticResource ButtonForeground}" VerticalAlignment="Center" HorizontalAlignment="Center" TextBlock.FontSize="18" Margin="5"/>
         </Border>
 
         <ControlTemplate.Triggers>

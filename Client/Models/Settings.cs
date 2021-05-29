@@ -24,28 +24,6 @@ namespace Client.Models
 
         private MediaPlayer player;
 
-        private Settings()
-        {
-            //player = new MediaPlayer();
-
-            //XmlDocument document = new XmlDocument();
-            //document.Load("Settings/user-settings.xml");
-
-            //messageLoadCount = int.Parse(document.DocumentElement["MessageLoadCount"].InnerText);
-            //selectedWallpaper = document.DocumentElement["Wallpaper"].InnerText;
-            //canNotify = bool.Parse(document.DocumentElement["CanNotify"].InnerText);
-            //canUserNotify = bool.Parse(document.DocumentElement["CanUserNotify"].InnerText);
-            //canGroupNotify = bool.Parse(document.DocumentElement["CanGroupNotify"].InnerText);
-
-            //selectedUserRington = new Rington();
-            //selectedUserRington.Name = document.DocumentElement["UserRington"].Attributes["Name"].InnerText;
-            //selectedUserRington.Path = document.DocumentElement["UserRington"].Attributes["Path"].InnerText;
-
-            //selectedGroupRington = new Rington();
-            //selectedGroupRington.Name = document.DocumentElement["GroupRington"].Attributes["Name"].InnerText;
-            //selectedGroupRington.Path = document.DocumentElement["GroupRington"].Attributes["Path"].InnerText;
-        }
-
         public static Settings Instance
         {
             get
@@ -67,7 +45,7 @@ namespace Client.Models
                 Set(ref messageLoadCount, value);
                 XmlDocument document = new XmlDocument();
                 document.Load("Settings/user-settings.xml");
-                document.DocumentElement["Users"].ChildNodes[userNodeIndex]["MessageLoadCount"].InnerText = messageLoadCount.ToString();
+                document.DocumentElement.ChildNodes[userNodeIndex]["MessageLoadCount"].InnerText = messageLoadCount.ToString();
                 document.Save("Settings/user-settings.xml");
             }
         }
@@ -80,7 +58,7 @@ namespace Client.Models
                 Set(ref selectedWallpaper, value);
                 XmlDocument document = new XmlDocument();
                 document.Load("Settings/user-settings.xml");
-                document.DocumentElement["Users"].ChildNodes[userNodeIndex]["Wallpaper"].InnerText = selectedWallpaper;
+                document.DocumentElement.ChildNodes[userNodeIndex]["Wallpaper"].InnerText = selectedWallpaper;
                 document.Save("Settings/user-settings.xml");
             }
         }
@@ -93,8 +71,8 @@ namespace Client.Models
                 Set(ref selectedUserRington, value);
                 XmlDocument document = new XmlDocument();
                 document.Load("Settings/user-settings.xml");
-                document.DocumentElement["Users"].ChildNodes[userNodeIndex]["UserRington"].Attributes["Name"].InnerText = value.Name;
-                document.DocumentElement["Users"].ChildNodes[userNodeIndex]["UserRington"].Attributes["Path"].InnerText = value.Path;
+                document.DocumentElement.ChildNodes[userNodeIndex]["UserRington"].Attributes["Name"].InnerText = value.Name;
+                document.DocumentElement.ChildNodes[userNodeIndex]["UserRington"].Attributes["Path"].InnerText = value.Path;
                 document.Save("Settings/user-settings.xml");
             }
         }
@@ -107,8 +85,8 @@ namespace Client.Models
                 Set(ref selectedGroupRington, value);
                 XmlDocument document = new XmlDocument();
                 document.Load("Settings/user-settings.xml");
-                document.DocumentElement["Users"].ChildNodes[userNodeIndex]["GroupRington"].Attributes["Name"].InnerText = value.Name;
-                document.DocumentElement["Users"].ChildNodes[userNodeIndex]["GroupRington"].Attributes["Path"].InnerText = value.Path;
+                document.DocumentElement.ChildNodes[userNodeIndex]["GroupRington"].Attributes["Name"].InnerText = value.Name;
+                document.DocumentElement.ChildNodes[userNodeIndex]["GroupRington"].Attributes["Path"].InnerText = value.Path;
                 document.Save("Settings/user-settings.xml");
             }
         }
@@ -121,7 +99,7 @@ namespace Client.Models
                 Set(ref canNotify, value);
                 XmlDocument document = new XmlDocument();
                 document.Load("Settings/user-settings.xml");
-                document.DocumentElement["Users"].ChildNodes[userNodeIndex]["CanNotify"].InnerText = canNotify.ToString();
+                document.DocumentElement.ChildNodes[userNodeIndex]["CanNotify"].InnerText = canNotify.ToString();
                 document.Save("Settings/user-settings.xml");
             }
         }
@@ -134,7 +112,7 @@ namespace Client.Models
                 Set(ref canUserNotify, value);
                 XmlDocument document = new XmlDocument();
                 document.Load("Settings/user-settings.xml");
-                document.DocumentElement["Users"].ChildNodes[userNodeIndex]["CanUserNotify"].InnerText = canUserNotify.ToString();
+                document.DocumentElement.ChildNodes[userNodeIndex]["CanUserNotify"].InnerText = canUserNotify.ToString();
                 document.Save("Settings/user-settings.xml");
             }
         }
@@ -147,7 +125,7 @@ namespace Client.Models
                 Set(ref canGroupNotify, value);
                 XmlDocument document = new XmlDocument();
                 document.Load("Settings/user-settings.xml");
-                document.DocumentElement["Users"].ChildNodes[userNodeIndex]["CanGroupNotify"].InnerText = canGroupNotify.ToString();
+                document.DocumentElement.ChildNodes[userNodeIndex]["CanGroupNotify"].InnerText = canGroupNotify.ToString();
                 document.Save("Settings/user-settings.xml");
             }
         }
@@ -158,25 +136,25 @@ namespace Client.Models
             XmlDocument document = new XmlDocument();
             document.Load("Settings/user-settings.xml");
 
-            for (int i = 0; i < document.DocumentElement["Users"].ChildNodes.Count; i++)
+            for (int i = 0; i < document.DocumentElement.ChildNodes.Count; i++)
             {
-                if (int.Parse(document.DocumentElement["Users"].ChildNodes[i].Attributes["UserId"].InnerText) == userId)
+                if (int.Parse(document.DocumentElement.ChildNodes[i].Attributes["UserId"].InnerText) == userId)
                 {
                     this.userNodeIndex = i;
 
-                    messageLoadCount = int.Parse(document.DocumentElement["Users"].ChildNodes[i]["MessageLoadCount"].InnerText);
-                    selectedWallpaper = document.DocumentElement["Users"].ChildNodes[i]["Wallpaper"].InnerText;
-                    canNotify = bool.Parse(document.DocumentElement["Users"].ChildNodes[i]["CanNotify"].InnerText);
-                    canUserNotify = bool.Parse(document.DocumentElement["Users"].ChildNodes[i]["CanUserNotify"].InnerText);
-                    canGroupNotify = bool.Parse(document.DocumentElement["Users"].ChildNodes[i]["CanGroupNotify"].InnerText);
+                    messageLoadCount = int.Parse(document.DocumentElement.ChildNodes[i]["MessageLoadCount"].InnerText);
+                    selectedWallpaper = document.DocumentElement.ChildNodes[i]["Wallpaper"].InnerText;
+                    canNotify = bool.Parse(document.DocumentElement.ChildNodes[i]["CanNotify"].InnerText);
+                    canUserNotify = bool.Parse(document.DocumentElement.ChildNodes[i]["CanUserNotify"].InnerText);
+                    canGroupNotify = bool.Parse(document.DocumentElement.ChildNodes[i]["CanGroupNotify"].InnerText);
 
                     selectedUserRington = new Rington();
-                    selectedUserRington.Name = document.DocumentElement["Users"].ChildNodes[i]["UserRington"].Attributes["Name"].InnerText;
-                    selectedUserRington.Path = document.DocumentElement["Users"].ChildNodes[i]["UserRington"].Attributes["Path"].InnerText;
+                    selectedUserRington.Name = document.DocumentElement.ChildNodes[i]["UserRington"].Attributes["Name"].InnerText;
+                    selectedUserRington.Path = document.DocumentElement.ChildNodes[i]["UserRington"].Attributes["Path"].InnerText;
 
                     selectedGroupRington = new Rington();
-                    selectedGroupRington.Name = document.DocumentElement["Users"].ChildNodes[i]["GroupRington"].Attributes["Name"].InnerText;
-                    selectedGroupRington.Path = document.DocumentElement["Users"].ChildNodes[i]["GroupRington"].Attributes["Path"].InnerText;
+                    selectedGroupRington.Name = document.DocumentElement.ChildNodes[i]["GroupRington"].Attributes["Name"].InnerText;
+                    selectedGroupRington.Path = document.DocumentElement.ChildNodes[i]["GroupRington"].Attributes["Path"].InnerText;
                     break;
                 }
             }
@@ -235,7 +213,7 @@ namespace Client.Models
             element = document.CreateElement("Notifes");
             user.AppendChild(element);
 
-            document.DocumentElement["Users"].AppendChild(user);
+            document.DocumentElement.AppendChild(user);
             document.Save("Settings/user-settings.xml");
         }
 
@@ -277,7 +255,7 @@ namespace Client.Models
             else attr.InnerText = canNotify.Value.ToString();
             element.Attributes.Append(attr);
 
-            document.DocumentElement["Users"].ChildNodes[userNodeIndex]["Notifes"].AppendChild(element);
+            document.DocumentElement.ChildNodes[userNodeIndex]["Notifes"].AppendChild(element);
             document.Save("Settings/user-settings.xml");
         }
 
@@ -285,7 +263,7 @@ namespace Client.Models
         {
             XmlDocument document = new XmlDocument();
             document.Load("Settings/user-settings.xml");
-            foreach (XmlNode mute in document.DocumentElement["Users"].ChildNodes[userNodeIndex]["Notifes"])
+            foreach (XmlNode mute in document.DocumentElement.ChildNodes[userNodeIndex]["Notifes"])
             {
                 if (int.Parse(mute.Attributes["ChatId"].InnerText) == chatId)
                 {
@@ -300,11 +278,11 @@ namespace Client.Models
         {
             XmlDocument document = new XmlDocument();
             document.Load("Settings/user-settings.xml");
-            for (int i = 0; i < document.DocumentElement["Users"].ChildNodes[userNodeIndex]["Notifes"].ChildNodes.Count; i++)
+            for (int i = 0; i < document.DocumentElement.ChildNodes[userNodeIndex]["Notifes"].ChildNodes.Count; i++)
             {
-                if (int.Parse(document.DocumentElement["Users"].ChildNodes[userNodeIndex]["Notifes"].ChildNodes[i].Attributes["ChatId"].InnerText) == chatId)
+                if (int.Parse(document.DocumentElement.ChildNodes[userNodeIndex]["Notifes"].ChildNodes[i].Attributes["ChatId"].InnerText) == chatId)
                 {
-                    document.DocumentElement["Users"].ChildNodes[userNodeIndex]["Notifes"].RemoveChild(document.DocumentElement["Notify"].ChildNodes[i]);
+                    document.DocumentElement.ChildNodes[userNodeIndex]["Notifes"].RemoveChild(document.DocumentElement["Notify"].ChildNodes[i]);
                     document.Save("Settings/user-settings.xml");
                     return;
                 }
@@ -315,14 +293,12 @@ namespace Client.Models
         {
             XmlDocument document = new XmlDocument();
             document.Load("Settings/user-settings.xml");
-            for (int i = 0; i < document.DocumentElement["Users"].ChildNodes[userNodeIndex]["Notifes"].ChildNodes.Count; i++)
+            for (int i = 0; i < document.DocumentElement.ChildNodes[userNodeIndex]["Notifes"].ChildNodes.Count; i++)
             {
-                if (int.Parse(document.DocumentElement["Users"].ChildNodes[userNodeIndex]["Notifes"].ChildNodes[i].Attributes["ChatId"].InnerText) == chatId)
+                if (int.Parse(document.DocumentElement.ChildNodes[userNodeIndex]["Notifes"].ChildNodes[i].Attributes["ChatId"].InnerText) == chatId)
                 {
-                    if (isMute == null)
-                        document.DocumentElement["Users"].ChildNodes[userNodeIndex]["Notifes"].ChildNodes[i].Attributes["CanNotify"].InnerText = "";
-                    else
-                        document.DocumentElement["Users"].ChildNodes[userNodeIndex]["Notifes"].ChildNodes[i].Attributes["CanNotify"].InnerText = isMute.Value.ToString();
+                    if (isMute == null) document.DocumentElement.ChildNodes[userNodeIndex]["Notifes"].ChildNodes[i].Attributes["CanNotify"].InnerText = "";
+                    else document.DocumentElement.ChildNodes[userNodeIndex]["Notifes"].ChildNodes[i].Attributes["CanNotify"].InnerText = isMute.Value.ToString();
                     document.Save("Settings/user-settings.xml");
                     return;
                 }
