@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Drawing;
 using System.Windows.Media.Imaging;
-using System.Windows;
 
 namespace Client.ViewModels
 {
@@ -101,17 +100,17 @@ namespace Client.ViewModels
                 }
                 catch (FaultException<ChatService.ConnectionExceptionFault> ex)
                 {
-                    System.Windows.MessageBox.Show(ex.Message);
+                    new DialogWindow(ex.Message).ShowDialog();
                     Info = ex.Message;
                 }
                 catch (Exception ex)
                 {
-                    System.Windows.MessageBox.Show(ex.Message);
+                    new DialogWindow(ex.Message).ShowDialog();
                 }
             }
             else
             {
-                System.Windows.MessageBox.Show("all fields must be entered");
+                new DialogWindow("all fields must be entered").ShowDialog();
             }
         }
 
@@ -166,27 +165,27 @@ namespace Client.ViewModels
             catch (FaultException<ChatService.LoginExceptionFault> ex)
             {
                 LoaderState = LoaderState.Fault;
-                MessageBox.Show(ex.Message);
+                new DialogWindow(ex.Message).ShowDialog();
             }
             catch (FaultException<ChatService.NicknameExceptionFault> ex)
             {
                 LoaderState = LoaderState.Fault;
-                MessageBox.Show(ex.Message);
+                new DialogWindow(ex.Message).ShowDialog();
             }
             catch (FaultException<ChatService.StreamExceptionFault> ex)
             {
                 LoaderState = LoaderState.Fault;
-                MessageBox.Show(ex.Message);
+                new DialogWindow(ex.Message).ShowDialog();
             }
             catch (FaultException<ChatService.AuthorizationExceptionFault> ex)
             {
                 LoaderState = LoaderState.Fault;
-                MessageBox.Show(ex.Message);
+                new DialogWindow(ex.Message).ShowDialog();
             }
             catch (Exception)
             {
                 LoaderState = LoaderState.Fault;
-                MessageBox.Show("Something wrong with server");
+                new DialogWindow("Something wrong with server").ShowDialog();
             }
             finally
             {
@@ -251,7 +250,7 @@ namespace Client.ViewModels
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(ex.Message);
+                new DialogWindow(ex.Message).ShowDialog();
             }
         }
 

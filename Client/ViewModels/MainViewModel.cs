@@ -124,11 +124,11 @@ namespace Client.ViewModels
             }
             catch (FaultException<ConnectionExceptionFault> ex)
             {
-                System.Windows.MessageBox.Show(ex.Message);
+                new Views.DialogWindow(ex.Message).ShowDialog();
             }
             catch (IOException)
             {
-                System.Windows.MessageBox.Show("avatar image could not be download");
+                new Views.DialogWindow("avatar image could not be download").ShowDialog();
             }
         }
 
@@ -173,7 +173,7 @@ namespace Client.ViewModels
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(ex.Message);
+                new Views.DialogWindow(ex.Message).ShowDialog();
             }
             finally
             {
@@ -640,7 +640,6 @@ namespace Client.ViewModels
 
         private void ExitFromTray(object sender, EventArgs e)
         {
-            //сдесь реализуй метод для отключения клиента с сервером
             icon.Dispose();
             mainWindow.Closing -= WindowClosing;
             mainWindow.Close();

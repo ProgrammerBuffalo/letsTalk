@@ -180,7 +180,7 @@ namespace Client.ViewModels
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(ex.Message);
+                new Views.DialogWindow(ex.Message).ShowDialog();
             }
             finally
             {
@@ -267,7 +267,7 @@ namespace Client.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    new Views.DialogWindow(ex.Message).ShowDialog();
                 }
             }
         }

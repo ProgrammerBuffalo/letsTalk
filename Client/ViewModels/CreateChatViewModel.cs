@@ -141,11 +141,12 @@ namespace Client.ViewModels
                 }
                 catch(FaultException<ChatroomAlreadyExistExceptionFault> fe)
                 {
+                    new Views.DialogWindow(fe.Message).ShowDialog();
                     MessageBox.Show(fe.Message);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    new Views.DialogWindow(ex.Message).ShowDialog();
                 }
             }
             else
@@ -177,12 +178,12 @@ namespace Client.ViewModels
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message);
+                        new Views.DialogWindow(ex.Message).ShowDialog();
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Please enter chatroom name");
+                    new Views.DialogWindow("Please enter chatroom name").ShowDialog();
                 }
             }
         }
@@ -270,198 +271,4 @@ namespace Client.ViewModels
         }
     }
 
-    //class CreateGroupViewModel : CreateChatViewModel, IDropTarget
-    //{
-
-
-    //    public CreateGroupViewModel(ClientUserInfo client, ChatClient chatClient) : base(client)
-    //    {
-    //        AddToGroupCommand = new Command(AddToGroup);
-    //        RemoveFromGroupCommand = new Command(RemoveFromGroup);
-    //        CreateGroupCommand = new Command(CreateGroup);
-
-    //        AllUsers_MouseLeaveCommand = new Command(AllUsers_MouseLeave);
-    //        AllUsers_PreviewDragEnterCommand = new Command(AllUsers_PreviewDragEnter);
-    //        AllUsers_DragLeaveCommand = new Command(AllUsers_DragLeave);
-    //        AllUsers_MouseEnterCommand = new Command(AllUsers_MouseEnter);
-
-    //        UsersToAdd_MouseLeaveCommand = new Command(UsersToadd_MouseLeave);
-    //        UsersToAdd_PreviewDragEnterCommand = new Command(UsersToAdd_PreviewDragEnter);
-    //        UsersToAdd_DragLeaveCommand = new Command(UsersToAdd_DragLeave);
-    //        UsersToAdd_MouseEnterCommand = new Command(UsersToAdd_MouseEnter);
-
-    //        UsersToAdd = new ObservableCollection<AvailableUser>();
-    //    }
-
-    //    public ICommand AddToGroupCommand { get; }
-    //    public ICommand RemoveFromGroupCommand { get; }
-    //    public ICommand CreateGroupCommand { get; }
-
-    //    public ICommand AllUsers_MouseLeaveCommand { get; }
-    //    public ICommand AllUsers_PreviewDragEnterCommand { get; }
-    //    public ICommand AllUsers_DragLeaveCommand { get; }
-    //    public ICommand AllUsers_MouseEnterCommand { get; }
-
-    //    public ICommand UsersToAdd_MouseLeaveCommand { get; }
-    //    public ICommand UsersToAdd_PreviewDragEnterCommand { get; }
-    //    public ICommand UsersToAdd_DragLeaveCommand { get; }
-    //    public ICommand UsersToAdd_MouseEnterCommand { get; }
-
-    //    public ObservableCollection<AvailableUser> UsersToAdd { get => usersToAdd; set => Set(ref usersToAdd, value); }
-    //    public string ChatName { get => chatName; set => Set(ref chatName, value); }
-    //    public bool AllUsersIsDropTarget { get => allUsersIsDropTarget; set => Set(ref allUsersIsDropTarget, value); }
-    //    public bool UsersToAddIsDropTarget { get => usersToAddIsDropTarget; set => Set(ref usersToAddIsDropTarget, value); }
-
-    //    //private void AddToGroup(object param)
-    //    //{
-    //    //    if (SelectedUser != null)
-    //    //    {
-    //    //        usersToAdd.Add(SelectedUser);
-    //    //        AllUsers.Remove(SelectedUser);
-    //    //    }
-    //    //}
-
-    //    //private void RemoveFromGroup(object param)
-    //    //{
-    //    //    if (SelectedUser != null)
-    //    //    {
-    //    //        AllUsers.Add(SelectedUser);
-    //    //        usersToAdd.Remove(SelectedUser);
-    //    //    }
-    //    //}
-
-    //    private void CreateGroup(object param)
-    //    {
-    //        int sqlId;
-    //        Chat chat;
-    //        if (usersToAdd.Count == 1)
-    //        {
-    //            sqlId = chatClient.CreateChatroom(usersToAdd[0].Name, new int[] { client.SqlId, usersToAdd[0].SqlId });
-    //            chat = new ChatOne(sqlId, usersToAdd[0]) { CanWrite = true };
-    //            AddChat.Invoke(chat);
-    //        }
-    //        else
-    //        {
-    //            if (!String.IsNullOrWhiteSpace(ChatName))
-    //            {
-    //                int[] users = new int[usersToAdd.Count + 1];
-    //                users[0] = client.SqlId;
-    //                for (int i = 1; i < users.Length; i++)
-    //                    users[i] = usersToAdd[i - 1].SqlId;
-
-    //                sqlId = chatClient.CreateChatroom(ChatName, users);
-
-    //                chat = new ChatGroup(sqlId, ChatName, UsersToAdd) { CanWrite = true };
-    //                AddChat.Invoke(chat);
-    //            }
-    //            else
-    //            {
-    //                MessageBox.Show("Please enter chat room name");
-    //            }
-    //        }
-    //    }
-
-    //    private void UsersToAdd_PreviewDragEnter(object param)
-    //    {
-    //        canDrop = true;
-    //        allUsersIsDropSource = true;
-    //    }
-
-    //    private void UsersToAdd_DragLeave(object param)
-    //    {
-    //        canDrop = false;
-    //        allUsersIsDropSource = false;
-    //    }
-
-    //    private void UsersToadd_MouseLeave(object param)
-    //    {
-    //        canDrop = false;
-    //        allUsersIsDropSource = false;
-    //    }
-
-    //    private void AllUsers_PreviewDragEnter(object param)
-    //    {
-    //        canDrop = true;
-    //        usersToAddIsDropSource = true;
-    //    }
-
-    //    private void AllUsers_DragLeave(object param)
-    //    {
-    //        canDrop = false;
-    //        usersToAddIsDropSource = false;
-    //    }
-
-    //    private void AllUsers_MouseLeave(object param)
-    //    {
-    //        canDrop = false;
-    //        usersToAddIsDropSource = false;
-    //    }
-
-    //    private void AllUsers_MouseEnter(object param)
-    //    {
-    //        AllUsersIsDropTarget = false;
-    //        UsersToAddIsDropTarget = true;
-    //    }
-
-    //    private void UsersToAdd_MouseEnter(object param)
-    //    {
-    //        UsersToAddIsDropTarget = false;
-    //        AllUsersIsDropTarget = true;
-    //    }
-
-    //    public void DragOver(IDropInfo dropInfo)
-    //    {
-    //        AvailableUser sourceItem = dropInfo.Data as AvailableUser;
-    //        if (sourceItem != null)
-    //        {
-    //            dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
-    //            dropInfo.Effects = DragDropEffects.Copy;
-    //        }
-    //    }
-
-    //    public void Drop(IDropInfo dropInfo)
-    //    {
-    //        AvailableUser sourceItem = dropInfo.Data as AvailableUser;
-    //        if (sourceItem != null && canDrop)
-    //        {
-    //            if (allUsersIsDropSource)
-    //            {
-    //                usersToAdd.Add(sourceItem);
-    //                AllUsers.Remove(sourceItem);
-    //            }
-    //            else if (usersToAddIsDropSource)
-    //            {
-    //                AllUsers.Add(sourceItem);
-    //                UsersToAdd.Remove(sourceItem);
-    //            }
-    //        }
-    //    }
-    //}
-
-
-
-    //public void AddUser(object param)
-    //{
-    //    if (selectedUser != null)
-    //    {
-    //        int chatId;
-    //        try
-    //        {
-    //            chatId = chatClient.CreateChatroom(selectedUser.Name, new int[] { client.SqlId, selectedUser.SqlId });
-    //            //chatClient.AddUserToChatroom(client.SqlId, chatId);
-    //        }
-    //        catch (Exception)
-    //        {
-    //            MessageBox.Show("someting went wrong please try later");
-    //            return;
-    //        }
-    //        ChatOne chat = new ChatOne(chatId, selectedUser);
-    //        AddChat.Invoke(chat);
-    //        MessageBox.Show("friend added");
-    //    }
-    //    else
-    //    {
-    //        MessageBox.Show("Select user for creating chat room");
-    //    }
-    //}
 }
