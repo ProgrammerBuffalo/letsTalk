@@ -43,6 +43,14 @@ namespace Client.ViewModels
         private Visibility loaderVisibility;
         private Message inputMessage;
 
+        public Emoji.Wpf.EmojiData.Group selectedEmojiGroup;
+
+        public string searchEmojiText;
+        public Emoji.Wpf.EmojiData.Emoji selectedEmoji;
+        public ObservableCollection<Emoji.Wpf.EmojiData.Emoji> emojis;
+
+        Views.EmojiWindow window;
+
         public ChatViewModel(MainViewModel mainVM)
         {
             this.mainVM = mainVM;
@@ -61,6 +69,10 @@ namespace Client.ViewModels
             _countLeft = chat._messageCount;
 
             LoaderVisibility = Visibility.Hidden;
+
+            InputMessage = new TextMessage();
+
+            EmojiGroups = new ObservableCollection<Emoji.Wpf.EmojiData.Group>(Emoji.Wpf.EmojiData.AllGroups);
 
             //client = ClientUserInfo.getInstance();
             //ChatClient = chatClient;
@@ -81,18 +93,27 @@ namespace Client.ViewModels
             //MediaPosChangedCommand = new Command(MediaPosChanged);
             //SendCommand = new Command(Send);
             OpenFileCommand = new Command(OpenFile);
-            UnloadCommand = new Command(Unload);
-            LoadCommand = new Command(Load);
+            CancelFileCommand = new Command(CancelFile);
+            SendFileCommand = new Command(SendFile);
 
-            CanNotifyChangedCommand = new Command(CanNotifyChanged);
+            OpenEmojiCommand = new Command(OpenEmoji);
+            EmojiChangedCommand = new Command(EmojiChanged);
+            EmojiGroupChangedCommand = new Command(EmojiGroupChanged);
+            SearchEmojiTextChangedCommand = new Command(SearchEmojiTextChanged);
+            FavEmojiCommand = new Command(FavEmoji);
+
             EditChatCommand = new Command(EditChat);
             LeaveChatCommand = new Command(LeaveChat);
 
             DownloadFileCommand = new Command(DownloadFile);
-            CancelFileCommand = new Command(CancelFile);
-            SendFileCommand = new Command(SendFile);
 
-            InputMessage = new TextMessage();
+            CanNotifyChangedCommand = new Command(CanNotifyChanged);
+
+            LoadCommand = new Command(Load);
+            UnloadCommand = new Command(Unload);
+
+            window = new Views.EmojiWindow();
+            window.DataContext = this;
         }
 
         public ICommand TextBox_KeyDownCommand { get; }
@@ -102,18 +123,25 @@ namespace Client.ViewModels
         //public ICommand MediaPlayCommand { get; }
         //public ICommand MediaPosChangedCommand { get; }
         //public ICommand SendCommand { get; }
-        public ICommand OpenFileCommand { get; }
-        public ICommand OpenSmileCommand { get; }
-        public ICommand UnloadCommand { get; }
+        public ICommand OpenEmojiCommand { get; }
+        public ICommand EmojiGroupChangedCommand { get; }
+        public ICommand EmojiChangedCommand { get; }
+        public ICommand SearchEmojiTextChangedCommand { get; }
+        public ICommand FavEmojiCommand { get; }
 
-        public ICommand CanNotifyChangedCommand { get; }
         public ICommand EditChatCommand { get; }
         public ICommand LeaveChatCommand { get; }
 
-        public ICommand LoadCommand { get; }
+        public ICommand CanNotifyChangedCommand { get; }
+
+        public ICommand OpenFileCommand { get; }
         public ICommand SendFileCommand { get; }
         public ICommand CancelFileCommand { get; }
+
         public ICommand DownloadFileCommand { get; }
+
+        public ICommand LoadCommand { get; }
+        public ICommand UnloadCommand { get; }
 
         public Chat Chat { get => chat; set => Set(ref chat, value); }
         public Settings Settings { get; }
@@ -122,6 +150,13 @@ namespace Client.ViewModels
         public Message InputMessage { get => inputMessage; set => Set(ref inputMessage, value); }
         public string MessageText { get => messageText; set => Set(ref messageText, value); }
         public bool? CanNotify { get => canNotify; set => Set(ref canNotify, value); }
+
+        public Emoji.Wpf.EmojiData.Group SelectedEmojiGroup { get => selectedEmojiGroup; set => Set(ref selectedEmojiGroup, value); }
+        public ObservableCollection<Emoji.Wpf.EmojiData.Group> EmojiGroups { get; }
+
+        public string SearchEmojiText { get => searchEmojiText; set => Set(ref searchEmojiText, value); }
+        public Emoji.Wpf.EmojiData.Emoji SelectedEmoji { get => selectedEmoji; set => Set(ref selectedEmoji, value); }
+        public ObservableCollection<Emoji.Wpf.EmojiData.Emoji> Emojis { get => emojis; set => Set(ref emojis, value); }
 
         public Visibility LoaderVisibility { get => loaderVisibility; set => Set(ref loaderVisibility, value); }
         public System.Windows.Controls.ScrollViewer Scroll { get; set; }
@@ -153,7 +188,7 @@ namespace Client.ViewModels
         private async void Load(object obj)
         {
             await LoadMore();
-            Scroll.ScrollToEnd();
+            //Scroll.ScrollToEnd();
         }
 
         private async Task LoadMore()
@@ -161,7 +196,7 @@ namespace Client.ViewModels
             await Utility.MessageLoader.LoadMessage(this.Chat, mainVM.Client.SqlId, 30, 30);
         }
 
-        private async void TextBox_EnterPressed(object obj)
+        private async void TextBox_EnterPressed(object obj)        
         {
             if (String.IsNullOrEmpty(messageText)) return;
             await mainVM.ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = MessageText, UserId = mainVM.Client.SqlId }, Chat.SqlId);
@@ -172,7 +207,7 @@ namespace Client.ViewModels
             {
                 mainVM.Chats.Move(mainVM.Chats.IndexOf(chat), 0);
             }
-            Scroll.ScrollToBottom();
+            //Scroll.ScrollToBottom();
         }
 
         private void TextBox_KeyUp(object obj)
@@ -184,9 +219,7 @@ namespace Client.ViewModels
         private void TextBox_KeyDown(object obj)
         {
             if (String.IsNullOrEmpty(messageText))
-            {
                 mainVM.ChatClient.MessageIsWritingAsync(Chat.SqlId, mainVM.Client.SqlId);
-            }
         }
 
         //private void MediaEnded(object sender, EventArgs e)
@@ -360,6 +393,70 @@ namespace Client.ViewModels
         private void CancelFile(object param)
         {
             InputMessage = new TextMessage();
+        }
+
+        private void OpenEmoji(object param)
+        {
+            if (!window.IsActive)
+            {
+                window.Show();
+            }
+        }
+
+        private void EmojiGroupChanged(object param)
+        {
+            if (SelectedEmojiGroup != null)
+            {
+                foreach (var item in Emoji.Wpf.EmojiData.AllGroups)
+                {
+                    if (item.Icon == SelectedEmojiGroup.Icon)
+                    {
+                        Emojis = new ObservableCollection<Emoji.Wpf.EmojiData.Emoji>(item.EmojiList);
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void EmojiChanged(object param)
+        {
+            if (SelectedEmoji != null)
+            {
+                if (inputMessage is TextMessage)
+                {
+                    MessageText += selectedEmoji.Text;
+                }
+            }
+        }
+
+        private void SearchEmojiTextChanged(object param)
+        {
+            if (!String.IsNullOrWhiteSpace(SearchEmojiText))
+            {
+                Emojis = new ObservableCollection<Emoji.Wpf.EmojiData.Emoji>();
+                Task.Run(() =>
+                {
+                    foreach (var group in Emoji.Wpf.EmojiData.AllGroups)
+                    {
+                        foreach (var emoji in group.EmojiList)
+                        {
+                            if (StringExtensions.ContainsAtStart(emoji.Name, searchEmojiText))
+                            {
+                                App.Current.Dispatcher.Invoke(() =>
+                                {
+                                    Emojis.Add(emoji);
+                                });
+                            }
+                        }
+                    }
+                });
+            }
+            else Emojis.Clear();
+        }
+
+        private void FavEmoji(object param)
+        {
+
         }
 
         private async void ShowMore(object param)

@@ -47,6 +47,9 @@
     <Reference Include="ControlzEx, Version=5.0.0.0, Culture=neutral, PublicKeyToken=69f1c32f803d307e, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.5.0.0\lib\net462\ControlzEx.dll</HintPath>
     </Reference>
+    <Reference Include="Emoji.Wpf, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Emoji.Wpf.0.3.0\lib\net40\Emoji.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="GongSolutions.WPF.DragDrop, Version=2.0.0.0, Culture=neutral, PublicKeyToken=91f1945125b7a587, processorArchitecture=MSIL">
       <HintPath>..\packages\gong-wpf-dragdrop.2.3.2\lib\net47\GongSolutions.WPF.DragDrop.dll</HintPath>
     </Reference>
@@ -171,6 +174,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
@@ -185,6 +191,12 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="Typography.GlyphLayout, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Emoji.Wpf.0.3.0\lib\net40\Typography.GlyphLayout.dll</HintPath>
+    </Reference>
+    <Reference Include="Typography.OpenFont, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Emoji.Wpf.0.3.0\lib\net40\Typography.OpenFont.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -221,6 +233,7 @@
     <Compile Include="Utility\ImageCropper.cs" />
     <Compile Include="Utility\MessageLoader.cs" />
     <Compile Include="Utility\SortChatsExtension.cs" />
+    <Compile Include="Utility\StringExtensions.cs" />
     <Compile Include="Utility\UCHelper.cs" />
     <Compile Include="Utility\ValidationRules.cs" />
     <Compile Include="ViewModels\CreateChatViewModel.cs" />
@@ -241,6 +254,9 @@
     </Compile>
     <Compile Include="Views\EditGroupWindow.xaml.cs">
       <DependentUpon>EditGroupWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EmojiWindow.xaml.cs">
+      <DependentUpon>EmojiWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EntranceWindow.xaml.cs">
       <DependentUpon>EntranceWindow.xaml</DependentUpon>
@@ -301,6 +317,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\EditGroupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EmojiWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

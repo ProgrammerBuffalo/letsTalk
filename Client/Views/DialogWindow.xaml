@@ -4,14 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="DialogWindow" Height="250" Width="450">
+        Title="DialogWindow" Height="250" Width="450" ResizeMode="NoResize" WindowStyle="SingleBorderWindow">
     <Window.Resources>
         <ResourceDictionary Source="/WindowResources/ThemeDictionary.xaml"/>
     </Window.Resources>
 
     <Grid Background="{StaticResource MainBackground}">
-        <TextBlock x:Name="message" Foreground="{StaticResource ButtonBackground}" TextWrapping="Wrap" FontSize="25" VerticalAlignment="Center" Margin="20,0,0,60"/>
+        <TextBlock x:Name="message" Foreground="{StaticResource ButtonBackground}" TextWrapping="Wrap" FontSize="20" VerticalAlignment="Center" Margin="20,0,0,60"/>
 
-        <Button Template="{StaticResource ButtonTemplate}" Width="110" Height="40" Content="Ok" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20"/>
+        <Button Template="{StaticResource ButtonTemplate}" Width="110" Height="40" Content="Ok" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Click="Button_Click"/>
     </Grid>
 </Window>

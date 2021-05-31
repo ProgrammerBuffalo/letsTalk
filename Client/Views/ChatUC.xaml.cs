@@ -21,10 +21,17 @@ namespace Client.Views
 
         private void ChatUC_Loaded(object sender, RoutedEventArgs e)
         {
-            var border = (Border)VisualTreeHelper.GetChild(chatListView, 0);
-            scroll = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
-            getControl.Invoke(ref scroll);
-            CanNotifyText();
+            try
+            {
+                var border = (Border)VisualTreeHelper.GetChild(chatListView, 0);
+                scroll = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
+                getControl.Invoke(ref scroll);
+                CanNotifyText();
+            }
+            catch (System.Exception)
+            {
+
+            }
         }
 
         private void canNotifyCheckBox_Click(object sender, RoutedEventArgs e)

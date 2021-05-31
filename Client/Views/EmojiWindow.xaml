@@ -1,0 +1,101 @@
+﻿<Window x:Class="Client.Views.EmojiWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client.Views"
+        xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        mc:Ignorable="d"
+        Title="EmojiWindow" Height="350" Width="600" ResizeMode="NoResize" WindowStyle="SingleBorderWindow" Closing="Window_Closing">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/WindowResources/ThemeDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate x:Key="GroupEmojiDataTemplate">
+                <emoji:TextBlock Text="{Binding Path=Icon}" FontSize="30"/>
+            </DataTemplate>
+
+            <DataTemplate x:Key="EmojiDataTemplate">
+                <emoji:TextBlock Text="{Binding Path=Text}" FontSize="25"/>
+            </DataTemplate>
+
+            <ItemsPanelTemplate x:Key="EmojiGroupPanelTemplate">
+                <WrapPanel/>
+            </ItemsPanelTemplate>
+
+            <Style x:Key="EmojiGroupListViewItemStyle" TargetType="ListViewItem">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListViewItem">
+                            <Grid Margin="10,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="50"/>
+                                    <RowDefinition Height="10"/>
+                                </Grid.RowDefinitions>
+
+                                <ContentPresenter Grid.Row="0"/>
+
+                                <Rectangle x:Name="rec" Grid.Row="1" Visibility="Hidden" Fill="{StaticResource ButtonBackground}"/>
+                            </Grid>
+
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="rec" Property="Visibility" Value="Visible"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="4*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="100"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=SearchEmojiText}" FontSize="15" TextChanged="TextBox_TextChanged">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="TextChanged">
+                    <i:InvokeCommandAction Command="{Binding SearchEmojiTextChangedCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </TextBox>
+
+        <ListView Grid.Row="0"
+                  Margin="10,0"
+                  ItemsSource="{Binding Path=EmojiGroups}"
+                  SelectedItem="{Binding Path=SelectedEmojiGroup}"
+                  ItemTemplate="{StaticResource GroupEmojiDataTemplate}"
+                  ItemsPanel="{StaticResource EmojiGroupPanelTemplate}"
+                  ItemContainerStyle="{StaticResource EmojiGroupListViewItemStyle}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding EmojiGroupChangedCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ListView>
+
+        <ListView Grid.Row="1" Grid.ColumnSpan="2"
+                  SelectedItem="{Binding Path=SelectedEmoji}" 
+                  ItemsSource="{Binding Path=Emojis}"
+                  ItemTemplate="{StaticResource EmojiDataTemplate}"
+                  ItemsPanel="{StaticResource EmojiGroupPanelTemplate}"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding EmojiChangedCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ListView>
+    </Grid>
+</Window>

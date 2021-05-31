@@ -172,9 +172,10 @@
             </i:Interaction.Triggers>
         </ListView>
 
-        <Grid Grid.Row="2" MaxHeight="100">
+        <Grid Grid.Row="2" Height="50">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="8*"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
@@ -182,7 +183,9 @@
                             Content="{Binding Path=InputMessage}"
                             ContentTemplateSelector="{StaticResource InputMessageTemplateSelector}"/>
 
-            <Button Grid.Column="1" Content="File" FontSize="20" IsEnabled="{Binding Path=Chat.CanWrite}" Template="{StaticResource ButtonTemplate}" Command="{Binding OpenFileCommand}"/>
+            <Button x:Name="smileBtn" Grid.Column="1" Content="Emoji" FontSize="20" Margin="5,0" IsEnabled="{Binding Path=Chat.CanWrite}" Template="{StaticResource ButtonTemplate}" Command="{Binding OpenEmojiCommand}"/>
+
+            <Button Grid.Column="2" Content="File" FontSize="20" IsEnabled="{Binding Path=Chat.CanWrite}" Margin="5,0" Template="{StaticResource ButtonTemplate}" Command="{Binding OpenFileCommand}"/>
         </Grid>
     </Grid>
 

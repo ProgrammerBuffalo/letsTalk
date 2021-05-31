@@ -21,6 +21,7 @@ namespace Client.Models
         private bool canGroupNotify;
         private int userId;
         private int userNodeIndex;
+        private int favEmojiCount;
 
         private MediaPlayer player;
 
@@ -32,9 +33,24 @@ namespace Client.Models
                 {
                     instance = new Settings();
                     instance.player = new MediaPlayer();
+                    //instance.Temp();
                 }
                 return instance;
             }
+        }
+
+        private void Temp()
+        {
+            AddFavEmoji("a");
+            AddFavEmoji("b");
+            AddFavEmoji("a");
+            AddFavEmoji("c");
+            AddFavEmoji("d");
+            AddFavEmoji("d");
+            AddFavEmoji("d");
+            AddFavEmoji("d");
+            AddFavEmoji("d");
+            AddFavEmoji("d");
         }
 
         public int MessageLoadCount
@@ -304,6 +320,60 @@ namespace Client.Models
                 }
             }
             AddNotify(document, chatId, isMute);
+        }
+
+        private void AddFavEmoji(string emoji)
+        {
+            XmlDocument document = new XmlDocument();
+            document.Load("Settings/user-settings.xml");
+
+            foreach (XmlNode item in document.DocumentElement.ChildNodes[userId]["FavEmojis"])
+            {
+                if (item.Attributes["Text"].InnerText == emoji)
+                {
+                    int tempCount = int.Parse(item.Attributes["Count"].InnerText) + 1;
+                    string tempText = item.Attributes["Text"].InnerText;
+                    //foreach (XmlNode item2 in document.DocumentElement["FavEmoji"])
+                    //{
+                    //    if(int.Parse(item2.Attributes["Count"].InnerText) <= tempCount)
+                    //    {
+                    //        document.DocumentElement["FavEmojis"].ChildNodes[0].InsertAfter(null, null);
+                    //    }
+                    //}
+                    break;
+                }
+            }
+            XmlElement element = document.CreateElement("Emoji");
+            XmlAttribute attr = document.CreateAttribute("Text");
+            attr.InnerText = emoji;
+            element.Attributes.Append(attr);
+
+            attr = document.CreateAttribute("Count");
+            attr.InnerText = "1";
+            element.Attributes.Append(attr);
+            document.DocumentElement["FavEmojis"].AppendChild(element);
+
+            document.Save("Settings/user-settings.xml");
+        }
+
+        private void FavEmojiReplace(XmlDocument document)
+        {
+
+        }
+
+        private void FavEmojiPlace(XmlDocument document, XmlElement emoji)
+        {
+            if (document.DocumentElement.ChildNodes[userId]["Emojis"].ChildNodes.Count < favEmojiCount)
+            {
+                foreach (XmlNode item in document.DocumentElement.ChildNodes[userId]["Emojis"])
+                {
+                    //if (item.Attributes[""])
+                    //{
+
+                    //}
+                }
+            }
+            else document.DocumentElement.ChildNodes[userId]["Emojis"].AppendChild(emoji);
         }
 
         public void PlayRington(string path)

@@ -12,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Notifications.Wpf;
+
 namespace Client.ViewModels
 {
     public class MainViewModel : System.ComponentModel.INotifyPropertyChanged, ChatCallback, IHelperUC
@@ -538,7 +539,6 @@ namespace Client.ViewModels
 
                         user.Image = bitmapImage;
                     });
-
                 });
 
             }
