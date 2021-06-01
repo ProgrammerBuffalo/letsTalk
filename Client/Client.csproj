@@ -473,6 +473,8 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Resource Include="Resources\bayern.ttf" />
+    <Resource Include="Resources\seguiemj.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -544,11 +546,9 @@
     <Content Include="Resources\Ringtons\sunny.wav" />
     <Resource Include="Resources\Wallpapers\black-white.jpg" />
     <Resource Include="Resources\Wallpapers\blue-red.jpg" />
-    <Resource Include="Resources\Wallpapers\brown.jpg" />
     <Resource Include="Resources\Wallpapers\castle-river.jpg" />
     <Resource Include="Resources\Wallpapers\city.jpg" />
     <Resource Include="Resources\Wallpapers\dark-forest.jpg" />
-    <Resource Include="Resources\Wallpapers\flowers.jpg" />
     <Resource Include="Resources\Wallpapers\grass.jpg" />
     <Resource Include="Resources\Wallpapers\green.jpg" />
     <Resource Include="Resources\Wallpapers\horizont.jpg" />
@@ -556,17 +556,11 @@
     <Resource Include="Resources\Wallpapers\mix-color.jpg" />
     <Resource Include="Resources\Wallpapers\mountain1.jpg" />
     <Resource Include="Resources\Wallpapers\mountain2.jpg" />
-    <Resource Include="Resources\Wallpapers\north-light.jpg" />
     <Resource Include="Resources\Wallpapers\red.jpg" />
     <Resource Include="Resources\Wallpapers\skin.jpg" />
-    <Resource Include="Resources\Wallpapers\sky.jpg" />
     <Resource Include="Resources\Wallpapers\snow1.jpg" />
     <Resource Include="Resources\Wallpapers\snow2.jpg" />
-    <Resource Include="Resources\Wallpapers\space1.jpg" />
-    <Resource Include="Resources\Wallpapers\space2.jpg" />
     <Resource Include="Resources\Wallpapers\volcano.jpg" />
-    <Resource Include="Resources\Wallpapers\water-light.jpg" />
-    <Resource Include="Resources\Wallpapers\waterfall.jpg" />
     <Resource Include="Resources\Wallpapers\yellow.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

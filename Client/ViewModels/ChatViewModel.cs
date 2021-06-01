@@ -188,7 +188,7 @@ namespace Client.ViewModels
         private async void Load(object obj)
         {
             await LoadMore();
-            //Scroll.ScrollToEnd();
+            Scroll.ScrollToEnd();
         }
 
         private async Task LoadMore()
@@ -207,7 +207,7 @@ namespace Client.ViewModels
             {
                 mainVM.Chats.Move(mainVM.Chats.IndexOf(chat), 0);
             }
-            //Scroll.ScrollToBottom();
+            Scroll.ScrollToBottom();
         }
 
         private void TextBox_KeyUp(object obj)
@@ -423,9 +423,8 @@ namespace Client.ViewModels
             if (SelectedEmoji != null)
             {
                 if (inputMessage is TextMessage)
-                {
                     MessageText += selectedEmoji.Text;
-                }
+                SelectedEmoji = null;
             }
         }
 

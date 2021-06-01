@@ -117,7 +117,7 @@
 
                 <Border x:Name="border" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" BorderBrush="AliceBlue" BorderThickness="3" CornerRadius="15" Margin="10,20,0,0">
                     <Grid>
-                        <emoji:TextBlock Text="{Binding Path=Message.Text}" TextWrapping="Wrap" Foreground="Black" FontSize="18" Padding="8,0,8,15"/>
+                        <emoji:TextBlock Text="{Binding Path=Message.Text}" FontFamily="{StaticResource EmojiFontFamily}" TextWrapping="Wrap" Foreground="Black" FontSize="18" Padding="8,0,8,15"/>
                         <TextBlock x:Name="date" Text="{Binding Path=Message.Date, StringFormat={}{0:HH:mm}}" Margin="10, 2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="{StaticResource DateForeground}" FontSize="12" FontWeight="DemiBold"/>
                     </Grid>
                 </Border>

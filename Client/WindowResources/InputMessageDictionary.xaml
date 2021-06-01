@@ -13,10 +13,11 @@
     <Style x:Key="InputTextBoxStyle" TargetType="TextBox">
         <Setter Property="Background" Value="{StaticResource InputTextBoxBackground}"/>
         <Setter Property="Foreground" Value="{StaticResource InputTextBoxForeground}"/>
-        <Setter Property="FontSize" Value="35"/>
+        <Setter Property="FontSize" Value="30"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="FontFamily" Value="{StaticResource EmojiFontFamily}"/>
     </Style>
 
     <DataTemplate x:Key="TextDataTemplate">
