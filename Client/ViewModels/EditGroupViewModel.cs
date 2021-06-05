@@ -30,7 +30,9 @@ namespace Client.ViewModels
 
         private string name;
         private string searchMembersText;
-        private string searchUsersText;
+        private string searchUsersText = "";
+
+        private string acceptedUserText = "";
 
         public EditGroupViewModel(MainViewModel mainVM)
         {
@@ -48,7 +50,7 @@ namespace Client.ViewModels
             ShowMoreCommand = new Command(ShowMore);
             SaveNameCommand = new Command(SaveName);
             SearchChangedCommand = new Command(SearchChanged);
-            TextBoxSearch_EnterPressedCommand = new Command(SearchUsersFromDB);
+            SearchByNameInDB = new Command(SearchUsersFromDB);
 
             Users_MouseLeaveCommand = new Command(Users_MouseLeave);
             Users_PreviewDragEnterCommand = new Command(Users_PreviewDragEnter);
@@ -64,7 +66,7 @@ namespace Client.ViewModels
         public ICommand ShowMoreCommand { get; }
         public ICommand SaveNameCommand { get; }
         public ICommand SearchChangedCommand { get; }
-        public ICommand TextBoxSearch_EnterPressedCommand { get; }
+        public ICommand SearchByNameInDB { get; }
 
         public ICommand Users_MouseLeaveCommand { get; }
         public ICommand Users_PreviewDragEnterCommand { get; }
@@ -85,6 +87,7 @@ namespace Client.ViewModels
             AvailableUser user = (AvailableUser)param;
             mainVM.SelectedChat.RemoveUser(user);
             ChatClient.RemoveUserFromChatroom(user.SqlId, chat.SqlId);
+            chat.LastMessage = SystemMessage.UserRemoved(DateTime.Now, user.Name).Message;
         }
 
         private void DeleteChat(object param)
@@ -125,9 +128,19 @@ namespace Client.ViewModels
         private void SearchUsersFromDB(object obj)
         {
             offset = 0;
+            AllUsers.Clear();
+
+
+            if (SearchUsersText.Length == 0)
+            {
+                acceptedUserText = "";
+                ShowMore(obj);
+            }
+
+            acceptedUserText = SearchUsersText;
 
             ChatService.UnitClient unitClient = new ChatService.UnitClient();
-            Dictionary<int, string> users = unitClient.SearchUsersByName(SearchUsersText);
+            Dictionary<int, int> users = unitClient.GetRegisteredUsers(5, offset, mainVM.Client.SqlId, acceptedUserText);
 
             if (users.Count == 0)
                 return;
@@ -138,11 +151,13 @@ namespace Client.ViewModels
                 it.MoveNext();
                 if (Users.FirstOrDefault(u => u.SqlId == it.Current.Key) == null && AllUsers.FirstOrDefault(u => u.SqlId == it.Current.Key) == null)
                 {
-                    AvailableUser availableUser = new AvailableUser(it.Current.Key, it.Current.Value);
+                    AvailableUser availableUser = new AvailableUser(it.Current.Key, unitClient.FindUserName(it.Current.Value));
                     AllUsers.Add(availableUser);
                     mainVM.DownloadUserAvatarAsync(availableUser);
                 }
             }
+
+            offset = users.Last().Value;
         }
 
         private async void ChangeImageAsync(object param)
@@ -202,7 +217,7 @@ namespace Client.ViewModels
         private void ShowMore(object param)
         {
             ChatService.UnitClient unitClient = new ChatService.UnitClient();
-            Dictionary<int, string> users = unitClient.GetRegisteredUsers(15, offset, mainVM.Client.SqlId);
+            Dictionary<int, int> users = unitClient.GetRegisteredUsers(3, offset, mainVM.Client.SqlId, acceptedUserText);
 
             if (users.Count == 0)
                 return;
@@ -213,12 +228,12 @@ namespace Client.ViewModels
                 it.MoveNext();
                 if (Users.FirstOrDefault(u => u.SqlId == it.Current.Key) == null && AllUsers.FirstOrDefault(u => u.SqlId == it.Current.Key) == null)
                 {
-                    AvailableUser availableUser = new AvailableUser(it.Current.Key, it.Current.Value);
+                    AvailableUser availableUser = new AvailableUser(it.Current.Key, unitClient.FindUserName(it.Current.Value));
                     AllUsers.Add(availableUser);
                     mainVM.DownloadUserAvatarAsync(availableUser);
                 }
             }
-            offset += 15;
+            offset = users.Last().Value;
         }
 
         private void Users_MouseLeave(object param)
@@ -261,6 +276,7 @@ namespace Client.ViewModels
                     {
                         user = new AvailableUser(sourceItem.SqlId, sourceItem.Name);
                         mainVM.Users.Add(new KeyValuePair<int, AvailableUser>(user.SqlId, user));
+                        chat.LastMessage = SystemMessage.UserAdded(DateTime.Now, user.Name).Message;
                     }
 
                     this.Chat.AddMember(user);

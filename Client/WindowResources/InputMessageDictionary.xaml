@@ -21,7 +21,7 @@
     </Style>
 
     <DataTemplate x:Key="TextDataTemplate">
-        <TextBox Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.MessageText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
+        <emoji:TextBox Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.MessageText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
                  IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.Chat.CanWrite}"
                  Style="{StaticResource InputTextBoxStyle}">
             <TextBox.InputBindings>
@@ -35,7 +35,7 @@
                     <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.TextBox_KeyUpCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-        </TextBox>
+        </emoji:TextBox>
     </DataTemplate>
 
     <DataTemplate x:Key="FileDataTemplate">

@@ -16,15 +16,20 @@ namespace Client.Views
         public ChatUC()
         {
             InitializeComponent();
+            contentLoader.Visibility = Visibility.Visible;
             Loaded += ChatUC_Loaded;
         }
 
         private void ChatUC_Loaded(object sender, RoutedEventArgs e)
         {
-            var border = (Border)VisualTreeHelper.GetChild(chatListView, 0);
-            scroll = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
-            getControl.Invoke(ref scroll);
+            try
+            {
+                var border = (Border)VisualTreeHelper.GetChild(chatListView, 0);
+                scroll = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
+                getControl.Invoke(ref scroll);
+            }catch(System.Exception ex) { MessageBox.Show(ex.Message); }
             CanNotifyText();
+            contentLoader.Visibility = Visibility.Collapsed;
         }
 
         private void canNotifyCheckBox_Click(object sender, RoutedEventArgs e)

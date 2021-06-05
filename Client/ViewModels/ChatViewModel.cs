@@ -68,8 +68,6 @@ namespace Client.ViewModels
             chat._offsetDate = DateTime.Now;
             _countLeft = chat._messageCount;
 
-            LoaderVisibility = Visibility.Hidden;
-
             InputMessage = new TextMessage();
 
             EmojiGroups = new ObservableCollection<Emoji.Wpf.EmojiData.Group>(Emoji.Wpf.EmojiData.AllGroups);
@@ -179,7 +177,7 @@ namespace Client.ViewModels
                 Scroll.VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Disabled;
                 await LoadMore();
                 Scroll.VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Auto;
-                LoaderVisibility = Visibility.Hidden;
+                LoaderVisibility = Visibility.Collapsed;
             }
             else
                 _previousScrollOffset = Scroll.VerticalOffset;
@@ -193,10 +191,17 @@ namespace Client.ViewModels
 
         private async Task LoadMore()
         {
-            await Utility.MessageLoader.LoadMessage(this.Chat, mainVM.Client.SqlId, 30, 30);
+            List<SourceMessage> sourceMessages = await Utility.MessageLoader.LoadMessage(this.chat, new List<SourceMessage>(), mainVM.Client.SqlId, 30, 30);
+
+            if (LoaderVisibility.Equals(Visibility.Collapsed))
+                foreach (var mes in sourceMessages)
+                {
+                    chat.Messages.Add(mes);
+                }
+
         }
 
-        private async void TextBox_EnterPressed(object obj)        
+        private async void TextBox_EnterPressed(object obj)
         {
             if (String.IsNullOrEmpty(messageText)) return;
             await mainVM.ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = MessageText, UserId = mainVM.Client.SqlId }, Chat.SqlId);
@@ -411,11 +416,13 @@ namespace Client.ViewModels
                 {
                     if (item.Icon == SelectedEmojiGroup.Icon)
                     {
-                        Emojis = new ObservableCollection<Emoji.Wpf.EmojiData.Emoji>(item.EmojiList);
+                        //Emojis = new ObservableCollection<Emoji.Wpf.EmojiData.Emoji>(item.EmojiList);
                         break;
                     }
                 }
             }
+            Emojis = new ObservableCollection<Emoji.Wpf.EmojiData.Emoji>();
+            Emojis.Add(Emoji.Wpf.EmojiData.AllGroups[0].EmojiList.ElementAt(21));
         }
 
         private void EmojiChanged(object param)

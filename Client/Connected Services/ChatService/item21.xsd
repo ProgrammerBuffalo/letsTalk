@@ -36,13 +36,14 @@
         <xs:element minOccurs="0" name="count" type="xs:int" />
         <xs:element minOccurs="0" name="offset" type="xs:int" />
         <xs:element minOccurs="0" name="callerId" type="xs:int" />
+        <xs:element minOccurs="0" name="regex" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetRegisteredUsersResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetRegisteredUsersResult" nillable="true" type="q4:ArrayOfKeyValueOfintstring" />
+        <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetRegisteredUsersResult" nillable="true" type="q4:ArrayOfKeyValueOfintint" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -104,20 +105,6 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="chatId" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SearchUsersByName">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="regex" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SearchUsersByNameResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="SearchUsersByNameResult" nillable="true" type="q6:ArrayOfKeyValueOfintstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

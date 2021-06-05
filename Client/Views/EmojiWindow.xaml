@@ -15,11 +15,11 @@
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate x:Key="GroupEmojiDataTemplate">
-                <emoji:TextBlock Text="{Binding Path=Icon}" FontSize="30"/>
+                <emoji:TextBlock Text="{Binding Path=Icon}" FontFamily="{StaticResource EmojiFontFamily}" FontSize="30"/>
             </DataTemplate>
 
             <DataTemplate x:Key="EmojiDataTemplate">
-                <emoji:TextBlock Text="{Binding Path=Text}" FontSize="25"/>
+                <emoji:TextBlock Text="{Binding Path=Text}" FontFamily="{StaticResource EmojiFontFamily}" FontSize="25"/>
             </DataTemplate>
 
             <ItemsPanelTemplate x:Key="EmojiGroupPanelTemplate">
