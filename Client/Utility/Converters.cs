@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Windows.Documents;
 
 //конверторы служат для предоставления данных в болле удобной форме для пользователя
 //метод Convert преврашает данные из модели в данные для View 
 //метод ConvertBack преврашает данные веденные из View в данные модели 
-namespace Client.Utility    
+namespace Client.Utility
 {
     //перевод из тиков во время для отброжения длины трека
     class TicksToTime : System.Windows.Data.IValueConverter
@@ -140,4 +141,56 @@ namespace Client.Utility
             return value;
         }
     }
+
+    class EmojiConverter : System.Windows.Data.IValueConverter
+    {
+        public object Convert(object value, Type targetType, object param, System.Globalization.CultureInfo culture)
+        {
+            string text = value.ToString();
+            System.Windows.Controls.TextBlock block = new System.Windows.Controls.TextBlock();
+            block.TextWrapping = System.Windows.TextWrapping.Wrap;
+            block.FontSize = 18;
+            int i, start = 0;
+            for (i = 0; i < text.Length; i++)
+            {
+                if (text[i] == '&' && text.Length - 5 >= i && text[i + 1] == '#')
+                {
+                    if (start != i) block.Inlines.Add(new Run(text.Substring(start, i - start)) { BaselineAlignment = System.Windows.BaselineAlignment.TextTop });
+                    string code = text.Substring(i, 5);
+                    Models.Emoji emoji = Models.EmojiData.GetEmoji(code);
+
+                    System.Windows.Controls.Image image = new System.Windows.Controls.Image();
+                    image.Width = 30;
+                    image.Height = 30;
+                    image.Margin = new System.Windows.Thickness(3, 0, 3, 0);
+                    image.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri(emoji.Path, UriKind.Relative));
+                    block.Inlines.Add(image);
+
+                    i += 4;
+                    start = i + 1;
+                }
+            }
+            if (start != i) block.Inlines.Add(new Run(text.Substring(start)) { BaselineAlignment = System.Windows.BaselineAlignment.TextTop });
+            return block;
+        }
+
+        public object ConvertBack(object value, Type targetType, object param, System.Globalization.CultureInfo culture)
+        {
+            return value;
+        }
+    }
+
+    class PathToUri : System.Windows.Data.IValueConverter
+    {
+        public object Convert(object value, Type targetType, object param, System.Globalization.CultureInfo culture)
+        {
+            return '/' + value.ToString();
+        }
+
+        public object ConvertBack(object value, Type targetType, object param, System.Globalization.CultureInfo culture)
+        {
+            return value;
+        }
+    }
+
 }

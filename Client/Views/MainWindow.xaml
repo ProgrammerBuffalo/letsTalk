@@ -122,6 +122,7 @@
                                  ItemTemplateSelector="{StaticResource ChatDataTemplateSelector}"
                                  ItemsSource="{Binding Path=Chats}"
                                  SelectedItem="{Binding Path=SelectedChat}"
+                                 SelectedOptionsItem="{Binding Path=SelectedOptionsItem}"
                                  Style="{StaticResource HamburgerStyle}">
 
             <controls:HamburgerMenu.OptionsItemsSource>

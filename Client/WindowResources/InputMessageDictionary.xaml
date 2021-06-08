@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:utility="clr-namespace:Client.Utility"
                     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-                    xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf">
+                    xmlns:UC="clr-namespace:Client.UserControls">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/WindowResources/ThemeDictionary.xaml"/>
     </ResourceDictionary.MergedDictionaries>
@@ -20,22 +20,39 @@
         <Setter Property="FontFamily" Value="{StaticResource EmojiFontFamily}"/>
     </Style>
 
+    <Style x:Key="InputRichBoxStyle" TargetType="RichTextBox">
+        <Setter Property="Background" Value="{StaticResource InputTextBoxBackground}"/>
+        <Setter Property="Foreground" Value="{StaticResource InputTextBoxForeground}"/>
+        <Setter Property="FontSize" Value="30"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+    </Style>
+
+    <!--Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.MessageText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"-->
     <DataTemplate x:Key="TextDataTemplate">
-        <TextBox Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.MessageText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
-                 IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.Chat.CanWrite}"
-                 Style="{StaticResource InputTextBoxStyle}">
-            <TextBox.InputBindings>
+        <RichTextBox x:Name="block"
+                     IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.Chat.CanWrite}"
+                     Style="{StaticResource InputRichBoxStyle}">
+            <FlowDocument>
+                <Paragraph>
+                </Paragraph>
+            </FlowDocument>
+            <RichTextBox.InputBindings>
                 <KeyBinding Key="Enter" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.TextBox_EnterPressedCommand}"/>
-            </TextBox.InputBindings>
+                <KeyBinding Key="Backspace" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.TextBox_BackspacePressedCommand}"/>
+            </RichTextBox.InputBindings>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="KeyDown">
                     <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.TextBox_KeyDownCommand}"/>
-                </i:EventTrigger>
+                </i:EventTrigger>                
                 <i:EventTrigger EventName="KeyUp">
                     <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.TextBox_KeyUpCommand}"/>
                 </i:EventTrigger>
+                <i:EventTrigger EventName="TextChanged">
+                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.TextBox_TextChangedCommand}"/>
+                </i:EventTrigger>
             </i:Interaction.Triggers>
-        </TextBox>
+        </RichTextBox>
     </DataTemplate>
 
     <DataTemplate x:Key="FileDataTemplate">

@@ -10,8 +10,9 @@ namespace Client.Views
     public partial class ChatUC : UserControl
     {
         public ScrollViewer scroll;
-        public delegate void GetControlDelegate(ref ScrollViewer element);
-        public GetControlDelegate getControl;
+        public delegate void GetControlDelegate(DependencyObject element);
+        public GetControlDelegate getScroll;
+        public GetControlDelegate getRichTextBox;
 
         public ChatUC()
         {
@@ -23,8 +24,11 @@ namespace Client.Views
         {
             var border = (Border)VisualTreeHelper.GetChild(chatListView, 0);
             scroll = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
-            getControl.Invoke(ref scroll);
+            getScroll.Invoke(scroll);
             CanNotifyText();
+
+            var a = VisualTreeHelper.GetChild(input, 0);
+            getScroll.Invoke(scroll);
         }
 
         private void canNotifyCheckBox_Click(object sender, RoutedEventArgs e)
@@ -42,6 +46,15 @@ namespace Client.Views
                     canNotifyText.Text = "rington is off";
             }
             else canNotifyText.Text = "global settings";
+        }
+
+        private void input_ContentChanged(object sender, RoutedEventArgs e)
+        {
+            var rich = VisualTreeHelper.GetChild(input, 0);
+            if (rich is RichTextBox)
+            {
+                getRichTextBox.Invoke(rich);
+            }
         }
     }
 }

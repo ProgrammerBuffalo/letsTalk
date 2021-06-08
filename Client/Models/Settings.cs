@@ -298,7 +298,7 @@ namespace Client.Models
             {
                 if (int.Parse(document.DocumentElement.ChildNodes[userNodeIndex]["Notifes"].ChildNodes[i].Attributes["ChatId"].InnerText) == chatId)
                 {
-                    document.DocumentElement.ChildNodes[userNodeIndex]["Notifes"].RemoveChild(document.DocumentElement["Notify"].ChildNodes[i]);
+                    document.DocumentElement.ChildNodes[userNodeIndex]["Notifes"].RemoveChild(document.DocumentElement.ChildNodes[userNodeIndex]["Notifes"].ChildNodes[i]);
                     document.Save("Settings/user-settings.xml");
                     return;
                 }

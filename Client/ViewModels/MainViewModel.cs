@@ -34,6 +34,7 @@ namespace Client.ViewModels
 
         private NotificationManager notifyManager;
         private Views.MainWindow mainWindow;
+        private MahApps.Metro.Controls.HamburgerMenuIconItem selectedOptionsItem;
 
         public MainViewModel(string name, int sqlId)
         {
@@ -108,7 +109,7 @@ namespace Client.ViewModels
         public ObservableCollection<KeyValuePair<int, AvailableUser>> Users { get; private set; }
         public ObservableCollection<Models.Chat> Chats { get => chats; set => Set(ref chats, value); }
         public Models.Chat SelectedChat { get => selectedChat; set { if (selectedChat == null) RemoveUC.Invoke(currentView); Set(ref selectedChat, value); } }
-
+        public MahApps.Metro.Controls.HamburgerMenuIconItem SelectedOptionsItem { get => selectedOptionsItem; set => Set(ref selectedOptionsItem, value); }
         public async void LoadedWindow(object sender)
         {
             try
@@ -188,11 +189,11 @@ namespace Client.ViewModels
 
         public void SelectedChatChanged(object param)
         {
-            if (selectedChat != null)
-                RemoveUC.Invoke(currentView);
+            if (selectedChat != null) RemoveUC.Invoke(currentView);
             Views.ChatUC chatView = new Views.ChatUC();
             ChatViewModel viewModel = new ChatViewModel(this);
-            chatView.getControl = new Views.ChatUC.GetControlDelegate(viewModel.SetScrollViewer);
+            chatView.getScroll = new Views.ChatUC.GetControlDelegate(viewModel.SetScrollViewer);
+            chatView.getRichTextBox = new Views.ChatUC.GetControlDelegate(viewModel.SetInputRichBox);
             chatView.DataContext = viewModel;
             currentView = chatView;
             AddUC.Invoke(currentView);
@@ -210,7 +211,8 @@ namespace Client.ViewModels
 
         private void SettingsShow(object param)
         {
-            RemoveUC.Invoke(currentView);            
+            SelectedOptionsItem = null;
+            RemoveUC.Invoke(currentView);
             SelectedChat = null;
             UserControl control = new Views.SettingsUC();
             control.DataContext = new SettingsViewModel(Client);
@@ -292,7 +294,7 @@ namespace Client.ViewModels
                         if (item.UserSqlId == client.SqlId)
                             continue;
 
-                        if(item.LeaveDate != DateTime.MinValue)
+                        if (item.LeaveDate != DateTime.MinValue)
                         {
                             continue;
                         }

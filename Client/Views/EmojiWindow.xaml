@@ -3,28 +3,50 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Client.Views"
-        xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:Controls ="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:utility="clr-namespace:Client.Utility"
         mc:Ignorable="d"
-        Title="EmojiWindow" Height="350" Width="600" ResizeMode="NoResize" WindowStyle="SingleBorderWindow" Closing="Window_Closing">
+        Title="EmojiWindow" Height="300" Width="450" ResizeMode="NoResize" WindowStyle="SingleBorderWindow" Closing="Window_Closing">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/WindowResources/ThemeDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
+            <utility:PathToUri x:Key="PathToUri"/>
+
             <DataTemplate x:Key="GroupEmojiDataTemplate">
-                <emoji:TextBlock Text="{Binding Path=Icon}" FontSize="30"/>
+                <Image Width="45" Height="45" Margin="2,0,0,0">
+                    <Image.Source>
+                        <BitmapImage UriSource="{Binding Path=Path,Converter={StaticResource PathToUri}}"/>
+                    </Image.Source>
+                </Image>
             </DataTemplate>
 
             <DataTemplate x:Key="EmojiDataTemplate">
-                <emoji:TextBlock Text="{Binding Path=Text}" FontSize="25"/>
+                <Image Width="38" Height="38" Margin="5,0,0,0">
+                    <Image.Source>
+                        <BitmapImage UriSource="{Binding Path=Path, Converter={StaticResource PathToUri}}"/>
+                    </Image.Source>
+                </Image>
             </DataTemplate>
 
             <ItemsPanelTemplate x:Key="EmojiGroupPanelTemplate">
                 <WrapPanel/>
             </ItemsPanelTemplate>
+
+            <Style x:Key="EmojiListViewItemStyle" TargetType="ListViewItem">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListViewItem">
+                            <Border Background="Transparent">
+                                <ContentPresenter/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
 
             <Style x:Key="EmojiGroupListViewItemStyle" TargetType="ListViewItem">
                 <Setter Property="Template">
@@ -53,26 +75,16 @@
         </ResourceDictionary>
     </Window.Resources>
     
-    <Grid>
+    <Grid Background="{StaticResource MainBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="0.8*"/>
             <RowDefinition Height="4*"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="100"/>
-        </Grid.ColumnDefinitions>
-
-        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=SearchEmojiText}" FontSize="15" TextChanged="TextBox_TextChanged">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="TextChanged">
-                    <i:InvokeCommandAction Command="{Binding SearchEmojiTextChangedCommand}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </TextBox>
 
         <ListView Grid.Row="0"
                   Margin="10,0"
+                  Background="{StaticResource MainBackground}"
                   ItemsSource="{Binding Path=EmojiGroups}"
                   SelectedItem="{Binding Path=SelectedEmojiGroup}"
                   ItemTemplate="{StaticResource GroupEmojiDataTemplate}"
@@ -85,11 +97,27 @@
             </i:Interaction.Triggers>
         </ListView>
 
-        <ListView Grid.Row="1" Grid.ColumnSpan="2"
+        <TextBox Grid.Row="1"
+                 Margin="10,0"
+                 Text="{Binding Path=SearchEmojiText, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                 Controls:TextBoxHelper.ClearTextButton="True"
+                 Controls:TextBoxHelper.Watermark="Search Emoji"
+                 FontSize="15"
+                 Background="{StaticResource MainBackground}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="TextChanged">
+                    <i:InvokeCommandAction Command="{Binding SearchEmojiTextChangedCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </TextBox>
+
+        <ListView Grid.Row="2"
+                  Background="{StaticResource MainBackground}"
                   SelectedItem="{Binding Path=SelectedEmoji}" 
                   ItemsSource="{Binding Path=Emojis}"
                   ItemTemplate="{StaticResource EmojiDataTemplate}"
                   ItemsPanel="{StaticResource EmojiGroupPanelTemplate}"
+                  ItemContainerStyle="{StaticResource EmojiListViewItemStyle}"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">

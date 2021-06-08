@@ -8,9 +8,9 @@ namespace Client.UserControls
     /// </summary>
     public partial class LightBulb : UserControl
     {
-        public static readonly DependencyProperty IsOnProperty;
-        public static readonly RoutedEvent OnEvent;
-        public static readonly RoutedEvent OffEvent;
+        private static readonly DependencyProperty IsOnProperty;
+        private static readonly RoutedEvent OnEvent;
+        private static readonly RoutedEvent OffEvent;
 
         static LightBulb()
         {

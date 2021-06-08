@@ -9,21 +9,21 @@ namespace Client.UserControls
     /// </summary>
     public partial class ChatItem : UserControl
     {
-        static readonly DependencyProperty UserNameProperty;
-        static readonly DependencyProperty UserNameFontSizeProperty;
-        static readonly DependencyProperty UserNameForegroundProperty;
+        private static readonly DependencyProperty UserNameProperty;
+        private static readonly DependencyProperty UserNameFontSizeProperty;
+        private static readonly DependencyProperty UserNameForegroundProperty;
 
-        static readonly DependencyProperty AvatarProperty;
-        static readonly DependencyProperty IsWritingProperty;
-        static readonly DependencyProperty IsOnlineProperty;
-        static readonly DependencyProperty IsOnlineVisibilityProperty;
+        private static readonly DependencyProperty AvatarProperty;
+        private static readonly DependencyProperty IsWritingProperty;
+        private static readonly DependencyProperty IsOnlineProperty;
+        private static readonly DependencyProperty IsOnlineVisibilityProperty;
 
-        static readonly DependencyProperty DescriptionProperty;
-        static readonly DependencyProperty DescriptionDataTemplateProperty;
-        static readonly DependencyProperty DescriptionDataTemplateSelectorProperty;
+        private static readonly DependencyProperty DescriptionProperty;
+        private static readonly DependencyProperty DescriptionDataTemplateProperty;
+        private static readonly DependencyProperty DescriptionDataTemplateSelectorProperty;
 
-        static readonly RoutedEvent WritingOnEvent;
-        static readonly RoutedEvent WritingOffEvent;
+        private static readonly RoutedEvent WritingOnEvent;
+        private static readonly RoutedEvent WritingOffEvent;
 
         static ChatItem()
         {

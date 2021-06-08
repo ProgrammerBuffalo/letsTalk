@@ -7,21 +7,16 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
-using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace Client.ViewModels
 {
     class ChatViewModel : INotifyPropertyChanged
     {
-        //private delegate void MessageSendType(string message);
-        //private MessageSendType sendType;
-
-        //private bool canWrite = true;
         public event PropertyChangedEventHandler PropertyChanged;
 
         private int _countLeft;
@@ -32,24 +27,22 @@ namespace Client.ViewModels
         private Chat chat;
 
         private MediaMessage curMediaMessage;
-        //private MediaPlayer player;
-
-        //private Timer timer;
 
         private string isWritingText;
         private string messageText = "";
 
         private bool? canNotify;
-        private Visibility loaderVisibility;
+        private System.Windows.Visibility loaderVisibility;
         private Message inputMessage;
 
-        public Emoji.Wpf.EmojiData.Group selectedEmojiGroup;
+        private EmojiGroup selectedEmojiGroup;
+        private string searchEmojiText;
+        private Emoji selectedEmoji;
+        private ObservableCollection<Emoji> emojis;
 
-        public string searchEmojiText;
-        public Emoji.Wpf.EmojiData.Emoji selectedEmoji;
-        public ObservableCollection<Emoji.Wpf.EmojiData.Emoji> emojis;
-
-        Views.EmojiWindow window;
+        private System.Windows.Controls.ScrollViewer scroll;
+        private System.Windows.Controls.RichTextBox rich;
+        private Views.EmojiWindow window;
 
         public ChatViewModel(MainViewModel mainVM)
         {
@@ -68,15 +61,9 @@ namespace Client.ViewModels
             chat._offsetDate = DateTime.Now;
             _countLeft = chat._messageCount;
 
-            LoaderVisibility = Visibility.Hidden;
+            LoaderVisibility = System.Windows.Visibility.Hidden;
 
             InputMessage = new TextMessage();
-
-            EmojiGroups = new ObservableCollection<Emoji.Wpf.EmojiData.Group>(Emoji.Wpf.EmojiData.AllGroups);
-
-            //client = ClientUserInfo.getInstance();
-            //ChatClient = chatClient;
-            //sendType = SendText;
 
             //player = new MediaPlayer();
             //player.MediaEnded += MediaEnded;
@@ -88,10 +75,8 @@ namespace Client.ViewModels
             TextBox_KeyDownCommand = new Command(TextBox_KeyDown);
             TextBox_KeyUpCommand = new Command(TextBox_KeyUp);
             TextBox_EnterPressedCommand = new Command(TextBox_EnterPressed);
+            TextBox_BackspacePressedCommand = new Command(TextBox_BackspacePressed);
 
-            //MediaPlayCommand = new Command(MediaPlay);
-            //MediaPosChangedCommand = new Command(MediaPosChanged);
-            //SendCommand = new Command(Send);
             OpenFileCommand = new Command(OpenFile);
             CancelFileCommand = new Command(CancelFile);
             SendFileCommand = new Command(SendFile);
@@ -116,13 +101,12 @@ namespace Client.ViewModels
             window.DataContext = this;
         }
 
+        public ICommand TextBox_TextChangedCommand { get; set; }
         public ICommand TextBox_KeyDownCommand { get; }
         public ICommand TextBox_KeyUpCommand { get; }
         public ICommand TextBox_EnterPressedCommand { get; }
+        public ICommand TextBox_BackspacePressedCommand { get; }
 
-        //public ICommand MediaPlayCommand { get; }
-        //public ICommand MediaPosChangedCommand { get; }
-        //public ICommand SendCommand { get; }
         public ICommand OpenEmojiCommand { get; }
         public ICommand EmojiGroupChangedCommand { get; }
         public ICommand EmojiChangedCommand { get; }
@@ -151,22 +135,27 @@ namespace Client.ViewModels
         public string MessageText { get => messageText; set => Set(ref messageText, value); }
         public bool? CanNotify { get => canNotify; set => Set(ref canNotify, value); }
 
-        public Emoji.Wpf.EmojiData.Group SelectedEmojiGroup { get => selectedEmojiGroup; set => Set(ref selectedEmojiGroup, value); }
-        public ObservableCollection<Emoji.Wpf.EmojiData.Group> EmojiGroups { get; }
-
+        public EmojiGroup[] EmojiGroups { get => EmojiData.Groups; }
+        public EmojiGroup SelectedEmojiGroup { get => selectedEmojiGroup; set => Set(ref selectedEmojiGroup, value); }
+        public ObservableCollection<Emoji> Emojis { get => emojis; set => Set(ref emojis, value); }
+        public Emoji SelectedEmoji { get => selectedEmoji; set => Set(ref selectedEmoji, value); }
         public string SearchEmojiText { get => searchEmojiText; set => Set(ref searchEmojiText, value); }
-        public Emoji.Wpf.EmojiData.Emoji SelectedEmoji { get => selectedEmoji; set => Set(ref selectedEmoji, value); }
-        public ObservableCollection<Emoji.Wpf.EmojiData.Emoji> Emojis { get => emojis; set => Set(ref emojis, value); }
 
-        public Visibility LoaderVisibility { get => loaderVisibility; set => Set(ref loaderVisibility, value); }
+        public System.Windows.Visibility LoaderVisibility { get => loaderVisibility; set => Set(ref loaderVisibility, value); }
         public System.Windows.Controls.ScrollViewer Scroll { get; set; }
 
-
-        public void SetScrollViewer(ref System.Windows.Controls.ScrollViewer scroll)
+        public void SetScrollViewer(System.Windows.DependencyObject obj)
         {
+            scroll = (System.Windows.Controls.ScrollViewer)obj;
             Scroll = scroll;
             Scroll.ScrollChanged += ScrollPositionChanged;
             Scroll.VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Auto;
+        }
+
+        public void SetInputRichBox(System.Windows.DependencyObject obj)
+        {
+            rich = (System.Windows.Controls.RichTextBox)obj;
+            rich.TextChanged += Rich_TextChanged;
         }
 
         private async void ScrollPositionChanged(object sender, System.Windows.Controls.ScrollChangedEventArgs e)
@@ -175,28 +164,17 @@ namespace Client.ViewModels
             {
                 _countLeft = chat._messageCount;
                 _previousScrollOffset = Scroll.VerticalOffset;
-                LoaderVisibility = Visibility.Visible;
+                LoaderVisibility = System.Windows.Visibility.Visible;
                 Scroll.VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Disabled;
                 await LoadMore();
                 Scroll.VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Auto;
-                LoaderVisibility = Visibility.Hidden;
+                LoaderVisibility = System.Windows.Visibility.Hidden;
             }
             else
                 _previousScrollOffset = Scroll.VerticalOffset;
         }
 
-        private async void Load(object obj)
-        {
-            await LoadMore();
-            Scroll.ScrollToEnd();
-        }
-
-        private async Task LoadMore()
-        {
-            await Utility.MessageLoader.LoadMessage(this.Chat, mainVM.Client.SqlId, 30, 30);
-        }
-
-        private async void TextBox_EnterPressed(object obj)        
+        private async void TextBox_EnterPressed(object obj)
         {
             if (String.IsNullOrEmpty(messageText)) return;
             await mainVM.ChatClient.SendMessageTextAsync(new ChatService.ServiceMessageText() { Text = MessageText, UserId = mainVM.Client.SqlId }, Chat.SqlId);
@@ -207,7 +185,50 @@ namespace Client.ViewModels
             {
                 mainVM.Chats.Move(mainVM.Chats.IndexOf(chat), 0);
             }
-            Scroll.ScrollToBottom();
+            scroll.ScrollToBottom();
+        }
+
+        private void TextBox_BackspacePressed(object param)
+        {
+            int index = 0, point;
+            point = -rich.CaretPosition.GetOffsetToPosition(rich.CaretPosition.DocumentStart) - 2;
+
+            System.Windows.Documents.Paragraph paragraph = (System.Windows.Documents.Paragraph)rich.Document.Blocks.FirstBlock;
+
+            foreach (var item in paragraph.Inlines)
+            {
+                if (item is System.Windows.Documents.Run)
+                {
+                    System.Windows.Documents.Run run = (System.Windows.Documents.Run)item;
+                    for (int i = 0; i < run.Text.Length; i++, index++)
+                    {
+                        if (index == point - 1)
+                        {
+                            rich.TextChanged -= Rich_TextChanged;
+                            if (!rich.Selection.IsEmpty)
+                            {
+                                int startSelect = -rich.Selection.Start.GetOffsetToPosition(rich.CaretPosition.DocumentStart);
+                                int endSelect = -rich.Selection.End.GetOffsetToPosition(rich.CaretPosition.DocumentStart);
+                                int count = rich.Selection.Start.GetOffsetToPosition(rich.Selection.End);
+
+                                messageText = RemoveString(messageText, index - count, count);
+                                rich.CaretPosition.DeleteTextInRun(count);
+                            }
+                            else
+                            {
+                                messageText = RemoveString(messageText, index);
+                                rich.CaretPosition.DeleteTextInRun(-1);
+                            }
+                            rich.TextChanged += Rich_TextChanged;
+                            return;
+                        }
+                    }
+                }
+                else if (item is System.Windows.Documents.InlineUIContainer)
+                {
+                    index += 5;
+                }
+            }
         }
 
         private void TextBox_KeyUp(object obj)
@@ -222,21 +243,67 @@ namespace Client.ViewModels
                 mainVM.ChatClient.MessageIsWritingAsync(Chat.SqlId, mainVM.Client.SqlId);
         }
 
-        //private void MediaEnded(object sender, EventArgs e)
-        //{
-        //    player.Close();
-        //    timer.Stop();
-        //    curMediaMessage.CurrentLength = 0;
-        //    curMediaMessage.IsPlaying = false;
-        //}
+        private void Rich_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            int index = 0, point = 0;
+            point = -rich.CaretPosition.GetOffsetToPosition(rich.CaretPosition.DocumentStart) - 2;
+            System.Windows.Documents.Paragraph paragraph = (System.Windows.Documents.Paragraph)rich.Document.Blocks.FirstBlock;
+            if (paragraph != null)
+            {
+                foreach (var item in paragraph.Inlines)
+                {
+                    if (item is System.Windows.Documents.Run)
+                    {
+                        System.Windows.Documents.Run run = (System.Windows.Documents.Run)item;
+                        run.BaselineAlignment = System.Windows.BaselineAlignment.TextTop;
+                        for (int i = 0; i < run.Text.Length; i++, index++)
+                        {
+                            if (index == point - 1)
+                            {
+                                messageText = AddString(messageText, run.Text.Substring(i, 1), index);
+                                return;
+                            }
+                        }
+                    }
+                    else if (item is System.Windows.Documents.InlineUIContainer)
+                    {
+                        index += 5;
+                    }
+                }
+            }
+        }
 
-        //private void MediaPosTimer(object sender, EventArgs e)
-        //{
-        //    App.Current.Dispatcher.Invoke(() =>
-        //    {
-        //        curMediaMessage.CurrentLength = player.Position.Ticks;
-        //    });
-        //}
+        private string AddString(string str, string add, int index)
+        {
+            if (str.Length == index)
+            {
+                return str + add;
+            }
+            else
+            {
+                string start = str.Substring(0, index);
+                string end = str.Substring(index);
+                return start + add + end;
+            }
+        }
+
+        private string RemoveString(string str, int index, int count = 1)
+        {
+            if (str.Length == index)
+            {
+                return str.Remove(str.Length - 1, count);
+            }
+            else if (index < 0)
+            {
+                return str.Substring(count);
+            }
+            else
+            {
+                string start = str.Substring(0, index);
+                string end = str.Substring(index + count);
+                return start + end;
+            }
+        }
 
         private void CanNotifyChanged(object param)
         {
@@ -278,10 +345,9 @@ namespace Client.ViewModels
             string filename = saveFileDialog.FileName;
             if (message is ImageMessage)
             {
-                BitmapImage imageMessage = (message as ImageMessage).Bitmap;
-
-                BitmapEncoder encoder = new PngBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(imageMessage));
+                System.Windows.Media.Imaging.BitmapImage imageMessage = (message as ImageMessage).Bitmap;
+                System.Windows.Media.Imaging.BitmapEncoder encoder = new System.Windows.Media.Imaging.PngBitmapEncoder();
+                encoder.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(imageMessage));
 
                 using (var filestream = new FileStream(filename, System.IO.FileMode.Create))
                 {
@@ -317,44 +383,6 @@ namespace Client.ViewModels
             }
         }
 
-        //private void MediaPlay(object param)
-        //{
-        //    MediaMessage message = (MediaMessage)((SourceMessage)param).Message;
-        //    if (player.Source == null)
-        //    {
-        //        curMediaMessage = message;
-        //        player.Open(new Uri(message.FileName, UriKind.Absolute));
-        //        player.Position = TimeSpan.FromTicks(message.CurrentLength);
-        //        player.Play();
-        //        timer.Start();
-        //        curMediaMessage.IsPlaying = true;
-        //    }
-        //    else if (message != curMediaMessage)
-        //    {
-        //        curMediaMessage.IsPlaying = false;
-        //        curMediaMessage.CurrentLength = 0;
-        //        player.Close();
-        //        player.Open(new Uri(message.FileName, UriKind.Absolute));
-        //        player.Position = TimeSpan.FromTicks(message.CurrentLength);
-        //        player.Play();
-        //        timer.Start();
-        //        curMediaMessage = message;
-        //        curMediaMessage.IsPlaying = true;
-        //    }
-        //    else if (curMediaMessage.IsPlaying)
-        //    {
-        //        player.Pause();
-        //        timer.Stop();
-        //        curMediaMessage.IsPlaying = false;
-        //    }
-        //    else
-        //    {
-        //        player.Play();
-        //        timer.Start();
-        //        curMediaMessage.IsPlaying = true;
-        //    }
-        //}
-
         private void OpenFile(object param)
         {
             OpenFileDialog dialog = new OpenFileDialog();
@@ -384,7 +412,7 @@ namespace Client.ViewModels
                     mainVM.Chats.Move(mainVM.Chats.IndexOf(chat), 0);
                 }
 
-                Scroll.ScrollToBottom();
+                scroll.ScrollToBottom();
             }
 
             InputMessage = new TextMessage();
@@ -407,37 +435,126 @@ namespace Client.ViewModels
         {
             if (SelectedEmojiGroup != null)
             {
-                foreach (var item in Emoji.Wpf.EmojiData.AllGroups)
-                {
-                    if (item.Icon == SelectedEmojiGroup.Icon)
-                    {
-                        Emojis = new ObservableCollection<Emoji.Wpf.EmojiData.Emoji>(item.EmojiList);
-                        break;
-                    }
-                }
+                Emojis = new ObservableCollection<Emoji>(selectedEmojiGroup.Emojis);
             }
         }
 
+        //messageText текс для сервера
+        // ЗАМЕЧАНИЯ: 
+        // При добавлении элементов в RichTextBox вызываеться TextChanged поэтому его надо отписывать от ивента
         private void EmojiChanged(object param)
         {
             if (SelectedEmoji != null)
             {
-                if (inputMessage is TextMessage)
-                    MessageText += selectedEmoji.Text;
+                rich.TextChanged -= Rich_TextChanged;
+                System.Windows.Documents.Paragraph paragrap = (System.Windows.Documents.Paragraph)rich.Document.Blocks.FirstBlock;
+                //позиция курсора минус 2 так как вначале самого документа есть 2 каких то escape символа в конце вроде тоже есть
+                int point = -rich.CaretPosition.GetOffsetToPosition(rich.CaretPosition.DocumentStart) - 2;
+                int index = 0, index2 = 0;
+
+                //start emoji
+                if (point == 0)
+                {
+                    messageText = AddString(messageText, selectedEmoji.Code, 0);
+                    //чтобы поместить картинку в RictTextBox его надо обернуть в InlineUIContainer а потом добавить в Inlines 
+                    //есть методы Add(добавляет в конец) InsertBefore(добвляет до выбраного элемента) InsertAfter (добвляет после выбраного элемента)
+                    System.Windows.Documents.InlineUIContainer container = new System.Windows.Documents.InlineUIContainer(GetEmojiImage(selectedEmoji.Path));
+                    paragrap.Inlines.InsertBefore(paragrap.Inlines.FirstInline, container);
+                    //установка позиции каретки
+                    rich.CaretPosition = container.ContentEnd;
+                    rich.TextChanged += Rich_TextChanged;
+                    SelectedEmoji = null;
+                    return;
+                }
+
+                //middle text emoji
+                var node = paragrap.Inlines.FirstInline;
+                for (int i = 0; i < paragrap.Inlines.Count; i++)
+                {
+                    if (node is System.Windows.Documents.Run)
+                    {
+                        System.Windows.Documents.Run run = (System.Windows.Documents.Run)node;
+                        if (point < index + run.Text.Length)
+                        {
+                            index2 = point - index;
+                            index += index2;
+                            messageText = AddString(messageText, selectedEmoji.Code, index);
+
+                            System.Windows.Documents.InlineUIContainer container = new System.Windows.Documents.InlineUIContainer(GetEmojiImage(selectedEmoji.Path));
+                            paragrap.Inlines.InsertAfter(run, container);
+
+                            if (index2 == run.Text.Length)
+                            {
+                                rich.CaretPosition = container.ContentEnd;
+                            }
+                            else
+                            {
+                                string end = run.Text.Substring(index2);
+                                run.Text = run.Text.Substring(0, index2);
+                                run = new System.Windows.Documents.Run(end);
+                                run.BaselineAlignment = System.Windows.BaselineAlignment.TextTop;
+                                paragrap.Inlines.InsertAfter(container, run);
+                                rich.CaretPosition = run.ContentStart;
+                            }
+
+                            rich.TextChanged += Rich_TextChanged;
+                            SelectedEmoji = null;
+                            return;
+                        }
+                        else
+                        {
+                            index += run.Text.Length;
+                            index2 += run.Text.Length;
+                        }
+                    }
+                    else if (node is System.Windows.Documents.InlineUIContainer)
+                    {
+                        index += 5;
+                        index2 += 5;
+                        //end emoji
+                        if (point == index2)
+                        {
+                            messageText = AddString(messageText, selectedEmoji.Code, index);
+                            System.Windows.Documents.InlineUIContainer container = new System.Windows.Documents.InlineUIContainer(GetEmojiImage(selectedEmoji.Path));
+                            paragrap.Inlines.InsertAfter(node, container);
+                            rich.CaretPosition = container.ContentEnd;
+                            rich.TextChanged += Rich_TextChanged;
+                            SelectedEmoji = null;
+                            return;
+                        }
+                    }
+                    node = node.NextInline;
+                }
+                //empty text emoji   
+                messageText = AddString(messageText, selectedEmoji.Code, index);
+                System.Windows.Documents.InlineUIContainer _container = new System.Windows.Documents.InlineUIContainer(GetEmojiImage(selectedEmoji.Path));
+                paragrap.Inlines.Add(_container);
+                rich.CaretPosition = _container.ContentEnd;
+                rich.TextChanged += Rich_TextChanged;
                 SelectedEmoji = null;
             }
+        }
+
+        private System.Windows.Controls.Image GetEmojiImage(string path)
+        {
+            System.Windows.Controls.Image image = new System.Windows.Controls.Image();
+            image.Width = 35;
+            image.Height = 35;
+            image.Margin = new System.Windows.Thickness(3, 5, 3, 0);
+            image.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri(path, UriKind.Relative));
+            return image;
         }
 
         private void SearchEmojiTextChanged(object param)
         {
             if (!String.IsNullOrWhiteSpace(SearchEmojiText))
             {
-                Emojis = new ObservableCollection<Emoji.Wpf.EmojiData.Emoji>();
+                Emojis = new ObservableCollection<Emoji>();
                 Task.Run(() =>
                 {
-                    foreach (var group in Emoji.Wpf.EmojiData.AllGroups)
+                    foreach (var group in EmojiData.Groups)
                     {
-                        foreach (var emoji in group.EmojiList)
+                        foreach (var emoji in group.Emojis)
                         {
                             if (StringExtensions.ContainsAtStart(emoji.Name, searchEmojiText))
                             {
@@ -450,7 +567,10 @@ namespace Client.ViewModels
                     }
                 });
             }
-            else Emojis.Clear();
+            else if (selectedEmojiGroup != null)
+            {
+                Emojis = new ObservableCollection<Emoji>(selectedEmojiGroup.Emojis);
+            }
         }
 
         private void FavEmoji(object param)
@@ -463,12 +583,11 @@ namespace Client.ViewModels
             await LoadMore();
         }
 
-        //private void MediaPosChanged(object param)
-        //{
-        //    MediaMessage message = (MediaMessage)((SourceMessage)param).Message;
-        //    if (message == curMediaMessage)
-        //        player.Position = TimeSpan.FromTicks(message.CurrentLength);
-        //}
+        private async void Load(object obj)
+        {
+            await LoadMore();
+            Scroll.ScrollToEnd();
+        }
 
         private void Unload(object param)
         {
@@ -488,6 +607,11 @@ namespace Client.ViewModels
             }
         }
 
+        private async Task LoadMore()
+        {
+            await Utility.MessageLoader.LoadMessage(this.Chat, mainVM.Client.SqlId, 30, 30);
+        }
+
         public void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
         {
             prop = value;
@@ -495,3 +619,88 @@ namespace Client.ViewModels
         }
     }
 }
+
+//private void TextInput()
+//{
+//    var paragrah = (System.Windows.Documents.Paragraph)((System.Windows.Documents.FlowDocument)rich.Document).Blocks.FirstBlock;
+//    foreach (var item in paragrah.Inlines)
+//    {
+//        if (item is System.Windows.Documents.Run)
+//        {
+//            System.Windows.Documents.Run run = (System.Windows.Documents.Run)item;
+//        }
+//        else if (item is System.Windows.Documents.InlineUIContainer)
+//        {
+//            System.Windows.Controls.Image image = (System.Windows.Controls.Image)((System.Windows.Documents.InlineUIContainer)item).Child;
+//        }
+//    }
+//}
+
+//public ICommand MediaPlayCommand { get; }
+//public ICommand MediaPosChangedCommand { get; }
+//public ICommand SendCommand { get; }
+
+//MediaPlayCommand = new Command(MediaPlay);
+//MediaPosChangedCommand = new Command(MediaPosChanged);
+//SendCommand = new Command(Send);
+
+//private void MediaEnded(object sender, EventArgs e)
+//{
+//    player.Close();
+//    timer.Stop();
+//    curMediaMessage.CurrentLength = 0;
+//    curMediaMessage.IsPlaying = false;
+//}
+
+//private void MediaPosTimer(object sender, EventArgs e)
+//{
+//    App.Current.Dispatcher.Invoke(() =>
+//    {
+//        curMediaMessage.CurrentLength = player.Position.Ticks;
+//    });
+//}
+
+//private void MediaPosChanged(object param)
+//{
+//    MediaMessage message = (MediaMessage)((SourceMessage)param).Message;
+//    if (message == curMediaMessage)
+//        player.Position = TimeSpan.FromTicks(message.CurrentLength);
+//}
+
+//private void MediaPlay(object param)
+//{
+//    MediaMessage message = (MediaMessage)((SourceMessage)param).Message;
+//    if (player.Source == null)
+//    {
+//        curMediaMessage = message;
+//        player.Open(new Uri(message.FileName, UriKind.Absolute));
+//        player.Position = TimeSpan.FromTicks(message.CurrentLength);
+//        player.Play();
+//        timer.Start();
+//        curMediaMessage.IsPlaying = true;
+//    }
+//    else if (message != curMediaMessage)
+//    {
+//        curMediaMessage.IsPlaying = false;
+//        curMediaMessage.CurrentLength = 0;
+//        player.Close();
+//        player.Open(new Uri(message.FileName, UriKind.Absolute));
+//        player.Position = TimeSpan.FromTicks(message.CurrentLength);
+//        player.Play();
+//        timer.Start();
+//        curMediaMessage = message;
+//        curMediaMessage.IsPlaying = true;
+//    }
+//    else if (curMediaMessage.IsPlaying)
+//    {
+//        player.Pause();
+//        timer.Stop();
+//        curMediaMessage.IsPlaying = false;
+//    }
+//    else
+//    {
+//        player.Play();
+//        timer.Start();
+//        curMediaMessage.IsPlaying = true;
+//    }
+//}
