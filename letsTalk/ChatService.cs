@@ -439,29 +439,30 @@ namespace letsTalk
         }
 
         // Получает список всех существующий пользователей в Базе Данных
-        public Dictionary<int, string> GetRegisteredUsers(int count, int offset, int callerId)
+        public Dictionary<int, int> GetRegisteredUsers(int count, int offset, int callerId, string regex)
         {
-            Dictionary<int, string> users = new Dictionary<int, string>();
+            Dictionary<int, int> users = new Dictionary<int, int>();
             try
             {
                 using (SqlConnection sqlConnection = new SqlConnection(connection_string))
                 {
                     sqlConnection.Open();
 
-                    SqlCommand sqlCommandShowMoreUsers = new SqlCommand(@"SELECT Id, Name FROM ShowMoreUsers(@count, @offset, @callerId)", sqlConnection);
+                    SqlCommand sqlCommandShowMoreUsers = new SqlCommand(@"SELECT Id, rowNum FROM ShowMoreUsers(@offset, @callerId, @regex)", sqlConnection);
                     sqlCommandShowMoreUsers.CommandType = CommandType.Text;
 
                     sqlCommandShowMoreUsers.Parameters.Add("@count", SqlDbType.SmallInt).Value = count;
                     sqlCommandShowMoreUsers.Parameters.Add("@offset", SqlDbType.SmallInt).Value = offset;
                     sqlCommandShowMoreUsers.Parameters.Add("@callerId", SqlDbType.SmallInt).Value = callerId;
+                    sqlCommandShowMoreUsers.Parameters.Add("@regex", SqlDbType.NVarChar).Value = regex;
 
                     using (SqlDataReader sqlDataReader = sqlCommandShowMoreUsers.ExecuteReader())
                     {
                         if (sqlDataReader.HasRows)
                         {
-                            while (sqlDataReader.Read())
+                            for(int i = 0; i < count && sqlDataReader.Read(); i++)
                             {
-                                users.Add(sqlDataReader.GetSqlInt32(0).Value, sqlDataReader.GetSqlString(1).Value);
+                                users.Add(sqlDataReader.GetSqlInt32(0).Value, sqlDataReader.GetSqlInt32(1).Value);
                             }
                         }
                     }
@@ -496,7 +497,10 @@ namespace letsTalk
                         else
                             sqlCommandAddChatroom.Parameters.Add("@chatName", SqlDbType.NVarChar).Value = chatName;
 
+
                         chat_id = int.Parse(sqlCommandAddChatroom.ExecuteScalar().ToString());
+
+                        Console.WriteLine(chat_id);
 
                         SqlCommand sqlCommandAddUsersToChatroom = new SqlCommand("AddUsersToChat", sqlConnection);
                         sqlCommandAddUsersToChatroom.CommandType = CommandType.StoredProcedure;
@@ -508,11 +512,11 @@ namespace letsTalk
                         {
                             SqlDataRecord sqlDataRecord = new SqlDataRecord(sqlMetaData);
                             sqlDataRecord.SetInt32(0, user);
-
-                            usersRecords.Add(sqlDataRecord);
+                            Console.WriteLine(user);
+                            usersRecords.Insert(0, sqlDataRecord);
                         }
 
-                        var parameter = new SqlParameter("@Users", SqlDbType.Structured);
+                        SqlParameter parameter = new SqlParameter("@Users", SqlDbType.Structured);
                         parameter.TypeName = "UsersTableType";
                         parameter.Value = usersRecords;
 
@@ -523,8 +527,10 @@ namespace letsTalk
                         {
                             sqlCommandAddUsersToChatroom.ExecuteNonQuery();
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
+                            Console.WriteLine(ex.Message);
+
                             ChatroomAlreadyExistExceptionFault chatroomAlreadyExistExceptionFault = new ChatroomAlreadyExistExceptionFault();
 
                             throw new FaultException<ChatroomAlreadyExistExceptionFault>(chatroomAlreadyExistExceptionFault, chatroomAlreadyExistExceptionFault.Message);
@@ -804,7 +810,7 @@ namespace letsTalk
             {
                 DateTime dateMessages = DateTime.Parse(xMessagesEl.FirstAttribute.Value);
 
-                if (dateMessages.Date == offsetDate.Date)
+                if (dateMessages.Date <= offsetDate.Date)
                 {
                     if (dateMessages.Date < leaveDate.Value.Date && dateMessages.Date > joinDate.Date)
                     {
@@ -1632,35 +1638,6 @@ namespace letsTalk
         public void ChangeChatroomName(int sqlId, string newName)
         {
 
-        }
-
-        public Dictionary<int, string> SearchUsersByName(string regex)
-        {
-            Dictionary<int, string> users = new Dictionary<int, string>();
-            try
-            {
-                using (SqlConnection sqlConnection = new SqlConnection(connection_string))
-                {
-                    sqlConnection.Open();
-
-                    SqlCommand sqlCommand = new SqlCommand(@"SELECT Users.Id, Users.Name FROM Users WHERE Users.Name LIKE @regex + '%'", sqlConnection);
-                    sqlCommand.Parameters.Add("@regex", SqlDbType.NVarChar).Value = regex;
-
-                    using (SqlDataReader dataReader = sqlCommand.ExecuteReader())
-                    {
-                        while (dataReader.Read())
-                        {
-                            users.Add(dataReader.GetInt32(0), dataReader.GetString(1));
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-            return users;
-        }
+        }        
     }
 }

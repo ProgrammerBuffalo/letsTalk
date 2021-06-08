@@ -60,12 +60,6 @@
   <wsdl:message name="Unit_ChatAvatarDelete_InputMessage">
     <wsdl:part name="parameters" element="tns:ChatAvatarDelete" />
   </wsdl:message>
-  <wsdl:message name="Unit_SearchUsersByName_InputMessage">
-    <wsdl:part name="parameters" element="tns:SearchUsersByName" />
-  </wsdl:message>
-  <wsdl:message name="Unit_SearchUsersByName_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SearchUsersByNameResponse" />
-  </wsdl:message>
   <wsdl:portType name="Unit">
     <wsdl:operation name="Authorization">
       <wsdl:input wsaw:Action="letsTalk.IUnitService/Unit/Authorization" message="tns:Unit_Authorization_InputMessage" />
@@ -99,10 +93,6 @@
     </wsdl:operation>
     <wsdl:operation name="ChatAvatarDelete">
       <wsdl:input wsaw:Action="letsTalk.IUnitService/Unit/ChatAvatarDelete" message="tns:Unit_ChatAvatarDelete_InputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SearchUsersByName">
-      <wsdl:input wsaw:Action="letsTalk.IUnitService/Unit/SearchUsersByName" message="tns:Unit_SearchUsersByName_InputMessage" />
-      <wsdl:output wsaw:Action="letsTalk.IUnitService/Unit/SearchUsersByNameResponse" message="tns:Unit_SearchUsersByName_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

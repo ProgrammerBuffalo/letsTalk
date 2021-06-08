@@ -825,10 +825,10 @@ namespace Client.ChatService {
         System.Threading.Tasks.Task<int> RegistrationAsync(Client.ChatService.ServerUserInfo serverUserInfo);
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/GetRegisteredUsers", ReplyAction="letsTalk.IUnitService/Unit/GetRegisteredUsersResponse")]
-        System.Collections.Generic.Dictionary<int, string> GetRegisteredUsers(int count, int offset, int callerId);
+        System.Collections.Generic.Dictionary<int, int> GetRegisteredUsers(int count, int offset, int callerId, string regex);
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/GetRegisteredUsers", ReplyAction="letsTalk.IUnitService/Unit/GetRegisteredUsersResponse")]
-        System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> GetRegisteredUsersAsync(int count, int offset, int callerId);
+        System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, int>> GetRegisteredUsersAsync(int count, int offset, int callerId, string regex);
         
         [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/MessagesFromOneChat", ReplyAction="letsTalk.IUnitService/Unit/MessagesFromOneChatResponse")]
         Client.ChatService.ServiceMessage[] MessagesFromOneChat(int chatroomId, int userId, int offset, int count, System.DateTime offsetDate);
@@ -859,12 +859,6 @@ namespace Client.ChatService {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="letsTalk.IUnitService/Unit/ChatAvatarDelete")]
         System.Threading.Tasks.Task ChatAvatarDeleteAsync(int chatId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/SearchUsersByName", ReplyAction="letsTalk.IUnitService/Unit/SearchUsersByNameResponse")]
-        System.Collections.Generic.Dictionary<int, string> SearchUsersByName(string regex);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="letsTalk.IUnitService/Unit/SearchUsersByName", ReplyAction="letsTalk.IUnitService/Unit/SearchUsersByNameResponse")]
-        System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> SearchUsersByNameAsync(string regex);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -910,12 +904,12 @@ namespace Client.ChatService {
             return base.Channel.RegistrationAsync(serverUserInfo);
         }
         
-        public System.Collections.Generic.Dictionary<int, string> GetRegisteredUsers(int count, int offset, int callerId) {
-            return base.Channel.GetRegisteredUsers(count, offset, callerId);
+        public System.Collections.Generic.Dictionary<int, int> GetRegisteredUsers(int count, int offset, int callerId, string regex) {
+            return base.Channel.GetRegisteredUsers(count, offset, callerId, regex);
         }
         
-        public System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> GetRegisteredUsersAsync(int count, int offset, int callerId) {
-            return base.Channel.GetRegisteredUsersAsync(count, offset, callerId);
+        public System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, int>> GetRegisteredUsersAsync(int count, int offset, int callerId, string regex) {
+            return base.Channel.GetRegisteredUsersAsync(count, offset, callerId, regex);
         }
         
         public Client.ChatService.ServiceMessage[] MessagesFromOneChat(int chatroomId, int userId, int offset, int count, System.DateTime offsetDate) {
@@ -956,14 +950,6 @@ namespace Client.ChatService {
         
         public System.Threading.Tasks.Task ChatAvatarDeleteAsync(int chatId) {
             return base.Channel.ChatAvatarDeleteAsync(chatId);
-        }
-        
-        public System.Collections.Generic.Dictionary<int, string> SearchUsersByName(string regex) {
-            return base.Channel.SearchUsersByName(regex);
-        }
-        
-        public System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<int, string>> SearchUsersByNameAsync(string regex) {
-            return base.Channel.SearchUsersByNameAsync(regex);
         }
     }
     

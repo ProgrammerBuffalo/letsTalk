@@ -26,7 +26,8 @@ namespace Client.ViewModels
         private bool allUsersIsDropTarget;
         private bool usersToAddIsDropTarget;
 
-        private string searchText;
+        private string searchText = "";
+        private string acceptedText = "";
         private string chatName;
         private AvailableUser selectedUser;
         private ObservableCollection<AvailableUser> allUsers;
@@ -94,7 +95,7 @@ namespace Client.ViewModels
         public void ShowMore(object param)
         {
             UnitClient unitClient = new UnitClient();
-            Dictionary<int, string> users = unitClient.GetRegisteredUsers(count, offset, mainVM.Client.SqlId);
+            Dictionary<int, int> users = unitClient.GetRegisteredUsers(5, offset, mainVM.Client.SqlId, acceptedText);
 
             if (users.Count == 0)
                 return;
@@ -103,25 +104,34 @@ namespace Client.ViewModels
             for (int i = 0; i < users.Count; i++)
             {
                 it.MoveNext();
-                AvailableUser availableUser = new AvailableUser(it.Current.Key, it.Current.Value);
+                AvailableUser availableUser = new AvailableUser(it.Current.Key, unitClient.FindUserName(it.Current.Value));
                 AllUsers.Add(availableUser);
                 mainVM.DownloadUserAvatarAsync(availableUser);
             }
-            offset += count;
+            offset = users.Last().Value;
         }
 
         //метод для поиска новых пользователй (использовать SearchText для поиска по имени)
         public void Search(object param)
         {
-            //if (!String.IsNullOrWhiteSpace(searchText))
-            //{
-            //    AllUsers.Clear();
-            //}
+            AllUsers.Clear();
+            offset = 0;
+
+            if (!String.IsNullOrWhiteSpace(searchText))
+            {
+                acceptedText = searchText;
+                ShowMore(param);
+            }
+            else
+            {
+                acceptedText = "";
+                ShowMore(param);
+            }
         }
 
         private void CreateGroup(object param)
         {
-            int sqlId;
+            int sqlId = 0;
             Models.Chat chat;
             if (usersToAdd.Count == 1)
             {
@@ -138,8 +148,9 @@ namespace Client.ViewModels
 
                     chat = new ChatOne(sqlId, usersToAdd[0]) { CanWrite = true };
                     mainVM.Chats.Insert(0, chat);
+                    chat.LastMessage = SystemMessage.ChatroomCreated(DateTime.Now).Message;
                 }
-                catch(FaultException<ChatroomAlreadyExistExceptionFault> fe)
+                catch (FaultException<ChatroomAlreadyExistExceptionFault> fe)
                 {
                     new Views.DialogWindow(fe.Message).ShowDialog();
                     MessageBox.Show(fe.Message);

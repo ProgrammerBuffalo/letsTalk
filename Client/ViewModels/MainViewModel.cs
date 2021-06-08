@@ -310,8 +310,9 @@ namespace Client.ViewModels
 
                     this.Chats.Add(isGroup ? new ChatGroup(chatId, chatName, availableUsers) { CanWrite = true } :
                                         (Models.Chat)new ChatOne(chatId, availableUsers.First()) { CanWrite = true });
+                    Chats.Last().LastMessage = SystemMessage.UserAdded(DateTime.Now, "You are added").Message;
                     Chats.Move(Chats.IndexOf(Chats.Last()), 0);
-
+                   
                 });
 
                 ChatClient.AddedUserToChatIsOnline(this.client.SqlId, chatId);
@@ -386,6 +387,16 @@ namespace Client.ViewModels
 
         public void ReplyMessageIsWriting(Nullable<int> userSqlId, int chatSqlId)
         {
+            if (userSqlId != null)
+            {
+                AvailableUser user = Users.FirstOrDefault(u => u.Key == userSqlId).Value;
+                if (user == null)
+                {
+                    user = new AvailableUser(userSqlId.Value, new ChatService.UnitClient().FindUserName(userSqlId.Value));
+                    user.IsOnline = true;
+                    Users.Add(new KeyValuePair<int, AvailableUser>(user.SqlId, user));
+                }
+            }
             ChatIsWriting(chatSqlId, userSqlId);
         }
 
@@ -492,7 +503,7 @@ namespace Client.ViewModels
 
                 foreach (var item in clientChatrooms)
                 {
-                    item.LastMessage = await Utility.MessageLoader.LoadMessage(item, client.SqlId, 1, 1);
+                    item.LastMessage = (await Utility.MessageLoader.LoadMessage(item, new List<SourceMessage>(), client.SqlId, 1, 1)).First().Message;
                 }
                 clientChatrooms.Sort((a, b) => { return b.LastMessage.Date.CompareTo(a.LastMessage.Date); });
 

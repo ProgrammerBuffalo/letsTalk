@@ -25,22 +25,22 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfKeyValueOfChatroomArrayOfUserInChatOMw27L4J" nillable="true" type="tns:ArrayOfKeyValueOfChatroomArrayOfUserInChatOMw27L4J" />
-  <xs:complexType name="ArrayOfKeyValueOfintstring">
+  <xs:complexType name="ArrayOfKeyValueOfintint">
     <xs:annotation>
       <xs:appinfo>
         <IsDictionary xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsDictionary>
       </xs:appinfo>
     </xs:annotation>
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValueOfintstring">
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValueOfintint">
         <xs:complexType>
           <xs:sequence>
             <xs:element name="Key" type="xs:int" />
-            <xs:element name="Value" nillable="true" type="xs:string" />
+            <xs:element name="Value" type="xs:int" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfKeyValueOfintstring" nillable="true" type="tns:ArrayOfKeyValueOfintstring" />
+  <xs:element name="ArrayOfKeyValueOfintint" nillable="true" type="tns:ArrayOfKeyValueOfintint" />
 </xs:schema>

@@ -61,8 +61,6 @@ namespace Client.ViewModels
             chat._offsetDate = DateTime.Now;
             _countLeft = chat._messageCount;
 
-            LoaderVisibility = System.Windows.Visibility.Hidden;
-
             InputMessage = new TextMessage();
 
             //player = new MediaPlayer();
@@ -168,10 +166,28 @@ namespace Client.ViewModels
                 Scroll.VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Disabled;
                 await LoadMore();
                 Scroll.VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Auto;
-                LoaderVisibility = System.Windows.Visibility.Hidden;
+                LoaderVisibility = Visibility.Collapsed;
             }
             else
                 _previousScrollOffset = Scroll.VerticalOffset;
+        }
+
+        private async void Load(object obj)
+        {
+            await LoadMore();
+            Scroll.ScrollToEnd();
+        }
+
+        private async Task LoadMore()
+        {
+            List<SourceMessage> sourceMessages = await Utility.MessageLoader.LoadMessage(this.chat, new List<SourceMessage>(), mainVM.Client.SqlId, 30, 30);
+
+            if (LoaderVisibility.Equals(Visibility.Collapsed))
+                foreach (var mes in sourceMessages)
+                {
+                    chat.Messages.Add(mes);
+                }
+
         }
 
         private async void TextBox_EnterPressed(object obj)

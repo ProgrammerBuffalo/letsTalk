@@ -20,7 +20,7 @@ namespace letsTalk
         int Registration(ServerUserInfo serverUserInfo);
 
         [OperationContract(IsOneWay = false)]
-        Dictionary<int, string> GetRegisteredUsers(int count, int offset, int callerId);
+        Dictionary<int, int> GetRegisteredUsers(int count, int offset, int callerId, string regex);
 
         [OperationContract(IsOneWay = false)]
         List<ServiceMessage> MessagesFromOneChat(int chatroomId, int userId, int offset, int count, DateTime offsetDate);
@@ -36,8 +36,5 @@ namespace letsTalk
 
         [OperationContract(IsOneWay = true)]
         void ChatAvatarDelete(int chatId);
-
-        [OperationContract(IsOneWay = false)]
-        Dictionary<int, string> SearchUsersByName(string regex);
     }
 }

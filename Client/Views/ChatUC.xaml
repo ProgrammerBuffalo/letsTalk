@@ -133,7 +133,7 @@
             <TextBlock x:Name="canNotifyText" Text="" DockPanel.Dock="Right" Margin="0,0,10,0" VerticalAlignment="Center" FontSize="14"/>
         </DockPanel>
 
-        <Image Grid.Row="1" VerticalAlignment="Top" Margin="0,10,0,0" Source="/Resources/loader.png" Visibility="{Binding Path=LoaderVisibility}" Width="50" Height="50" Panel.ZIndex="1">
+        <Image x:Name="contentLoader" Grid.Row="1" VerticalAlignment="Top" Margin="0,10,0,0" Source="/Resources/loader.png" Visibility="{Binding Path=LoaderVisibility, Mode=TwoWay}" Width="50" Height="50" Panel.ZIndex="1">
             <Image.RenderTransform>
                 <RotateTransform x:Name="rotate" Angle="0" CenterX="25" CenterY="25"/>
             </Image.RenderTransform>
