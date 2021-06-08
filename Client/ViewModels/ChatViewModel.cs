@@ -95,6 +95,8 @@ namespace Client.ViewModels
             LoadCommand = new Command(Load);
             UnloadCommand = new Command(Unload);
 
+            LoaderVisibility = System.Windows.Visibility.Visible;
+
             window = new Views.EmojiWindow();
             window.DataContext = this;
         }
@@ -166,7 +168,7 @@ namespace Client.ViewModels
                 Scroll.VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Disabled;
                 await LoadMore();
                 Scroll.VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Auto;
-                LoaderVisibility = Visibility.Collapsed;
+                LoaderVisibility = System.Windows.Visibility.Collapsed;
             }
             else
                 _previousScrollOffset = Scroll.VerticalOffset;
@@ -182,7 +184,7 @@ namespace Client.ViewModels
         {
             List<SourceMessage> sourceMessages = await Utility.MessageLoader.LoadMessage(this.chat, new List<SourceMessage>(), mainVM.Client.SqlId, 30, 30);
 
-            if (LoaderVisibility.Equals(Visibility.Collapsed))
+            if (LoaderVisibility.Equals(System.Windows.Visibility.Collapsed))
                 foreach (var mes in sourceMessages)
                 {
                     chat.Messages.Add(mes);
@@ -599,11 +601,11 @@ namespace Client.ViewModels
             await LoadMore();
         }
 
-        private async void Load(object obj)
-        {
-            await LoadMore();
-            Scroll.ScrollToEnd();
-        }
+        //private async void Load(object obj)
+        //{
+        //    await LoadMore();
+        //    Scroll.ScrollToEnd();
+        //}
 
         private void Unload(object param)
         {
@@ -623,10 +625,10 @@ namespace Client.ViewModels
             }
         }
 
-        private async Task LoadMore()
-        {
-            await Utility.MessageLoader.LoadMessage(this.Chat, mainVM.Client.SqlId, 30, 30);
-        }
+        //private async Task LoadMore()
+        //{
+        //    await Utility.MessageLoader.LoadMessage(this.Chat, mainVM.Client.SqlId, 30, 30);
+        //}
 
         public void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
         {

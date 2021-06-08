@@ -27,10 +27,11 @@ namespace Client.Views
             {
                 var border = (Border)VisualTreeHelper.GetChild(chatListView, 0);
                 scroll = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
-                getControl.Invoke(ref scroll);
-            }catch(System.Exception ex) { MessageBox.Show(ex.Message); }
+                getScroll.Invoke(scroll);
+            }
+            catch (System.Exception ex) { MessageBox.Show(ex.Message); }
             CanNotifyText();
-            contentLoader.Visibility = Visibility.Collapsed;
+            contentLoader.Visibility = Visibility.Hidden;
         }
 
         private void canNotifyCheckBox_Click(object sender, RoutedEventArgs e)
@@ -42,10 +43,8 @@ namespace Client.Views
         {
             if (canNotifyCheckBox.IsChecked.HasValue)
             {
-                if (canNotifyCheckBox.IsChecked.Value)
-                    canNotifyText.Text = "rington is on";
-                else if (!canNotifyCheckBox.IsChecked.Value)
-                    canNotifyText.Text = "rington is off";
+                if (canNotifyCheckBox.IsChecked.Value) canNotifyText.Text = "rington is on";
+                else if (!canNotifyCheckBox.IsChecked.Value) canNotifyText.Text = "rington is off";
             }
             else canNotifyText.Text = "global settings";
         }
@@ -53,10 +52,7 @@ namespace Client.Views
         private void input_ContentChanged(object sender, RoutedEventArgs e)
         {
             var rich = VisualTreeHelper.GetChild(input, 0);
-            if (rich is RichTextBox)
-            {
-                getRichTextBox.Invoke(rich);
-            }
+            if (rich is RichTextBox) getRichTextBox.Invoke(rich);
         }
     }
 }

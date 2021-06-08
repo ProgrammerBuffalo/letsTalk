@@ -15,7 +15,7 @@
             emojis[1] = new Emoji("cool", "&#002", "Resources/Emojis/faces/002-cool-5.png");
             emojis[2] = new Emoji("happy", "&#003", "Resources/Emojis/faces/003-happy-17.png");
             emojis[3] = new Emoji("surprised", "&#004", "Resources/Emojis/faces/004-surprised-9.png");
-            emojis[4] = new Emoji("surprised", "&#005", "Resources/Emojis/faces/004-surprised-9.png");
+            emojis[4] = new Emoji("surprised", "&#005", "Resources/Emojis/faces/005-shocked-4.png");
             emojiGroups[0] = new EmojiGroup("Resources/Emojis/faces/003-happy-17.png", EmojiType.Faces, emojis);
 
             emojis = new Emoji[5];
