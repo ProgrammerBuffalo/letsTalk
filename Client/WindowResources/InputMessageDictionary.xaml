@@ -21,35 +21,26 @@
     </Style>
 
     <Style x:Key="InputRichBoxStyle" TargetType="RichTextBox">
-        <Setter Property="Background" Value="{StaticResource InputTextBoxBackground}"/>
-        <Setter Property="Foreground" Value="{StaticResource InputTextBoxForeground}"/>
-        <Setter Property="FontSize" Value="30"/>
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
-        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property = "Background" Value="{StaticResource InputTextBoxBackground}"/>
+        <Setter Property = "Foreground" Value="{StaticResource InputTextBoxForeground}"/>
+        <Setter Property = "FontSize" Value="30"/>
+        <Setter Property = "ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property = "ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
     </Style>
 
-    <!--Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.MessageText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"-->
     <DataTemplate x:Key="TextDataTemplate">
         <RichTextBox x:Name="block"
                      IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.Chat.CanWrite}"
                      Style="{StaticResource InputRichBoxStyle}">
-            <FlowDocument>
-                <Paragraph>
-                </Paragraph>
-            </FlowDocument>
             <RichTextBox.InputBindings>
                 <KeyBinding Key="Enter" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.TextBox_EnterPressedCommand}"/>
-                <KeyBinding Key="Backspace" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.TextBox_BackspacePressedCommand}"/>
             </RichTextBox.InputBindings>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="KeyDown">
                     <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.TextBox_KeyDownCommand}"/>
-                </i:EventTrigger>                
+                </i:EventTrigger>
                 <i:EventTrigger EventName="KeyUp">
                     <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.TextBox_KeyUpCommand}"/>
-                </i:EventTrigger>
-                <i:EventTrigger EventName="TextChanged">
-                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.TextBox_TextChangedCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </RichTextBox>
@@ -66,7 +57,7 @@
 
             <Image x:Name="icon" Source="{Binding Path=FileName}" Grid.Column="0" Width="40" Height="40"/>
 
-            <TextBlock Grid.Column="1" Text="{Binding Path=FileName, Converter={StaticResource PathToName}}" VerticalAlignment="Center" FontSize="20" Margin="0,0,20,0"/>
+            <TextBlock Grid.Column="1" Text="{Binding Path=FileName}" VerticalAlignment="Center" FontSize="20" Margin="0,0,20,0"/>
 
             <Button Grid.Column="2" Width="60" Height="35" Content="Send" HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="Hand"
                     Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.SendFileCommand}"/>

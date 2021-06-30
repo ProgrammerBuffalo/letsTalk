@@ -2,14 +2,11 @@
 
 namespace Client.Models
 {
-    public enum MessageState { Readen, Recived, Send, NoInet };
-
-    // тут храниться сообшение которые пришли к клиенту
-    public class SourceMessage : System.ComponentModel.INotifyPropertyChanged
+    public class SourceMessage : System.ComponentModel.INotifyPropertyChanged, ICloneable
     {
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 
-        private Message message;
+        protected Message message;
 
         public SourceMessage()
         {
@@ -28,6 +25,11 @@ namespace Client.Models
             prop = value;
             PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(prop_name));
         }
+
+        public virtual object Clone()
+        {
+            return new SourceMessage((Message)message.Clone());
+        }
     }
 
     public class SessionSendedMessage : SourceMessage
@@ -36,13 +38,15 @@ namespace Client.Models
         {
 
         }
+
+        public override object Clone()
+        {
+            return new SessionSendedMessage((Message)message.Clone());
+        }
     }
 
-    // тут храниться сообшение которые послал клиент
     public class UserMessage : SourceMessage
     {
-        private MessageState state;
-
         public UserMessage()
         {
 
@@ -53,14 +57,14 @@ namespace Client.Models
 
         }
 
-        public MessageState State { get => state; set => Set(ref state, value); }
+        public override object Clone()
+        {
+            return new UserMessage((Message)message.Clone());
+        }
     }
 
-    // тут храниться сообшение от группы
-    // в будушим сдесь будут поля которые будут показывать какие пользователи прочитали, приняли, не приняли сообщение
     public class GroupMessage : SourceMessage
     {
-        //поверх сообщения будет видно какой именно член группы отправил сообшение
         private AvailableUser user;
         private string color;
 
@@ -88,15 +92,18 @@ namespace Client.Models
 
         public AvailableUser User { get => user; set => Set(ref user, value); }
         public string Color { get => color; set => Set(ref color, value); }
+
+        public override object Clone()
+        {
+            return new GroupMessage((Message)message.Clone(), (AvailableUser)user.Clone(), color);
+        }
     }
 
-    //системнные сообшение что типо пользователь покинул чат или кто стал админом чата
-    //скорее тут будут static поля с систменными сообшения 
     public class SystemMessage : SourceMessage
     {
         public SystemMessage(Message message)
         {
-            this.Message = message;
+            this.message = message;
         }
 
         public static SystemMessage ShiftDate(DateTime dateTime)
@@ -122,6 +129,11 @@ namespace Client.Models
         public static SystemMessage ChatroomCreated(DateTime dateTime)
         {
             return new SystemMessage(new TextMessage("Chatroom was created " + dateTime.ToShortTimeString(), dateTime));
+        }
+
+        public override object Clone()
+        {
+            return new SystemMessage((Message)message.Clone());
         }
     }
 }

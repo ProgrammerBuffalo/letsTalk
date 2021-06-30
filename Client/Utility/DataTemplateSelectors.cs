@@ -4,7 +4,6 @@ using System.Windows.Controls;
 
 namespace Client.Utility
 {
-    //выбор шаблона в зависимости от вида чатрума
     public class ChatDataTemplateSelector : DataTemplateSelector
     {
         public DataTemplate ChatOneDataTemplate { get; set; }
@@ -18,33 +17,39 @@ namespace Client.Utility
         }
     }
 
-    //выбор шаблона для отброжения сообшения в зависимости от вида сообщения
-    public class MessageTemplateSelector : DataTemplateSelector
+    public class SourceMessageTemplateSelector : DataTemplateSelector
     {
         public DataTemplate TextDataTemplate { get; set; }
         public DataTemplate FileDataTemplate { get; set; }
         public DataTemplate ImageDataTemplate { get; set; }
-        public DataTemplate AudioDataTemplate { get; set; }
         public DataTemplate SystemMessageDataTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             Message message = ((SourceMessage)item).Message;
-
             if (message is TextMessage) return TextDataTemplate;
-            else if (message is FileMessage)
-            {
-                FileMessage fileMessage = (FileMessage)message;
-                string extn = fileMessage.FileName.Substring(fileMessage.FileName.LastIndexOf('.'));
-                if (extn == ".png" || extn == ".jpg") return ImageDataTemplate;
-                else if (extn == ".mp3" || extn == ".wave") return AudioDataTemplate;
-                else return FileDataTemplate;
-            }
+            else if (message is ImageMessage) return ImageDataTemplate;
+            else if (message is FileMessage) return FileDataTemplate;
             else return SystemMessageDataTemplate;
         }
     }
 
-    //выбор шаблона при отправке сообшения
+    public class MessageTemplateSelector : DataTemplateSelector
+    {
+        public DataTemplate TextDataTemplate { get; set; }
+        public DataTemplate FileDataTemplate { get; set; }
+        public DataTemplate ImageDataTemplate { get; set; }
+        public DataTemplate SystemMessageDataTemplate { get; set; }
+
+        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        {
+            if (item is TextMessage) return TextDataTemplate;
+            else if (item is ImageMessage) return ImageDataTemplate;
+            else if (item is FileMessage) return FileDataTemplate;
+            else return SystemMessageDataTemplate;
+        }
+    }
+
     public class InputMessageTemplateSelector : DataTemplateSelector
     {
         public DataTemplate TextDataTemplate { get; set; }
@@ -54,8 +59,7 @@ namespace Client.Utility
         {
             Message message = (Message)item;
             if (message is TextMessage) return TextDataTemplate;
-            else if (message is FileMessage) return FileDataTemplate;
-            else return null;
+            else return FileDataTemplate;
         }
     }
 }

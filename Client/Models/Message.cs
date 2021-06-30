@@ -4,7 +4,6 @@ using System.Windows.Media.Imaging;
 
 namespace Client.Models
 {
-    //сюда можешь добавить Id для сообшений
     public class Message : INotifyPropertyChanged, ICloneable
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -124,43 +123,5 @@ namespace Client.Models
             return new ImageMessage(fileName, date, StreamId, bitmap);
         }
     }
-
-    public class MediaMessage : FileMessage
-    {
-        private long length;
-        private long currentLength;
-        private bool isPlaying;
-
-        public MediaMessage(string fileName) : base(fileName)
-        {
-            using (var shell = Microsoft.WindowsAPICodePack.Shell.ShellFile.FromFilePath(fileName))
-            {
-                Length = (long)shell.Properties.System.Media.Duration.Value.Value;
-            }
-        }
-
-        public MediaMessage(string fileName, DateTime date) : this(fileName)
-        {
-            Date = date;
-        }
-
-        private MediaMessage(string fileName, DateTime date, Guid streamId, bool isLoaded, long lenght, long currentLength, bool isPlaying)
-            : base(fileName, date, streamId, isLoaded)
-        {
-            Length = lenght;
-            CurrentLength = currentLength;
-            IsPlaying = isPlaying;
-        }
-
-        public long Length { get => length; set => Set(ref length, value); }
-        public long CurrentLength { get => currentLength; set => Set(ref currentLength, value); }
-        public bool IsPlaying { get => isPlaying; set => Set(ref isPlaying, value); }
-
-        public override object Clone()
-        {
-            return new MediaMessage(fileName, date, StreamId, isLoaded, length, currentLength, isPlaying);
-        }
-    }
-
 
 }

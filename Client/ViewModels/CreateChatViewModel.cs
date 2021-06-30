@@ -13,7 +13,6 @@ using System.Windows.Media.Imaging;
 
 namespace Client.ViewModels
 {
-    //пока что сделал все в одном потоке потом исправлю шас на это времяни нет
     class CreateChatViewModel : System.ComponentModel.INotifyPropertyChanged, IDropTarget
     {
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
@@ -33,19 +32,11 @@ namespace Client.ViewModels
         private ObservableCollection<AvailableUser> allUsers;
         private ObservableCollection<AvailableUser> usersToAdd;
 
-        //public MainViewModel.ChatDelegate AddChat { get; set; }
-
-        //private ClientUserInfo client;
-        //private ChatClient chatClient;
-
         private int offset;
-        private int count;
 
         public CreateChatViewModel(MainViewModel mainVM)
         {
             this.mainVM = mainVM;
-            //this.client = client;
-            //this.chatClient = chatClient;
 
             AllUsers = new ObservableCollection<AvailableUser>();
             UsersToAdd = new ObservableCollection<AvailableUser>();
@@ -65,7 +56,6 @@ namespace Client.ViewModels
             UsersToAdd_MouseEnterCommand = new Command(UsersToAdd_MouseEnter);
 
             offset = 0;
-            count = 10;
         }
 
         public ICommand ShowMoreCommand { get; }
@@ -111,7 +101,6 @@ namespace Client.ViewModels
             offset = users.Last().Value;
         }
 
-        //метод для поиска новых пользователй (использовать SearchText для поиска по имени)
         public void Search(object param)
         {
             AllUsers.Clear();

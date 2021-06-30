@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Windows.Documents;
 
-//конверторы служат для предоставления данных в болле удобной форме для пользователя
-//метод Convert преврашает данные из модели в данные для View 
-//метод ConvertBack преврашает данные веденные из View в данные модели 
 namespace Client.Utility
 {
-    //перевод из тиков во время для отброжения длины трека
     class TicksToTime : System.Windows.Data.IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -23,7 +18,6 @@ namespace Client.Utility
         }
     }
 
-    //получение типа файла 
     class PathToExtension : System.Windows.Data.IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -38,13 +32,15 @@ namespace Client.Utility
         }
     }
 
-    //получение имени файл без полного пути
     class PathToName : System.Windows.Data.IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             string path = value.ToString();
-            return path.Substring(0, path.LastIndexOf('.'));
+            int start = path.LastIndexOf('\\');
+            int end = path.LastIndexOf('.');
+            if (start == -1) return path.Substring(0, end);
+            else return path.Substring(start + 1, end - start - 1);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -53,7 +49,6 @@ namespace Client.Utility
         }
     }
 
-    //получени полного пути файла внутри сборки
     class FullPathConverter : System.Windows.Data.IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -80,7 +75,6 @@ namespace Client.Utility
         }
     }
 
-    //выборка нужного цвета для никнеймов в груповых сообщениях
     class ColorConverter : System.Windows.Data.IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -94,7 +88,6 @@ namespace Client.Utility
         }
     }
 
-    //конвертация строки с добовлением "..." в конец при большой длине строки
     class FitStringConverter : System.Windows.Data.IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -155,13 +148,13 @@ namespace Client.Utility
             {
                 if (text[i] == '&' && text.Length - 5 >= i && text[i + 1] == '#')
                 {
-                    if (start != i) block.Inlines.Add(new Run(text.Substring(start, i - start)) { BaselineAlignment = System.Windows.BaselineAlignment.TextTop });
+                    if (start != i) block.Inlines.Add(new System.Windows.Documents.Run(text.Substring(start, i - start)) { BaselineAlignment = System.Windows.BaselineAlignment.TextTop });
                     string code = text.Substring(i, 5);
                     Models.Emoji emoji = Models.EmojiData.GetEmoji(code);
 
                     System.Windows.Controls.Image image = new System.Windows.Controls.Image();
-                    image.Width = 30;
-                    image.Height = 30;
+                    image.Width = 25;
+                    image.Height = 25;
                     image.Margin = new System.Windows.Thickness(3, 0, 3, 0);
                     image.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri(emoji.Path, UriKind.Relative));
                     block.Inlines.Add(image);
@@ -170,7 +163,7 @@ namespace Client.Utility
                     start = i + 1;
                 }
             }
-            if (start != i) block.Inlines.Add(new Run(text.Substring(start)) { BaselineAlignment = System.Windows.BaselineAlignment.TextTop });
+            if (start != i) block.Inlines.Add(new System.Windows.Documents.Run(text.Substring(start)) { BaselineAlignment = System.Windows.BaselineAlignment.TextTop });
             return block;
         }
 
@@ -184,7 +177,7 @@ namespace Client.Utility
     {
         public object Convert(object value, Type targetType, object param, System.Globalization.CultureInfo culture)
         {
-            return '/' + value.ToString();
+            return '/' + value.ToString();  
         }
 
         public object ConvertBack(object value, Type targetType, object param, System.Globalization.CultureInfo culture)
@@ -192,5 +185,4 @@ namespace Client.Utility
             return value;
         }
     }
-
 }

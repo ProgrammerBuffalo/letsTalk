@@ -14,7 +14,6 @@ namespace Client.Utility
             Regex regex = new Regex("^[\\w,!,#,$,%,^,&,*,@]{5,15}$");
             if (regex.IsMatch(text)) return new ValidationResult(true, "");
             else return new ValidationResult(false, "valid symbols (!,#,$,%,^,&,*,@)");
-            return new ValidationResult(true, "");
         }
     }
 
@@ -27,7 +26,6 @@ namespace Client.Utility
             Regex regex = new Regex("^[\\w]{4,12}$");
             if (regex.IsMatch(text)) return new ValidationResult(true, "");
             else return new ValidationResult(false, "name can contain only letters");
-            return new ValidationResult(true, "");
         }
     }
 }

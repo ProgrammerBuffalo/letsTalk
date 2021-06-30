@@ -223,17 +223,7 @@ namespace Client.Models
 
         }
 
-        public ChatOne(IEnumerable<SourceMessage> messages) : base(messages)
-        {
-
-        }
-
         public ChatOne(int sqlId, AvailableUser user) : this(sqlId)
-        {
-            User = user;
-        }
-
-        public ChatOne(IEnumerable<SourceMessage> messages, AvailableUser user) : base(messages)
         {
             User = user;
         }

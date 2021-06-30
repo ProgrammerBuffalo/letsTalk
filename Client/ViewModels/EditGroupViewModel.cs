@@ -44,11 +44,11 @@ namespace Client.ViewModels
             Name = Chat.GroupName;
 
             RemoveMemberCommand = new Command(RemoveMember);
-            DeleteChatCommand = new Command(DeleteChat);
+            //DeleteChatCommand = new Command(DeleteChat);
             ChangeImageCommand = new Command(ChangeImageAsync);
             CancelImageCommand = new Command(CancelImage);
             ShowMoreCommand = new Command(ShowMore);
-            SaveNameCommand = new Command(SaveName);
+            //SaveNameCommand = new Command(SaveName);
             SearchChangedCommand = new Command(SearchChanged);
             SearchByNameInDB = new Command(SearchUsersFromDB);
 
@@ -60,11 +60,11 @@ namespace Client.ViewModels
         }
 
         public ICommand RemoveMemberCommand { get; }
-        public ICommand DeleteChatCommand { get; }
+        //public ICommand DeleteChatCommand { get; }
         public ICommand ChangeImageCommand { get; }
         public ICommand CancelImageCommand { get; }
         public ICommand ShowMoreCommand { get; }
-        public ICommand SaveNameCommand { get; }
+        //public ICommand SaveNameCommand { get; }
         public ICommand SearchChangedCommand { get; }
         public ICommand SearchByNameInDB { get; }
 
@@ -90,46 +90,24 @@ namespace Client.ViewModels
             chat.LastMessage = SystemMessage.UserRemoved(DateTime.Now, user.Name).Message;
         }
 
-        private void DeleteChat(object param)
-        {
-            //mainVM.Chats.Remove(mainVM.SelectedChat);
-        }
-
-        private void SaveName(object param)
-        {
-            if (Name != null)
-            {
-                //функция для изменения имени чата в сервере
-                chat.GroupName = name;
-            }
-        }
-
         private void SearchChanged(object param)
         {
-            if (SearchMembersText == "" || searchMembersText == null)
-                return;
+            if (SearchMembersText == "" || searchMembersText == null) return;
             List<AvailableUser> sortedUsers = new List<AvailableUser>();
 
-
             for (int i = 0; i < Users.Count; i++)
-            {
                 sortedUsers.AddRange(Users.Where(u => u.Name.Substring(0, SearchMembersText.Length <= u.Name.Length ? SearchMembersText.Length : 0).Contains(searchMembersText)).ToList());
-            }
 
-            if (sortedUsers.Count < 1)
-                return;
+            if (sortedUsers.Count < 1) return;
 
             for (int i = 0; i < sortedUsers.Count; i++)
-            {
                 Users.Move(Users.IndexOf(Users.First(u => u.SqlId == sortedUsers[i].SqlId)), 0);
-            }
         }
 
         private void SearchUsersFromDB(object obj)
         {
             offset = 0;
             AllUsers.Clear();
-
 
             if (SearchUsersText.Length == 0)
             {
@@ -142,8 +120,7 @@ namespace Client.ViewModels
             ChatService.UnitClient unitClient = new ChatService.UnitClient();
             Dictionary<int, int> users = unitClient.GetRegisteredUsers(5, offset, mainVM.Client.SqlId, acceptedUserText);
 
-            if (users.Count == 0)
-                return;
+            if (users.Count == 0) return;
 
             var it = users.GetEnumerator();
             for (int i = 0; i < users.Count; i++)

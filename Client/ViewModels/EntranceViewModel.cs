@@ -89,7 +89,7 @@ namespace Client.ViewModels
                 try
                 {
                     ChatService.ServerUserInfo serverUserInfo = unitClient.Authorization(new ChatService.AuthenticationUserInfo() { Login = Login, Password = Password });
-
+                    Models.Settings.Instance.AddUser(serverUserInfo.SqlId);
                     MainWindow window = new MainWindow();
                     MainViewModel viewModel = new MainViewModel(serverUserInfo.Name, serverUserInfo.SqlId);
                     viewModel.AddUC += window.AddUC;
@@ -160,7 +160,6 @@ namespace Client.ViewModels
                     if (uploadFileInfo.FileStream.CanRead)
                         await avatarClient.UserAvatarUploadAsync(uploadFileInfo.FileName, UserId, uploadFileInfo.FileStream);
                 }
-                Models.Settings.Instance.AddUser(UserId);
             }
             catch (FaultException<ChatService.LoginExceptionFault> ex)
             {

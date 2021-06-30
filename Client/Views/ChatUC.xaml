@@ -6,9 +6,8 @@
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:utility="clr-namespace:Client.Utility"
              xmlns:models="clr-namespace:Client.Models"
-             xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:UC="clr-namespace:Client.UserControls"
-             xmlns:dd="urn:gong-wpf-dragdrop"
+             xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" >
     <UserControl.Resources>
@@ -180,9 +179,9 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <UC:ActionableContentPresenter  x:Name="input" IsEnabled="{Binding Path=Chat.CanWrite}" Content="{Binding Path=InputMessage}" ContentTemplateSelector="{StaticResource InputMessageTemplateSelector}" ContentChanged="input_ContentChanged"/>
+            <UC:ActionableContentPresenter x:Name="input" IsEnabled="{Binding Path=Chat.CanWrite}" Content="{Binding Path=InputMessage}" ContentTemplateSelector="{StaticResource InputMessageTemplateSelector}" ContentChanged="input_ContentChanged"/>
 
-            <Button x:Name="smileBtn" Grid.Column="1" Content="Emoji" FontSize="20" Margin="5,0" IsEnabled="{Binding Path=Chat.CanWrite}" Template="{StaticResource ButtonTemplate}" Command="{Binding OpenEmojiCommand}"/>
+            <Button Grid.Column="1" Content="Smile" FontSize="20" IsCancel="{Binding Path=Chat.CanWrite}" Margin="5,0" Template="{StaticResource ButtonTemplate}" Command="{Binding OpenEmojisCommand}"/>
 
             <Button Grid.Column="2" Content="File" FontSize="20" IsEnabled="{Binding Path=Chat.CanWrite}" Margin="5,0" Template="{StaticResource ButtonTemplate}" Command="{Binding OpenFileCommand}"/>
         </Grid>

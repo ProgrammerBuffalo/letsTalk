@@ -312,7 +312,7 @@ namespace Client.ViewModels
                                         (Models.Chat)new ChatOne(chatId, availableUsers.First()) { CanWrite = true });
                     Chats.Last().LastMessage = SystemMessage.UserAdded(DateTime.Now, "You are added").Message;
                     Chats.Move(Chats.IndexOf(Chats.Last()), 0);
-                   
+
                 });
 
                 ChatClient.AddedUserToChatIsOnline(this.client.SqlId, chatId);
@@ -669,8 +669,8 @@ namespace Client.ViewModels
 
         private void Notify(Models.Chat chat)
         {
-            UserControls.NotifyUC notifyUC = new UserControls.NotifyUC();
-            notifyUC.DataContext = chat;
+            Views.NotifyUC notifyUC = new Views.NotifyUC();
+            notifyUC.DataContext = new NotifyMessage(chat, chat.LastMessage);
             notifyManager.Show(notifyUC, "", new TimeSpan(0, 0, 5));
         }
 
