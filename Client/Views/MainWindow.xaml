@@ -8,7 +8,7 @@
         xmlns:controls ="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:UC="clr-namespace:Client.UserControls"
         mc:Ignorable="d"
-        Title="letsTalk" Height="700" Width="1200" MinHeight="500" MinWidth="800" 
+        Title="{DynamicResource LetsTalk}" Height="700" Width="1200" MinHeight="500" MinWidth="800" 
         WindowStartupLocation="CenterScreen" GlowBrush="#8738ab" WindowTitleBrush="#57394a" WindowState="{Binding WindowState}">
 
     <Window.Resources>
@@ -127,7 +127,7 @@
 
             <controls:HamburgerMenu.OptionsItemsSource>
                 <controls:HamburgerMenuItemCollection>
-                    <controls:HamburgerMenuIconItem Tag="UC2" Label="Create Chatroom" Command="{Binding CreateChatCommand}">
+                    <controls:HamburgerMenuIconItem Tag="UC2" Label="{DynamicResource CreateChatroom}" Command="{Binding CreateChatCommand}">
                         <controls:HamburgerMenuIconItem.Icon>
                             <icons:PackIconMaterial  Kind="AccountMultiplePlus" Foreground="Wheat" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10, 0, 0, 0"/>
                         </controls:HamburgerMenuIconItem.Icon>
@@ -178,7 +178,7 @@
 
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
-            <Button Command="{Binding SettingsShowCommand}" Content="Settings">
+            <Button Command="{Binding SettingsShowCommand}" Content="{DynamicResource Settings}">
                 <Button.ContentTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">

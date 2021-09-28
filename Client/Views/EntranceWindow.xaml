@@ -7,27 +7,13 @@
         xmlns:Icons ="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:uc="clr-namespace:Client.UserControls"
         mc:Ignorable="d"
-        Title="Entrance" Height="450" Width="350" ResizeMode="NoResize" WindowTitleBrush="#57394a">
+        Title="{DynamicResource Entrance}" Height="450" Width="350" ResizeMode="NoResize" WindowTitleBrush="#57394a">
 
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/WindowResources/ThemeDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
-            <DataTemplate x:Key="PhotoButtonDataTemplate">
-                <Grid>
-                    <Icons:PackIconMaterialDesign x:Name="icon" Width="Auto" Height="Auto" Foreground="#57394a" Kind="AddAPhoto" Visibility="Hidden"/>
-
-                    <Button x:Name="btn" Width="30" Height="30" Content="close" Visibility="Visible" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,-50,-15,0" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.CancelImageCommand}"/>
-                </Grid>
-                <DataTemplate.Triggers>
-                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SelectedImage}" Value="{x:Null}">
-                        <Setter TargetName="icon" Property="Visibility" Value="Visible"/>
-                        <Setter TargetName="btn" Property="Visibility" Value="Hidden"/>
-                    </DataTrigger>
-                </DataTemplate.Triggers>
-            </DataTemplate>
 
             <Style x:Key="WarnStyle" TargetType="Icons:PackIconMaterialDesign">
                 <Setter Property="Width" Value="30"/>
@@ -46,6 +32,58 @@
                 <Setter Property="Height" Value="40"/>
                 <Setter Property="Controls:TextBoxHelper.ClearTextButton" Value="True"/>
             </Style>
+
+            <Style x:Key="CancelButtonStyle" TargetType="Button">
+                <Setter Property="Foreground" Value="{StaticResource ButtonBackground}"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Width" Value="30"/>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="VerticalAlignment" Value="Top"/>
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="Margin" Value="0,5,5,0"/>
+            </Style>
+
+            <ControlTemplate x:Key="CancelButtonTemplate" TargetType="Button">
+                <Icons:PackIconMaterial Kind="Cancel" Width="30" Height="30"/>
+            </ControlTemplate>
+
+            <ControlTemplate x:Key="AvatarButtonTemplate" TargetType="Button">
+                <Border BorderBrush="Goldenrod" BorderThickness="3">
+                    <Grid Background="{TemplateBinding Background}">
+                        <Icons:PackIconMaterialDesign x:Name="icon" Kind="AddAPhoto" Margin="5" Visibility="Hidden" Width="Auto" Height="Auto" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#57394a" />
+
+                        <Button x:Name="btn"
+                            Template="{StaticResource CancelButtonTemplate}"
+                            Style="{StaticResource CancelButtonStyle}"
+                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.CancelImageCommand}"/>
+                    </Grid>
+                </Border>
+
+                <ControlTemplate.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SelectedImage}" Value="{x:Null}">
+                        <Setter TargetName="icon" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="btn" Property="Visibility" Value="Hidden"/>
+                    </DataTrigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+
+            <!--<DataTemplate x:Key="PhotoButtonDataTemplate">
+                <Grid>
+                    <Icons:PackIconMaterialDesign x:Name="icon" Width="Auto" Height="Auto" Foreground="#57394a" Kind="AddAPhoto" Visibility="Hidden"/>
+
+                    <Button x:Name="btn"
+                            Template="{StaticResource CancelButtonTemplate}"
+                            Style="{StaticResource CancelButtonStyle}"
+                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.CancelImageCommand}"/>
+                </Grid>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SelectedImage}" Value="{x:Null}">
+                        <Setter TargetName="icon" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="btn" Property="Visibility" Value="Hidden"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>-->
 
         </ResourceDictionary>
     </Window.Resources>
@@ -69,7 +107,7 @@
                 <ColumnDefinition x:Name="col1" Width="0"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="nameText" Text="{Binding Path=Name}" Grid.Column="0" Visibility="Hidden" Controls:TextBoxHelper.ClearTextButton="True" Controls:TextBoxHelper.Watermark="Your Name" Height="40" FontSize="20" Margin="15,0,5,0" TextChanged="nameText_TextChanged"/>
+            <TextBox x:Name="nameText" Text="{Binding Path=Name}" Grid.Column="0" Visibility="Hidden" Controls:TextBoxHelper.ClearTextButton="True" Controls:TextBoxHelper.Watermark="{DynamicResource Name}" Height="40" FontSize="20" Margin="15,0,5,0" TextChanged="nameText_TextChanged"/>
             <Icons:PackIconMaterialDesign x:Name="nameWarn" Grid.Column="1" Style="{StaticResource WarnStyle}"/>
         </Grid>
 
@@ -79,7 +117,7 @@
                 <ColumnDefinition x:Name="col2" Width="0"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="loginText" Text="{Binding Path=Login}" Grid.Column="0" Margin="15,0,5,0" Controls:TextBoxHelper.ClearTextButton="True" Controls:TextBoxHelper.Watermark="Login" Height="40" FontSize="20" TextChanged="loginText_TextChanged"/>
+            <TextBox x:Name="loginText" Text="{Binding Path=Login}" Grid.Column="0" Margin="15,0,5,0" Controls:TextBoxHelper.ClearTextButton="True" Controls:TextBoxHelper.Watermark="{DynamicResource Login}" Height="40" FontSize="20" TextChanged="loginText_TextChanged"/>
             <Icons:PackIconMaterialDesign x:Name="loginWarn" Grid.Column="1" Style="{StaticResource WarnStyle}"/>
         </Grid>
 
@@ -89,7 +127,7 @@
                 <ColumnDefinition x:Name="col3" Width="0"/>
             </Grid.ColumnDefinitions>
 
-            <PasswordBox x:Name="passText" Grid.Column="0" Margin="15,0,5,0" Controls:TextBoxHelper.Watermark="Password" Controls:TextBoxHelper.ClearTextButton="True" Height="40" FontSize="20" PasswordChanged="passText_TextChanged"/>
+            <PasswordBox x:Name="passText" Grid.Column="0" Margin="15,0,5,0" Controls:TextBoxHelper.Watermark="{DynamicResource Password}" Controls:TextBoxHelper.ClearTextButton="True" Height="40" FontSize="20" PasswordChanged="passText_TextChanged"/>
             <Icons:PackIconMaterialDesign x:Name="passWarn" Grid.Column="1" Style="{StaticResource WarnStyle}"/>
         </Grid>
 
@@ -101,16 +139,16 @@
 
             <Button x:Name="signIn" Content="Sign In" Grid.Column="0" Margin="10, 50, 10, 100" Template="{StaticResource ButtonTemplate}" Command="{Binding SignInCommand}"/>
 
-            <Button x:Name="registr" Content="Registrate" Grid.Column="1" Margin="10, 50, 10, 100" Template="{StaticResource ButtonTemplate}" Command="{Binding RegistrateCommand}" Click="registr_Click"/>
+            <Button x:Name="registr" Content="{DynamicResource Registrate}" Grid.Column="1" Margin="10, 50, 10, 100" Template="{StaticResource ButtonTemplate}" Command="{Binding RegistrateCommand}" Click="registr_Click"/>
         </Grid>
 
-        <Button Grid.Column="1" Grid.RowSpan="3" Margin="5, 15" Padding="15 30" Command="{Binding SetPhotoCommand}" ContentTemplate="{StaticResource PhotoButtonDataTemplate}">
+        <Button Grid.Column="1" Grid.RowSpan="3" Margin="5, 15" Padding="15 30" Command="{Binding SetPhotoCommand}" Template="{StaticResource AvatarButtonTemplate}">
             <Button.Background>
-                <ImageBrush ImageSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SelectedImage}" ></ImageBrush>
+                <ImageBrush ImageSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.SelectedImage}" />
             </Button.Background>
         </Button>
 
-        <Button x:Name="back" Content="Back" Grid.Row="3" Grid.Column="1" Margin="10, 50, 10, 100" Template="{StaticResource ButtonTemplate}" Command="{Binding BackCommand}" Click="back_Click"/>
+        <Button x:Name="back" Content="{DynamicResource Back}" Grid.Row="3" Grid.Column="1" Margin="10, 50, 10, 100" Template="{StaticResource ButtonTemplate}" Command="{Binding BackCommand}" Click="back_Click"/>
 
         <uc:LoadingUserControl Grid.RowSpan="4" Grid.ColumnSpan="2" State="{Binding Path=LoaderState}" Visibility="{Binding Path=LoaderVisibility}"/>
     </Grid>

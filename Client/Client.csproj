@@ -232,8 +232,10 @@
     <Compile Include="ViewModels\EntranceViewModel.cs" />
     <Compile Include="ViewModels\EditGroupViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\RingtonsViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="Views\ApirianceSettigsUC.xaml.cs">
+      <DependentUpon>ApirianceSettigsUC.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CreateGroupUC.xaml.cs">
       <DependentUpon>CreateGroupUC.xaml</DependentUpon>
     </Compile>
@@ -252,6 +254,9 @@
     <Compile Include="Views\EntranceWindow.xaml.cs">
       <DependentUpon>EntranceWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\GeneralSettingsUC.xaml.cs">
+      <DependentUpon>GeneralSettingsUC.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HelpUC.xaml.cs">
       <DependentUpon>HelpUC.xaml</DependentUpon>
     </Compile>
@@ -260,6 +265,9 @@
     </Compile>
     <Compile Include="Views\ChatUC.xaml.cs">
       <DependentUpon>ChatUC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NotificationSettingsUC.xaml.cs">
+      <DependentUpon>NotificationSettingsUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NotifyUC.xaml.cs">
       <DependentUpon>NotifyUC.xaml</DependentUpon>
@@ -282,6 +290,9 @@
     <Compile Include="Views\SettingsUC.xaml.cs">
       <DependentUpon>SettingsUC.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Temp.xaml.cs">
+      <DependentUpon>Temp.xaml</DependentUpon>
+    </Compile>
     <Page Include="UserControls\ChatItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -291,6 +302,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\LoadingUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ApirianceSettigsUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -318,11 +333,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\GeneralSettingsUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\HelpUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NotificationSettingsUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -343,6 +366,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SettingsUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Temp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -405,7 +432,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="ClassDiagram1.cd" />
     <None Include="Connected Services\ChatService\ChatService.wsdl" />
     <None Include="Connected Services\ChatService\Client.ChatService.ChatAvatarUploadResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -1218,6 +1244,8 @@
     <Resource Include="Resources\Emojis\objects\170-joystick.png" />
     <Resource Include="Resources\Emojis\objects\171-watch.png" />
     <Resource Include="Resources\Emojis\objects\172-bow.png" />
+    <Resource Include="Resources\Languages\ru.png" />
+    <Resource Include="Resources\Languages\en.png" />
     <Content Include="Resources\Ringtons\alcatel_success.wav" />
     <Content Include="Resources\Ringtons\basic_whistle.wav" />
     <Content Include="Resources\Ringtons\doorslam.wav" />

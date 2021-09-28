@@ -109,7 +109,9 @@ namespace Client.Models
 
         public abstract bool CanNotify(Settings settings);
 
-        public abstract string GetNotifyPath(Settings settings);
+        public abstract bool CanRington(Settings settings);
+
+        public abstract string GetRingtonPath(Settings settings);
 
         private async System.Threading.Tasks.Task<ImageMessage> LoadImageFromClient(FileMessage fileMessage)
         {
@@ -272,12 +274,17 @@ namespace Client.Models
 
         public override bool CanNotify(Settings settings)
         {
+            return settings.CanUserNotify;
+        }
+
+        public override bool CanRington(Settings settings)
+        {
             var notify = settings.GetMute(SqlId);
             if (notify == null) return settings.CanUserNotify;
             else return notify.Value;
         }
 
-        public override string GetNotifyPath(Settings settings)
+        public override string GetRingtonPath(Settings settings)
         {
             return settings.SelectedUserRington.Path;
         }
@@ -405,12 +412,17 @@ namespace Client.Models
 
         public override bool CanNotify(Settings settings)
         {
+            return settings.CanGroupNotify;
+        }
+
+        public override bool CanRington(Settings settings)
+        {
             var notify = settings.GetMute(SqlId);
             if (notify == null) return settings.CanGroupNotify;
             else return notify.Value;
         }
 
-        public override string GetNotifyPath(Settings settings)
+        public override string GetRingtonPath(Settings settings)
         {
             return settings.SelectedGroupRington.Path;
         }

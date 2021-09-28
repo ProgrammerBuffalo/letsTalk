@@ -1,769 +1,268 @@
-﻿namespace Client.Models
+﻿using System.Collections.Generic;
+using System.Xml;
+
+namespace Client.Models
 {
     public enum EmojiType { Faces, Hands, Hearts, Nature, Objects, Flags }
 
     public static class EmojiData
     {
-        private static EmojiGroup[] emojiGroups;
+        //private static EmojiGroup[] emojiGroups;
+
+        private static string emojiPath;
 
         static EmojiData()
         {
-            emojiGroups = new EmojiGroup[6];
-
-            Emoji[] emojis = new Emoji[150];
-            emojis[0] = new Emoji("happy", "&#001", "Resources/Emojis/faces/001-happy-18.png");
-            emojis[1] = new Emoji("happy", "&#002", "Resources/Emojis/faces/003-happy-17.png");
-            emojis[2] = new Emoji("happy", "&#003", "Resources/Emojis/faces/037-happy-11.png");
-            emojis[3] = new Emoji("happy", "&#004", "Resources/Emojis/faces/062-happy-8.png");
-            emojis[4] = new Emoji("happy", "&#005", "Resources/Emojis/faces/066-happy-7.png");
-            emojis[5] = new Emoji("happy", "&#006", "Resources/Emojis/faces/076-happy-5.png");
-            emojis[6] = new Emoji("happy", "&#007", "Resources/Emojis/faces/090-happy-4.png");
-            emojis[7] = new Emoji("happy", "&#008", "Resources/Emojis/faces/020-happy-16.png");
-            emojis[8] = new Emoji("happy", "&#009", "Resources/Emojis/faces/025-happy-15.png");
-            emojis[9] = new Emoji("happy", "&#010", "Resources/Emojis/faces/026-happy-14.png");
-            emojis[10] = new Emoji("happy", "&#011", "Resources/Emojis/faces/028-happy-13.png");
-            emojis[11] = new Emoji("happy", "&#012", "Resources/Emojis/faces/166-happy-3.png");
-            emojis[12] = new Emoji("happy", "&#013", "Resources/Emojis/faces/170-happy-2.png");
-            emojis[13] = new Emoji("happy", "&#014", "Resources/Emojis/faces/194-happy.png");
-            emojis[14] = new Emoji("sad", "&#015", "Resources/Emojis/faces/060-sad-13.png");
-            emojis[15] = new Emoji("sad", "&#016", "Resources/Emojis/faces/085-sad-11.png");
-            emojis[16] = new Emoji("sad", "&#017", "Resources/Emojis/faces/035-sad-14.png");
-            emojis[17] = new Emoji("sad", "&#018", "Resources/Emojis/faces/073-sad-12.png");
-            emojis[18] = new Emoji("sad", "&#019", "Resources/Emojis/faces/091-sad-10.png");
-            emojis[19] = new Emoji("sad", "&#020", "Resources/Emojis/faces/131-sad-8.png");
-            emojis[20] = new Emoji("sad", "&#021", "Resources/Emojis/faces/164-sad-7.png");
-            emojis[21] = new Emoji("sad", "&#022", "Resources/Emojis/faces/182-sad-6.png");
-            emojis[22] = new Emoji("sad", "&#023", "Resources/Emojis/faces/183-sad-5.png");
-            emojis[23] = new Emoji("sad", "&#024", "Resources/Emojis/faces/184-sad-4.png");
-            emojis[24] = new Emoji("sad", "&#025", "Resources/Emojis/faces/185-sad-3.png");
-            emojis[25] = new Emoji("smile", "&#026", "Resources/Emojis/faces/015-smile-1.png");
-            emojis[26] = new Emoji("cool", "&#027", "Resources/Emojis/faces/002-cool-5.png");
-            emojis[27] = new Emoji("cool", "&#028", "Resources/Emojis/faces/078-cool-3.png");
-            emojis[28] = new Emoji("cool", "&#029", "Resources/Emojis/faces/129-cool-2.png");
-            emojis[29] = new Emoji("cool", "&#030", "Resources/Emojis/faces/165-cool-1.png");
-            emojis[30] = new Emoji("surprised", "&#031", "Resources/Emojis/faces/004-surprised-9.png");
-            emojis[31] = new Emoji("surprised", "&#032", "Resources/Emojis/faces/005-shocked-4.png");
-            emojis[32] = new Emoji("surprised", "&#033", "Resources/Emojis/faces/040-surprised-7.png");
-            emojis[33] = new Emoji("surprised", "&#034", "Resources/Emojis/faces/123-surprised-6.png");
-            emojis[34] = new Emoji("surprised", "&#035", "Resources/Emojis/faces/134-surprised-5.png");
-            emojis[35] = new Emoji("surprised", "&#036", "Resources/Emojis/faces/139-surprised-4.png");
-            emojis[36] = new Emoji("surprised", "&#037", "Resources/Emojis/faces/162-surprised-3.png");
-            emojis[37] = new Emoji("surprised", "&#038", "Resources/Emojis/faces/178-surprised-2.png");
-            emojis[38] = new Emoji("surprised", "&#039", "Resources/Emojis/faces/179-surprised-1.png");
-            emojis[39] = new Emoji("surprised", "&#040", "Resources/Emojis/faces/180-surprised.png");
-            emojis[40] = new Emoji("shocked", "&#041", "Resources/Emojis/faces/006-shocked-3.png");
-            emojis[41] = new Emoji("shocked", "&#042", "Resources/Emojis/faces/075-shocked-2.png");
-            emojis[42] = new Emoji("shocked", "&#043", "Resources/Emojis/faces/077-shocked-1.png");
-            emojis[43] = new Emoji("shocked", "&#044", "Resources/Emojis/faces/176-shocked.png");
-            emojis[44] = new Emoji("nervous", "&#045", "Resources/Emojis/faces/007-nervous-2.png");
-            emojis[45] = new Emoji("nervous", "&#046", "Resources/Emojis/faces/008-nervous-1.png");
-            emojis[46] = new Emoji("nervous", "&#047", "Resources/Emojis/faces/017-nervous.png");
-            emojis[47] = new Emoji("tired", "&#048", "Resources/Emojis/faces/011-tired-2.png");
-            emojis[48] = new Emoji("tongue", "&#049", "Resources/Emojis/faces/012-tongue-7.png");
-            emojis[49] = new Emoji("tongue", "&#050", "Resources/Emojis/faces/013-tongue-6.png");
-            emojis[50] = new Emoji("tongue", "&#051", "Resources/Emojis/faces/014-tongue-5.png");
-            emojis[51] = new Emoji("tongue", "&#052", "Resources/Emojis/faces/019-tongue-4.png");
-            emojis[52] = new Emoji("tongue", "&#053", "Resources/Emojis/faces/055-tongue-3.png");
-            emojis[53] = new Emoji("tongue", "&#054", "Resources/Emojis/faces/096-tongue-2.png");
-            emojis[54] = new Emoji("sleeping", "&#055", "Resources/Emojis/faces/016-sleeping-1.png");
-            emojis[55] = new Emoji("surprised", "&#056", "Resources/Emojis/faces/018-surprised-8.png");
-            emojis[56] = new Emoji("wink", "&#057", "Resources/Emojis/faces/021-wink-1.png");
-            emojis[57] = new Emoji("laughing", "&#058", "Resources/Emojis/faces/022-laughing-2.png");
-            emojis[58] = new Emoji("laughing", "&#059", "Resources/Emojis/faces/027-laughing.png");
-            emojis[59] = new Emoji("laughing", "&#060", "Resources/Emojis/faces/023-laughing-1.png");
-            emojis[60] = new Emoji("sweat", "&#061", "Resources/Emojis/faces/024-sweat-1.png");
-            emojis[61] = new Emoji("crying", "&#062", "Resources/Emojis/faces/030-crying-8.png");
-            emojis[62] = new Emoji("crying", "&#063", "Resources/Emojis/faces/031-crying-7.png");
-            emojis[63] = new Emoji("crying", "&#064", "Resources/Emojis/faces/065-crying-6.png");
-            emojis[64] = new Emoji("crying", "&#065", "Resources/Emojis/faces/079-crying-5.png");
-            emojis[65] = new Emoji("crying", "&#066", "Resources/Emojis/faces/110-crying-4.png");
-            emojis[66] = new Emoji("crying", "&#067", "Resources/Emojis/faces/121-crying-3.png");
-            emojis[67] = new Emoji("crying", "&#068", "Resources/Emojis/faces/159-crying-2.png");
-            emojis[68] = new Emoji("crying", "&#069", "Resources/Emojis/faces/160-crying-1.png");
-            emojis[69] = new Emoji("crying", "&#070", "Resources/Emojis/faces/163-crying.png");
-            emojis[70] = new Emoji("bored", "&#071", "Resources/Emojis/faces/032-bored.png");
-            emojis[71] = new Emoji("angry", "&#072", "Resources/Emojis/faces/009-angry-6.png");
-            emojis[72] = new Emoji("angry", "&#073", "Resources/Emojis/faces/036-angry-4.png");
-            emojis[73] = new Emoji("angry", "&#074", "Resources/Emojis/faces/038-angry-3.png");
-            emojis[74] = new Emoji("angry", "&#075", "Resources/Emojis/faces/127-angry-2.png");
-            emojis[75] = new Emoji("angry", "&#076", "Resources/Emojis/faces/199-angry.png");
-            emojis[76] = new Emoji("angel", "&#077", "Resources/Emojis/faces/157-angel.png");
-            emojis[77] = new Emoji("thinking", "&#078", "Resources/Emojis/faces/041-thinking-2.png");
-            emojis[78] = new Emoji("dead", "&#079", "Resources/Emojis/faces/044-dead-1.png");
-            emojis[79] = new Emoji("dead", "&#080", "Resources/Emojis/faces/154-dead.png");
-            emojis[80] = new Emoji("tired", "&#081", "Resources/Emojis/faces/053-tired-1.png");
-            emojis[81] = new Emoji("tired", "&#082", "Resources/Emojis/faces/147-tired.png");
-            emojis[82] = new Emoji("vampire", "&#083", "Resources/Emojis/faces/056-vampire.png");
-            emojis[83] = new Emoji("hungry", "&#084", "Resources/Emojis/faces/063-hungry.png");
-            emojis[84] = new Emoji("late", "&#085", "Resources/Emojis/faces/070-late.png");
-            emojis[85] = new Emoji("sick", "&#086", "Resources/Emojis/faces/072-sick-3.png");
-            emojis[86] = new Emoji("sick", "&#087", "Resources/Emojis/faces/125-sick-2.png");
-            emojis[87] = new Emoji("sick", "&#088", "Resources/Emojis/faces/151-sick-1.png");
-            emojis[88] = new Emoji("sick", "&#089", "Resources/Emojis/faces/156-sick.png");
-            emojis[89] = new Emoji("zombie", "&#090", "Resources/Emojis/faces/080-zombie.png");
-            emojis[90] = new Emoji("pain", "&#091", "Resources/Emojis/faces/081-pain.png");
-            emojis[91] = new Emoji("sweat", "&#092", "Resources/Emojis/faces/083-sweat.png");
-            emojis[92] = new Emoji("kiss", "&#093", "Resources/Emojis/faces/086-kiss-4.png");
-            emojis[93] = new Emoji("angel", "&#094", "Resources/Emojis/faces/089-angel-1.png");
-            emojis[94] = new Emoji("outrage", "&#095", "Resources/Emojis/faces/092-outrage-1.png");
-            emojis[95] = new Emoji("ugly", "&#096", "Resources/Emojis/faces/054-ugly-3.png");
-            emojis[96] = new Emoji("ugly", "&#097", "Resources/Emojis/faces/093-ugly-2.png");
-            emojis[97] = new Emoji("ugly", "&#098", "Resources/Emojis/faces/094-ugly-1.png");
-            emojis[98] = new Emoji("scared", "&#099", "Resources/Emojis/faces/095-scared.png");
-            emojis[99] = new Emoji("greed", "&#100", "Resources/Emojis/faces/099-greed-2.png");
-            emojis[100] = new Emoji("whistle", "&#101", "Resources/Emojis/faces/100-whistle.png");
-            emojis[101] = new Emoji("nerd", "&#102", "Resources/Emojis/faces/098-nerd-9.png");
-            emojis[102] = new Emoji("nerd", "&#103", "Resources/Emojis/faces/101-nerd-8.png");
-            emojis[103] = new Emoji("nerd", "&#104", "Resources/Emojis/faces/109-nerd-6.png");
-            emojis[104] = new Emoji("nerd", "&#105", "Resources/Emojis/faces/112-nerd-5.png");
-            emojis[105] = new Emoji("nerd", "&#106", "Resources/Emojis/faces/118-nerd-4.png");
-            emojis[106] = new Emoji("nerd", "&#107", "Resources/Emojis/faces/120-nerd-3.png");
-            emojis[107] = new Emoji("nerd", "&#108", "Resources/Emojis/faces/132-nerd-2.png");
-            emojis[108] = new Emoji("nerd", "&#109", "Resources/Emojis/faces/158-nerd-1.png");
-            emojis[109] = new Emoji("nerd", "&#110", "Resources/Emojis/faces/172-nerd.png");
-            emojis[110] = new Emoji("muted", "&#111", "Resources/Emojis/faces/102-muted-4.png");
-            emojis[111] = new Emoji("muted", "&#112", "Resources/Emojis/faces/111-muted-3.png");
-            emojis[112] = new Emoji("muted", "&#113", "Resources/Emojis/faces/124-muted-2.png");
-            emojis[113] = new Emoji("muted", "&#114", "Resources/Emojis/faces/161-muted-1.png");
-            emojis[114] = new Emoji("muted", "&#115", "Resources/Emojis/faces/168-muted.png");
-            emojis[115] = new Emoji("in love", "&#116", "Resources/Emojis/faces/074-in-love-10.png");
-            emojis[116] = new Emoji("in love", "&#117", "Resources/Emojis/faces/103-in-love-9.png");
-            emojis[117] = new Emoji("in love", "&#118", "Resources/Emojis/faces/104-in-love-8.png");
-            emojis[118] = new Emoji("in love", "&#119", "Resources/Emojis/faces/128-in-love-6.png");
-            emojis[119] = new Emoji("in love", "&#120", "Resources/Emojis/faces/141-in-love-5.png");
-            emojis[120] = new Emoji("in love", "&#121", "Resources/Emojis/faces/146-in-love-4.png");
-            emojis[121] = new Emoji("in love", "&#122", "Resources/Emojis/faces/173-in-love-3.png");
-            emojis[122] = new Emoji("in love", "&#123", "Resources/Emojis/faces/173-in-love-3.png");
-            emojis[123] = new Emoji("in love", "&#124", "Resources/Emojis/faces/193-in-love-2.png");
-            emojis[124] = new Emoji("in love", "&#125", "Resources/Emojis/faces/196-in-love-1.png");
-            emojis[125] = new Emoji("in love", "&#126", "Resources/Emojis/faces/197-in-love.png");
-            emojis[126] = new Emoji("kiss", "&#127", "Resources/Emojis/faces/113-kiss-2.png");
-            emojis[127] = new Emoji("kiss", "&#128", "Resources/Emojis/faces/105-kiss-3.png");
-            emojis[128] = new Emoji("greed", "&#129", "Resources/Emojis/faces/114-greed-1.png");
-            emojis[129] = new Emoji("greed", "&#130", "Resources/Emojis/faces/119-greed.png");
-            emojis[130] = new Emoji("pirate", "&#131", "Resources/Emojis/faces/115-pirate-1.png");
-            emojis[131] = new Emoji("music", "&#132", "Resources/Emojis/faces/116-music.png");
-            emojis[132] = new Emoji("confused", "&#133", "Resources/Emojis/faces/117-confused-2.png");
-            emojis[133] = new Emoji("confused", "&#134", "Resources/Emojis/faces/130-confused-1.png");
-            emojis[134] = new Emoji("cheering", "&#135", "Resources/Emojis/faces/122-cheering.png");
-            emojis[135] = new Emoji("graduated", "&#136", "Resources/Emojis/faces/126-graduated.png");
-            emojis[136] = new Emoji("birthday boy", "&#137", "Resources/Emojis/faces/133-birthday-boy.png");
-            emojis[137] = new Emoji("sleeping", "&#138", "Resources/Emojis/faces/142-sleeping.png");
-            emojis[138] = new Emoji("wink", "&#139", "Resources/Emojis/faces/145-wink.png");
-            emojis[139] = new Emoji("injury", "&#140", "Resources/Emojis/faces/153-injury.png");
-            emojis[140] = new Emoji("rich", "&#141", "Resources/Emojis/faces/155-rich-1.png");
-            emojis[141] = new Emoji("thinking", "&#142", "Resources/Emojis/faces/167-thinking-1.png");
-            emojis[142] = new Emoji("thinking", "&#143", "Resources/Emojis/faces/171-thinking.png");
-            emojis[143] = new Emoji("confused", "&#144", "Resources/Emojis/faces/169-confused.png");
-            emojis[144] = new Emoji("hypnotized", "&#145", "Resources/Emojis/faces/174-hypnotized.png");
-            emojis[145] = new Emoji("furious", "&#146", "Resources/Emojis/faces/181-furious.png");
-            emojis[146] = new Emoji("angry", "&#147", "Resources/Emojis/faces/186-angry-1.png");
-            emojis[147] = new Emoji("kiss", "&#148", "Resources/Emojis/faces/195-kiss-1.png");
-            emojis[148] = new Emoji("kiss", "&#149", "Resources/Emojis/faces/198-kiss.png");
-            emojis[149] = new Emoji("sleepy", "&#150", "Resources/Emojis/faces/200-sleepy.png");
-            emojiGroups[0] = new EmojiGroup("Resources/Emojis/faces/003-happy-17.png", EmojiType.Faces, emojis);
-
-            emojis = new Emoji[20];
-            emojis[0] = new Emoji("middle finger", "&#201", "Resources/Emojis/hands/162-middle-finger.png");
-            emojis[1] = new Emoji("salute", "&#202", "Resources/Emojis/hands/163-salute.png");
-            emojis[2] = new Emoji("strong", "&#203", "Resources/Emojis/hands/164-strong.png");
-            emojis[3] = new Emoji("clapping", "&#204", "Resources/Emojis/hands/165-clapping.png");
-            emojis[4] = new Emoji("pointing up", "&#205", "Resources/Emojis/hands/166-pointing-up.png");
-            emojis[5] = new Emoji("please", "&#206", "Resources/Emojis/hands/167-please.png");
-            emojis[6] = new Emoji("raise hand", "&#207", "Resources/Emojis/hands/169-raise-hand.png");
-            emojis[7] = new Emoji("pointing left", "&#208", "Resources/Emojis/hands/170-pointing-left.png");
-            emojis[8] = new Emoji("pointing right", "&#209", "Resources/Emojis/hands/171-pointing-right.png");
-            emojis[9] = new Emoji("tap", "&#210", "Resources/Emojis/hands/172-tap-1.png");
-            emojis[10] = new Emoji("tap", "&#211", "Resources/Emojis/hands/173-tap.png");
-            emojis[11] = new Emoji("hand", "&#212", "Resources/Emojis/hands/174-hand-1.png");
-            emojis[12] = new Emoji("hand", "&#213", "Resources/Emojis/hands/175-hand.png");
-            emojis[13] = new Emoji("waving hand", "&#214", "Resources/Emojis/hands/176-waving-hand.png");
-            emojis[14] = new Emoji("victory", "&#215", "Resources/Emojis/hands/177-victory.png");
-            emojis[15] = new Emoji("first", "&#216", "Resources/Emojis/hands/178-fist.png");
-            emojis[16] = new Emoji("punch", "&#217", "Resources/Emojis/hands/180-punch.png");
-            emojis[17] = new Emoji("ok", "&#218", "Resources/Emojis/hands/181-ok.png");
-            emojis[18] = new Emoji("dislike", "&#219", "Resources/Emojis/hands/182-dislike.png");
-            emojis[19] = new Emoji("like", "&#220", "Resources/Emojis/hands/183-like.png");
-            emojiGroups[1] = new EmojiGroup("Resources/Emojis/hands/175-hand.png", EmojiType.Hands, emojis);
-
-            emojis = new Emoji[14];
-            emojis[0] = new Emoji("kiss", "&#301", "Resources/Emojis/hearts/097-kiss-2.png");
-            emojis[1] = new Emoji("email", "&#302", "Resources/Emojis/hearts/098-email.png");
-            emojis[2] = new Emoji("cupid", "&#303", "Resources/Emojis/hearts/099-cupid.png");
-            emojis[3] = new Emoji("hearts", "&#304", "Resources/Emojis/hearts/100-heart-9.png");
-            emojis[4] = new Emoji("heart", "&#305", "Resources/Emojis/hearts/101-heart-8.png");
-            emojis[5] = new Emoji("hearts", "&#306", "Resources/Emojis/hearts/103-heart-7.png");
-            emojis[6] = new Emoji("heart", "&#307", "Resources/Emojis/hearts/104-heart-6.png");
-            emojis[7] = new Emoji("heart", "&#308", "Resources/Emojis/hearts/105-heart-5.png");
-            emojis[8] = new Emoji("broken heart", "&#309", "Resources/Emojis/hearts/106-broken-heart.png");
-            emojis[9] = new Emoji("red heart", "&#310", "Resources/Emojis/hearts/107-heart-4.png");
-            emojis[10] = new Emoji("green heart", "&#311", "Resources/Emojis/hearts/108-heart-3.png");
-            emojis[11] = new Emoji("violet heart", "&#312", "Resources/Emojis/hearts/109-heart-2.png");
-            emojis[12] = new Emoji("blue heart", "&#313", "Resources/Emojis/hearts/110-heart-1.png");
-            emojis[13] = new Emoji("yellow heart", "&#314", "Resources/Emojis/hearts/111-heart.png");
-            emojiGroups[2] = new EmojiGroup("Resources/Emojis/hearts/107-heart-4.png", EmojiType.Hearts, emojis);
-
-            emojis = new Emoji[165];
-            emojis[0] = new Emoji("dog", "&#400", "Resources/Emojis/nature/019-dog-1.png");
-            emojis[1] = new Emoji("dog", "&#401", "Resources/Emojis/nature/165-dog.png");
-            emojis[2] = new Emoji("cat", "&#402", "Resources/Emojis/nature/143-cat.png");
-            emojis[3] = new Emoji("cat", "&#403", "Resources/Emojis/nature/015-cat-1.png");
-            emojis[4] = new Emoji("plant", "&#404", "Resources/Emojis/nature/001-plant-1.png");
-            emojis[5] = new Emoji("koala", "&#405", "Resources/Emojis/nature/002-koala.png");
-            emojis[6] = new Emoji("chipmunk", "&#406", "Resources/Emojis/nature/003-chipmunk.png");
-            emojis[7] = new Emoji("rat", "&#407", "Resources/Emojis/nature/004-rat.png");
-            emojis[8] = new Emoji("mouse", "&#408", "Resources/Emojis/nature/005-mouse-1.png");
-            emojis[9] = new Emoji("rabbit", "&#409", "Resources/Emojis/nature/006-rabbit-1.png");
-            emojis[10] = new Emoji("rabbit", "&#410", "Resources/Emojis/nature/076-rabbit.png");
-            emojis[11] = new Emoji("dove", "&#411", "Resources/Emojis/nature/007-dove.png");
-            emojis[12] = new Emoji("turkey", "&#412", "Resources/Emojis/nature/008-turkey.png");
-            emojis[13] = new Emoji("panda", "&#413", "Resources/Emojis/nature/010-panda.png");
-            emojis[14] = new Emoji("tiger", "&#414", "Resources/Emojis/nature/050-tiger-1.png");
-            emojis[15] = new Emoji("tyrannosaurus rex", "&#415", "Resources/Emojis/nature/012-tyrannosaurus-rex.png");
-            emojis[16] = new Emoji("hen", "&#416", "Resources/Emojis/nature/013-hen-1.png");
-            emojis[17] = new Emoji("hen", "&#417", "Resources/Emojis/nature/139-hen.png");
-            emojis[18] = new Emoji("chicken", "&#418", "Resources/Emojis/nature/130-chicken-1.png");
-            emojis[19] = new Emoji("dinosaur", "&#419", "Resources/Emojis/nature/014-dinosaur.png");
-            emojis[20] = new Emoji("poodle", "&#420", "Resources/Emojis/nature/016-poodle.png");
-            emojis[21] = new Emoji("hedgehog", "&#421", "Resources/Emojis/nature/017-hedgehog.png");
-            emojis[22] = new Emoji("zebra", "&#422", "Resources/Emojis/nature/018-zebra.png");
-            emojis[23] = new Emoji("giraffe", "&#423", "Resources/Emojis/nature/020-giraffe.png");
-            emojis[24] = new Emoji("ewe", "&#424", "Resources/Emojis/nature/021-ewe.png");
-            emojis[25] = new Emoji("bee", "&#425", "Resources/Emojis/nature/109-bee.png");
-            emojis[26] = new Emoji("unicorn", "&#426", "Resources/Emojis/nature/111-unicorn.png");
-            emojis[27] = new Emoji("turtle", "&#427", "Resources/Emojis/nature/088-turtle.png");
-            emojis[28] = new Emoji("ram", "&#428", "Resources/Emojis/nature/023-ram.png");
-            emojis[29] = new Emoji("snail", "&#429", "Resources/Emojis/nature/103-snail.png");
-            emojis[30] = new Emoji("goat", "&#430", "Resources/Emojis/nature/025-goat.png");
-            emojis[31] = new Emoji("hamster", "&#431", "Resources/Emojis/nature/098-hamster.png");
-            emojis[32] = new Emoji("pig", "&#432", "Resources/Emojis/nature/026-pig-2.png");
-            emojis[33] = new Emoji("chicken", "&#433", "Resources/Emojis/nature/133-chicken.png");
-            emojis[34] = new Emoji("bird", "&#434", "Resources/Emojis/nature/135-bird.png");
-            emojis[35] = new Emoji("monkey", "&#435", "Resources/Emojis/nature/140-monkey-4.png");
-            emojis[36] = new Emoji("monkey", "&#436", "Resources/Emojis/nature/144-monkey-3.png");
-            emojis[37] = new Emoji("monkey", "&#437", "Resources/Emojis/nature/147-monkey-2.png");
-            emojis[38] = new Emoji("monkey", "&#438", "Resources/Emojis/nature/148-monkey-1.png");
-            emojis[39] = new Emoji("monkey", "&#439", "Resources/Emojis/nature/150-monkey.png");
-            emojis[40] = new Emoji("dragon", "&#440", "Resources/Emojis/nature/142-dragon.png");
-            emojis[41] = new Emoji("frog", "&#441", "Resources/Emojis/nature/153-frog.png");
-            emojis[42] = new Emoji("pig", "&#442", "Resources/Emojis/nature/155-pig-1.png");
-            emojis[43] = new Emoji("cow", "&#443", "Resources/Emojis/nature/159-cow.png");
-            emojis[44] = new Emoji("tiger", "&#444", "Resources/Emojis/nature/162-tiger.png");
-            emojis[45] = new Emoji("pig", "&#445", "Resources/Emojis/nature/157-pig.png");
-            emojis[46] = new Emoji("lion", "&#446", "Resources/Emojis/nature/161-lion.png");
-            emojis[47] = new Emoji("penguin", "&#447", "Resources/Emojis/nature/137-penguin.png");
-            emojis[48] = new Emoji("boar", "&#448", "Resources/Emojis/nature/115-boar.png");
-            emojis[49] = new Emoji("wolf", "&#449", "Resources/Emojis/nature/116-wolf.png");
-            emojis[50] = new Emoji("bat", "&#450", "Resources/Emojis/nature/119-bat.png");
-            emojis[51] = new Emoji("mouse", "&#451", "Resources/Emojis/nature/120-mouse.png");
-            emojis[52] = new Emoji("dragon", "&#452", "Resources/Emojis/nature/121-dragon-1.png");
-            emojis[53] = new Emoji("owl", "&#453", "Resources/Emojis/nature/122-owl.png");
-            emojis[54] = new Emoji("horse", "&#454", "Resources/Emojis/nature/029-horse-1.png");
-            emojis[55] = new Emoji("gorilla", "&#455", "Resources/Emojis/nature/030-gorilla.png");
-            emojis[56] = new Emoji("caterpillar", "&#456", "Resources/Emojis/nature/107-caterpillar.png");
-            emojis[57] = new Emoji("bear", "&#457", "Resources/Emojis/nature/033-bear.png");
-            emojis[58] = new Emoji("rhinoceros", "&#458", "Resources/Emojis/nature/035-rhinoceros.png");
-            emojis[59] = new Emoji("eagle", "&#459", "Resources/Emojis/nature/125-eagle.png");
-            emojis[60] = new Emoji("elephant", "&#460", "Resources/Emojis/nature/036-elephant.png");
-            emojis[61] = new Emoji("butterfly", "&#461", "Resources/Emojis/nature/105-butterfly.png");
-            emojis[62] = new Emoji("camel", "&#462", "Resources/Emojis/nature/039-camel-1.png");
-            emojis[63] = new Emoji("camel", "&#463", "Resources/Emojis/nature/041-camel.png");
-            emojis[64] = new Emoji("lizard", "&#464", "Resources/Emojis/nature/085-lizard.png");
-            emojis[65] = new Emoji("deer", "&#465", "Resources/Emojis/nature/043-deer.png");
-            emojis[66] = new Emoji("buffalo", "&#466", "Resources/Emojis/nature/048-buffalo.png");
-            emojis[67] = new Emoji("duck", "&#467", "Resources/Emojis/nature/127-duck.png");
-            emojis[68] = new Emoji("chicken", "&#468", "Resources/Emojis/nature/128-chicken-2.png");
-            emojis[69] = new Emoji("fox", "&#469", "Resources/Emojis/nature/054-fox.png");
-            emojis[70] = new Emoji("cow", "&#470", "Resources/Emojis/nature/045-cow-1.png");
-            emojis[71] = new Emoji("ox", "&#471", "Resources/Emojis/nature/046-ox.png");
-            emojis[72] = new Emoji("crocodile", "&#472", "Resources/Emojis/nature/056-crocodile.png");
-            emojis[73] = new Emoji("horse", "&#473", "Resources/Emojis/nature/113-horse.png");
-            emojis[74] = new Emoji("leopard", "&#474", "Resources/Emojis/nature/052-leopard.png");
-            emojis[75] = new Emoji("snake", "&#475", "Resources/Emojis/nature/086-snake.png");
-            emojis[76] = new Emoji("fish", "&#476", "Resources/Emojis/nature/069-fish-1.png");
-            emojis[77] = new Emoji("fish", "&#477", "Resources/Emojis/nature/070-fish.png");
-            emojis[78] = new Emoji("whale", "&#478", "Resources/Emojis/nature/058-whale-1.png");
-            emojis[79] = new Emoji("whale", "&#479", "Resources/Emojis/nature/061-whale.png");
-            emojis[80] = new Emoji("shark", "&#480", "Resources/Emojis/nature/063-shark.png");
-            emojis[81] = new Emoji("dolphin", "&#481", "Resources/Emojis/nature/065-dolphin.png");
-            emojis[82] = new Emoji("blowfish", "&#482", "Resources/Emojis/nature/067-blowfish.png");
-            emojis[83] = new Emoji("shrimp", "&#483", "Resources/Emojis/nature/072-shrimp.png");
-            emojis[84] = new Emoji("octopus", "&#484", "Resources/Emojis/nature/074-octopus.png");
-            emojis[85] = new Emoji("squid", "&#485", "Resources/Emojis/nature/078-squid.png");
-            emojis[86] = new Emoji("crab", "&#486", "Resources/Emojis/nature/081-crab.png");
-            emojis[87] = new Emoji("sea snail", "&#487", "Resources/Emojis/nature/100-sea-snail.png");
-            emojis[88] = new Emoji("ant", "&#488", "Resources/Emojis/nature/095-ant.png");
-            emojis[89] = new Emoji("ladybug", "&#489", "Resources/Emojis/nature/096-ladybug.png");
-            emojis[90] = new Emoji("scorpion", "&#490", "Resources/Emojis/nature/082-scorpion.png");
-            emojis[91] = new Emoji("spider", "&#491", "Resources/Emojis/nature/092-spider.png");
-            emojis[92] = new Emoji("cricket", "&#492", "Resources/Emojis/nature/009-cricket.png");
-            emojis[93] = new Emoji("sun", "&#493", "Resources/Emojis/nature/068-sun-1.png");
-            emojis[94] = new Emoji("sun", "&#494", "Resources/Emojis/nature/094-sun.png");
-            emojis[95] = new Emoji("cloudy day", "&#495", "Resources/Emojis/nature/062-cloudy-day.png");
-            emojis[96] = new Emoji("cloudy", "&#496", "Resources/Emojis/nature/066-cloudy.png");
-            emojis[97] = new Emoji("cloudy", "&#497", "Resources/Emojis/nature/064-cloudy-1.png");
-            emojis[98] = new Emoji("cloudy", "&#498", "Resources/Emojis/nature/060-cloudy-2.png");
-            emojis[99] = new Emoji("rain", "&#499", "Resources/Emojis/nature/053-rain.png");
-            emojis[100] = new Emoji("rain", "&#500", "Resources/Emojis/nature/022-rain-1.png");
-            emojis[101] = new Emoji("drop", "&#501", "Resources/Emojis/nature/027-drop.png");
-            emojis[102] = new Emoji("drops", "&#502", "Resources/Emojis/nature/024-drops.png");
-            emojis[103] = new Emoji("tornado", "&#503", "Resources/Emojis/nature/034-tornado.png");
-            emojis[104] = new Emoji("wind", "&#504", "Resources/Emojis/nature/037-wind-1.png");
-            emojis[105] = new Emoji("wind", "&#505", "Resources/Emojis/nature/038-wind.png");
-            emojis[106] = new Emoji("storm", "&#506", "Resources/Emojis/nature/049-storm-1.png");
-            emojis[107] = new Emoji("storm", "&#507", "Resources/Emojis/nature/051-storm.png");
-            emojis[108] = new Emoji("pine", "&#508", "Resources/Emojis/nature/055-pine.png");
-            emojis[109] = new Emoji("snowflake", "&#509", "Resources/Emojis/nature/040-snowflake.png");
-            emojis[110] = new Emoji("cloud", "&#510", "Resources/Emojis/nature/057-cloud.png");
-            emojis[111] = new Emoji("snowing", "&#511", "Resources/Emojis/nature/047-snowing.png");
-            emojis[112] = new Emoji("fog", "&#512", "Resources/Emojis/nature/031-fog.png");
-            emojis[113] = new Emoji("sparkles", "&#513", "Resources/Emojis/nature/080-sparkles.png");
-            emojis[114] = new Emoji("rainbow", "&#514", "Resources/Emojis/nature/059-rainbow.png");
-            emojis[115] = new Emoji("lightning", "&#515", "Resources/Emojis/nature/079-lightning.png");
-            emojis[116] = new Emoji("snowman", "&#516", "Resources/Emojis/nature/044-snowman.png");
-            emojis[117] = new Emoji("snowman", "&#517", "Resources/Emojis/nature/042-snowman-1.png");
-            emojis[118] = new Emoji("wave", "&#518", "Resources/Emojis/nature/028-wave.png");
-            emojis[119] = new Emoji("shooting star", "&#519", "Resources/Emojis/nature/087-shooting-star.png");
-            emojis[120] = new Emoji("star", "&#520", "Resources/Emojis/nature/083-star-1.png");
-            emojis[121] = new Emoji("star", "&#521", "Resources/Emojis/nature/084-star.png");
-            emojis[122] = new Emoji("earth globe", "&#522", "Resources/Emojis/nature/118-earth-globe-2.png");
-            emojis[123] = new Emoji("earth globe", "&#523", "Resources/Emojis/nature/123-earth-globe-1.png");
-            emojis[124] = new Emoji("earth globe", "&#524", "Resources/Emojis/nature/124-earth-globe.png");
-            emojis[125] = new Emoji("full moon", "&#525", "Resources/Emojis/nature/117-full-moon.png");
-            emojis[126] = new Emoji("half moon", "&#526", "Resources/Emojis/nature/089-half-moon-2.png");
-            emojis[127] = new Emoji("half moon", "&#527", "Resources/Emojis/nature/091-half-moon-1.png");
-            emojis[128] = new Emoji("half moon", "&#528", "Resources/Emojis/nature/093-half-moon.png");
-            emojis[129] = new Emoji("moon", "&#529", "Resources/Emojis/nature/097-moon-8.png");
-            emojis[130] = new Emoji("moon", "&#530", "Resources/Emojis/nature/101-moon-7.png");
-            emojis[131] = new Emoji("moon", "&#531", "Resources/Emojis/nature/102-moon-6.png");
-            emojis[132] = new Emoji("moon", "&#532", "Resources/Emojis/nature/104-moon-5.png");
-            emojis[133] = new Emoji("moon", "&#533", "Resources/Emojis/nature/106-moon-4.png");
-            emojis[134] = new Emoji("moon", "&#534", "Resources/Emojis/nature/108-moon-3.png");
-            emojis[135] = new Emoji("moon", "&#535", "Resources/Emojis/nature/110-moon-2.png");
-            emojis[136] = new Emoji("moon", "&#536", "Resources/Emojis/nature/112-moon-1.png");
-            emojis[137] = new Emoji("moon", "&#537", "Resources/Emojis/nature/114-moon.png");
-            emojis[138] = new Emoji("fire", "&#538", "Resources/Emojis/nature/075-fire.png");
-            emojis[139] = new Emoji("comet", "&#539", "Resources/Emojis/nature/071-comet.png");
-            emojis[140] = new Emoji("explosion", "&#540", "Resources/Emojis/nature/073-explosion.png");
-            emojis[141] = new Emoji("spider web", "&#541", "Resources/Emojis/nature/090-spider-web.png");
-            emojis[142] = new Emoji("cactus", "&#542", "Resources/Emojis/nature/099-cactus.png");
-            emojis[143] = new Emoji("tree", "&#543", "Resources/Emojis/nature/032-tree.png");
-            emojis[144] = new Emoji("plam tree", "&#544", "Resources/Emojis/nature/011-palm-tree.png");
-            emojis[145] = new Emoji("christmas tree", "&#545", "Resources/Emojis/nature/077-christmas-tree.png");
-            emojis[146] = new Emoji("hibiscus", "&#546", "Resources/Emojis/nature/126-hibiscus.png");
-            emojis[147] = new Emoji("cherry blossom", "&#547", "Resources/Emojis/nature/129-cherry-blossom.png");
-            emojis[148] = new Emoji("flower", "&#548", "Resources/Emojis/nature/131-flower-1.png");
-            emojis[149] = new Emoji("sunflower", "&#549", "Resources/Emojis/nature/132-sunflower.png");
-            emojis[150] = new Emoji("flower", "&#550", "Resources/Emojis/nature/134-flower.png");
-            emojis[151] = new Emoji("rose", "&#551", "Resources/Emojis/nature/136-rose.png");
-            emojis[152] = new Emoji("tulip", "&#552", "Resources/Emojis/nature/138-tulip.png");
-            emojis[153] = new Emoji("bouquet", "&#553", "Resources/Emojis/nature/141-bouquet.png");
-            emojis[154] = new Emoji("rice", "&#554", "Resources/Emojis/nature/145-rice.png");
-            emojis[155] = new Emoji("mushroom", "&#555", "Resources/Emojis/nature/146-mushroom.png");
-            emojis[156] = new Emoji("maple leaf", "&#556", "Resources/Emojis/nature/149-maple-leaf.png");
-            emojis[157] = new Emoji("leaves", "&#557", "Resources/Emojis/nature/151-leaves-1.png");
-            emojis[158] = new Emoji("leaves", "&#558", "Resources/Emojis/nature/152-leaves.png");
-            emojis[159] = new Emoji("bamboo", "&#559", "Resources/Emojis/nature/154-bamboo.png");
-            emojis[160] = new Emoji("plant", "&#560", "Resources/Emojis/nature/156-plant.png");
-            emojis[161] = new Emoji("clover", "&#561", "Resources/Emojis/nature/158-clover.png");
-            emojis[162] = new Emoji("shamrock", "&#562", "Resources/Emojis/nature/160-shamrock.png");
-            emojis[163] = new Emoji("herb", "&#563", "Resources/Emojis/nature/163-herb.png");
-            emojis[164] = new Emoji("pawprints", "&#564", "Resources/Emojis/nature/164-pawprints.png");
-            emojiGroups[3] = new EmojiGroup("Resources/Emojis/nature/010-panda.png", EmojiType.Nature, emojis);
-
-            emojis = new Emoji[198];
-            emojis[0] = new Emoji("balloon", "&#600", "Resources/Emojis/objects/001-balloon.png");
-            emojis[1] = new Emoji("gift", "&#601", "Resources/Emojis/objects/002-gift.png");
-            emojis[2] = new Emoji("shopping cart", "&#602", "Resources/Emojis/objects/003-shopping-cart.png");
-            emojis[3] = new Emoji("shopping bag", "&#603", "Resources/Emojis/objects/004-shopping-bag.png");
-            emojis[4] = new Emoji("frame", "&#604", "Resources/Emojis/objects/005-frame.png");
-            emojis[5] = new Emoji("bed", "&#605", "Resources/Emojis/objects/006-bed-1.png");
-            emojis[6] = new Emoji("bed", "&#606", "Resources/Emojis/objects/007-bed.png");
-            emojis[7] = new Emoji("sofa", "&#607", "Resources/Emojis/objects/008-sofa.png");
-            emojis[8] = new Emoji("door", "&#608", "Resources/Emojis/objects/009-door.png");
-            emojis[9] = new Emoji("key", "&#609", "Resources/Emojis/objects/010-key-1.png");
-            emojis[10] = new Emoji("email", "&#610", "Resources/Emojis/objects/011-email-1.png");
-            emojis[11] = new Emoji("controller", "&#611", "Resources/Emojis/objects/012-controller.png");
-            emojis[12] = new Emoji("key", "&#612", "Resources/Emojis/objects/013-key.png");
-            emojis[13] = new Emoji("bell", "&#613", "Resources/Emojis/objects/014-bell.png");
-            emojis[14] = new Emoji("bathtub", "&#614", "Resources/Emojis/objects/015-bathtub-1.png");
-            emojis[15] = new Emoji("bathtub", "&#615", "Resources/Emojis/objects/016-bathtub.png");
-            emojis[16] = new Emoji("shower", "&#616", "Resources/Emojis/objects/017-shower.png");
-            emojis[17] = new Emoji("faucet", "&#617", "Resources/Emojis/objects/018-faucet.png");
-            emojis[18] = new Emoji("toilet", "&#618", "Resources/Emojis/objects/019-toilet.png");
-            emojis[19] = new Emoji("thermometer", "&#619", "Resources/Emojis/objects/020-thermometer.png");
-            emojis[20] = new Emoji("syringe", "&#620", "Resources/Emojis/objects/021-syringe.png");
-            emojis[21] = new Emoji("pill", "&#621", "Resources/Emojis/objects/022-pill.png");
-            emojis[22] = new Emoji("mouse", "&#622", "Resources/Emojis/objects/023-mouse.png");
-            emojis[23] = new Emoji("letter", "&#623", "Resources/Emojis/objects/024-letter-1.png");
-            emojis[24] = new Emoji("hole", "&#624", "Resources/Emojis/objects/025-hole.png");
-            emojis[25] = new Emoji("microscope", "&#625", "Resources/Emojis/objects/026-microscope.png");
-            emojis[26] = new Emoji("telescope", "&#626", "Resources/Emojis/objects/027-telescope.png");
-            emojis[27] = new Emoji("flask", "&#627", "Resources/Emojis/objects/028-flask.png");
-            emojis[28] = new Emoji("barber shop", "&#628", "Resources/Emojis/objects/029-barber-shop.png");
-            emojis[29] = new Emoji("beads", "&#628", "Resources/Emojis/objects/030-beads.png");
-            emojis[30] = new Emoji("fog", "&#630", "Resources/Emojis/objects/031-fog.png");
-            emojis[31] = new Emoji("magic ball", "&#631", "Resources/Emojis/objects/031-magic-ball.png");
-            emojis[32] = new Emoji("vase", "&#632", "Resources/Emojis/objects/032-vase-1.png");
-            emojis[33] = new Emoji("book", "&#633", "Resources/Emojis/objects/033-book-3.png");
-            emojis[34] = new Emoji("vase", "&#634", "Resources/Emojis/objects/034-vase.png");
-            emojis[35] = new Emoji("book", "&#635", "Resources/Emojis/objects/035-book-2.png");
-            emojis[36] = new Emoji("coffin", "&#636", "Resources/Emojis/objects/036-coffin.png");
-            emojis[37] = new Emoji("book", "&#637", "Resources/Emojis/objects/037-book-1.png");
-            emojis[38] = new Emoji("printer", "&#638", "Resources/Emojis/objects/038-printer.png");
-            emojis[39] = new Emoji("letter", "&#639", "Resources/Emojis/objects/039-letter.png");
-            emojis[40] = new Emoji("cigarette", "&#640", "Resources/Emojis/objects/040-cigarette.png");
-            emojis[41] = new Emoji("book", "&#641", "Resources/Emojis/objects/041-book.png");
-            emojis[42] = new Emoji("shield", "&#642", "Resources/Emojis/objects/042-shield.png");
-            emojis[43] = new Emoji("swords", "&#643", "Resources/Emojis/objects/044-swords.png");
-            emojis[44] = new Emoji("unlocked", "&#644", "Resources/Emojis/objects/045-unlocked.png");
-            emojis[45] = new Emoji("sword", "&#645", "Resources/Emojis/objects/046-sword.png");
-            emojis[46] = new Emoji("padlock", "&#646", "Resources/Emojis/objects/047-padlock-2.png");
-            emojis[47] = new Emoji("padlock", "&#647", "Resources/Emojis/objects/048-padlock-1.png");
-            emojis[48] = new Emoji("knife", "&#648", "Resources/Emojis/objects/049-knife.png");
-            emojis[49] = new Emoji("padlock", "&#649", "Resources/Emojis/objects/050-padlock.png");
-            emojis[50] = new Emoji("bomb", "&#650", "Resources/Emojis/objects/051-bomb.png");
-            emojis[51] = new Emoji("loupe", "&#651", "Resources/Emojis/objects/052-loupe.png");
-            emojis[52] = new Emoji("gun", "&#652", "Resources/Emojis/objects/053-gun.png");
-            emojis[53] = new Emoji("pencil", "&#653", "Resources/Emojis/objects/054-pencil.png");
-            emojis[54] = new Emoji("chain", "&#654", "Resources/Emojis/objects/055-chain.png");
-            emojis[55] = new Emoji("gear", "&#655", "Resources/Emojis/objects/056-gear.png");
-            emojis[56] = new Emoji("file", "&#656", "Resources/Emojis/objects/057-file-3.png");
-            emojis[57] = new Emoji("highlighter", "&#657", "Resources/Emojis/objects/058-highlighter.png");
-            emojis[58] = new Emoji("bolt", "&#658", "Resources/Emojis/objects/059-bolt.png");
-            emojis[59] = new Emoji("monitor", "&#659", "Resources/Emojis/objects/060-monitor.png");
-            emojis[60] = new Emoji("lantern", "&#660", "Resources/Emojis/objects/061-lantern-1.png");
-            emojis[61] = new Emoji("pick", "&#661", "Resources/Emojis/objects/062-pick.png");
-            emojis[62] = new Emoji("paint brush", "&#662", "Resources/Emojis/objects/063-paint-brush.png");
-            emojis[63] = new Emoji("repair tools", "&#663", "Resources/Emojis/objects/064-repair-tools.png");
-            emojis[64] = new Emoji("pen", "&#664", "Resources/Emojis/objects/065-pen-1.png");
-            emojis[65] = new Emoji("pen", "&#665", "Resources/Emojis/objects/066-pen.png");
-            emojis[66] = new Emoji("hammers", "&#666", "Resources/Emojis/objects/067-hammers.png");
-            emojis[67] = new Emoji("scissors", "&#667", "Resources/Emojis/objects/068-scissors.png");
-            emojis[68] = new Emoji("hammer", "&#668", "Resources/Emojis/objects/069-hammer.png");
-            emojis[69] = new Emoji("wrench", "&#669", "Resources/Emojis/objects/070-wrench.png");
-            emojis[70] = new Emoji("pin", "&#670", "Resources/Emojis/objects/071-pin.png");
-            emojis[71] = new Emoji("push pin", "&#671", "Resources/Emojis/objects/072-push-pin.png");
-            emojis[72] = new Emoji("libra", "&#672", "Resources/Emojis/objects/073-libra.png");
-            emojis[73] = new Emoji("ruler", "&#673", "Resources/Emojis/objects/074-ruler.png");
-            emojis[74] = new Emoji("diamond", "&#674", "Resources/Emojis/objects/075-diamond.png");
-            emojis[75] = new Emoji("set square", "&#675", "Resources/Emojis/objects/076-set-square.png");
-            emojis[76] = new Emoji("credit card", "&#676", "Resources/Emojis/objects/077-credit-card.png");
-            emojis[77] = new Emoji("money bag", "&#677", "Resources/Emojis/objects/078-money-bag.png");
-            emojis[78] = new Emoji("paperclip", "&#678", "Resources/Emojis/objects/079-paperclip-1.png");
-            emojis[79] = new Emoji("pound sterling", "&#679", "Resources/Emojis/objects/080-pound-sterling.png");
-            emojis[80] = new Emoji("paperclip", "&#680", "Resources/Emojis/objects/081-paperclip.png");
-            emojis[81] = new Emoji("lantern", "&#681", "Resources/Emojis/objects/082-lantern.png");
-            emojis[82] = new Emoji("keyboard", "&#682", "Resources/Emojis/objects/083-keyboard.png");
-            emojis[83] = new Emoji("money", "&#683", "Resources/Emojis/objects/084-money-2.png");
-            emojis[84] = new Emoji("link", "&#684", "Resources/Emojis/objects/085-link.png");
-            emojis[85] = new Emoji("tag", "&#685", "Resources/Emojis/objects/086-tag-1.png");
-            emojis[86] = new Emoji("shooting star", "&#686", "Resources/Emojis/objects/087-shooting-star.png");
-            emojis[87] = new Emoji("yen", "&#687", "Resources/Emojis/objects/087-yen.png");
-            emojis[88] = new Emoji("money", "&#688", "Resources/Emojis/objects/088-money-1.png");
-            emojis[89] = new Emoji("half moon", "&#689", "Resources/Emojis/objects/089-half-moon-2.png");
-            emojis[90] = new Emoji("open book", "&#690", "Resources/Emojis/objects/089-open-book.png");
-            emojis[91] = new Emoji("money", "&#691", "Resources/Emojis/objects/090-money.png");
-            emojis[92] = new Emoji("spider web", "&#692", "Resources/Emojis/objects/090-spider-web.png");
-            emojis[93] = new Emoji("books", "&#693", "Resources/Emojis/objects/091-books.png");
-            emojis[94] = new Emoji("notebook", "&#694", "Resources/Emojis/objects/092-notebook-2.png");
-            emojis[95] = new Emoji("barrel", "&#695", "Resources/Emojis/objects/093-barrel.png");
-            emojis[96] = new Emoji("trash", "&#696", "Resources/Emojis/objects/094-trash.png");
-            emojis[97] = new Emoji("diamond", "&#697", "Resources/Emojis/objects/095-diamond.png");
-            emojis[98] = new Emoji("notebook", "&#698", "Resources/Emojis/objects/095-notebook-1.png");
-            emojis[99] = new Emoji("engagement ring", "&#699", "Resources/Emojis/objects/096-engagement-ring.png");
-            emojis[100] = new Emoji("notebook", "&#700", "Resources/Emojis/objects/096-notebook.png");
-            emojis[101] = new Emoji("candle", "&#701", "Resources/Emojis/objects/097-candle.png");
-            emojis[102] = new Emoji("newspaper", "&#702", "Resources/Emojis/objects/098-newspaper-1.png");
-            emojis[103] = new Emoji("cactus", "&#703", "Resources/Emojis/objects/099-cactus.png");
-            emojis[104] = new Emoji("flashlight", "&#704", "Resources/Emojis/objects/099-flashlight.png");
-            emojis[105] = new Emoji("newspaper", "&#705", "Resources/Emojis/objects/100-newspaper.png");
-            emojis[106] = new Emoji("sea snail", "&#706", "Resources/Emojis/objects/100-sea-snail.png");
-            emojis[107] = new Emoji("idea", "&#707", "Resources/Emojis/objects/101-idea.png");
-            emojis[108] = new Emoji("folder", "&#708", "Resources/Emojis/objects/102-folder-2.png");
-            emojis[109] = new Emoji("plug", "&#709", "Resources/Emojis/objects/103-plug.png");
-            emojis[110] = new Emoji("geisha", "&#710", "Resources/Emojis/objects/104-geisha.png");
-            emojis[111] = new Emoji("butterfly", "&#711", "Resources/Emojis/objects/105-butterfly.png");
-            emojis[112] = new Emoji("laptop", "&#712", "Resources/Emojis/objects/105-laptop.png");
-            emojis[113] = new Emoji("folder", "&#713", "Resources/Emojis/objects/106-folder-1.png");
-            emojis[114] = new Emoji("battery", "&#714", "Resources/Emojis/objects/107-battery.png");
-            emojis[115] = new Emoji("satellite dish", "&#715", "Resources/Emojis/objects/108-satellite-dish.png");
-            emojis[116] = new Emoji("folder", "&#716", "Resources/Emojis/objects/109-folder.png");
-            emojis[117] = new Emoji("clipboard", "&#717", "Resources/Emojis/objects/110-clipboard.png");
-            emojis[118] = new Emoji("hourglass", "&#718", "Resources/Emojis/objects/111-hourglass-1.png");
-            emojis[119] = new Emoji("hourglass", "&#719", "Resources/Emojis/objects/112-hourglass.png");
-            emojis[120] = new Emoji("lipstick", "&#720", "Resources/Emojis/objects/112-lipstick.png");
-            emojis[121] = new Emoji("archive", "&#721", "Resources/Emojis/objects/113-archive.png");
-            emojis[122] = new Emoji("clock", "&#722", "Resources/Emojis/objects/114-clock.png");
-            emojis[123] = new Emoji("umbrella", "&#723", "Resources/Emojis/objects/114-umbrella.png");
-            emojis[124] = new Emoji("box", "&#724", "Resources/Emojis/objects/115-box-1.png");
-            emojis[125] = new Emoji("ribbon", "&#725", "Resources/Emojis/objects/115-ribbon.png");
-            emojis[126] = new Emoji("alarm clock", "&#726", "Resources/Emojis/objects/116-alarm-clock.png");
-            emojis[127] = new Emoji("sunglasses", "&#727", "Resources/Emojis/objects/116-sunglasses.png");
-            emojis[128] = new Emoji("box", "&#728", "Resources/Emojis/objects/117-box.png");
-            emojis[129] = new Emoji("purse", "&#729", "Resources/Emojis/objects/117-purse.png");
-            emojis[130] = new Emoji("clutch", "&#730", "Resources/Emojis/objects/118-clutch.png");
-            emojis[131] = new Emoji("stopwatch", "&#731", "Resources/Emojis/objects/118-stopwatch-1.png");
-            emojis[132] = new Emoji("calendar", "&#732", "Resources/Emojis/objects/119-calendar-4.png");
-            emojis[133] = new Emoji("handbag", "&#733", "Resources/Emojis/objects/119-handbag.png");
-            emojis[134] = new Emoji("briefcase", "&#734", "Resources/Emojis/objects/120-briefcase.png");
-            emojis[135] = new Emoji("stopwatch", "&#735", "Resources/Emojis/objects/120-stopwatch.png");
-            emojis[136] = new Emoji("bikini", "&#736", "Resources/Emojis/objects/121-bikini.png");
-            emojis[137] = new Emoji("calendar", "&#737", "Resources/Emojis/objects/121-calendar-3.png");
-            emojis[138] = new Emoji("remote control", "&#738", "Resources/Emojis/objects/122-remote-control-1.png");
-            emojis[139] = new Emoji("calendar", "&#739", "Resources/Emojis/objects/123-calendar-2.png");
-            emojis[140] = new Emoji("remote control", "&#740", "Resources/Emojis/objects/124-remote-control.png");
-            emojis[141] = new Emoji("calendar", "&#741", "Resources/Emojis/objects/125-calendar-1.png");
-            emojis[142] = new Emoji("smartphone", "&#742", "Resources/Emojis/objects/126-smartphone-1.png");
-            emojis[143] = new Emoji("confetti", "&#743", "Resources/Emojis/objects/127-confetti-1.png");
-            emojis[144] = new Emoji("shirt", "&#744", "Resources/Emojis/objects/127-shirt-1.png");
-            emojis[145] = new Emoji("microphone", "&#745", "Resources/Emojis/objects/128-microphone.png");
-            emojis[146] = new Emoji("shirt", "&#746", "Resources/Emojis/objects/128-shirt.png");
-            emojis[147] = new Emoji("calendar", "&#747", "Resources/Emojis/objects/129-calendar.png");
-            emojis[148] = new Emoji("polo shirt", "&#748", "Resources/Emojis/objects/129-polo-shirt.png");
-            emojis[149] = new Emoji("boot", "&#749", "Resources/Emojis/objects/130-boot.png");
-            emojis[150] = new Emoji("radio", "&#750", "Resources/Emojis/objects/130-radio.png");
-            emojis[151] = new Emoji("high heel", "&#751", "Resources/Emojis/objects/131-high-heel.png");
-            emojis[152] = new Emoji("loss", "&#752", "Resources/Emojis/objects/131-loss.png");
-            emojis[153] = new Emoji("sandal", "&#753", "Resources/Emojis/objects/132-sandal.png");
-            emojis[154] = new Emoji("television", "&#754", "Resources/Emojis/objects/132-television.png");
-            emojis[155] = new Emoji("bar chart", "&#755", "Resources/Emojis/objects/133-bar-chart-1.png");
-            emojis[156] = new Emoji("shoe", "&#756", "Resources/Emojis/objects/133-shoe.png");
-            emojis[157] = new Emoji("bar chart", "&#757", "Resources/Emojis/objects/134-bar-chart.png");
-            emojis[158] = new Emoji("sneakers", "&#758", "Resources/Emojis/objects/134-sneakers.png");
-            emojis[159] = new Emoji("fax", "&#759", "Resources/Emojis/objects/135-fax.png");
-            emojis[160] = new Emoji("pager", "&#760", "Resources/Emojis/objects/136-pager.png");
-            emojis[161] = new Emoji("crown", "&#761", "Resources/Emojis/objects/137-crown.png");
-            emojis[162] = new Emoji("file", "&#762", "Resources/Emojis/objects/137-file-2.png");
-            emojis[163] = new Emoji("telephone", "&#763", "Resources/Emojis/objects/138-telephone-1.png");
-            emojis[164] = new Emoji("file", "&#764", "Resources/Emojis/objects/139-file-1.png");
-            emojis[165] = new Emoji("telephone", "&#765", "Resources/Emojis/objects/140-telephone.png");
-            emojis[166] = new Emoji("file", "&#766", "Resources/Emojis/objects/141-file.png");
-            emojis[167] = new Emoji("scroll", "&#767", "Resources/Emojis/objects/142-scroll.png");
-            emojis[168] = new Emoji("film", "&#768", "Resources/Emojis/objects/143-film.png");
-            emojis[169] = new Emoji("video camera", "&#769", "Resources/Emojis/objects/144-video-camera-2.png");
-            emojis[170] = new Emoji("horn", "&#770", "Resources/Emojis/objects/145-horn.png");
-            emojis[171] = new Emoji("video camera", "&#771", "Resources/Emojis/objects/146-video-camera-1.png");
-            emojis[172] = new Emoji("mailbox", "&#772", "Resources/Emojis/objects/147-mailbox-3.png");
-            emojis[173] = new Emoji("smartphone", "&#773", "Resources/Emojis/objects/148-smartphone.png");
-            emojis[174] = new Emoji("confetti", "&#774", "Resources/Emojis/objects/149-confetti.png");
-            emojis[175] = new Emoji("video camera", "&#775", "Resources/Emojis/objects/150-video-camera.png");
-            emojis[176] = new Emoji("mailbox", "&#776", "Resources/Emojis/objects/151-mailbox-2.png");
-            emojis[177] = new Emoji("mailbox", "&#777", "Resources/Emojis/objects/152-mailbox-1.png");
-            emojis[178] = new Emoji("photo camera", "&#778", "Resources/Emojis/objects/153-photo-camera-1.png");
-            emojis[179] = new Emoji("mailbox", "&#779", "Resources/Emojis/objects/154-mailbox.png");
-            emojis[180] = new Emoji("photo camera", "&#780", "Resources/Emojis/objects/155-photo-camera.png");
-            emojis[181] = new Emoji("vhs", "&#781", "Resources/Emojis/objects/156-vhs.png");
-            emojis[182] = new Emoji("mail box", "&#782", "Resources/Emojis/objects/157-mail-box.png");
-            emojis[183] = new Emoji("tag", "&#783", "Resources/Emojis/objects/158-tag.png");
-            emojis[184] = new Emoji("compact disk", "&#784", "Resources/Emojis/objects/159-compact-disc-1.png");
-            emojis[185] = new Emoji("compact disk", "&#785", "Resources/Emojis/objects/160-compact-disc.png");
-            emojis[186] = new Emoji("package", "&#786", "Resources/Emojis/objects/161-package.png");
-            emojis[187] = new Emoji("floppy disk", "&#787", "Resources/Emojis/objects/162-floppy-disk.png");
-            emojis[188] = new Emoji("outbox", "&#788", "Resources/Emojis/objects/163-outbox.png");
-            emojis[189] = new Emoji("hard disc", "&#789", "Resources/Emojis/objects/164-hard-disk.png");
-            emojis[190] = new Emoji("inbox", "&#790", "Resources/Emojis/objects/165-inbox.png");
-            emojis[191] = new Emoji("vise", "&#791", "Resources/Emojis/objects/166-vise.png");
-            emojis[192] = new Emoji("love letter", "&#792", "Resources/Emojis/objects/167-love-letter.png");
-            emojis[193] = new Emoji("koinobori", "&#793", "Resources/Emojis/objects/168-koinobori.png");
-            emojis[194] = new Emoji("email", "&#794", "Resources/Emojis/objects/169-email.png");
-            emojis[195] = new Emoji("joystick", "&#795", "Resources/Emojis/objects/170-joystick.png");
-            emojis[196] = new Emoji("watch", "&#796", "Resources/Emojis/objects/171-watch.png");
-            emojis[197] = new Emoji("bow", "&#797", "Resources/Emojis/objects/172-bow.png");
-            emojiGroups[4] = new EmojiGroup("Resources/Emojis/objects/001-balloon.png", EmojiType.Objects, emojis);
-
-            emojis = new Emoji[160];
-            emojis[0] = new Emoji("mauritius", "&#800", "Resources/Emojis/flags/001-mauritius.png");
-            emojis[1] = new Emoji("cyprus", "&#801", "Resources/Emojis/flags/002-cyprus.png");
-            emojis[2] = new Emoji("austria", "&#802", "Resources/Emojis/flags/003-austria.png");
-            emojis[3] = new Emoji("oman", "&#803", "Resources/Emojis/flags/004-oman.png");
-            emojis[4] = new Emoji("ethiopia", "&#804", "Resources/Emojis/flags/005-ethiopia.png");
-            emojis[5] = new Emoji("tanzania", "&#805", "Resources/Emojis/flags/006-tanzania.png");
-            emojis[6] = new Emoji("nicaragua", "&#806", "Resources/Emojis/flags/007-nicaragua.png");
-            emojis[7] = new Emoji("estonia", "&#807", "Resources/Emojis/flags/008-estonia.png");
-            emojis[8] = new Emoji("uganda", "&#808", "Resources/Emojis/flags/009-uganda.png");
-            emojis[9] = new Emoji("slovenia", "&#809", "Resources/Emojis/flags/010-slovenia.png");
-            emojis[10] = new Emoji("zimbabwe", "&#810", "Resources/Emojis/flags/011-zimbabwe.png");
-            emojis[11] = new Emoji("italy", "&#811", "Resources/Emojis/flags/013-italy.png");
-            emojis[12] = new Emoji("wales", "&#812", "Resources/Emojis/flags/014-wales.png");
-            emojis[13] = new Emoji("nepal", "&#813", "Resources/Emojis/flags/016-nepal.png");
-            emojis[14] = new Emoji("lebanon", "&#814", "Resources/Emojis/flags/018-lebanon.png");
-            emojis[15] = new Emoji("ceuta", "&#815", "Resources/Emojis/flags/019-ceuta.png");
-            emojis[16] = new Emoji("iraq", "&#816", "Resources/Emojis/flags/020-iraq.png");
-            emojis[17] = new Emoji("syria", "&#817", "Resources/Emojis/flags/022-syria.png");
-            emojis[18] = new Emoji("honduras", "&#818", "Resources/Emojis/flags/024-honduras.png");
-            emojis[19] = new Emoji("anguilla", "&#819", "Resources/Emojis/flags/025-anguilla.png");
-            emojis[20] = new Emoji("north korea", "&#820", "Resources/Emojis/flags/030-north-korea.png");
-            emojis[21] = new Emoji("zambia", "&#821", "Resources/Emojis/flags/032-zambia.png");
-            emojis[22] = new Emoji("china", "&#822", "Resources/Emojis/flags/034-china.png");
-            emojis[23] = new Emoji("luxembourg", "&#823", "Resources/Emojis/flags/035-luxembourg.png");
-            emojis[24] = new Emoji("central african republic", "&#824", "Resources/Emojis/flags/036-central-african-republic.png");
-            emojis[25] = new Emoji("jamaica", "&#825", "Resources/Emojis/flags/037-jamaica.png");
-            emojis[26] = new Emoji("monaco", "&#826", "Resources/Emojis/flags/039-monaco.png");
-            emojis[27] = new Emoji("paraguay", "&#827", "Resources/Emojis/flags/041-paraguay.png");
-            emojis[28] = new Emoji("latvia", "&#828", "Resources/Emojis/flags/044-latvia.png");
-            emojis[29] = new Emoji("andorra", "&#829", "Resources/Emojis/flags/045-andorra.png");
-            emojis[30] = new Emoji("micronesia", "&#830", "Resources/Emojis/flags/046-micronesia.png");
-            emojis[31] = new Emoji("dominican republic", "&#831", "Resources/Emojis/flags/047-dominican-republic.png");
-            emojis[32] = new Emoji("abkhazia", "&#832", "Resources/Emojis/flags/048-abkhazia.png");
-            emojis[33] = new Emoji("tunisia", "&#833", "Resources/Emojis/flags/049-tunisia.png");
-            emojis[34] = new Emoji("kosovo", "&#834", "Resources/Emojis/flags/052-kosovo.png");
-            emojis[35] = new Emoji("ghana", "&#835", "Resources/Emojis/flags/053-ghana.png");
-            emojis[36] = new Emoji("scotland", "&#836", "Resources/Emojis/flags/055-scotland.png");
-            emojis[37] = new Emoji("gabon", "&#837", "Resources/Emojis/flags/059-gabon.png");
-            emojis[38] = new Emoji("namibia", "&#838", "Resources/Emojis/flags/062-namibia.png");
-            emojis[39] = new Emoji("japan", "&#839", "Resources/Emojis/flags/063-japan.png");
-            emojis[40] = new Emoji("lithuania", "&#840", "Resources/Emojis/flags/064-lithuania.png");
-            emojis[41] = new Emoji("chad", "&#841", "Resources/Emojis/flags/066-chad.png");
-            emojis[42] = new Emoji("kenya", "&#842", "Resources/Emojis/flags/067-kenya.png");
-            emojis[43] = new Emoji("serbia", "&#843", "Resources/Emojis/flags/071-serbia.png");
-            emojis[44] = new Emoji("kazakhstan", "&#844", "Resources/Emojis/flags/074-kazakhstan.png");
-            emojis[45] = new Emoji("iceland", "&#845", "Resources/Emojis/flags/080-iceland.png");
-            emojis[46] = new Emoji("somalia", "&#846", "Resources/Emojis/flags/083-somalia.png");
-            emojis[47] = new Emoji("barbados", "&#847", "Resources/Emojis/flags/084-barbados.png");
-            emojis[48] = new Emoji("nigeria", "&#848", "Resources/Emojis/flags/086-nigeria.png");
-            emojis[49] = new Emoji("uruguay", "&#849", "Resources/Emojis/flags/088-uruguay.png");
-            emojis[50] = new Emoji("slovakia", "&#850", "Resources/Emojis/flags/091-slovakia.png");
-            emojis[51] = new Emoji("south korea", "&#851", "Resources/Emojis/flags/094-south-korea.png");
-            emojis[52] = new Emoji("san marino", "&#852", "Resources/Emojis/flags/097-san-marino.png");
-            emojis[53] = new Emoji("guatemala", "&#853", "Resources/Emojis/flags/098-guatemala.png");
-            emojis[54] = new Emoji("albania", "&#854", "Resources/Emojis/flags/099-albania.png");
-            emojis[55] = new Emoji("pakistan", "&#855", "Resources/Emojis/flags/100-pakistan.png");
-            emojis[56] = new Emoji("ecuador", "&#856", "Resources/Emojis/flags/104-ecuador.png");
-            emojis[57] = new Emoji("cameroon", "&#857", "Resources/Emojis/flags/105-cameroon.png");
-            emojis[58] = new Emoji("panama", "&#858", "Resources/Emojis/flags/106-panama.png");
-            emojis[59] = new Emoji("kwait", "&#859", "Resources/Emojis/flags/107-kwait.png");
-            emojis[60] = new Emoji("armenia", "&#860", "Resources/Emojis/flags/108-armenia.png");
-            emojis[61] = new Emoji("romania", "&#861", "Resources/Emojis/flags/109-romania.png");
-            emojis[62] = new Emoji("guinea", "&#862", "Resources/Emojis/flags/110-guinea.png");
-            emojis[63] = new Emoji("afghanistan", "&#863", "Resources/Emojis/flags/111-afghanistan.png");
-            emojis[64] = new Emoji("laos", "&#864", "Resources/Emojis/flags/112-laos.png");
-            emojis[65] = new Emoji("greenland", "&#865", "Resources/Emojis/flags/113-greenland.png");
-            emojis[66] = new Emoji("hungary", "&#866", "Resources/Emojis/flags/115-hungary.png");
-            emojis[67] = new Emoji("angola", "&#867", "Resources/Emojis/flags/117-angola.png");
-            emojis[68] = new Emoji("malasya", "&#868", "Resources/Emojis/flags/118-malasya.png");
-            emojis[69] = new Emoji("brunei", "&#869", "Resources/Emojis/flags/119-brunei.png");
-            emojis[70] = new Emoji("bahamas", "&#870", "Resources/Emojis/flags/120-bahamas.png");
-            emojis[71] = new Emoji("new zealand", "&#871", "Resources/Emojis/flags/121-new-zealand.png");
-            emojis[72] = new Emoji("vatican city", "&#872", "Resources/Emojis/flags/124-vatican-city.png");
-            emojis[73] = new Emoji("finland", "&#873", "Resources/Emojis/flags/125-finland.png");
-            emojis[74] = new Emoji("botswana", "&#874", "Resources/Emojis/flags/126-botswana.png");
-            emojis[75] = new Emoji("sri lanka", "&#875", "Resources/Emojis/flags/127-sri-lanka.png");
-            emojis[76] = new Emoji("spain", "&#876", "Resources/Emojis/flags/128-spain.png");
-            emojis[77] = new Emoji("ossetia", "&#877", "Resources/Emojis/flags/129-ossetia.png");
-            emojis[78] = new Emoji("chile", "&#878", "Resources/Emojis/flags/131-chile.png");
-            emojis[79] = new Emoji("bosnia and herzegovina", "&#879", "Resources/Emojis/flags/132-bosnia-and-herzegovina.png");
-            emojis[80] = new Emoji("saudi arabia", "&#880", "Resources/Emojis/flags/133-saudi-arabia.png");
-            emojis[81] = new Emoji("liechtenstein", "&#881", "Resources/Emojis/flags/134-liechtenstein.png");
-            emojis[82] = new Emoji("belarus", "&#882", "Resources/Emojis/flags/135-belarus.png");
-            emojis[83] = new Emoji("iran", "&#883", "Resources/Emojis/flags/136-iran.png");
-            emojis[84] = new Emoji("fiji", "&#884", "Resources/Emojis/flags/137-fiji.png");
-            emojis[85] = new Emoji("bahrain", "&#885", "Resources/Emojis/flags/138-bahrain.png");
-            emojis[86] = new Emoji("venezuela", "&#886", "Resources/Emojis/flags/139-venezuela.png");
-            emojis[87] = new Emoji("azerbaijan", "&#887", "Resources/Emojis/flags/141-azerbaijan.png");
-            emojis[88] = new Emoji("norway", "&#888", "Resources/Emojis/flags/143-norway.png");
-            emojis[89] = new Emoji("algeria", "&#889", "Resources/Emojis/flags/144-algeria.png");
-            emojis[90] = new Emoji("ukraine", "&#890", "Resources/Emojis/flags/145-ukraine.png");
-            emojis[91] = new Emoji("gambia", "&#891", "Resources/Emojis/flags/146-gambia.png");
-            emojis[92] = new Emoji("bangladesh", "&#892", "Resources/Emojis/flags/147-bangladesh.png");
-            emojis[93] = new Emoji("madeira", "&#893", "Resources/Emojis/flags/148-madeira.png");
-            emojis[94] = new Emoji("czech republic", "&#894", "Resources/Emojis/flags/149-czech-republic.png");
-            emojis[95] = new Emoji("bolivia", "&#895", "Resources/Emojis/flags/150-bolivia.png");
-            emojis[96] = new Emoji("united arab emirates", "&#896", "Resources/Emojis/flags/151-united-arab-emirates.png");
-            emojis[97] = new Emoji("kyrgyzstan", "&#897", "Resources/Emojis/flags/152-kyrgyzstan.png");
-            emojis[98] = new Emoji("cuba", "&#898", "Resources/Emojis/flags/153-cuba.png");
-            emojis[99] = new Emoji("israel", "&#899", "Resources/Emojis/flags/155-israel.png");
-            emojis[100] = new Emoji("costa rica", "&#900", "Resources/Emojis/flags/156-costa-rica.png");
-            emojis[101] = new Emoji("republic of the congo", "&#901", "Resources/Emojis/flags/157-republic-of-the-congo.png");
-            emojis[102] = new Emoji("egypt", "&#902", "Resources/Emojis/flags/158-egypt.png");
-            emojis[103] = new Emoji("cambodia", "&#903", "Resources/Emojis/flags/159-cambodia.png");
-            emojis[104] = new Emoji("germany", "&#904", "Resources/Emojis/flags/162-germany.png");
-            emojis[105] = new Emoji("croatia", "&#905", "Resources/Emojis/flags/164-croatia.png");
-            emojis[106] = new Emoji("belgium", "&#906", "Resources/Emojis/flags/165-belgium.png");
-            emojis[107] = new Emoji("morocco", "&#907", "Resources/Emojis/flags/166-morocco.png");
-            emojis[108] = new Emoji("bulgaria", "&#908", "Resources/Emojis/flags/168-bulgaria.png");
-            emojis[109] = new Emoji("liberia", "&#909", "Resources/Emojis/flags/169-liberia.png");
-            emojis[110] = new Emoji("greece", "&#910", "Resources/Emojis/flags/170-greece.png");
-            emojis[111] = new Emoji("denmark", "&#911", "Resources/Emojis/flags/174-denmark.png");
-            emojis[112] = new Emoji("colombia", "&#912", "Resources/Emojis/flags/177-colombia.png");
-            emojis[113] = new Emoji("ireland", "&#913", "Resources/Emojis/flags/179-ireland.png");
-            emojis[114] = new Emoji("sweden", "&#914", "Resources/Emojis/flags/184-sweden.png");
-            emojis[115] = new Emoji("haiti", "&#915", "Resources/Emojis/flags/185-haiti.png");
-            emojis[116] = new Emoji("dominica", "&#916", "Resources/Emojis/flags/186-dominica.png");
-            emojis[117] = new Emoji("peru", "&#917", "Resources/Emojis/flags/188-peru.png");
-            emojis[118] = new Emoji("uzbekistn", "&#918", "Resources/Emojis/flags/190-uzbekistn.png");
-            emojis[119] = new Emoji("malta", "&#919", "Resources/Emojis/flags/194-malta.png");
-            emojis[120] = new Emoji("france", "&#920", "Resources/Emojis/flags/195-france.png");
-            emojis[121] = new Emoji("tajikistan", "&#921", "Resources/Emojis/flags/196-tajikistan.png");
-            emojis[122] = new Emoji("argentina", "&#922", "Resources/Emojis/flags/198-argentina.png");
-            emojis[123] = new Emoji("sudan", "&#923", "Resources/Emojis/flags/199-sudan.png");
-            emojis[124] = new Emoji("south africa", "&#924", "Resources/Emojis/flags/200-south-africa.png");
-            emojis[125] = new Emoji("taiwan", "&#925", "Resources/Emojis/flags/202-taiwan.png");
-            emojis[126] = new Emoji("switzerland", "&#926", "Resources/Emojis/flags/205-switzerland.png");
-            emojis[127] = new Emoji("palestine", "&#927", "Resources/Emojis/flags/208-palestine.png");
-            emojis[128] = new Emoji("indonesia", "&#928", "Resources/Emojis/flags/209-indonesia.png");
-            emojis[129] = new Emoji("poland", "&#929", "Resources/Emojis/flags/211-poland.png");
-            emojis[130] = new Emoji("moldova", "&#930", "Resources/Emojis/flags/212-moldova.png");
-            emojis[131] = new Emoji("malawi", "&#931", "Resources/Emojis/flags/214-malawi.png");
-            emojis[132] = new Emoji("england", "&#932", "Resources/Emojis/flags/216-england.png");
-            emojis[133] = new Emoji("turkey", "&#933", "Resources/Emojis/flags/218-turkey.png");
-            emojis[134] = new Emoji("vietnam", "&#934", "Resources/Emojis/flags/220-vietnam.png");
-            emojis[135] = new Emoji("niger", "&#935", "Resources/Emojis/flags/222-niger.png");
-            emojis[136] = new Emoji("portugal", "&#936", "Resources/Emojis/flags/224-portugal.png");
-            emojis[137] = new Emoji("senegal", "&#937", "Resources/Emojis/flags/227-senegal.png");
-            emojis[138] = new Emoji("turkmenistan", "&#938", "Resources/Emojis/flags/229-turkmenistan.png");
-            emojis[139] = new Emoji("singapore", "&#939", "Resources/Emojis/flags/230-singapore.png");
-            emojis[140] = new Emoji("libya", "&#940", "Resources/Emojis/flags/231-libya.png");
-            emojis[141] = new Emoji("yemen", "&#941", "Resources/Emojis/flags/232-yemen.png");
-            emojis[142] = new Emoji("transnistria", "&#942", "Resources/Emojis/flags/233-transnistria.png");
-            emojis[143] = new Emoji("australia", "&#943", "Resources/Emojis/flags/234-australia.png");
-            emojis[144] = new Emoji("republic of macedonia", "&#944", "Resources/Emojis/flags/236-republic-of-macedonia.png");
-            emojis[145] = new Emoji("netherlands", "&#945", "Resources/Emojis/flags/237-netherlands.png");
-            emojis[146] = new Emoji("thailand", "&#946", "Resources/Emojis/flags/238-thailand.png");
-            emojis[147] = new Emoji("canada", "&#947", "Resources/Emojis/flags/243-canada.png");
-            emojis[148] = new Emoji("south sudan", "&#948", "Resources/Emojis/flags/244-south-sudan.png");
-            emojis[149] = new Emoji("jersey", "&#949", "Resources/Emojis/flags/245-jersey.png");
-            emojis[150] = new Emoji("india", "&#950", "Resources/Emojis/flags/246-india.png");
-            emojis[151] = new Emoji("somaliland", "&#951", "Resources/Emojis/flags/247-somaliland.png");
-            emojis[152] = new Emoji("russia", "&#952", "Resources/Emojis/flags/248-russia.png");
-            emojis[153] = new Emoji("mexico", "&#953", "Resources/Emojis/flags/252-mexico.png");
-            emojis[154] = new Emoji("brazil", "&#954", "Resources/Emojis/flags/255-brazil.png");
-            emojis[155] = new Emoji("georgia", "&#955", "Resources/Emojis/flags/256-georgia.png");
-            emojis[156] = new Emoji("mongolia", "&#966", "Resources/Emojis/flags/258-mongolia.png");
-            emojis[157] = new Emoji("european union", "&#957", "Resources/Emojis/flags/259-european-union.png");
-            emojis[158] = new Emoji("united kingdom", "&#958", "Resources/Emojis/flags/260-united-kingdom.png");
-            emojis[159] = new Emoji("hawaii", "&#959", "Resources/Emojis/flags/262-hawaii.png");
-            emojiGroups[5] = new EmojiGroup("Resources/Emojis/flags/259-european-union.png", EmojiType.Flags, emojis);
+            emojiPath = "Resources/Emojis/emojis.xml";
         }
 
-        public static EmojiGroup[] Groups { get => emojiGroups; }
+        //public static EmojiGroup[] Groups { get => emojiGroups; }
 
-        public static Emoji[] GetEmojiGroup(EmojiType type)
+        public static EmojiGroup[] GetEmojiGroups()
         {
-            foreach (var group in emojiGroups)
-            {
-                if (group.Type == type) return group.Emojis;
-            }
-            return null;
-        }
+            XmlDocument documentEmojis = new XmlDocument();
+            documentEmojis.Load(emojiPath);
 
-        public static Emoji GetEmoji(string code)
-        {
-            foreach (var group in emojiGroups)
+            XmlDocument documentLanguage = new XmlDocument();
+            documentLanguage.Load("Resources/Languages/" + Settings.Instance.SelectedLanguage + ".xml");
+
+            EmojiGroup[] groups = new EmojiGroup[documentEmojis.DocumentElement.ChildNodes.Count];
+            for (int i = 0; i < documentEmojis.DocumentElement.ChildNodes.Count; i++)
             {
-                foreach (var emoji in group.Emojis)
+                groups[i] = new EmojiGroup();
+                groups[i].Path = documentEmojis.DocumentElement.ChildNodes[i].Attributes["Path"].InnerText;
+                groups[i].Code = documentEmojis.DocumentElement.ChildNodes[i].Attributes["Code"].InnerText;
+                for (int j = 0; j < documentLanguage.DocumentElement["Emojis"].ChildNodes.Count; j++)
                 {
-                    if (code == emoji.Code) return emoji;
+                    if (documentLanguage.DocumentElement["Emojis"].ChildNodes[j].Attributes["Code"].InnerText == groups[i].Code)
+                    {
+                        groups[i].Type = documentLanguage.DocumentElement["Emojis"].ChildNodes[j].Attributes["Name"].InnerText;
+                        break;
+                    }
+                }
+            }
+            return groups;
+        }
+
+        public static Emoji[] GetEmojiGroup(string codeType)
+        {
+            XmlDocument documentEmojis = new XmlDocument();
+            documentEmojis.Load(emojiPath);
+
+            XmlDocument documentLanguage = new XmlDocument();
+            documentLanguage.Load("Resources/Languages/" + Settings.Instance.SelectedLanguage + ".xml");
+
+            Emoji[] emojis = null;
+
+            XmlNode emojiNode = null;
+            XmlNode languageNode = null;
+            for (int i = 0; i < documentEmojis.DocumentElement.ChildNodes.Count; i++)
+            {
+                if (documentEmojis.DocumentElement.ChildNodes[i].Attributes["Code"].InnerText == codeType)
+                {
+                    emojis = new Emoji[documentEmojis.DocumentElement.ChildNodes[i].ChildNodes.Count];
+                    emojiNode = documentEmojis.DocumentElement.ChildNodes[i];
+                    break;
+                }
+            }
+            for (int i = 0; i < documentLanguage.DocumentElement["Emojis"].ChildNodes.Count; i++)
+            {
+                if (documentLanguage.DocumentElement["Emojis"].ChildNodes[i].Attributes["Code"].InnerText == codeType)
+                {
+                    languageNode = documentLanguage.DocumentElement["Emojis"].ChildNodes[i];
+                    break;
+                }
+            }
+            for (int i = 0; i < emojiNode.ChildNodes.Count; i++)
+            {
+                emojis[i] = new Emoji();
+                emojis[i].Code = emojiNode.ChildNodes[i].Attributes["Code"].InnerText;
+                emojis[i].Path = emojiNode.ChildNodes[i].Attributes["Path"].InnerText;
+                for (int j = 0; j < languageNode.ChildNodes.Count; j++)
+                {
+                    if (emojis[i].Code == languageNode.ChildNodes[j].Attributes["Code"].InnerText)
+                    {
+                        emojis[i].Name = languageNode.ChildNodes[j].Attributes["Name"].InnerText;
+                        break;
+                    }
+                }
+            }
+            return emojis;
+        }
+
+        public static Emoji GetEmojiIcon(string code)
+        {
+            XmlDocument documentEmojis = new XmlDocument();
+            documentEmojis.Load(emojiPath);
+            for (int i = 0; i < documentEmojis.DocumentElement.ChildNodes.Count; i++)
+            {
+                for (int j = 0; j < documentEmojis.DocumentElement.ChildNodes[i].ChildNodes.Count; j++)
+                {
+                    if (documentEmojis.DocumentElement.ChildNodes[i].ChildNodes[j].Attributes["Code"].InnerText == code)
+                    {
+                        Emoji emoji = new Emoji();
+                        emoji.Code = code;
+                        emoji.Path = documentEmojis.DocumentElement.ChildNodes[i].ChildNodes[j].Attributes["Path"].InnerText;
+                        return emoji;
+                    }
                 }
             }
             return null;
+        }
+
+        public static Emoji[] GetEmojis(string[] codes)
+        {
+            XmlDocument emojiDocument = new XmlDocument();
+            emojiDocument.Load(emojiPath);
+
+            XmlDocument languageDocumnet = new XmlDocument();
+            languageDocumnet.Load("Resources/Languages/" + Settings.Instance.SelectedLanguage + ".xml");
+
+            Emoji[] emojis = new Emoji[codes.Length];
+
+            for (int i = 0; i < codes.Length; i++)
+            {
+                emojis[i] = new Emoji();
+                emojis[i].Code = codes[i];
+                SetEmojiProperty(emojiDocument.DocumentElement, emojis[i], "Path");
+                SetEmojiProperty(languageDocumnet.DocumentElement["Emojis"], emojis[i], "Name");
+            }
+            return emojis;
+        }
+
+        public static void SetEmojiProperty(XmlNode node, Emoji emoji, string property)
+        {
+            for (int i = 0; i < node.ChildNodes.Count; i++)
+            {
+                for (int j = 0; j < node.ChildNodes[i].ChildNodes.Count; j++)
+                {
+                    if (node.ChildNodes[i].ChildNodes[j].Attributes["Code"].InnerText == emoji.Code)
+                    {
+                        emoji.GetType().GetProperty(property).SetValue(emoji, node.ChildNodes[i].ChildNodes[j].Attributes[property].InnerText);
+                        return;
+                    }
+                }
+            }
+        }
+
+        public static Emoji GetEmoji(XmlDocument document, string code)
+        {
+            for (int j = 0; j < document.DocumentElement.ChildNodes.Count; j++)
+            {
+                for (int k = 0; k < document.DocumentElement.ChildNodes[j].ChildNodes.Count; k++)
+                {
+                    if (document.DocumentElement.ChildNodes[j].ChildNodes[k].Attributes["Code"].InnerText == code)
+                    {
+                        Emoji emoji = new Emoji();
+                        emoji.Code = code;
+                        emoji.Path = document.DocumentElement.ChildNodes[j].ChildNodes[k].Attributes["Path"].InnerText;
+                        return emoji;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static Emoji[] GetFavEmojis()
+        {
+            int count;
+            XmlDocument document = new XmlDocument();
+            document.Load(Settings.Instance.SettingsPath);
+
+            count = document.DocumentElement.ChildNodes[Settings.Instance.UserNodeIndex]["FavEmojis"].ChildNodes.Count;
+            if (count > Settings.Instance.FavEmojiCount) count = Settings.Instance.FavEmojiCount;
+            Emoji[] emojis = new Emoji[count];
+
+            var node = document.DocumentElement.ChildNodes[Settings.Instance.UserNodeIndex]["FavEmojis"].FirstChild;
+            string[] codes = new string[count];
+
+            for (int i = 0; i < count; i++)
+            {
+                codes[i] = node.Attributes["Code"].InnerText;
+                node = node.NextSibling;
+            }
+            return GetEmojis(codes);
+        }
+
+        public static void AddFavEmoji(string code)
+        {
+            XmlDocument document = new XmlDocument();
+            document.Load(Settings.Instance.SettingsPath);
+
+            var node = document.DocumentElement.ChildNodes[Settings.Instance.UserNodeIndex]["FavEmojis"].FirstChild;
+            for (int i = 0; i < document.DocumentElement.ChildNodes[Settings.Instance.UserNodeIndex]["FavEmojis"].ChildNodes.Count; i++)
+            {
+                if (node.Attributes["Code"].InnerText == code)
+                {
+                    var temp = node;
+                    node.Attributes["Count"].InnerText = (int.Parse(node.Attributes["Count"].InnerText) + 1).ToString();
+                    for (int j = i - 1; j >= 0; j--)
+                    {
+                        node = node.PreviousSibling;
+                        if (int.Parse(node.Attributes["Count"].InnerText) < int.Parse(temp.Attributes["Count"].InnerText))
+                        {
+                            document.DocumentElement.ChildNodes[Settings.Instance.UserNodeIndex]["FavEmojis"].InsertBefore(temp, node);
+                            break;
+                        }
+                    }
+                    document.Save(Settings.Instance.SettingsPath);
+                    return;
+                }
+                node = node.NextSibling;
+            }
+            XmlElement element = document.CreateElement("Emoji");
+
+            XmlAttribute attribute = document.CreateAttribute("Code");
+            attribute.InnerText = code;
+            element.Attributes.Append(attribute);
+
+            attribute = document.CreateAttribute("Count");
+            attribute.InnerText = "1";
+            element.Attributes.Append(attribute);
+
+            document.DocumentElement.ChildNodes[Settings.Instance.UserNodeIndex]["FavEmojis"].AppendChild(element);
+            document.Save(Settings.Instance.SettingsPath);
+        }
+
+        public static LinkedList<Emoji> GetEmojiByName(string name)
+        {
+            LinkedList<Emoji> emojis = new LinkedList<Emoji>();
+            LinkedList<string> names = new LinkedList<string>();
+
+            XmlDocument emojiDocument = new XmlDocument();
+            emojiDocument.Load(emojiPath);
+
+            XmlDocument languageDocumnet = new XmlDocument();
+            languageDocumnet.Load("Resources/Languages/" + Settings.Instance.SelectedLanguage + ".xml");
+
+            for (int i = 0; i < languageDocumnet.DocumentElement["Emojis"].ChildNodes.Count; i++)
+            {
+                for (int j = 0; j < languageDocumnet.DocumentElement["Emojis"].ChildNodes[i].ChildNodes.Count; j++)
+                {
+                    if (Utility.StringExtensions.ContainsAtStart(languageDocumnet.DocumentElement["Emojis"].ChildNodes[i].ChildNodes[j].Attributes["Name"].InnerText, name))
+                    {
+                        emojis.AddLast(new Emoji());
+                        emojis.Last.Value.Code = languageDocumnet.DocumentElement["Emojis"].ChildNodes[i].ChildNodes[j].Attributes["Code"].InnerText;
+                        emojis.Last.Value.Name = languageDocumnet.DocumentElement["Emojis"].ChildNodes[i].ChildNodes[j].Attributes["Name"].InnerText;
+                    }
+                }
+            }
+
+            var node = emojis.First;
+            for (int i = 0; i < emojis.Count; i++)
+            {
+                SetEmojiProperty(emojiDocument.DocumentElement, node.Value, "Path");
+                node = node.Next;
+            }
+            return emojis;
         }
     }
 
     public class EmojiGroup
     {
         private string path;
-        EmojiType type;
+        private string type;
+        private string code;
         private Emoji[] emojis;
 
         public EmojiGroup()
@@ -771,16 +270,17 @@
 
         }
 
-        public EmojiGroup(string path, EmojiType type, Emoji[] emojis)
+        public EmojiGroup(string path, string type, Emoji[] emojis)
         {
             this.path = path;
             this.type = type;
             this.emojis = emojis;
         }
 
-        public string Path { get => path; }
-        public EmojiType Type { get => type; }
-        public Emoji[] Emojis { get => emojis; }
+        public string Path { get => path; set => path = value; }
+        public string Type { get => type; set => type = value; }
+        public string Code { get => code; set => code = value; }
+        public Emoji[] Emojis { get => emojis; set => emojis = value; }
     }
 
     public class Emoji
@@ -789,6 +289,11 @@
         private string code;
         private string path;
 
+        public Emoji()
+        {
+
+        }
+
         public Emoji(string name, string code, string path)
         {
             this.name = name;
@@ -796,8 +301,8 @@
             this.path = path;
         }
 
-        public string Name { get => name; }
-        public string Path { get => path; }
-        public string Code { get => code; }
+        public string Name { get => name; set => name = value; }
+        public string Path { get => path; set => path = value; }
+        public string Code { get => code; set => code = value; }
     }
 }

@@ -36,7 +36,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBox Text="{Binding Path=SearchText}"
-                metro:TextBoxHelper.Watermark="Search users"
+                metro:TextBoxHelper.Watermark="{DynamicResource SearchUsers}"
                 metro:TextBoxHelper.ClearTextButton="True"
                 Margin="10,0" Height="50" Background="LightGoldenrodYellow"
                 VerticalAlignment="Center"
@@ -44,14 +44,14 @@
             </TextBox>
 
             <Button Grid.Column="1" 
-                    Content="Search"
+                    Content="{DynamicResource Search}"
                     Margin="10" MaxHeight="50" MaxWidth="200"
                     Template="{StaticResource ButtonTemplate}"
                     Command="{Binding SearchCommand}">
             </Button>
         </Grid>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Drag users for adding to group" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="{DynamicResource DragUsersToAdd}" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap"/>
 
         <ListView 
             Grid.Row="2" Grid.Column="0"
@@ -84,7 +84,7 @@
 
         <Button 
             Grid.Row="3" Grid.Column="0"
-            Content="Show More"
+            Content="{DynamicResource ShowMore}"
             Width="250" Height="50"
             VerticalAlignment="Center" HorizontalAlignment="Center"
             Template="{StaticResource ButtonTemplate}"
@@ -94,14 +94,14 @@
         <TextBox 
             Text="{Binding Path=ChatName}"
             Grid.Row="0" Grid.Column="1"
-            metro:TextBoxHelper.Watermark="Enter name of chat room"
+            metro:TextBoxHelper.Watermark="{DynamicResource EnterNameOfChat}"
             metro:TextBoxHelper.ClearTextButton="True"
             Height="50" Background="LightGoldenrodYellow"
             VerticalAlignment="Center" Margin="20,0"
             FontSize="20">
         </TextBox>
 
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="Members of group" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="{DynamicResource MembersOfGroup}" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
         <ListView 
             Grid.Row="2" Grid.Column="1"
@@ -133,7 +133,7 @@
         </ListView>
 
         <Button Grid.Row="3" Grid.Column="1"
-                Content="Create Group"
+                Content="{DynamicResource CreateGroup}"
                 Width="250" Height="50"
                 VerticalAlignment="Center" HorizontalAlignment="Center" 
                 Template="{StaticResource ButtonTemplate}"

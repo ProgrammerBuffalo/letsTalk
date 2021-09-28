@@ -6,17 +6,23 @@ using System.Xml;
 
 namespace Client.Models
 {
+    //fav emoji count 
     public class Settings : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
         private static Settings instance;
+        private string wallaperFolderPath;
         private int messageLoadCount;
         private string selectedWallpaper;
         private Rington selectedUserRington;
         private Rington selectedGroupRington;
+        private string selectedLanguage;
+        private int chatFontSize;
+        private bool showAvatarInGroupMessages;
 
-        private bool canNotify;
+        private bool canUserRington;
+        private bool canGroupRington;
         private bool canUserNotify;
         private bool canGroupNotify;
         private int userNodeIndex;
@@ -32,12 +38,15 @@ namespace Client.Models
                 if (instance == null)
                 {
                     instance = new Settings();
-                    instance.favEmojiCount = 3;
+                    instance.wallaperFolderPath = "Settings\\Wallpaper";
+                    instance.favEmojiCount = 40;
                     instance.player = new MediaPlayer();
                 }
                 return instance;
             }
         }
+
+        public string WallaperFolderPath { get => wallaperFolderPath; }
 
         public int MessageLoadCount
         {
@@ -93,15 +102,28 @@ namespace Client.Models
             }
         }
 
-        public bool CanNotify
+        public bool CanUserRington
         {
-            get => canNotify;
+            get => canUserRington;
             set
             {
-                Set(ref canNotify, value);
+                Set(ref canUserRington, value);
                 XmlDocument document = new XmlDocument();
                 document.Load("Settings/user-settings.xml");
-                document.DocumentElement.ChildNodes[userNodeIndex]["CanNotify"].InnerText = canNotify.ToString();
+                document.DocumentElement.ChildNodes[userNodeIndex]["CanUserRington"].InnerText = canUserRington.ToString();
+                document.Save("Settings/user-settings.xml");
+            }
+        }
+
+        public bool CanGroupRington
+        {
+            get => canGroupRington;
+            set
+            {
+                Set(ref canGroupRington, value);
+                XmlDocument document = new XmlDocument();
+                document.Load("Settings/user-settings.xml");
+                document.DocumentElement.ChildNodes[userNodeIndex]["CanGroupRington"].InnerText = canGroupRington.ToString();
                 document.Save("Settings/user-settings.xml");
             }
         }
@@ -132,6 +154,50 @@ namespace Client.Models
             }
         }
 
+        public string SelectedLanguage
+        {
+            get => selectedLanguage;
+            set
+            {
+                Set(ref selectedLanguage, value);
+                XmlDocument document = new XmlDocument();
+                document.Load("Settings/user-settings.xml");
+                document.DocumentElement.ChildNodes[userNodeIndex]["SelectedLanguage"].InnerText = selectedLanguage.ToString();
+                document.Save("Settings/user-settings.xml");
+                ChangeLanguage(selectedLanguage);
+            }
+        }
+
+        public int ChatFontSize
+        {
+            get => chatFontSize;
+            set
+            {
+                Set(ref chatFontSize, value);
+                XmlDocument document = new XmlDocument();
+                document.Load("Settings/user-settings.xml");
+                document.DocumentElement.ChildNodes[userNodeIndex]["ChatFontSize"].InnerText = chatFontSize.ToString();
+                document.Save("Settings/user-settings.xml");
+            }
+        }
+
+        public bool ShowAvatarInGroupMessages
+        {
+            get => showAvatarInGroupMessages;
+            set
+            {
+                Set(ref showAvatarInGroupMessages, value);
+                XmlDocument document = new XmlDocument();
+                document.Load("Settings/user-settings.xml");
+                document.DocumentElement.ChildNodes[userNodeIndex]["ShowAvatarInGroupMessages"].InnerText = showAvatarInGroupMessages.ToString();
+                document.Save("Settings/user-settings.xml");
+            }
+        }
+
+        public int FavEmojiCount { get => favEmojiCount; }
+        public int UserNodeIndex { get => userNodeIndex; }
+        public string SettingsPath { get => "Settings/user-settings.xml"; }
+
         public void LoadSettings(int userId)
         {
             XmlDocument document = new XmlDocument();
@@ -141,11 +207,17 @@ namespace Client.Models
             {
                 if (int.Parse(document.DocumentElement.ChildNodes[i].Attributes["UserId"].InnerText) == userId)
                 {
-                    this.userNodeIndex = i;
+                    userNodeIndex = i;
 
+                    selectedLanguage = document.DocumentElement.ChildNodes[i]["SelectedLanguage"].InnerText;
                     messageLoadCount = int.Parse(document.DocumentElement.ChildNodes[i]["MessageLoadCount"].InnerText);
+
                     selectedWallpaper = document.DocumentElement.ChildNodes[i]["Wallpaper"].InnerText;
-                    canNotify = bool.Parse(document.DocumentElement.ChildNodes[i]["CanNotify"].InnerText);
+                    chatFontSize = int.Parse(document.DocumentElement.ChildNodes[i]["ChatFontSize"].InnerText);
+                    showAvatarInGroupMessages = bool.Parse(document.DocumentElement.ChildNodes[i]["ShowAvatarInGroupMessages"].InnerText);
+
+                    canUserRington = bool.Parse(document.DocumentElement.ChildNodes[i]["CanUserRington"].InnerText);
+                    canGroupRington = bool.Parse(document.DocumentElement.ChildNodes[i]["CanGroupRington"].InnerText);
                     canUserNotify = bool.Parse(document.DocumentElement.ChildNodes[i]["CanUserNotify"].InnerText);
                     canGroupNotify = bool.Parse(document.DocumentElement.ChildNodes[i]["CanGroupNotify"].InnerText);
 
@@ -156,6 +228,7 @@ namespace Client.Models
                     selectedGroupRington = new Rington();
                     selectedGroupRington.Name = document.DocumentElement.ChildNodes[i]["GroupRington"].Attributes["Name"].InnerText;
                     selectedGroupRington.Path = document.DocumentElement.ChildNodes[i]["GroupRington"].Attributes["Path"].InnerText;
+                    ChangeLanguage(selectedLanguage);
                     break;
                 }
             }
@@ -176,7 +249,11 @@ namespace Client.Models
             attribute.InnerText = userId.ToString();
             user.Attributes.Append(attribute);
 
-            XmlElement element = document.CreateElement("MessageLoadCount");
+            XmlElement element = document.CreateElement("SelectedLanguage");
+            element.InnerText = "en";
+            user.AppendChild(element);
+
+            element = document.CreateElement("MessageLoadCount");
             element.InnerText = "30";
             user.AppendChild(element);
 
@@ -184,7 +261,19 @@ namespace Client.Models
             element.InnerText = "/Resources/Wallpapers/skin.jpg";
             user.AppendChild(element);
 
-            element = document.CreateElement("CanNotify");
+            element = document.CreateElement("ChatFontSize");
+            element.InnerText = "18";
+            user.AppendChild(element);
+
+            element = document.CreateElement("ShowAvatarInGroupMessages");
+            element.InnerText = "True";
+            user.AppendChild(element);
+
+            element = document.CreateElement("CanUserRington");
+            element.InnerText = "True";
+            user.AppendChild(element);
+
+            element = document.CreateElement("CanGroupRington");
             element.InnerText = "True";
             user.AppendChild(element);
 
@@ -313,63 +402,104 @@ namespace Client.Models
             AddNotify(document, chatId, isMute);
         }
 
-        public void AddFavEmoji(string code)
+        //public IEnumerable<Emoji> GetFavEmojis()
+        //{
+        //    int count;
+        //    XmlDocument document = new XmlDocument();
+        //    document.Load("Settings/user-settings.xml");
+
+        //    count = document.DocumentElement.ChildNodes[userNodeIndex]["FavEmojis"].ChildNodes.Count;
+        //    if (count > favEmojiCount) count = favEmojiCount;
+        //    Emoji[] emojis = new Emoji[count];
+
+        //    var node = document.DocumentElement.ChildNodes[userNodeIndex]["FavEmojis"].FirstChild;
+        //    for (int i = 0; i < count; i++)
+        //    {
+        //        emojis[i] = EmojiData.GetEmojiIcon(node.Attributes["Code"].InnerText);
+        //        node = node.NextSibling;
+        //    }
+        //    return emojis;
+        //}
+
+        public void DeleteFromDeviceWallpaper()
         {
-            XmlDocument document = new XmlDocument();
-            document.Load("Settings/user-settings.xml");
-
-            var node = document.DocumentElement.ChildNodes[userNodeIndex]["FavEmojis"].FirstChild;
-            for (int i = 0; i < document.DocumentElement.ChildNodes[userNodeIndex]["FavEmojis"].ChildNodes.Count; i++)
-            {
-                if (node.Attributes["Code"].InnerText == code)
-                {
-                    var temp = node;
-                    node.Attributes["Count"].InnerText = (int.Parse(node.Attributes["Count"].InnerText) + 1).ToString();
-                    for (int j = i - 1; j >= 0; j--)
-                    {
-                        node = node.PreviousSibling;
-                        if (int.Parse(node.Attributes["Count"].InnerText) < int.Parse(temp.Attributes["Count"].InnerText))
-                        {
-                            document.DocumentElement.ChildNodes[userNodeIndex]["FavEmojis"].InsertBefore(temp, node);
-                            break;
-                        }
-                    }
-                    document.Save("Settings/user-settings.xml");
-                    return;
-                }
-                node = node.NextSibling;
-            }
-            XmlElement element = document.CreateElement("Emoji");
-
-            XmlAttribute attribute = document.CreateAttribute("Code");
-            attribute.InnerText = code;
-            element.Attributes.Append(attribute);
-
-            attribute = document.CreateAttribute("Count");
-            attribute.InnerText = "1";
-            element.Attributes.Append(attribute);
-
-            document.DocumentElement.ChildNodes[userNodeIndex]["FavEmojis"].AppendChild(element);
-            document.Save("Settings/user-settings.xml");
+            foreach (var file in System.IO.Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + wallaperFolderPath))
+                System.IO.File.Delete(file);
         }
 
-        public IEnumerable<Emoji> GetFavEmojis()
+        public void ChangeLanguage(string language)
         {
-            int count;
             XmlDocument document = new XmlDocument();
-            document.Load("Settings/user-settings.xml");
+            document.Load("Resources/Languages/" + language + ".xml");
+            App.Current.Resources["HelloUser"] = document.DocumentElement["HelloUser"].InnerText;
+            App.Current.Resources["HelpUser"] = document.DocumentElement["HelpUser"].InnerText;
+            App.Current.Resources["Ok"] = document.DocumentElement["Ok"].InnerText;
+            App.Current.Resources["Cancel"] = document.DocumentElement["Cancel"].InnerText;
 
-            count = document.DocumentElement.ChildNodes[userNodeIndex]["FavEmojis"].ChildNodes.Count;
-            if (count > favEmojiCount) count = favEmojiCount;
-            Emoji[] emojis = new Emoji[count];
+            App.Current.Resources["Entrance"] = document.DocumentElement["Entrance"].InnerText;
+            App.Current.Resources["Name"] = document.DocumentElement["Name"].InnerText;
+            App.Current.Resources["Login"] = document.DocumentElement["Login"].InnerText;
+            App.Current.Resources["Password"] = document.DocumentElement["Password"].InnerText;
+            App.Current.Resources["SignIn"] = document.DocumentElement["SignIn"].InnerText;
+            App.Current.Resources["Registrate"] = document.DocumentElement["Registrate"].InnerText;
+            App.Current.Resources["Back"] = document.DocumentElement["Back"].InnerText;
 
-            var node = document.DocumentElement.ChildNodes[userNodeIndex]["FavEmojis"].FirstChild;
-            for (int i = 0; i < count; i++)
-            {
-                emojis[i] = EmojiData.GetEmoji(node.Attributes["Code"].InnerText);
-                node = node.NextSibling;
-            }
-            return emojis;
+            App.Current.Resources["NameErrorLength"] = document.DocumentElement["NameErrorLength"].InnerText;
+            App.Current.Resources["NameErrorValidSymbols"] = document.DocumentElement["NameErrorValidSymbols"].InnerText;
+            App.Current.Resources["PasswordErrorLength"] = document.DocumentElement["PasswordErrorLength"].InnerText;
+            App.Current.Resources["PasswordErrorValidSymbols"] = document.DocumentElement["PasswordErrorValidSymbols"].InnerText;
+            App.Current.Resources["AllFieldsError"] = document.DocumentElement["AllFieldsError"].InnerText;
+
+            App.Current.Resources["LoginError"] = document.DocumentElement["LoginError"].InnerText;
+            App.Current.Resources["PasswordError"] = document.DocumentElement["PasswordError"].InnerText;
+            App.Current.Resources["ConnectionError"] = document.DocumentElement["ConnectionError"].InnerText;
+            App.Current.Resources["AuthorizationError"] = document.DocumentElement["AuthorizationError"].InnerText;
+            App.Current.Resources["StreamError"] = document.DocumentElement["StreamError"].InnerText;             
+
+            App.Current.Resources["ImageFiles"] = document.DocumentElement["ImageFiles"].InnerText;
+
+            App.Current.Resources["CreateChatroom"] = document.DocumentElement["CreateChatroom"].InnerText;
+            App.Current.Resources["Settings"] = document.DocumentElement["Settings"].InnerText;
+            App.Current.Resources["AvatarError"] = document.DocumentElement["AvatarError"].InnerText;
+            App.Current.Resources["YouAreRemoved"] = document.DocumentElement["YouAreRemoved"].InnerText;
+            App.Current.Resources["YouAreAdded"] = document.DocumentElement["YouAreAdded"].InnerText;
+            App.Current.Resources["ChatroomError"] = document.DocumentElement["ChatroomError"].InnerText;
+
+            App.Current.Resources["SearchUsers"] = document.DocumentElement["SearchUsers"].InnerText;
+            App.Current.Resources["Search"] = document.DocumentElement["Search"].InnerText;
+            App.Current.Resources["DragUsersToAdd"] = document.DocumentElement["DragUsersToAdd"].InnerText;
+            App.Current.Resources["ShowMore"] = document.DocumentElement["ShowMore"].InnerText;
+            App.Current.Resources["EnterNameOfChat"] = document.DocumentElement["EnterNameOfChat"].InnerText;
+            App.Current.Resources["MembersOfGroup"] = document.DocumentElement["MembersOfGroup"].InnerText;
+            App.Current.Resources["CreateGroup"] = document.DocumentElement["CreateGroup"].InnerText;
+            App.Current.Resources["PleaseEnterChatroomName"] = document.DocumentElement["PleaseEnterChatroomName"].InnerText;
+
+            App.Current.Resources["Leave"] = document.DocumentElement["Leave"].InnerText;
+            App.Current.Resources["EditChat"] = document.DocumentElement["EditChat"].InnerText;
+            App.Current.Resources["Smile"] = document.DocumentElement["Smile"].InnerText;
+            App.Current.Resources["File"] = document.DocumentElement["File"].InnerText;
+            App.Current.Resources["Save"] = document.DocumentElement["Save"].InnerText;
+
+            App.Current.Resources["GeneralSettings"] = document.DocumentElement["GeneralSettings"].InnerText;
+            App.Current.Resources["AppearanceSettings"] = document.DocumentElement["AppearanceSettings"].InnerText;
+            App.Current.Resources["NotificationSettings"] = document.DocumentElement["NotificationSettings"].InnerText;
+
+            App.Current.Resources["UserProfile"] = document.DocumentElement["UserProfile"].InnerText;
+            App.Current.Resources["Language"] = document.DocumentElement["Language"].InnerText;
+            App.Current.Resources["SelectedLanguageText"] = document.DocumentElement["SelectedLanguageText"].InnerText;
+            App.Current.Resources["ChatSettings"] = document.DocumentElement["ChatSettings"].InnerText;
+            App.Current.Resources["MessageDownloadStep"] = document.DocumentElement["MessageDownloadStep"].InnerText;
+
+            App.Current.Resources["GroupSettings"] = document.DocumentElement["GroupSettings"].InnerText;
+            App.Current.Resources["ChatNotification"] = document.DocumentElement["ChatNotification"].InnerText;
+            App.Current.Resources["GroupNotification"] = document.DocumentElement["GroupNotification"].InnerText;
+            App.Current.Resources["ChatSounds"] = document.DocumentElement["ChatSounds"].InnerText;
+            App.Current.Resources["GroupSounds"] = document.DocumentElement["GroupSounds"].InnerText;
+
+            App.Current.Resources["ShowAvatarInGroupMessage"] = document.DocumentElement["ShowAvatarInGroupMessage"].InnerText;
+            App.Current.Resources["ChatFontSize"] = document.DocumentElement["ChatFontSize"].InnerText;
+            App.Current.Resources["LetsTalkWallpapers"] = document.DocumentElement["LetsTalkWallpapers"].InnerText;
+            App.Current.Resources["SelectFromDevice"] = document.DocumentElement["SelectFromDevice"].InnerText;
         }
 
         public void PlayRington(string path)

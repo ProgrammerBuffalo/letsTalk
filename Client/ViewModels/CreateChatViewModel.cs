@@ -141,8 +141,7 @@ namespace Client.ViewModels
                 }
                 catch (FaultException<ChatroomAlreadyExistExceptionFault> fe)
                 {
-                    new Views.DialogWindow(fe.Message).ShowDialog();
-                    MessageBox.Show(fe.Message);
+                    new Views.DialogWindow(App.Current.Resources["ChatroomError"].ToString()).ShowDialog();
                 }
                 catch (Exception ex)
                 {
@@ -183,7 +182,8 @@ namespace Client.ViewModels
                 }
                 else
                 {
-                    new Views.DialogWindow("Please enter chatroom name").ShowDialog();
+                    //new Views.DialogWindow("Please enter chatroom name").ShowDialog();
+                    new Views.DialogWindow(App.Current.Resources["PleaseEnterChatroomName"].ToString()).ShowDialog();
                 }
             }
         }

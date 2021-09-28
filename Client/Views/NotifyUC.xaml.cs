@@ -7,7 +7,7 @@
     {
         public NotifyUC()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
     }
 }

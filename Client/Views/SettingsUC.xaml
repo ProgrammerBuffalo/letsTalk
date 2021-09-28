@@ -29,7 +29,7 @@
                 <RowDefinition MinHeight="100"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0" Text="User profile" Style="{StaticResource HeaderStyle}" />
+            <TextBlock Grid.Row="0" Text="{DynamicResource UserProfile}" Style="{StaticResource HeaderStyle}" />
 
             <StackPanel Grid.Row="1" Orientation="Horizontal">
                 <Ellipse Grid.Column="2" Width="50" Height="50" StrokeThickness="3" Stroke="Black" VerticalAlignment="Center">
@@ -39,6 +39,18 @@
                 </Ellipse>
 
                 <TextBlock Grid.Column="0" Text="{Binding Path=Client.UserName}" Margin="20,0,0,0" Style="{StaticResource TextBlockStyle}" />
+
+                <Button Width="40" Height="40" ToolTip="{StaticResource en}" Margin="10,0" Command="{Binding LanguageChangedCommand}" CommandParameter="en">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Languages/en.png"/>
+                    </Button.Background>
+                </Button>
+
+                <Button Width="40" Height="40" ToolTip="{StaticResource ru}" Margin="10,0" Command="{Binding LanguageChangedCommand}" CommandParameter="ru">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Languages/ru.png"/>
+                    </Button.Background>
+                </Button>
             </StackPanel>
 
             <TextBlock Grid.Row="2" Text="Choose message download step" Style="{StaticResource HeaderStyle}"/>
@@ -68,7 +80,7 @@
                 </Grid>
             </GroupBox>
 
-            <TextBlock Grid.Row="4" Text="Choose wallpaper" Style="{StaticResource HeaderStyle}"/>
+            <TextBlock Grid.Row="4" Text="{DynamicResource ChooseWallpaper}" Style="{StaticResource HeaderStyle}"/>
 
             <Grid Grid.Row="5">
                 <Grid.ColumnDefinitions>

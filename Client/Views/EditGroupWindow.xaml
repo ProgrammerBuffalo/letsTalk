@@ -47,9 +47,27 @@
                 </Setter>
             </Style>
 
-            <ControlTemplate x:Key="CancelButtonTemplate" TargetType="Button">
-                <icons:PackIconMaterialDesign Kind="Cancel" Background="Transparent" Width="25" Height="25" Foreground="{StaticResource ButtonBackground}" Cursor="Hand"/>
-            </ControlTemplate>
+            <Style x:Key="CancelButtonStyle" TargetType="Button">
+                <Setter Property="Foreground" Value="{StaticResource ButtonBackground}"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Width" Value="25"/>
+                <Setter Property="Height" Value="25"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Visibility" Value="Visible" />
+                <Setter Property="VerticalAlignment" Value="Top"/>
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+            </Style>
+
+            <Style x:Key="ChangeImageButtonStyle" TargetType="Button">
+                <Setter Property="Foreground" Value="{StaticResource ButtonBackground}"/>
+                <Setter Property="Foreground" Value="Transparent"/>
+                <Setter Property="Width" Value="25"/>
+                <Setter Property="Height" Value="25"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="VerticalAlignment" Value="Bottom"/>
+                <Setter Property="Visibility" Value="Visible"/>
+            </Style>
 
             <ControlTemplate x:Key="ChangeImageTemplae" TargetType="Button">
                 <icons:PackIconMaterialDesign Kind="Photo" Background="Transparent" Width="25" Height="25" Foreground="{StaticResource ButtonBackground}" Cursor="Hand"/>
@@ -67,8 +85,8 @@
                         </Ellipse.Fill>
                     </Ellipse>
 
-                    <Button x:Name="btn1" Visibility="Hidden" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" Command="{Binding CancelImageCommand}" Template="{StaticResource CancelButtonTemplate}"/>
-                    <Button x:Name="btn2" Visibility="Hidden" Margin="0,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Command="{Binding ChangeImageCommand}" Template="{StaticResource ChangeImageTemplae}"/>
+                    <Button x:Name="btn1" Command="{Binding CancelImageCommand}" Template="{StaticResource CancelButtonTemplate}" Style="{StaticResource CancelButtonStyle}"/>
+                    <Button x:Name="btn2" Command="{Binding ChangeImageCommand}" Template="{StaticResource ChangeImageTemplae}" Style="{StaticResource ChangeImageButtonStyle}"/>
                 </Grid>
 
                 <ControlTemplate.Triggers>
@@ -138,19 +156,29 @@
         <Grid Grid.Row="0" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding Path=Name}" FontSize="20" Height="40" Margin="10,0,0,0" />
-            <Button Grid.Column="1" Content="Save" Width="80" Template="{StaticResource ButtonTemplate}" Command="{Binding SaveNameCommand}" Margin="10"/>
+            <Button Grid.Column="1" Content="{DynamicResource Save}" Width="80" Template="{StaticResource ButtonTemplate}" Command="{Binding SaveNameCommand}" Margin="10"/>
         </Grid>
 
-        <TextBox Grid.Row="1" Grid.Column="1" 
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox Grid.Column="0" 
                      Text="{Binding Path=SearchUsersText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="20"
                      metro:TextBoxHelper.ClearTextButton="True"
-                     Margin="10,8,98,8" Height="45"
+                     Height="45"
+                     Margin="10,0,0,0"
                      Background="LightGoldenrodYellow">
-        </TextBox>
+            </TextBox>
+
+            <Button Content="{DynamicResource Search}" Grid.Column="1" Width="80" Height="45" Margin="10,0" VerticalAlignment="Center" Template="{StaticResource ButtonTemplate}" Command="{Binding SearchByNameInDB}" />
+        </Grid>
 
         <ListView Grid.Row="2" Grid.Column="1"
                   dd:DragDrop.DragHandler="{Binding}"
@@ -162,11 +190,11 @@
         </ListView>
 
         <Button Grid.Row="3" Grid.Column="1"
-                Content="Show more"
+                Content="{DynamicResource ShowMore}"
                 Width="200" Height="45"
                 Command="{Binding ShowMoreCommand}"
                 Template="{StaticResource ButtonTemplate}">
         </Button>
-        <Button Command="{Binding SearchByNameInDB}" Grid.Column="1" Grid.Row="1" Content="Search" Width="80" Height="45" VerticalAlignment="Center" Template="{StaticResource ButtonTemplate}" Margin="306,8,10,7"/>
+
     </Grid>
 </metro:MetroWindow>

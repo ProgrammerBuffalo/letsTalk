@@ -6,6 +6,7 @@
     <utility:FitStringConverter x:Key="FitStringConverter"/>
     <utility:FitDateConverter x:Key="FitDateConverter"/>
     <utility:FitPathConverter x:Key="FitPathConverter"/>
+    <utility:FitEmojiConverter x:Key="FitEmojiConverter" FontSize="15" ImageSize="20"/>
 
     <DataTemplate x:Key="TextDataTemplate">
         <Grid Margin="10,0,0,0">
@@ -14,7 +15,7 @@
                 <ColumnDefinition Width="48"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Text="{Binding Path=Text, Converter={StaticResource FitStringConverter}}" FontSize="12" Foreground="Wheat" VerticalAlignment="Center"/>
+            <ContentControl Grid.Column="0" Content="{Binding Path=Text, Converter={StaticResource FitEmojiConverter}}" TextBlock.Foreground="Wheat" VerticalAlignment="Center"/>
             <TextBlock Grid.Column="1" Text="{Binding Path=Date, Converter={StaticResource FitDateConverter}}" FontSize="12" Foreground="Wheat" VerticalAlignment="Center"/>
         </Grid>
     </DataTemplate>

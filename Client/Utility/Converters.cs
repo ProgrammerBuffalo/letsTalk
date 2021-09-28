@@ -2,21 +2,21 @@
 
 namespace Client.Utility
 {
-    class TicksToTime : System.Windows.Data.IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            long ticks = System.Convert.ToInt64(value);
-            if (ticks == 0) return null;
-            else if (ticks / 10000000 % 60 <= 9) return ticks / 600000000 + ":0" + ticks / 10000000 % 60;
-            else return ticks / 600000000 + ":" + ticks / 10000000 % 60;
-        }
+    //class TicksToTime : System.Windows.Data.IValueConverter
+    //{
+    //    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+    //    {
+    //        long ticks = System.Convert.ToInt64(value);
+    //        if (ticks == 0) return null;
+    //        else if (ticks / 10000000 % 60 <= 9) return ticks / 600000000 + ":0" + ticks / 10000000 % 60;
+    //        else return ticks / 600000000 + ":" + ticks / 10000000 % 60;
+    //    }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return value;
-        }
-    }
+    //    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+    //    {
+    //        return value;
+    //    }
+    //}
 
     class PathToExtension : System.Windows.Data.IValueConverter
     {
@@ -75,18 +75,18 @@ namespace Client.Utility
         }
     }
 
-    class ColorConverter : System.Windows.Data.IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+    //class ColorConverter : System.Windows.Data.IValueConverter
+    //{
+    //    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return value;
-        }
-    }
+    //    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+    //    {
+    //        return value;
+    //    }
+    //}
 
     class FitStringConverter : System.Windows.Data.IValueConverter
     {
@@ -135,26 +135,68 @@ namespace Client.Utility
         }
     }
 
-    class EmojiConverter : System.Windows.Data.IValueConverter
+    class EmojiConverter : System.Windows.Data.IMultiValueConverter
     {
+        public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            string text = values[0].ToString();
+            int fontSize = (int)values[1];
+
+            System.Windows.Controls.TextBlock block = new System.Windows.Controls.TextBlock();
+            block.TextWrapping = System.Windows.TextWrapping.Wrap;
+            block.FontSize = fontSize;
+
+            int i, start = 0;
+            for (i = 0; i < text.Length; i++)
+            {
+                if (text[i] == '$' && text.Length - 5 >= i && text[i + 1] == '#')
+                {
+                    if (start != i) block.Inlines.Add(new System.Windows.Documents.Run(text.Substring(start, i - start)) { BaselineAlignment = System.Windows.BaselineAlignment.TextTop });
+                    string code = text.Substring(i, 5);
+                    Models.Emoji emoji = Models.EmojiData.GetEmojiIcon(code);
+
+                    System.Windows.Controls.Image image = new System.Windows.Controls.Image();
+                    image.Width = image.Height = fontSize + 5;
+                    image.Margin = new System.Windows.Thickness(3, 0, 3, 0);
+                    image.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri(emoji.Path, UriKind.Relative));
+                    block.Inlines.Add(image);
+
+                    i += 4;
+                    start = i + 1;
+                }
+            }
+            if (start != i) block.Inlines.Add(new System.Windows.Documents.Run(text.Substring(start)) { BaselineAlignment = System.Windows.BaselineAlignment.TextTop });
+            return block;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    class FitEmojiConverter : System.Windows.Data.IValueConverter
+    {
+        public int FontSize { get; set; }
+        public int ImageSize { get; set; }
+
         public object Convert(object value, Type targetType, object param, System.Globalization.CultureInfo culture)
         {
             string text = value.ToString();
             System.Windows.Controls.TextBlock block = new System.Windows.Controls.TextBlock();
             block.TextWrapping = System.Windows.TextWrapping.Wrap;
-            block.FontSize = 18;
+            block.FontSize = FontSize;
             int i, start = 0;
             for (i = 0; i < text.Length; i++)
             {
-                if (text[i] == '&' && text.Length - 5 >= i && text[i + 1] == '#')
+                if (text[i] == '$' && text.Length - 5 >= i && text[i + 1] == '#')
                 {
                     if (start != i) block.Inlines.Add(new System.Windows.Documents.Run(text.Substring(start, i - start)) { BaselineAlignment = System.Windows.BaselineAlignment.TextTop });
                     string code = text.Substring(i, 5);
-                    Models.Emoji emoji = Models.EmojiData.GetEmoji(code);
+                    Models.Emoji emoji = Models.EmojiData.GetEmojiIcon(code);
 
                     System.Windows.Controls.Image image = new System.Windows.Controls.Image();
-                    image.Width = 25;
-                    image.Height = 25;
+                    image.Width = image.Height = ImageSize;
                     image.Margin = new System.Windows.Thickness(3, 0, 3, 0);
                     image.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri(emoji.Path, UriKind.Relative));
                     block.Inlines.Add(image);
@@ -169,7 +211,7 @@ namespace Client.Utility
 
         public object ConvertBack(object value, Type targetType, object param, System.Globalization.CultureInfo culture)
         {
-            return value;
+            return null;
         }
     }
 
@@ -177,7 +219,7 @@ namespace Client.Utility
     {
         public object Convert(object value, Type targetType, object param, System.Globalization.CultureInfo culture)
         {
-            return '/' + value.ToString();  
+            return '/' + value.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object param, System.Globalization.CultureInfo culture)

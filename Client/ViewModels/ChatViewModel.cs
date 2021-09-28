@@ -34,6 +34,7 @@ namespace Client.ViewModels
         private EmojiGroup selectedEmojiGroup;
         private string searchEmojiText;
         private Emoji selectedEmoji;
+        private ObservableCollection<EmojiGroup> emojiGroups;
         private ObservableCollection<Emoji> emojis;
 
         private System.Windows.Controls.RichTextBox rich;
@@ -118,7 +119,7 @@ namespace Client.ViewModels
         public string MessageText { get => messageText; set => Set(ref messageText, value); }
         public bool? CanNotify { get => canNotify; set => Set(ref canNotify, value); }
 
-        public EmojiGroup[] EmojiGroups { get => EmojiData.Groups; }
+        public ObservableCollection<EmojiGroup> EmojiGroups { get => emojiGroups; set => Set(ref emojiGroups, value); }
         public EmojiGroup SelectedEmojiGroup { get => selectedEmojiGroup; set => Set(ref selectedEmojiGroup, value); }
         public ObservableCollection<Emoji> Emojis { get => emojis; set => Set(ref emojis, value); }
         public Emoji SelectedEmoji { get => selectedEmoji; set => Set(ref selectedEmoji, value); }
@@ -353,18 +354,13 @@ namespace Client.ViewModels
                 Emojis = new ObservableCollection<Emoji>();
                 Task.Run(() =>
                 {
-                    foreach (var group in EmojiData.Groups)
+                    LinkedList<Emoji> emojis = EmojiData.GetEmojiByName(searchEmojiText);
+                    foreach (var item in emojis)
                     {
-                        foreach (var emoji in group.Emojis)
+                        App.Current.Dispatcher.Invoke(() =>
                         {
-                            if (StringExtensions.ContainsAtStart(emoji.Name, searchEmojiText))
-                            {
-                                App.Current.Dispatcher.Invoke(() =>
-                                {
-                                    Emojis.Add(emoji);
-                                });
-                            }
-                        }
+                            Emojis.Add(item);
+                        });
                     }
                 });
             }
@@ -377,19 +373,27 @@ namespace Client.ViewModels
         private void FavEmojis(object param)
         {
             SelectedEmojiGroup = null;
-            Emojis = new ObservableCollection<Emoji>(Settings.GetFavEmojis());
+            Emojis = new ObservableCollection<Emoji>(EmojiData.GetFavEmojis());
         }
 
         private void OpenEmojis(object param)
         {
-            if (!emojiWindow.IsActive) emojiWindow.Show();
+            if (!emojiWindow.IsActive)
+            {
+                EmojiGroups = new ObservableCollection<EmojiGroup>(EmojiData.GetEmojiGroups());
+                Emojis = new ObservableCollection<Emoji>(EmojiData.GetFavEmojis());
+                emojiWindow.Show();
+            }
         }
 
         private void EmojiGroupChanged(object param)
         {
             if (SelectedEmojiGroup != null)
             {
-                Emojis = new ObservableCollection<Emoji>(selectedEmojiGroup.Emojis);
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    Emojis = new ObservableCollection<Emoji>(EmojiData.GetEmojiGroup(selectedEmojiGroup.Code));
+                });
             }
         }
 
@@ -431,7 +435,7 @@ namespace Client.ViewModels
                         rich.CaretPosition = container.ContentEnd;
                         messageText = messageText.Insert(index2, selectedEmoji.Code);
                         rich.TextChanged += rich_TextChanged;
-                        Settings.AddFavEmoji(selectedEmoji.Code);
+                        EmojiData.AddFavEmoji(selectedEmoji.Code);
                         SelectedEmoji = null;
                         return;
                     }
@@ -452,7 +456,7 @@ namespace Client.ViewModels
                         rich.CaretPosition = container.ContentEnd;
                         rich.TextChanged += rich_TextChanged;
                         messageText = messageText.Insert(index2, selectedEmoji.Code);
-                        Settings.AddFavEmoji(selectedEmoji.Code);
+                        EmojiData.AddFavEmoji(selectedEmoji.Code);
                         SelectedEmoji = null;
                         return;
                     }
@@ -464,7 +468,7 @@ namespace Client.ViewModels
             rich.CaretPosition = _container.ContentEnd;
             rich.TextChanged += rich_TextChanged;
             messageText = messageText.Insert(index2, "&#001");
-            Settings.AddFavEmoji(selectedEmoji.Code);
+            EmojiData.AddFavEmoji(selectedEmoji.Code);
             SelectedEmoji = null;
         }
 

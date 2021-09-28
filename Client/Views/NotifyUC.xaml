@@ -14,6 +14,7 @@
 
             <utility:PathToName x:Key="PathToName"/>
             <utility:PathToExtension x:Key="PathToExtension"/>
+            <utility:FitEmojiConverter x:Key="FitEmojiConverter" FontSize="20" ImageSize="24"/>
 
             <DataTemplate x:Key="ChatOneDataTemplate">
                 <StackPanel Orientation="Horizontal">
@@ -40,7 +41,7 @@
             </DataTemplate>
 
             <DataTemplate x:Key="TextDataTemplate">
-                <TextBlock Text="{Binding Path=Text}" FontSize="15" Foreground="MintCream" TextWrapping="Wrap"/>
+                <ContentPresenter Content="{Binding Path=Text, Converter={StaticResource FitEmojiConverter}}"/>
             </DataTemplate>
 
             <DataTemplate x:Key="FileDataTemplate">

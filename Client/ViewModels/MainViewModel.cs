@@ -130,7 +130,8 @@ namespace Client.ViewModels
             }
             catch (IOException)
             {
-                new Views.DialogWindow("avatar image could not be download").ShowDialog();
+                new Views.DialogWindow(App.Current.Resources["AvatarError"].ToString()).ShowDialog();
+                //new Views.DialogWindow("avatar image could not be download").ShowDialog();
             }
         }
 
@@ -148,15 +149,16 @@ namespace Client.ViewModels
             {
                 Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
                 openFileDialog.Multiselect = false;
-                openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg; *.jpeg; *.png";
+                openFileDialog.Filter = App.Current.Resources["ImageFiles"].ToString();
+                //openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg; *.jpeg; *.png";
                 if (openFileDialog.ShowDialog() == true)
                 {
 
                     MemoryStream memoryStream = ImageCropper.GetCroppedImage(openFileDialog.FileName);
                     memoryStream.Position = 0;
 
-                    uploadFileInfo = new ChatService.UploadFileInfo { FileName = openFileDialog.FileName, FileStream = memoryStream, Responsed_SqlId = client.SqlId };
-                    ChatService.AvatarClient avatarClient = new ChatService.AvatarClient();
+                    uploadFileInfo = new UploadFileInfo { FileName = openFileDialog.FileName, FileStream = memoryStream, Responsed_SqlId = client.SqlId };
+                    AvatarClient avatarClient = new AvatarClient();
 
                     if (uploadFileInfo.FileStream.CanRead)
                         await avatarClient.UserAvatarUploadAsync(uploadFileInfo.FileName, uploadFileInfo.Responsed_SqlId, uploadFileInfo.FileStream);
@@ -214,8 +216,11 @@ namespace Client.ViewModels
             SelectedOptionsItem = null;
             RemoveUC.Invoke(currentView);
             SelectedChat = null;
-            UserControl control = new Views.SettingsUC();
-            control.DataContext = new SettingsViewModel(Client);
+            Views.Temp control = new Views.Temp();
+            SettingsViewModel viewModel = new SettingsViewModel(Client);
+            viewModel.AddUC += control.AddUc;
+            viewModel.RemoveUC += control.RemoveUC;
+            control.DataContext = viewModel;
             currentView = control;
             AddUC.Invoke(currentView);
         }
@@ -250,7 +255,7 @@ namespace Client.ViewModels
                     if (count < 2)
                         Users.Remove(Users.First(u => u.Key == item));
                 }
-                chat.LastMessage = new TextMessage("You are removed", DateTime.Now);
+                chat.LastMessage = new TextMessage(App.Current.Resources["YouAreRemoved"].ToString(), DateTime.Now);
                 Chats.Move(Chats.IndexOf(chat), 0);
                 chat.CanWrite = false;
                 settings.RemoveMute(chatId);
@@ -310,7 +315,7 @@ namespace Client.ViewModels
 
                     this.Chats.Add(isGroup ? new ChatGroup(chatId, chatName, availableUsers) { CanWrite = true } :
                                         (Models.Chat)new ChatOne(chatId, availableUsers.First()) { CanWrite = true });
-                    Chats.Last().LastMessage = SystemMessage.UserAdded(DateTime.Now, "You are added").Message;
+                    Chats.Last().LastMessage = SystemMessage.UserAdded(DateTime.Now, App.Current.Resources["YouAreAdded"].ToString()).Message;
                     Chats.Move(Chats.IndexOf(Chats.Last()), 0);
 
                 });
@@ -344,7 +349,7 @@ namespace Client.ViewModels
         {
             var chat = chats.FirstOrDefault(c => c.SqlId == chatId);
             if (chat != null)
-                chat.LastMessage = SystemMessage.UserLeftChat(DateTime.Now, new ChatService.UnitClient().FindUserName(userId)).Message;
+                chat.LastMessage = SystemMessage.UserLeftChat(DateTime.Now, new UnitClient().FindUserName(userId)).Message;
             RemoveUserFromChatroom(chatId, userId);
             settings.RemoveMute(chatId);
 
@@ -368,21 +373,36 @@ namespace Client.ViewModels
             if (Chats.IndexOf(chat) != 0)
                 Chats.Move(Chats.IndexOf(chat), 0);
 
-            if (chat.Equals(SelectedChat))
+            if (mainWindow.IsVisible)
             {
-                chat.Messages.Add(chat.GetMessageType(Client.SqlId, message.UserId, new TextMessage(message.Text, message.DateTime)));
-                if (!mainWindow.IsVisible && settings.CanNotify)
-                {
-                    if (chat.CanNotify(settings))
-                        settings.PlayRington(chat.GetNotifyPath(settings));
-                    Notify(chat);
-                }
+                if (chat.Equals(selectedChat))
+                    chat.Messages.Add(chat.GetMessageType(Client.SqlId, message.UserId, new TextMessage(message.Text, message.DateTime)));
+                else
+                    PlayRington(chat);
             }
-            else if (chat.CanNotify(settings))
+            else
             {
-                settings.PlayRington(chat.GetNotifyPath(settings));
-                if (!mainWindow.IsVisible && settings.CanNotify) Notify(chat);
+                if (chat.Equals(selectedChat))
+                    chat.Messages.Add(chat.GetMessageType(Client.SqlId, message.UserId, new TextMessage(message.Text, message.DateTime)));
+                PlayRington(chat);
+                Notify(chat);
             }
+
+            //if (chat.Equals(SelectedChat))
+            //{
+            //    chat.Messages.Add(chat.GetMessageType(Client.SqlId, message.UserId, new TextMessage(message.Text, message.DateTime)));
+            //    if (!mainWindow.IsVisible)
+            //    {
+            //        if (chat.CanRington(settings))
+            //            settings.PlayRington(chat.GetRingtonPath(settings));
+            //        Notify(chat);
+            //    }
+            //}
+            //else if (chat.CanRington(settings))
+            //{
+            //    settings.PlayRington(chat.GetRingtonPath(settings));
+            //    if (!mainWindow.IsVisible) Notify(chat);
+            //}
         }
 
         public void ReplyMessageIsWriting(Nullable<int> userSqlId, int chatSqlId)
@@ -392,7 +412,7 @@ namespace Client.ViewModels
                 AvailableUser user = Users.FirstOrDefault(u => u.Key == userSqlId).Value;
                 if (user == null)
                 {
-                    user = new AvailableUser(userSqlId.Value, new ChatService.UnitClient().FindUserName(userSqlId.Value));
+                    user = new AvailableUser(userSqlId.Value, new UnitClient().FindUserName(userSqlId.Value));
                     user.IsOnline = true;
                     Users.Add(new KeyValuePair<int, AvailableUser>(user.SqlId, user));
                 }
@@ -408,22 +428,37 @@ namespace Client.ViewModels
             if (Chats.IndexOf(chat) != 0)
                 Chats.Move(Chats.IndexOf(chat), 0);
 
-            if (chat.Equals(SelectedChat))
+            if (mainWindow.IsVisible)
             {
-                chat.Messages.Add(chat.GetMessageType(Client.SqlId, serviceMessageFile.UserId, new FileMessage(serviceMessageFile.FileName, serviceMessageFile.DateTime, serviceMessageFile.StreamId)));
-                if (!mainWindow.IsVisible && settings.CanNotify)
-                {
-                    if (chat.CanNotify(settings))
-                        settings.PlayRington(chat.GetNotifyPath(settings));
-                    Notify(chat);
-                }
+                if (chat.Equals(selectedChat))
+                    chat.Messages.Add(chat.GetMessageType(Client.SqlId, serviceMessageFile.UserId, new FileMessage(serviceMessageFile.FileName, serviceMessageFile.DateTime, serviceMessageFile.StreamId)));
+                else
+                    PlayRington(chat);
             }
-            else if (chat.CanNotify(settings))
+            else
             {
-                if (chat.CanNotify(settings))
-                    settings.PlayRington(chat.GetNotifyPath(settings));
-                if (!mainWindow.IsVisible && settings.CanNotify) Notify(chat);
+                if (chat.Equals(selectedChat))
+                    chat.Messages.Add(chat.GetMessageType(Client.SqlId, serviceMessageFile.UserId, new FileMessage(serviceMessageFile.FileName, serviceMessageFile.DateTime, serviceMessageFile.StreamId)));
+                PlayRington(chat);
+                Notify(chat);
             }
+
+            //if (chat.Equals(SelectedChat))
+            //{
+            //    chat.Messages.Add(chat.GetMessageType(Client.SqlId, serviceMessageFile.UserId, new FileMessage(serviceMessageFile.FileName, serviceMessageFile.DateTime, serviceMessageFile.StreamId)));
+            //    if (!mainWindow.IsVisible && settings.CanNotify)
+            //    {
+            //        if (chat.CanRington(settings))
+            //            settings.PlayRington(chat.GetRingtonPath(settings));
+            //        Notify(chat);
+            //    }
+            //}
+            //else if (chat.CanRington(settings))
+            //{
+            //    if (chat.CanRington(settings))
+            //        settings.PlayRington(chat.GetRingtonPath(settings));
+            //    if (!mainWindow.IsVisible && settings.CanNotify) Notify(chat);
+            //}
         }
 
         private async Task LoadChatroomsAsync()
@@ -521,8 +556,8 @@ namespace Client.ViewModels
 
         public async void DownloadUserAvatarAsync(AvailableUser user)
         {
-            ChatService.DownloadRequest request = new ChatService.DownloadRequest(user.SqlId);
-            var avatarClient = new ChatService.AvatarClient();
+            DownloadRequest request = new DownloadRequest(user.SqlId);
+            var avatarClient = new AvatarClient();
             Stream stream = null;
             MemoryStream memoryStream = null;
             long lenght = 0;
@@ -576,8 +611,8 @@ namespace Client.ViewModels
 
         public async void DownloadChatAvatarAsync(Models.ChatGroup chat)
         {
-            ChatService.DownloadRequest request = new ChatService.DownloadRequest(chat.SqlId);
-            var avatarClient = new ChatService.AvatarClient();
+            DownloadRequest request = new DownloadRequest(chat.SqlId);
+            var avatarClient = new AvatarClient();
             Stream stream = null;
             MemoryStream memoryStream = null;
             long lenght = 0;
@@ -667,11 +702,20 @@ namespace Client.ViewModels
             }
         }
 
+        private void PlayRington(Models.Chat chat)
+        {
+            if (chat.CanRington(settings))
+                settings.PlayRington(chat.GetRingtonPath(settings));
+        }
+
         private void Notify(Models.Chat chat)
         {
-            Views.NotifyUC notifyUC = new Views.NotifyUC();
-            notifyUC.DataContext = new NotifyMessage(chat, chat.LastMessage);
-            notifyManager.Show(notifyUC, "", new TimeSpan(0, 0, 5));
+            if (chat.CanNotify(settings))
+            {
+                Views.NotifyUC notifyUC = new Views.NotifyUC();
+                notifyUC.DataContext = new NotifyMessage(chat, chat.LastMessage);
+                notifyManager.Show(notifyUC, "", new TimeSpan(0, 0, 5));
+            }
         }
 
         public void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")

@@ -20,8 +20,6 @@ namespace Client.ViewModels
         private string fileName;
         private System.Windows.Window entranceWindow;
 
-        private bool isSectionShown;
-
         private string info;
         private bool formIsEnabled;
 
@@ -32,10 +30,6 @@ namespace Client.ViewModels
         private string login;
         private string password;
 
-        //private bool nameIsWarning;
-        //private bool loginIsWarning;
-        //private bool passwordIsWarning;
-
         private System.Windows.Visibility loaderVisbility;
         private LoaderState loaderState;
 
@@ -45,7 +39,6 @@ namespace Client.ViewModels
         {
             entranceWindow = window;
 
-            //IsSectionShown = false;
             LoaderVisibility = System.Windows.Visibility.Collapsed;
 
             SignInCommand = new Command(SignIn);
@@ -53,6 +46,9 @@ namespace Client.ViewModels
             SetPhotoCommand = new Command(SetPhoto);
             BackCommand = new Command(Back);
             CancelImageCommand = new Command(CancelImage);
+
+            string language = System.Globalization.CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
+            Models.Settings.Instance.ChangeLanguage(language);
         }
 
         public ICommand SignInCommand { get; }
@@ -61,8 +57,6 @@ namespace Client.ViewModels
         public ICommand BackCommand { get; }
         public ICommand CancelImageCommand { get; }
 
-        //public bool IsSectionShown { get => isSectionShown; set => Set(ref isSectionShown, value); }
-
         public string Info { get => info; set => Set(ref info, value); }
 
         public BitmapImage SelectedImage { get => image; set => Set(ref image, value); }
@@ -70,13 +64,6 @@ namespace Client.ViewModels
         public string Name { get => name; set => Set(ref name, value); }
         public string Login { get => login; set => Set(ref login, value); }
         public string Password { get => password; set => Set(ref password, value); }
-
-        //public bool NameIsWarning { get => nameIsWarning; set => Set(ref nameIsWarning, value); }
-        //public bool LoginIsWarning { get => loginIsWarning; set => Set(ref loginIsWarning, value); }
-        //public bool PasswordIsWarning { get => passwordIsWarning; set => Set(ref passwordIsWarning, value); }
-
-        // бывший main grid visibility
-        //public bool FormIsEnabled { get => formIsEnabled; set => Set(ref formIsEnabled, value); }
 
         public LoaderState LoaderState { get => loaderState; set => Set(ref loaderState, value); }
         public System.Windows.Visibility LoaderVisibility { get => loaderVisbility; set => Set(ref loaderVisbility, value); }
@@ -100,7 +87,7 @@ namespace Client.ViewModels
                 }
                 catch (FaultException<ChatService.ConnectionExceptionFault> ex)
                 {
-                    new DialogWindow(ex.Message).ShowDialog();
+                    new DialogWindow(App.Current.Resources["ConnectionError"].ToString()).ShowDialog();
                     Info = ex.Message;
                 }
                 catch (Exception ex)
@@ -110,7 +97,7 @@ namespace Client.ViewModels
             }
             else
             {
-                new DialogWindow("all fields must be entered").ShowDialog();
+                new DialogWindow(App.Current.Resources["AllFieldsError"].ToString()).ShowDialog();
             }
         }
 
@@ -118,7 +105,6 @@ namespace Client.ViewModels
         {
             if (formIsEnabled)
             {
-                //FormIsEnabled = false;
                 ChatService.ServerUserInfo registrationInfo = new ChatService.ServerUserInfo()
                 {
                     Name = Name,
@@ -135,10 +121,8 @@ namespace Client.ViewModels
                 await Task.Delay(1000); // нужен для того чтобы анимация закончилась до конца
 
                 LoaderVisibility = System.Windows.Visibility.Collapsed;
-                //FormIsEnabled = !FormIsEnabled;
             }
             formIsEnabled = true;
-            //IsSectionShown = true;
         }
 
         private async void MakeRegister(ChatService.ServerUserInfo registrationInfo)
@@ -152,7 +136,7 @@ namespace Client.ViewModels
 
                 if (uploadFileInfo != null)
                 {
-                    this.memoryStream.Position = 0;
+                    memoryStream.Position = 0;
                     uploadFileInfo.FileName = fileName;
 
                     uploadFileInfo.FileStream = memoryStream;
@@ -161,30 +145,30 @@ namespace Client.ViewModels
                         await avatarClient.UserAvatarUploadAsync(uploadFileInfo.FileName, UserId, uploadFileInfo.FileStream);
                 }
             }
-            catch (FaultException<ChatService.LoginExceptionFault> ex)
+            catch (FaultException<ChatService.LoginExceptionFault>)
             {
                 LoaderState = LoaderState.Fault;
-                new DialogWindow(ex.Message).ShowDialog();
+                new DialogWindow(App.Current.Resources["LoginError"].ToString()).ShowDialog();
             }
-            catch (FaultException<ChatService.NicknameExceptionFault> ex)
+            catch (FaultException<ChatService.NicknameExceptionFault>)
             {
                 LoaderState = LoaderState.Fault;
-                new DialogWindow(ex.Message).ShowDialog();
+                new DialogWindow(App.Current.Resources["PasswordError"].ToString()).ShowDialog();
             }
-            catch (FaultException<ChatService.StreamExceptionFault> ex)
+            catch (FaultException<ChatService.StreamExceptionFault>)
             {
                 LoaderState = LoaderState.Fault;
-                new DialogWindow(ex.Message).ShowDialog();
+                new DialogWindow(App.Current.Resources["StreamError"].ToString()).ShowDialog();
             }
-            catch (FaultException<ChatService.AuthorizationExceptionFault> ex)
+            catch (FaultException<ChatService.AuthorizationExceptionFault>)
             {
                 LoaderState = LoaderState.Fault;
-                new DialogWindow(ex.Message).ShowDialog();
+                new DialogWindow(App.Current.Resources["AuthorizationError"].ToString()).ShowDialog();
             }
             catch (Exception)
             {
                 LoaderState = LoaderState.Fault;
-                new DialogWindow("Something wrong with server").ShowDialog();
+                new DialogWindow(App.Current.Resources["ServerError"].ToString()).ShowDialog();
             }
             finally
             {
@@ -211,16 +195,12 @@ namespace Client.ViewModels
                     uploadFileInfo = new ChatService.UploadFileInfo();
 
                     Bitmap source = new Bitmap(fileName);
-                    this.memoryStream = new MemoryStream();
+                    memoryStream = new MemoryStream();
                     Bitmap croppedSource = null;
                     if (source.Height > 1000 || source.Width > 1000)
-                    {
                         croppedSource = source.Clone(new Rectangle(250, 250, 750, 750), source.PixelFormat);
-                    }
                     else
-                    {
                         croppedSource = source.Clone(new Rectangle(0, 0, source.Width, source.Height), source.PixelFormat);
-                    }
 
                     switch (fileName.Substring(fileName.LastIndexOf(".")))
                     {
@@ -228,7 +208,7 @@ namespace Client.ViewModels
                         case ".png": croppedSource.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png); break;
                     }
 
-                    this.memoryStream.Position = 0;
+                    memoryStream.Position = 0;
 
                     var bitmap = new BitmapImage();
 
@@ -237,27 +217,27 @@ namespace Client.ViewModels
                     bitmap.StreamSource = memoryStream;
                     bitmap.EndInit();
 
-                    this.SelectedImage = bitmap;
+                    SelectedImage = bitmap;
                 }
                 else
                 {
-                    this.SelectedImage = null;
+                    SelectedImage = null;
                     memoryStream = null;
                     uploadFileInfo = null;
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                new DialogWindow(ex.Message).ShowDialog();
+                new DialogWindow(App.Current.Resources["StreamError"].ToString()).ShowDialog();
             }
         }
 
         private void Back(object param)
         {
             formIsEnabled = false;
-            //IsSectionShown = !IsSectionShown;
-            if (uploadFileInfo != null && uploadFileInfo.FileStream != null) uploadFileInfo.FileStream.Dispose();
+            if (uploadFileInfo != null && uploadFileInfo.FileStream != null)
+                uploadFileInfo.FileStream.Dispose();
         }
 
         private void CancelImage(object param)

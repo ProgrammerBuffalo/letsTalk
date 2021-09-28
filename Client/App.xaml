@@ -1,6 +1,7 @@
 ﻿<Application x:Class="Client.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              StartupUri="Views/EntranceWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -9,6 +10,82 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <system:String x:Key="LetsTalk">letsTalk</system:String>
+            <system:String x:Key="ru">Русский</system:String>
+            <system:String x:Key="en">English</system:String>
+
+            <system:String x:Key="HelloUser">Hello dear user, welcome to the LetsTalk chat app!</system:String>
+            <system:String x:Key="HelpUser">Select the chat you need from the menu list in order to start chatting or create a new one</system:String>
+
+            <system:String x:Key="Ok">Ok</system:String>
+            <system:String x:Key="Cancel">Cancel</system:String>
+
+            <system:String x:Key="Entrance">Entrance</system:String>
+            <system:String x:Key="Name">Name</system:String>
+            <system:String x:Key="Login">Login</system:String>
+            <system:String x:Key="Password">Password</system:String>
+            <system:String x:Key="SignIn">Sign in</system:String>
+            <system:String x:Key="Registrate">Registrate</system:String>
+            <system:String x:Key="Back">Back</system:String>
+
+            <system:String x:Key="NameErrorLength">must be in the range of 4-12 letters</system:String>
+            <system:String x:Key="NameErrorValidSymbols">name can contain only letters</system:String>
+            <system:String x:Key="PasswordErrorLength">must be in the range of 5-15 symbols</system:String>
+            <system:String x:Key="PasswordErrorValidSymbols">valid symbols (!,#,$,%,^,&amp;,*,@)</system:String>
+            
+            <system:String x:Key="AllFieldsError">All fields must be entered</system:String>
+            <system:String x:Key="ServerError">Something wrong with server</system:String>
+            <system:String x:Key="LoginError">this login already exsists</system:String>
+            <system:String x:Key="PasswordError">this password already exsists</system:String>
+            <system:String x:Key="ConnectionError">This user is already connected</system:String>
+            <system:String x:Key="AuthorizationError">Login or Password is not correct</system:String>
+            <system:String x:Key="StreamError">Failed to send file</system:String>
+
+            <system:String x:Key="ImageFiles">Image files (*.jpg, *.jpeg, *.png)|*.jpg; *.jpeg; *.png</system:String>
+
+            <system:String x:Key="CreateChatroom">Create Chatroom</system:String>
+            <system:String x:Key="Settings">Settings</system:String>
+            <system:String x:Key="AvatarError">avatar image could not be download</system:String>
+            <system:String x:Key="YouAreRemoved">You are removed</system:String>
+            <system:String x:Key="YouAreAdded">You are added</system:String>
+            <system:String x:Key="ChatroomError">Chatroom already exsists, you cannot create a new one</system:String>
+
+            <system:String x:Key="SearchUsers">Search users</system:String>
+            <system:String x:Key="Search">Search</system:String>
+            <system:String x:Key="DragUsersToAdd">Drag users for adding to group</system:String>
+            <system:String x:Key="ShowMore">Show More</system:String>
+            <system:String x:Key="EnterNameOfChat">Enter name of chat room</system:String>
+            <system:String x:Key="MembersOfGroup">Members of group</system:String>
+            <system:String x:Key="CreateGroup">Create Group</system:String>
+            <system:String x:Key="PleaseEnterChatroomName">Please enter chatroom name</system:String>
+
+            <system:String x:Key="Leave">Leave</system:String>
+            <system:String x:Key="EditChat">Edit chat</system:String>
+            <system:String x:Key="Smile">Smile</system:String>
+            <system:String x:Key="File">File</system:String>
+            <system:String x:Key="Save">Save</system:String>
+
+            <system:String x:Key="GeneralSettings">General Settings</system:String>
+            <system:String x:Key="AppearanceSettings">Appearance Settings</system:String>
+            <system:String x:Key="NotificationSettings">Notification Settings</system:String>
+            
+            <system:String x:Key="UserProfile">User profile</system:String>
+            <system:String x:Key="Language">Language</system:String>
+            <system:String x:Key="SelectedLanguageText">Selected language: English</system:String>
+            <system:String x:Key="ChatSettings">Chat Settings</system:String>
+            <system:String x:Key="MessageDownloadStep">Messages download step:</system:String>
+
+            <system:String x:Key="GroupSettings">Group Settings</system:String>
+            <system:String x:Key="ChatNotification">Chat notification</system:String>
+            <system:String x:Key="GroupNotification">Group notification</system:String>
+            <system:String x:Key="ChatSounds">Chat sounds</system:String>
+            <system:String x:Key="GroupSounds">Group sounds</system:String>
+
+            <system:String x:Key="ShowAvatarInGroupMessage">Show avatar in group messages</system:String>
+            <system:String x:Key="ChatFontSize">Chat font size:</system:String>
+            <system:String x:Key="LetsTalkWallpapers">letsTalk wallpapers</system:String>
+            <system:String x:Key="SelectFromDevice">Select from device</system:String>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -145,7 +145,8 @@ namespace Client.ViewModels
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
                 openFileDialog.Multiselect = false;
-                openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg; *.jpeg; *.png";
+                //openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg; *.jpeg; *.png";
+                openFileDialog.Filter = App.Current.Resources["ImageFiles"].ToString();
                 if (openFileDialog.ShowDialog() == true)
                 {
 

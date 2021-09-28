@@ -8,78 +8,137 @@ using System.Windows.Input;
 
 namespace Client.ViewModels
 {
-    public class SettingsViewModel : System.ComponentModel.INotifyPropertyChanged
+    public class SettingsViewModel : System.ComponentModel.INotifyPropertyChanged, IHelperUC
     {
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        public event UCChangedEventHandler RemoveUC;
+        public event UCChangedEventHandler AddUC;
 
         private Settings settings;
-        
+        private System.Windows.Controls.UserControl selectedSubSetting;
+        private ObservableCollection<Rington> userRingtons;
+        private ObservableCollection<Rington> groupRingtons;
+
+        private Rington selectedUserRington;
+        private Rington selectedGroupRington;
+
         private Views.DefaultWallpaperWindow wallpaperWindow;
-        private Views.PreviewWallpaperWindow previewWallpaperWindow;
         private string selectedWallpaper;
-        
-        private bool loadCount1IsChecked;
-        private bool loadCount2IsChecked;
-        private bool loadCount3IsChecked;
-        private bool isFromDevice;
+        private Rington selectedRington;
 
 
         public SettingsViewModel(ClientUserInfo client)
         {
             Client = client;
             settings = Settings.Instance;
+            DefautWallpapers = new ObservableCollection<string>(settings.GetWallpapers());
+            UserRingtons = new ObservableCollection<Rington>(settings.GetRingtons());
+            GroupRingtons = new ObservableCollection<Rington>(settings.GetRingtons());
+            for (int i = 0; i < userRingtons.Count; i++)
+            {
+                if (userRingtons[i].Name == settings.SelectedUserRington.Name)
+                    userRingtons[i].IsSelected = true;
+            }
+            for (int i = 0; i < groupRingtons.Count; i++)
+            {
+                if (groupRingtons[i].Name == settings.SelectedGroupRington.Name)
+                    groupRingtons[i].IsSelected = true;
+            }
 
-            MessageLoadCountChangedCommand = new Command(MessageLoadCountChanged);
+            WindowLoadedCommand = new Command(WindowLoaded);
+            GeneralSettingsShowCommand = new Command(GeneralSettingsShow);
+            AppearanceSettingsShowCommand = new Command(AppearanceSettingsShow);
+            NotificationSettingsShowCommand = new Command(NotificationSettingsShow);
             DefaultWallpaperShowCommand = new Command(DefaultWallpaperShow);
             DeviceWallpaperShowCommand = new Command(DeviceWallpaperShow);
             DefaultWallpaperChangedCommand = new Command(DefaultWallpaperChanged);
-            PreviewWallpaperShowCommand = new Command(PreviewWallpaperShow);
-            ConfirmWallpaperCommand = new Command(ConfirmWallpaper);
-            DefaultRingtonShowCommand = new Command(DefaultRingtonShow);
-            UserRingtonChangeCommand = new Command(UserRingtonShow);
-            GroupRingtonChangeCommand = new Command(GroupRingtonShow);
+            UserRingtonChangedCommand = new Command(UserRingtonChanged);
+            GroupRingtonChangedCommand = new Command(GroupRingtonChanged);
+            LanguageChangedCommand = new Command(LanguageChanged);
 
             Messages = new ObservableCollection<SourceMessage>();
             Messages.Add(new SourceMessage(new TextMessage("Hello")));
             Messages.Add(new UserMessage(new TextMessage("Hi how are you")));
-            Messages.Add(new SourceMessage(new TextMessage("I am okey thanks ;)")));
+            Messages.Add(new SourceMessage(new TextMessage("I am okey)")));
+            Messages.Add(new SourceMessage(new TextMessage("thank you bro")));
+            Messages.Add(new GroupMessage(new TextMessage("hello guys lets have some fun!!!"), new AvailableUser() { Name = "John", IsOnline = true, Image = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/group.png", UriKind.Relative)) }, "#111111"));
+            Messages.Add(SystemMessage.ChatroomCreated(DateTime.Now));
 
-            if (settings.MessageLoadCount == 30) LoadCount1IsChecked = true;
-            else if (settings.MessageLoadCount == 50) LoadCount2IsChecked = true;
-            else LoadCount3IsChecked = true;
+            selectedSubSetting = new Views.GeneralSettingsUC();
+            selectedSubSetting.DataContext = this;
         }
 
-        public ICommand MessageLoadCountChangedCommand { get; }
+        public ICommand WindowLoadedCommand { get; }
         public ICommand DefaultWallpaperShowCommand { get; }
         public ICommand DeviceWallpaperShowCommand { get; }
         public ICommand DefaultWallpaperChangedCommand { get; }
-        public ICommand DefaultRingtonShowCommand { get; }
-        public ICommand DeviceRingtonShowCommand { get; }
-        public ICommand ConfirmWallpaperCommand { get; }
-        public ICommand PreviewWallpaperShowCommand { get; }
-        public ICommand UserRingtonChangeCommand { get; }
-        public ICommand GroupRingtonChangeCommand { get; }
+        public ICommand UserRingtonChangedCommand { get; }
+        public ICommand GroupRingtonChangedCommand { get; }
+        public ICommand LanguageChangedCommand { get; }
+        public ICommand GeneralSettingsShowCommand { get; }
+        public ICommand AppearanceSettingsShowCommand { get; }
+        public ICommand NotificationSettingsShowCommand { get; }
 
 
         public ClientUserInfo Client { get; }
         public Settings Settings { get => settings; set => Set(ref settings, value); }
         public ObservableCollection<string> DefautWallpapers { get; private set; }
         public ObservableCollection<SourceMessage> Messages { get; }
+        public ObservableCollection<Rington> UserRingtons { get => userRingtons; private set => userRingtons = value; }
+        public ObservableCollection<Rington> GroupRingtons { get => groupRingtons; private set => groupRingtons = value; }
+        public Rington SelectedUserRington { get => selectedUserRington; set => selectedUserRington = value; }
+        public Rington SelectedGroupRington { get => selectedGroupRington; set => selectedGroupRington = value; }
         public string SelectedWallpaper { get => selectedWallpaper; set => Set(ref selectedWallpaper, value); }
+        public Rington SelectedRington { get => selectedRington; set => Set(ref selectedRington, value); }
 
-        public bool LoadCount1IsChecked { get => loadCount1IsChecked; set => Set(ref loadCount1IsChecked, value); }
-        public bool LoadCount2IsChecked { get => loadCount2IsChecked; set => Set(ref loadCount2IsChecked, value); }
-        public bool LoadCount3IsChecked { get => loadCount3IsChecked; set => Set(ref loadCount3IsChecked, value); }
-
-        private void MessageLoadCountChanged(object param)
+        private void WindowLoaded(object param)
         {
-            settings.MessageLoadCount = int.Parse(param.ToString());
+            AddUC.Invoke(selectedSubSetting);
+        }
+
+        private void GeneralSettingsShow(object param)
+        {
+            if (!(selectedSubSetting is Views.GeneralSettingsUC))
+            {
+                System.Windows.Controls.UserControl subSetting = new Views.GeneralSettingsUC();
+                RemoveUC(selectedSubSetting);
+                selectedSubSetting = subSetting;
+                selectedSubSetting.DataContext = this;
+                AddUC(selectedSubSetting);
+            }
+        }
+
+        private void AppearanceSettingsShow(object param)
+        {
+            if (!(selectedSubSetting is Views.ApirianceSettigsUC))
+            {
+                System.Windows.Controls.UserControl subSetting = new Views.ApirianceSettigsUC();
+                RemoveUC(selectedSubSetting);
+                selectedSubSetting = subSetting;
+                selectedSubSetting.DataContext = this;
+                AddUC(selectedSubSetting);
+            }
+        }
+
+        private void NotificationSettingsShow(object param)
+        {
+            if (!(selectedSubSetting is Views.NotificationSettingsUC))
+            {
+                System.Windows.Controls.UserControl subSetting = new Views.NotificationSettingsUC();
+                RemoveUC(selectedSubSetting);
+                selectedSubSetting = subSetting;
+                selectedSubSetting.DataContext = this;
+                AddUC(selectedSubSetting);
+            }
+        }
+
+        private void LanguageChanged(object param)
+        {
+            settings.SelectedLanguage = param.ToString();
         }
 
         private void DefaultWallpaperShow(object param)
         {
-            isFromDevice = false;
-            DefautWallpapers = new ObservableCollection<string>(settings.GetWallpapers());
             wallpaperWindow = new Views.DefaultWallpaperWindow();
             wallpaperWindow.DataContext = this;
             wallpaperWindow.ShowDialog();
@@ -87,85 +146,47 @@ namespace Client.ViewModels
 
         private void DefaultWallpaperChanged(object param)
         {
-            SelectedWallpaper = param.ToString();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            settings.DeleteFromDeviceWallpaper();
             wallpaperWindow.Close();
-
-            previewWallpaperWindow = new Views.PreviewWallpaperWindow();
-            previewWallpaperWindow.Closed += PreviewWallpaperClosed;
-            previewWallpaperWindow.DataContext = this;
-            previewWallpaperWindow.ShowDialog();
-            previewWallpaperWindow.Close();
         }
 
         private void DeviceWallpaperShow(object param)
         {
-            isFromDevice = true;
             OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "Image files (*.png,*.jpg,*jpeg)|*.png;*.jpg;*jpeg";
+            dialog.Filter = App.Current.Resources["ImageFiles"].ToString();
             if (dialog.ShowDialog() == true)
             {
-                SelectedWallpaper = dialog.FileName;
-                previewWallpaperWindow = new Views.PreviewWallpaperWindow();
-                previewWallpaperWindow.DataContext = this;
-                previewWallpaperWindow.ShowDialog();
-                previewWallpaperWindow.Close();
+                settings.SelectedWallpaper = "";
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                settings.DeleteFromDeviceWallpaper();
+                string path = AppDomain.CurrentDomain.BaseDirectory + settings.WallaperFolderPath + "\\" + dialog.FileName.Substring(dialog.FileName.LastIndexOf('\\') + 1);
+                File.Copy(dialog.FileName, path);
+                Settings.SelectedWallpaper = path;
             }
         }
 
-        private void PreviewWallpaperShow(object param)
+        private void UserRingtonChanged(object param)
         {
-            wallpaperWindow.Close();
-            previewWallpaperWindow = new Views.PreviewWallpaperWindow();
-            previewWallpaperWindow.DataContext = this;
-            previewWallpaperWindow.Closed += PreviewWallpaperClosed;
-            previewWallpaperWindow.ShowDialog();
-            wallpaperWindow.Close();
-        }
-
-        private void PreviewWallpaperClosed(object sender, EventArgs e)
-        {
-            wallpaperWindow = new Views.DefaultWallpaperWindow();
-            wallpaperWindow.DataContext = this;
-            wallpaperWindow.ShowDialog();
-        }
-
-        private void ConfirmWallpaper(object param)
-        {
-            if (isFromDevice)
+            if (param != null)
             {
-                foreach (var file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "Settings\\Wallpaper"))
-                    File.Delete(file);
-                string path = AppDomain.CurrentDomain.BaseDirectory + "Settings\\Wallpaper\\" + selectedWallpaper.Substring(selectedWallpaper.LastIndexOf('\\') + 1);
-                File.Copy(selectedWallpaper, path);
-                settings.SelectedWallpaper = path;
+                Rington rington = (Rington)param;
+                Settings.SelectedUserRington = rington;
+                settings.PlayRington(Settings.SelectedUserRington.Path);
             }
-            else
+        }
+
+        private void GroupRingtonChanged(object param)
+        {
+            if (param != null)
             {
-                settings.SelectedWallpaper = selectedWallpaper;
+                Rington rington = (Rington)param;
+                Settings.SelectedGroupRington = rington;
+                settings.PlayRington(Settings.SelectedGroupRington.Path);
             }
-            previewWallpaperWindow.Close();
         }
-
-        private void DefaultRingtonShow(object param)
-        {
-            Views.RingtonWindow window = new Views.RingtonWindow();
-            window.DataContext = this;
-            window.ShowDialog();
-        }
-
-        private void UserRingtonShow(object param)
-        {
-            Views.RingtonWindow window = new Views.RingtonWindow();
-            window.DataContext = new UserRingtonsViewModel(settings);
-            window.ShowDialog();
-        }
-
-        private void GroupRingtonShow(object param)
-        {
-            Views.RingtonWindow window = new Views.RingtonWindow();
-            window.DataContext = new GroupRingtonsViewModel(settings);
-            window.ShowDialog();
-        }        
 
         private void Set<T>(ref T prop, T value, [System.Runtime.CompilerServices.CallerMemberName] string prop_name = "")
         {

@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"       
         mc:Ignorable="d"
-        Title="Wallpaper" Height="600" Width="820">
+        Title="Wallpaper" Height="600" Width="720">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -26,9 +26,9 @@
             </Style>
 
             <DataTemplate x:Key="WallpaperDataTemplate">
-                <Image Width="250" Height="250" Stretch="Fill">
+                <Image Width="220" Height="220" Stretch="Fill">
                     <Image.Source>
-                        <BitmapImage UriSource="{Binding BindsDirectlyToSource=True }" DecodePixelHeight="250"/>
+                        <BitmapImage UriSource="{Binding BindsDirectlyToSource=True}" DecodePixelHeight="250"/>
                     </Image.Source>
                 </Image>
             </DataTemplate>
@@ -40,18 +40,10 @@
     </Window.Resources>
 
     <Grid Background="Beige">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="5*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-
         <ListView Background="AntiqueWhite"
             x:Name="wallpapers"
             Grid.ColumnSpan="2"
+            SelectedItem="{Binding Path=Settings.SelectedWallpaper}"
             ItemsSource="{Binding Path=DefautWallpapers}"
             ItemContainerStyle="{StaticResource WallpaperContainerStyle}"
             ItemsPanel="{StaticResource WallpaperItemTemplate}"
@@ -59,13 +51,10 @@
             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding DefaultWallpaperChangedCommand}"
-                                           CommandParameter="{Binding ElementName=wallpapers, Path=SelectedItem}"/>
+                    <i:InvokeCommandAction Command="{Binding DefaultWallpaperChangedCommand}" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </ListView>
 
-        <Button Grid.Column="0" Grid.Row="1" Content="Confirm wallpaper" Width="200" Height="40" Template="{StaticResource ButtonTemplate}" Command="{Binding ConfirmWallpaperCommand}"/>
-        <Button Grid.Column="1" Grid.Row="1" Content="Preview wallpaper" Width="200" Height="40" Template="{StaticResource ButtonTemplate}" Command="{Binding PreviewWallpaperShowCommand}"/>
     </Grid>
 </metro:MetroWindow>
