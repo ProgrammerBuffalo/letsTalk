@@ -1,0 +1,801 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root>
+	<HelloUser>Hello dear user, welcome to the LetsTalk chat app!</HelloUser>
+	<HelpUser>Select the chat you need from the menu list in order to start chatting or create a new one</HelpUser>
+	
+	<Ok>Ok</Ok>
+	<Cancel>Cancel</Cancel>
+
+	<Entrance>Entrance</Entrance>
+	<Name>Name</Name>
+	<Login>Login</Login>	
+	<Password>Password</Password>
+	<SignIn>Sign in</SignIn>
+	<Registrate>Registrate</Registrate>
+	<Back>Back</Back>
+	
+	<NameErrorLength>must be in the range of 4-12 letters</NameErrorLength>
+	<NameErrorValidSymbols>name can contain only letters</NameErrorValidSymbols>
+	<PasswordErrorLength>must be in the range of 5-15 symbols</PasswordErrorLength>
+	<PasswordErrorValidSymbols>valid symbols (!,#,$,%,^,&amp;,*,@)</PasswordErrorValidSymbols>
+	<AllFieldsError>All fields must be entered</AllFieldsError>
+	
+	<LoginError>this login already exsists</LoginError>
+	<PasswordError>this password already exsists</PasswordError>
+	<StreamError>Failed to send file</StreamError>
+	<ConnectionError>This user is already connected</ConnectionError>
+	<AuthorizationError>Login or Password is not correct</AuthorizationError>
+	<ServerError>Something wrong with server</ServerError>
+	
+	<ImageFiles>Image files (*.jpg, *.jpeg, *.png)|*.jpg; *.jpeg; *.png</ImageFiles>
+	
+	<CreateChatroom>Create Chatroom</CreateChatroom>
+	<Settings>Settings</Settings>
+	<AvatarError>avatar image could not be downlad</AvatarError>
+	<YouAreRemoved>You are removed</YouAreRemoved>
+	<YouAreAdded>You are added</YouAreAdded>
+		
+	<SearchUsers>Search users</SearchUsers>
+	<Search>Search</Search>
+	<DragUsersToAdd>Drag users for adding to group</DragUsersToAdd>
+	<ShowMore>Show More</ShowMore>
+	<EnterNameOfChat>Enter name of chat room</EnterNameOfChat>
+	<MembersOfGroup>Members of group</MembersOfGroup>
+	<CreateGroup>Create Group</CreateGroup>
+	<PleaseEnterChatroomName>Please enter chatroom name</PleaseEnterChatroomName>
+	
+	<Leave>Leave</Leave>
+	<EditChat>Edit chat</EditChat>
+	<Smile>Smile</Smile>
+	<File>File</File>
+	<Save>Save</Save>
+	
+	<GeneralSettings>General Settings</GeneralSettings>
+	<AppearanceSettings>Appearance Settings</AppearanceSettings>
+	<NotificationSettings>Notification Settings</NotificationSettings>
+	
+	<UserProfile>User profile</UserProfile>
+	<Language>Language</Language>
+	<SelectedLanguageText>Selected language: English</SelectedLanguageText>
+	<ChatSettings>Chat Settings</ChatSettings>
+	<ShowAvatarInGroupMessage>Show avatar in group messages</ShowAvatarInGroupMessage>
+	
+	<GroupSettings>Group Settings</GroupSettings>
+	<ChatNotification>Chat notification</ChatNotification>
+	<GroupNotification>Group notification</GroupNotification>
+	<ChatSounds>Chat sounds</ChatSounds>
+	<GroupSounds>Group sounds</GroupSounds>
+	<ChatroomError>Chatroom already exsists, you cannot create a new one</ChatroomError>
+	
+	<MessageDownloadStep>Messages download step:</MessageDownloadStep>
+	<ChatFontSize>Chat font size</ChatFontSize>
+	<LetsTalkWallpapers>letsTalk wallpapers</LetsTalkWallpapers>
+	<SelectFromDevice>Select from device</SelectFromDevice>
+	
+	<Emojis>
+		<EmojiGroup Code="$#001" Name="Smiles">
+			<Emoji Code="$#001" Name="happy" />
+			<Emoji Code="$#002" Name="happy" />
+			<Emoji Code="$#003" Name="happy" />
+			<Emoji Code="$#004" Name="happy" />
+			<Emoji Code="$#005" Name="happy" />
+			<Emoji Code="$#006" Name="happy" />
+			<Emoji Code="$#007" Name="happy" />
+			<Emoji Code="$#008" Name="happy" />
+			<Emoji Code="$#009" Name="happy" />
+			<Emoji Code="$#010" Name="happy" />
+			<Emoji Code="$#011" Name="happy" />
+			<Emoji Code="$#012" Name="happy" />
+			<Emoji Code="$#013" Name="happy" />
+			<Emoji Code="$#014" Name="happy" />
+			<Emoji Code="$#015" Name="sad" />
+			<Emoji Code="$#016" Name="sad" />
+			<Emoji Code="$#017" Name="sad" />
+			<Emoji Code="$#018" Name="sad" />
+			<Emoji Code="$#019" Name="sad" />
+			<Emoji Code="$#020" Name="sad" />
+			<Emoji Code="$#021" Name="sad" />
+			<Emoji Code="$#022" Name="sad" />
+			<Emoji Code="$#023" Name="sad" />
+			<Emoji Code="$#024" Name="sad" />
+			<Emoji Code="$#025" Name="sad" />
+			<Emoji Code="$#026" Name="smile" />
+			<Emoji Code="$#027" Name="cool" />
+			<Emoji Code="$#028" Name="cool" />
+			<Emoji Code="$#029" Name="cool" />
+			<Emoji Code="$#030" Name="cool" />
+			<Emoji Code="$#031" Name="surprised" />
+			<Emoji Code="$#032" Name="surprised" />
+			<Emoji Code="$#033" Name="surprised" />
+			<Emoji Code="$#034" Name="surprised" />
+			<Emoji Code="$#035" Name="surprised" />
+			<Emoji Code="$#036" Name="surprised" />
+			<Emoji Code="$#037" Name="surprised" />
+			<Emoji Code="$#038" Name="surprised" />
+			<Emoji Code="$#039" Name="surprised" />
+			<Emoji Code="$#040" Name="surprised" />
+			<Emoji Code="$#041" Name="shocked" />
+			<Emoji Code="$#042" Name="shocked" />
+			<Emoji Code="$#043" Name="shocked" />
+			<Emoji Code="$#044" Name="shocked" />
+			<Emoji Code="$#045" Name="nervous" />
+			<Emoji Code="$#046" Name="nervous" />
+			<Emoji Code="$#047" Name="nervous" />
+			<Emoji Code="$#048" Name="tired" />
+			<Emoji Code="$#049" Name="tongue" />
+			<Emoji Code="$#050" Name="tongue" />
+			<Emoji Code="$#051" Name="tongue" />
+			<Emoji Code="$#052" Name="tongue" />
+			<Emoji Code="$#053" Name="tongue" />
+			<Emoji Code="$#054" Name="tongue" />
+			<Emoji Code="$#055" Name="sleeping" />
+			<Emoji Code="$#056" Name="surprised" />
+			<Emoji Code="$#057" Name="wink" />
+			<Emoji Code="$#058" Name="laughing" />
+			<Emoji Code="$#059" Name="laughing" />
+			<Emoji Code="$#060" Name="laughing" />
+			<Emoji Code="$#061" Name="sweat" />
+			<Emoji Code="$#062" Name="crying" />
+			<Emoji Code="$#063" Name="crying" />
+			<Emoji Code="$#064" Name="crying" />
+			<Emoji Code="$#065" Name="crying" />
+			<Emoji Code="$#066" Name="crying" />
+			<Emoji Code="$#067" Name="crying" />
+			<Emoji Code="$#068" Name="crying" />
+			<Emoji Code="$#069" Name="crying" />
+			<Emoji Code="$#070" Name="crying" />
+			<Emoji Code="$#071" Name="bored" />
+			<Emoji Code="$#072" Name="angry" />
+			<Emoji Code="$#073" Name="angry" />
+			<Emoji Code="$#074" Name="angry" />
+			<Emoji Code="$#075" Name="angry" />
+			<Emoji Code="$#076" Name="angry" />
+			<Emoji Code="$#077" Name="angel" />
+			<Emoji Code="$#078" Name="thinking" />
+			<Emoji Code="$#079" Name="dead" />
+			<Emoji Code="$#080" Name="dead" />
+			<Emoji Code="$#081" Name="tired" />
+			<Emoji Code="$#082" Name="tired" />
+			<Emoji Code="$#083" Name="vampire" />
+			<Emoji Code="$#084" Name="hungry" /> 
+			<Emoji Code="$#085" Name="late" />
+			<Emoji Code="$#086" Name="sick" />
+			<Emoji Code="$#087" Name="sick" />
+			<Emoji Code="$#088" Name="sick" />
+			<Emoji Code="$#089" Name="sick" />
+			<Emoji Code="$#090" Name="zombie" />
+			<Emoji Code="$#091" Name="pain" />
+			<Emoji Code="$#092" Name="sweat" />
+			<Emoji Code="$#093" Name="kiss" />
+			<Emoji Code="$#094" Name="angel" />
+			<Emoji Code="$#095" Name="outrage" />
+			<Emoji Code="$#096" Name="ugly" />
+			<Emoji Code="$#097" Name="ugly" />
+			<Emoji Code="$#098" Name="ugly" />
+			<Emoji Code="$#099" Name="scared" />
+			<Emoji Code="$#100" Name="greed" />
+			<Emoji Code="$#101" Name="whistle" />
+			<Emoji Code="$#102" Name="nerd" />
+			<Emoji Code="$#103" Name="nerd" />
+			<Emoji Code="$#104" Name="nerd" />
+			<Emoji Code="$#105" Name="nerd" />
+			<Emoji Code="$#106" Name="nerd" />
+			<Emoji Code="$#107" Name="nerd" />
+			<Emoji Code="$#108" Name="nerd" />
+			<Emoji Code="$#109" Name="nerd" />
+			<Emoji Code="$#110" Name="nerd" />
+			<Emoji Code="$#111" Name="muted" />
+			<Emoji Code="$#112" Name="muted" />
+			<Emoji Code="$#113" Name="muted" />
+			<Emoji Code="$#114" Name="muted" />
+			<Emoji Code="$#115" Name="muted" />
+			<Emoji Code="$#116" Name="in love" />
+			<Emoji Code="$#117" Name="in love" />
+			<Emoji Code="$#118" Name="in love" />
+			<Emoji Code="$#119" Name="in love" />
+			<Emoji Code="$#120" Name="in love" />
+			<Emoji Code="$#121" Name="in love" />
+			<Emoji Code="$#122" Name="in love" />
+			<Emoji Code="$#123" Name="in love" />
+			<Emoji Code="$#124" Name="in love" />
+			<Emoji Code="$#125" Name="in love" />
+			<Emoji Code="$#126" Name="in love" />
+			<Emoji Code="$#127" Name="kiss" />
+			<Emoji Code="$#128" Name="kiss" />
+			<Emoji Code="$#129" Name="greed" />
+			<Emoji Code="$#130" Name="greed" />
+			<Emoji Code="$#131" Name="pirate" />
+			<Emoji Code="$#132" Name="music" />
+			<Emoji Code="$#133" Name="confused" />
+			<Emoji Code="$#134" Name="confused" />
+			<Emoji Code="$#135" Name="cheering" />
+			<Emoji Code="$#136" Name="graduated" />
+			<Emoji Code="$#137" Name="birthday boy" />
+			<Emoji Code="$#138" Name="sleeping" />
+			<Emoji Code="$#139" Name="wink" />
+			<Emoji Code="$#140" Name="injury" />
+			<Emoji Code="$#141" Name="rich" />
+			<Emoji Code="$#142" Name="thinking" />
+			<Emoji Code="$#143" Name="thinking" />
+			<Emoji Code="$#144" Name="confused" />
+			<Emoji Code="$#145" Name="hypnotized" />
+			<Emoji Code="$#146" Name="furious" />
+			<Emoji Code="$#147" Name="angry" />
+			<Emoji Code="$#148" Name="kiss" />
+			<Emoji Code="$#149" Name="kiss" />
+			<Emoji Code="$#150" Name="sleepy" />
+		</EmojiGroup>    
+		                 
+		<EmojiGroup Code="$#002" Name="Hands">
+			<Emoji Code="$#201" Name="middle finger" />
+			<Emoji Code="$#202" Name="salute" />
+			<Emoji Code="$#203" Name="strong" />
+			<Emoji Code="$#204" Name="clapping" />
+			<Emoji Code="$#205" Name="pointing up" />
+			<Emoji Code="$#206" Name="please" />
+			<Emoji Code="$#207" Name="raise hand" />
+			<Emoji Code="$#208" Name="pointing left" />
+			<Emoji Code="$#209" Name="pointing right" />
+			<Emoji Code="$#210" Name="tap" />
+			<Emoji Code="$#211" Name="tap" />
+			<Emoji Code="$#212" Name="hand" />
+			<Emoji Code="$#213" Name="hand" />
+			<Emoji Code="$#214" Name="waving hand" />
+			<Emoji Code="$#215" Name="victory" />
+			<Emoji Code="$#216" Name="first" />
+			<Emoji Code="$#217" Name="punch" />
+			<Emoji Code="$#218" Name="ok" />
+			<Emoji Code="$#219" Name="dislike" />
+			<Emoji Code="$#220" Name="like" />
+		</EmojiGroup>    
+		                 
+		<EmojiGroup Code="$#003" Name="Heart">
+		    <Email Code="$#301" Name="kiss"/>  
+			<Email Code="$#302" Name="email"/>  
+			<Email Code="$#303" Name="cupid"/>  
+			<Email Code="$#304" Name="hearts"/>  
+			<Email Code="$#305" Name="heart"/>  
+			<Email Code="$#306" Name="heart"/>  
+			<Email Code="$#307" Name="heart"/>  
+			<Email Code="$#308" Name="heart"/>  
+			<Email Code="$#309" Name="broken heart"/>  
+			<Email Code="$#310" Name="red heart"/>  
+			<Email Code="$#311" Name="green heart"/>  
+			<Email Code="$#312" Name="violet heart"/>  
+			<Email Code="$#313" Name="blue heart"/>  
+			<Email Code="$#314" Name="yellow heart"/>  
+		</EmojiGroup>    
+		                 
+		<EmojiGroup Code="$#004" Name="Nature">
+		    <Emoji Code="$#400" Name="dog" />
+			<Emoji Code="$#401" Name="dog" />
+			<Emoji Code="$#402" Name="cat"/>
+			<Emoji Code="$#403" Name="cat" />
+			<Emoji Code="$#404" Name="plant" />
+			<Emoji Code="$#405" Name="koala" />
+			<Emoji Code="$#406" Name="chipmunk" />
+			<Emoji Code="$#407" Name="rat" />
+			<Emoji Code="$#408" Name="mouse" />
+			<Emoji Code="$#409" Name="rabbit" />
+			<Emoji Code="$#410" Name="rabbit" />
+			<Emoji Code="$#411" Name="dove" />
+			<Emoji Code="$#412" Name="turkey" />
+			<Emoji Code="$#413" Name="panda" />
+			<Emoji Code="$#414" Name="tiger" />
+			<Emoji Code="$#415" Name="tyrannosaurus rex" />
+			<Emoji Code="$#416" Name="hen" />
+			<Emoji Code="$#417" Name="hen" />
+			<Emoji Code="$#418" Name="chicken" />
+			<Emoji Code="$#419" Name="dinosaur" />
+			<Emoji Code="$#420" Name="poodle" />
+			<Emoji Code="$#421" Name="hedgehog" />
+			<Emoji Code="$#422" Name="zebra" />
+			<Emoji Code="$#423" Name="giraffe" />
+			<Emoji Code="$#424" Name="ewe" />
+			<Emoji Code="$#425" Name="bee" />
+			<Emoji Code="$#426" Name="unicorn" />
+			<Emoji Code="$#427" Name="turtle" />
+			<Emoji Code="$#428" Name="ram" />
+			<Emoji Code="$#429" Name="snail" />
+			<Emoji Code="$#430" Name="goat" />
+			<Emoji Code="$#431" Name="hamster" />
+			<Emoji Code="$#432" Name="pig" />
+			<Emoji Code="$#433" Name="chicken" />
+			<Emoji Code="$#434" Name="bird" />
+			<Emoji Code="$#435" Name="monkey" />
+			<Emoji Code="$#436" Name="monkey" />
+			<Emoji Code="$#437" Name="monkey" />
+			<Emoji Code="$#438" Name="monkey" />
+			<Emoji Code="$#439" Name="monkey" />
+			<Emoji Code="$#440" Name="dragon" />
+			<Emoji Code="$#441" Name="frog"  />
+			<Emoji Code="$#442" Name="pig" />
+			<Emoji Code="$#443" Name="cow" />
+			<Emoji Code="$#444" Name="tiger" />
+			<Emoji Code="$#445" Name="pig" />
+			<Emoji Code="$#446" Name="lion" />
+			<Emoji Code="$#447" Name="penguin" />
+			<Emoji Code="$#448" Name="boar" />
+			<Emoji Code="$#449" Name="wolf" />
+			<Emoji Code="$#450" Name="bat" />
+			<Emoji Code="$#451" Name="mouse" />
+			<Emoji Code="$#452" Name="dragon" />
+			<Emoji Code="$#453" Name="owl" />
+			<Emoji Code="$#454" Name="horse" />
+			<Emoji Code="$#455" Name="gorilla" />
+			<Emoji Code="$#456" Name="caterpillar" />
+			<Emoji Code="$#457" Name="bear" />
+			<Emoji Code="$#458" Name="rhinoceros" />
+			<Emoji Code="$#459" Name="eagle" />
+			<Emoji Code="$#460" Name="elephant" />
+			<Emoji Code="$#461" Name="butterfly" />
+			<Emoji Code="$#462" Name="camel" />
+			<Emoji Code="$#463" Name="camel" />
+			<Emoji Code="$#464" Name="lizard" />
+			<Emoji Code="$#465" Name="deer" />
+			<Emoji Code="$#466" Name="buffalo" />
+			<Emoji Code="$#467" Name="duck" />
+			<Emoji Code="$#468" Name="chicken" />
+			<Emoji Code="$#469" Name="fox" />
+			<Emoji Code="$#470" Name="cow" />
+			<Emoji Code="$#471" Name="ox" />
+			<Emoji Code="$#472" Name="crocodile" />
+			<Emoji Code="$#473" Name="horse" />
+			<Emoji Code="$#474" Name="leopard" />
+			<Emoji Code="$#475" Name="snake" />
+			<Emoji Code="$#476" Name="fish" />
+			<Emoji Code="$#477" Name="fish" />
+			<Emoji Code="$#478" Name="whale" />
+			<Emoji Code="$#479" Name="whale" />
+			<Emoji Code="$#480" Name="shark" />
+			<Emoji Code="$#481" Name="dolphin" />
+			<Emoji Code="$#482" Name="blowfish" />
+			<Emoji Code="$#483" Name="shrimp" />
+			<Emoji Code="$#484" Name="octopus" />
+			<Emoji Code="$#485" Name="squid" />
+			<Emoji Code="$#486" Name="crab" />
+			<Emoji Code="$#487" Name="sea snail" />
+			<Emoji Code="$#488" Name="ant" />
+			<Emoji Code="$#489" Name="ladybug" />
+			<Emoji Code="$#490" Name="scorpion" />
+			<Emoji Code="$#491" Name="spider" />
+			<Emoji Code="$#492" Name="cricket" />
+			<Emoji Code="$#493" Name="sun" />
+			<Emoji Code="$#494" Name="sun" />
+			<Emoji Code="$#495" Name="cloudy day" />
+			<Emoji Code="$#496" Name="cloudy" />
+			<Emoji Code="$#497" Name="cloudy" />
+			<Emoji Code="$#498" Name="cloudy" />
+			<Emoji Code="$#499" Name="rain" />
+			<Emoji Code="$#500" Name="rain" />
+			<Emoji Code="$#501" Name="drop" />
+			<Emoji Code="$#502" Name="drops" />
+			<Emoji Code="$#503" Name="tornado" />
+			<Emoji Code="$#504" Name="wind" />
+			<Emoji Code="$#505" Name="wind" />
+			<Emoji Code="$#506" Name="storm" />
+			<Emoji Code="$#507" Name="storm" />
+			<Emoji Code="$#508" Name="pine" />
+			<Emoji Code="$#509" Name="snowflake" />
+			<Emoji Code="$#510" Name="cloud" />
+			<Emoji Code="$#511" Name="snowing" />
+			<Emoji Code="$#512" Name="fog" />
+			<Emoji Code="$#513" Name="sparkles" />
+			<Emoji Code="$#514" Name="rainbow" />
+			<Emoji Code="$#515" Name="lightning" />
+			<Emoji Code="$#516" Name="snowman" />
+			<Emoji Code="$#517" Name="snowman" />
+			<Emoji Code="$#518" Name="wave" />
+			<Emoji Code="$#519" Name="shooting star" />
+			<Emoji Code="$#520" Name="star" />
+			<Emoji Code="$#521" Name="star" />
+			<Emoji Code="$#522" Name="earth globe" />
+			<Emoji Code="$#523" Name="earth globe" />
+			<Emoji Code="$#524" Name="earth globe" />
+			<Emoji Code="$#525" Name="full moon" />
+			<Emoji Code="$#526" Name="half moon" />
+			<Emoji Code="$#527" Name="half moon" />
+			<Emoji Code="$#528" Name="half moon" />
+			<Emoji Code="$#529" Name="moon" />
+			<Emoji Code="$#530" Name="moon" />
+			<Emoji Code="$#531" Name="moon" />
+			<Emoji Code="$#532" Name="moon" />
+			<Emoji Code="$#533" Name="moon" />
+			<Emoji Code="$#534" Name="moon" />
+			<Emoji Code="$#535" Name="moon" />
+			<Emoji Code="$#536" Name="moon" />
+			<Emoji Code="$#537" Name="moon" />
+			<Emoji Code="$#538" Name="fire" />
+			<Emoji Code="$#539" Name="comet" />
+			<Emoji Code="$#540" Name="explosion" />
+			<Emoji Code="$#541" Name="spider web" />
+			<Emoji Code="$#542" Name="cactus" />
+			<Emoji Code="$#543" Name="tree" />
+			<Emoji Code="$#544" Name="plam tree" />
+			<Emoji Code="$#545" Name="christmas tree" />
+			<Emoji Code="$#546" Name="hibiscus" />
+			<Emoji Code="$#547" Name="cherry blossom" />
+			<Emoji Code="$#548" Name="sunflower" />
+			<Emoji Code="$#549" Name="flower" />
+			<Emoji Code="$#550" Name="flower" />
+			<Emoji Code="$#551" Name="rose" />
+			<Emoji Code="$#552" Name="tulip" />
+			<Emoji Code="$#553" Name="bouquet" />
+			<Emoji Code="$#554" Name="rice" />
+			<Emoji Code="$#555" Name="mushroom" />
+			<Emoji Code="$#556" Name="maple leaf" />
+			<Emoji Code="$#557" Name="leaves" />
+			<Emoji Code="$#558" Name="leaves" />
+			<Emoji Code="$#559" Name="bamboo" />
+			<Emoji Code="$#560" Name="plant" />
+			<Emoji Code="$#561" Name="clover" />
+			<Emoji Code="$#562" Name="shamrock" />
+			<Emoji Code="$#563" Name="herb" />
+			<Emoji Code="$#564" Name="pawprints" />
+		</EmojiGroup>    
+		
+		<EmojiGroup Code="$#005" Name="Objects">                                           
+		    <Emoji Code="$#600" Name="balloon" />
+			<Emoji Code="$#601" Name="gift" />
+			<Emoji Code="$#602" Name="shopping cart" />
+			<Emoji Code="$#603" Name="shopping bag" />
+			<Emoji Code="$#604" Name="frame" />
+			<Emoji Code="$#605" Name="bed" />
+			<Emoji Code="$#606" Name="bed" />
+			<Emoji Code="$#607" Name="sofa" />
+			<Emoji Code="$#608" Name="door" />
+			<Emoji Code="$#609" Name="key" />
+			<Emoji Code="$#610" Name="key" />
+			<Emoji Code="$#611" Name="email" />
+			<Emoji Code="$#612" Name="email" />
+			<Emoji Code="$#613" Name="controller" />
+			<Emoji Code="$#614" Name="bell" />
+			<Emoji Code="$#615" Name="bathtub" />
+			<Emoji Code="$#616" Name="bathtub" />
+			<Emoji Code="$#617" Name="shower" />
+			<Emoji Code="$#618" Name="faucet" />
+			<Emoji Code="$#619" Name="toilet" />
+			<Emoji Code="$#620" Name="thermometer" />
+			<Emoji Code="$#621" Name="syringe" />
+			<Emoji Code="$#622" Name="pill" />
+			<Emoji Code="$#623" Name="mouse" />
+			<Emoji Code="$#624" Name="letter" />
+			<Emoji Code="$#625" Name="hole" />
+			<Emoji Code="$#626" Name="microscope" />
+			<Emoji Code="$#627" Name="telescope" />
+			<Emoji Code="$#628" Name="flask" />
+			<Emoji Code="$#629" Name="barber shop" />
+			<Emoji Code="$#630" Name="beads" />
+			<Emoji Code="$#631" Name="fog" />
+			<Emoji Code="$#632" Name="magic ball" />
+			<Emoji Code="$#633" Name="vase" />
+			<Emoji Code="$#634" Name="vase" />
+			<Emoji Code="$#635" Name="coffin" />
+			<Emoji Code="$#636" Name="book" />
+			<Emoji Code="$#637" Name="book" />
+			<Emoji Code="$#638" Name="book" />
+			<Emoji Code="$#639" Name="book" />
+			<Emoji Code="$#640" Name="printer" />
+			<Emoji Code="$#641" Name="letter" />
+			<Emoji Code="$#642" Name="cigarette" />
+			<Emoji Code="$#643" Name="shield" />
+			<Emoji Code="$#644" Name="swords" />
+			<Emoji Code="$#645" Name="unlocked" />
+			<Emoji Code="$#646" Name="sword" />
+			<Emoji Code="$#647" Name="padlock" />
+			<Emoji Code="$#648" Name="padlock" />
+			<Emoji Code="$#649" Name="padlock" />
+			<Emoji Code="$#650" Name="knife" />
+			<Emoji Code="$#651" Name="bomb" />
+			<Emoji Code="$#652" Name="loupe" />
+			<Emoji Code="$#653" Name="gun" />
+			<Emoji Code="$#654" Name="pencil" />
+			<Emoji Code="$#655" Name="chain" />
+			<Emoji Code="$#656" Name="gear" />
+			<Emoji Code="$#657" Name="highlighter" />
+			<Emoji Code="$#658" Name="bolt" />
+			<Emoji Code="$#659" Name="monitor" />
+			<Emoji Code="$#660" Name="lantern" />
+			<Emoji Code="$#661" Name="pick" />
+			<Emoji Code="$#662" Name="paint brush" />
+			<Emoji Code="$#663" Name="repair tools" />
+			<Emoji Code="$#664" Name="pen" />
+			<Emoji Code="$#665" Name="pen" />
+			<Emoji Code="$#666" Name="hammers" />
+			<Emoji Code="$#667" Name="scissors" />
+			<Emoji Code="$#668" Name="hammer" />
+			<Emoji Code="$#669" Name="wrench" />
+			<Emoji Code="$#670" Name="pin" />
+			<Emoji Code="$#671" Name="push pin" />
+			<Emoji Code="$#672" Name="libra" />
+			<Emoji Code="$#673" Name="ruler" />
+			<Emoji Code="$#674" Name="diamond" />
+			<Emoji Code="$#675" Name="set square" />
+			<Emoji Code="$#676" Name="credit card" />
+			<Emoji Code="$#677" Name="money bag" />
+			<Emoji Code="$#678" Name="paperclip" />
+			<Emoji Code="$#679" Name="pound sterling" />
+			<Emoji Code="$#680" Name="paperclip" />
+			<Emoji Code="$#681" Name="lantern" />
+			<Emoji Code="$#682" Name="keyboard" />
+			<Emoji Code="$#683" Name="money" />
+			<Emoji Code="$#684" Name="money" />
+			<Emoji Code="$#685" Name="money" />
+			<Emoji Code="$#686" Name="link" />
+			<Emoji Code="$#687" Name="tag" />
+			<Emoji Code="$#688" Name="tag" />
+			<Emoji Code="$#689" Name="shooting star" />
+			<Emoji Code="$#690" Name="yen" />
+			<Emoji Code="$#691" Name="half moon" />
+			<Emoji Code="$#692" Name="open book" />
+			<Emoji Code="$#693" Name="spider web" />
+			<Emoji Code="$#694" Name="books" />
+			<Emoji Code="$#695" Name="barrel" />
+			<Emoji Code="$#696" Name="trash" />
+			<Emoji Code="$#697" Name="diamond" />
+			<Emoji Code="$#698" Name="notebook" />
+			<Emoji Code="$#699" Name="notebook" />
+			<Emoji Code="$#700" Name="notebook" />
+			<Emoji Code="$#701" Name="engagement ring" />
+			<Emoji Code="$#702" Name="candle" />
+			<Emoji Code="$#703" Name="newspaper" />
+			<Emoji Code="$#704" Name="newspaper" />
+			<Emoji Code="$#705" Name="cactus" />
+			<Emoji Code="$#706" Name="flashlight" />
+			<Emoji Code="$#707" Name="sea snail" />
+			<Emoji Code="$#708" Name="idea" />
+			<Emoji Code="$#709" Name="fozlder" />
+			<Emoji Code="$#710" Name="folder" />
+			<Emoji Code="$#711" Name="folder" />
+			<Emoji Code="$#712" Name="plug" />
+			<Emoji Code="$#713" Name="geisha" />
+			<Emoji Code="$#714" Name="butterfly" />
+			<Emoji Code="$#715" Name="laptop" />
+			<Emoji Code="$#716" Name="battery" />
+			<Emoji Code="$#717" Name="satellite dish" />
+			<Emoji Code="$#718" Name="clipboard" />
+			<Emoji Code="$#719" Name="hourglass" />
+			<Emoji Code="$#720" Name="hourglass" />
+			<Emoji Code="$#721" Name="lipstick" />
+			<Emoji Code="$#722" Name="archive" />
+			<Emoji Code="$#723" Name="clock" />
+			<Emoji Code="$#724" Name="umbrella" />
+			<Emoji Code="$#725" Name="box" />
+			<Emoji Code="$#726" Name="ribbon" />
+			<Emoji Code="$#727" Name="alarm clock" />
+			<Emoji Code="$#728" Name="sunglasses" />
+			<Emoji Code="$#729" Name="box" />
+			<Emoji Code="$#730" Name="purse" />
+			<Emoji Code="$#731" Name="clutch" />
+			<Emoji Code="$#732" Name="stopwatch" />
+			<Emoji Code="$#733" Name="stopwatch" />
+			<Emoji Code="$#734" Name="calendar" />
+			<Emoji Code="$#735" Name="calendar" />
+			<Emoji Code="$#736" Name="calendar" />
+			<Emoji Code="$#737" Name="calendar" />
+			<Emoji Code="$#738" Name="calendar" />
+			<Emoji Code="$#739" Name="handbag" />
+			<Emoji Code="$#740" Name="briefcase" />
+			<Emoji Code="$#741" Name="bikini" />
+			<Emoji Code="$#742" Name="plate" />
+			<Emoji Code="$#743" Name="regulator" />
+			<Emoji Code="$#744" Name="smartphone" />
+			<Emoji Code="$#745" Name="smartphone" />
+			<Emoji Code="$#746" Name="confetti" />
+			<Emoji Code="$#747" Name="confetti" />
+			<Emoji Code="$#748" Name="shirt" />
+			<Emoji Code="$#749" Name="shirt" />
+			<Emoji Code="$#750" Name="microphone" />
+			<Emoji Code="$#751" Name="polo shirt" />
+			<Emoji Code="$#752" Name="boot" />
+			<Emoji Code="$#753" Name="radio" />
+			<Emoji Code="$#754" Name="high heel" />
+			<Emoji Code="$#755" Name="loss" />
+			<Emoji Code="$#756" Name="sandal" />
+			<Emoji Code="$#757" Name="television" />
+			<Emoji Code="$#758" Name="bar chart" />
+			<Emoji Code="$#759" Name="bar chart" />
+			<Emoji Code="$#760" Name="shoe" />
+			<Emoji Code="$#761" Name="sneakers" />
+			<Emoji Code="$#762" Name="fax" />
+			<Emoji Code="$#763" Name="pager" />
+			<Emoji Code="$#764" Name="crown" />
+			<Emoji Code="$#765" Name="telephone" />
+			<Emoji Code="$#766" Name="telephone" />
+			<Emoji Code="$#767" Name="file" />
+			<Emoji Code="$#768" Name="file" />
+			<Emoji Code="$#769" Name="file" />
+			<Emoji Code="$#770" Name="file" />
+			<Emoji Code="$#771" Name="scroll" />
+			<Emoji Code="$#772" Name="film" />
+			<Emoji Code="$#773" Name="horn" />
+			<Emoji Code="$#774" Name="video camera" />
+			<Emoji Code="$#775" Name="video camera" />
+			<Emoji Code="$#776" Name="video camera" />
+			<Emoji Code="$#777" Name="mailbox" />
+			<Emoji Code="$#778" Name="mailbox" />
+			<Emoji Code="$#779" Name="mailbox" />
+			<Emoji Code="$#780" Name="mailbox" />
+			<Emoji Code="$#781" Name="mailbox" />
+			<Emoji Code="$#782" Name="photo camera" />
+			<Emoji Code="$#783" Name="photo camera" />
+			<Emoji Code="$#784" Name="vhs" />
+			<Emoji Code="$#785" Name="compact disk" />
+			<Emoji Code="$#786" Name="compact disk" />
+			<Emoji Code="$#787" Name="package" />
+			<Emoji Code="$#788" Name="floppy disk" />
+			<Emoji Code="$#789" Name="outbox" />
+			<Emoji Code="$#790" Name="hard disc" />
+			<Emoji Code="$#791" Name="inbox" />
+			<Emoji Code="$#792" Name="vise" />
+			<Emoji Code="$#793" Name="love letter" />
+			<Emoji Code="$#794" Name="koinobori" />
+			<Emoji Code="$#795" Name="joystick" />
+			<Emoji Code="$#796" Name="watch" />
+			<Emoji Code="$#797" Name="bow" />
+		</EmojiGroup>    
+		                 
+		<EmojiGroup Code="$#006" Name="Flags">
+			<Emoji Code="$#800" Name="Mauritius" />
+			<Emoji Code="$#801" Name="Cyprus" />
+			<Emoji Code="$#802" Name="Austria" />
+			<Emoji Code="$#803" Name="Oman" />
+			<Emoji Code="$#804" Name="Ethiopia" />
+			<Emoji Code="$#805" Name="Tanzania" />
+			<Emoji Code="$#806" Name="Nicaragua" />
+			<Emoji Code="$#807" Name="Estonia" />
+			<Emoji Code="$#808" Name="Uganda" />
+			<Emoji Code="$#809" Name="Slovenia" />
+			<Emoji Code="$#810" Name="Zimbabwe" />
+			<Emoji Code="$#811" Name="Italy" />
+			<Emoji Code="$#812" Name="Wales" />
+			<Emoji Code="$#813" Name="Nepal" />
+			<Emoji Code="$#814" Name="Lebanon" />
+			<Emoji Code="$#815" Name="Ceuta" />
+			<Emoji Code="$#816" Name="Iraq" />
+			<Emoji Code="$#817" Name="Syria" />
+			<Emoji Code="$#818" Name="Honduras" />
+			<Emoji Code="$#819" Name="Anguilla" />
+			<Emoji Code="$#820" Name="North korea" />
+			<Emoji Code="$#821" Name="Zambia" />
+			<Emoji Code="$#822" Name="China"  />
+			<Emoji Code="$#823" Name="Luxembourg" />
+			<Emoji Code="$#824" Name="Central african republic" />
+			<Emoji Code="$#825" Name="Jamaica" />
+			<Emoji Code="$#826" Name="Monaco" />
+			<Emoji Code="$#827" Name="Paraguay" />
+			<Emoji Code="$#828" Name="Latvia" />
+			<Emoji Code="$#829" Name="Andorra" />
+			<Emoji Code="$#830" Name="Micronesia" />
+			<Emoji Code="$#831" Name="Dominican republic" />
+			<Emoji Code="$#832" Name="Abkhazia" />
+			<Emoji Code="$#833" Name="Tunisia" />
+			<Emoji Code="$#834" Name="Kosovo" />
+			<Emoji Code="$#835" Name="Ghana" />
+			<Emoji Code="$#836" Name="Scotland" />
+			<Emoji Code="$#837" Name="Gabon" />
+			<Emoji Code="$#838" Name="Namibia" />
+			<Emoji Code="$#839" Name="Japan" />
+			<Emoji Code="$#840" Name="Lithuania" />
+			<Emoji Code="$#841" Name="Chad" />
+			<Emoji Code="$#842" Name="Kenya"/>
+			<Emoji Code="$#843" Name="Serbia" />
+			<Emoji Code="$#844" Name="Kazakhstan" />
+			<Emoji Code="$#845" Name="Iceland" />
+			<Emoji Code="$#846" Name="Somalia" />
+			<Emoji Code="$#847" Name="Barbados" />
+			<Emoji Code="$#848" Name="Nigeria" />
+			<Emoji Code="$#849" Name="Uruguay" />
+			<Emoji Code="$#850" Name="Slovakia" />
+			<Emoji Code="$#851" Name="south korea" />
+			<Emoji Code="$#852" Name="San marino" />
+			<Emoji Code="$#853" Name="Guatemala" />
+			<Emoji Code="$#854" Name="Albania" />
+			<Emoji Code="$#855" Name="Pakistan" />
+			<Emoji Code="$#856" Name="Ecuador" />
+			<Emoji Code="$#857" Name="Cameroon" />
+			<Emoji Code="$#858" Name="Panama" />
+			<Emoji Code="$#859" Name="Kwait" />
+			<Emoji Code="$#860" Name="Armenia" />
+			<Emoji Code="$#861" Name="Romania" />
+			<Emoji Code="$#862" Name="Guinea" />
+			<Emoji Code="$#863" Name="Afghanistan" />
+			<Emoji Code="$#864" Name="Laos" />
+			<Emoji Code="$#865" Name="Greenland" />
+			<Emoji Code="$#866" Name="Hungary" />
+			<Emoji Code="$#867" Name="Angola" />
+			<Emoji Code="$#868" Name="Malasya" />
+			<Emoji Code="$#869" Name="Brunei" />
+			<Emoji Code="$#870" Name="Bahamas" />
+			<Emoji Code="$#871" Name="New zealand" />
+			<Emoji Code="$#872" Name="Vatican city" />
+			<Emoji Code="$#873" Name="Finland" />
+			<Emoji Code="$#874" Name="Botswana" />
+			<Emoji Code="$#875" Name="Sri lanka" />
+			<Emoji Code="$#876" Name="Spain" />
+			<Emoji Code="$#877" Name="Ossetia" />
+			<Emoji Code="$#878" Name="Chile" />
+			<Emoji Code="$#879" Name="Bosnia and herzegovina" />
+			<Emoji Code="$#880" Name="Saudi arabia" />
+			<Emoji Code="$#881" Name="Liechtenstein" />
+			<Emoji Code="$#882" Name="Belarus" />
+			<Emoji Code="$#883" Name="Iran" />
+			<Emoji Code="$#884" Name="Fiji" />
+			<Emoji Code="$#885" Name="Bahrain" />
+			<Emoji Code="$#886" Name="Venezuela" />
+			<Emoji Code="$#887" Name="Azerbaijan" />
+			<Emoji Code="$#888" Name="Norway" />
+			<Emoji Code="$#889" Name="Algeria" />
+			<Emoji Code="$#890" Name="Ukraine" />
+			<Emoji Code="$#891" Name="Gambia" />
+			<Emoji Code="$#892" Name="Bangladesh" />
+			<Emoji Code="$#893" Name="Madeira" />
+			<Emoji Code="$#894" Name="Czech republic" />
+			<Emoji Code="$#895" Name="Bolivia" />
+			<Emoji Code="$#896" Name="United arab emirates" />
+			<Emoji Code="$#897" Name="Kyrgyzstan" />
+			<Emoji Code="$#898" Name="Cuba" />
+			<Emoji Code="$#899" Name="Israel" />
+			<Emoji Code="$#900" Name="Costa rica" />
+			<Emoji Code="$#901" Name="Republic of the congo" />
+			<Emoji Code="$#902" Name="Egypt" />
+			<Emoji Code="$#903" Name="Cambodia" />
+			<Emoji Code="$#904" Name="Germany" />
+			<Emoji Code="$#905" Name="Croatia" />
+			<Emoji Code="$#906" Name="Belgium" />
+			<Emoji Code="$#907" Name="Morocco" />
+			<Emoji Code="$#908" Name="Bulgaria" />
+			<Emoji Code="$#909" Name="Liberia" />
+			<Emoji Code="$#910" Name="Greece" />
+			<Emoji Code="$#911" Name="Denmark" />
+			<Emoji Code="$#912" Name="Colombia" />
+			<Emoji Code="$#913" Name="Ireland" />
+			<Emoji Code="$#914" Name="Sweden" />
+			<Emoji Code="$#915" Name="Haiti" />
+			<Emoji Code="$#916" Name="Dominica" />
+			<Emoji Code="$#917" Name="Peru" />
+			<Emoji Code="$#918" Name="Uzbekistn" />
+			<Emoji Code="$#919" Name="Malta" />
+			<Emoji Code="$#920" Name="France" />
+			<Emoji Code="$#921" Name="Tajikistan" />
+			<Emoji Code="$#922" Name="Argentina" />
+			<Emoji Code="$#923" Name="Sudan" />
+			<Emoji Code="$#924" Name="South africa" />
+			<Emoji Code="$#925" Name="Taiwan" />
+			<Emoji Code="$#926" Name="Switzerland" />
+			<Emoji Code="$#927" Name="Palestine" />
+			<Emoji Code="$#928" Name="Indonesia" />
+			<Emoji Code="$#929" Name="Poland" />
+			<Emoji Code="$#930" Name="Moldova" />
+			<Emoji Code="$#931" Name="Malawi" />
+			<Emoji Code="$#932" Name="England" />
+			<Emoji Code="$#933" Name="Turkey" />
+			<Emoji Code="$#934" Name="Vietnam" />
+			<Emoji Code="$#935" Name="Niger" />
+			<Emoji Code="$#936" Name="Portugal" />
+			<Emoji Code="$#937" Name="Senegal" />
+			<Emoji Code="$#938" Name="Turkmenistan" />
+			<Emoji Code="$#939" Name="Singapore" />
+			<Emoji Code="$#940" Name="Libya" />
+			<Emoji Code="$#941" Name="Yemen" />
+			<Emoji Code="$#942" Name="Transnistria" />
+			<Emoji Code="$#943" Name="Australia" />
+			<Emoji Code="$#944" Name="Republic of macedonia" />
+			<Emoji Code="$#945" Name="Netherlands" />
+			<Emoji Code="$#946" Name="Thailand" />
+			<Emoji Code="$#947" Name="Canada" />
+			<Emoji Code="$#948" Name="South sudan" />
+			<Emoji Code="$#949" Name="Jersey" />
+			<Emoji Code="$#950" Name="India" />
+			<Emoji Code="$#951" Name="Somaliland" />
+			<Emoji Code="$#952" Name="Russia" />
+			<Emoji Code="$#953" Name="Mexico" />
+			<Emoji Code="$#954" Name="Brazil" />
+			<Emoji Code="$#955" Name="Georgia" />
+			<Emoji Code="$#956" Name="Mongolia" />
+			<Emoji Code="$#957" Name="European union" />
+			<Emoji Code="$#958" Name="United kingdom" />
+			<Emoji Code="$#959" Name="Hawaii" />
+		</EmojiGroup>    
+	</Emojis>            
+</Root>

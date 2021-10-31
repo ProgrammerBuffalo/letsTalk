@@ -1,0 +1,722 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root>
+	<EmojiGroup Name="Faces" Code="$#001" Path="Resources/Emojis/faces/003-happy-17.png">
+		<Emoji Name="happy" Code="$#001" Path="Resources/Emojis/faces/001-happy-18.png"/>
+		<Emoji Name="happy" Code="$#002" Path="Resources/Emojis/faces/003-happy-17.png"/>
+		<Emoji Name="happy" Code="$#003" Path="Resources/Emojis/faces/037-happy-11.png"/>
+		<Emoji Name="happy" Code="$#004" Path="Resources/Emojis/faces/062-happy-8.png"/>
+		<Emoji Name="happy" Code="$#005" Path="Resources/Emojis/faces/066-happy-7.png"/>
+		<Emoji Name="happy" Code="$#006" Path="Resources/Emojis/faces/076-happy-5.png"/>
+		<Emoji Name="happy" Code="$#007" Path="Resources/Emojis/faces/090-happy-4.png"/>
+		<Emoji Name="happy" Code="$#008" Path="Resources/Emojis/faces/020-happy-16.png"/>
+		<Emoji Name="happy" Code="$#009" Path="Resources/Emojis/faces/025-happy-15.png"/>
+		<Emoji Name="happy" Code="$#010" Path="Resources/Emojis/faces/026-happy-14.png"/>
+		<Emoji Name="happy" Code="$#011" Path="Resources/Emojis/faces/028-happy-13.png"/>
+		<Emoji Name="happy" Code="$#012" Path="Resources/Emojis/faces/166-happy-3.png"/>
+		<Emoji Name="happy" Code="$#013" Path="Resources/Emojis/faces/170-happy-2.png"/>
+		<Emoji Name="happy" Code="$#014" Path="Resources/Emojis/faces/194-happy.png"/>
+		<Emoji Name="sad" Code="$#015" Path="Resources/Emojis/faces/060-sad-13.png"/>
+		<Emoji Name="sad" Code="$#016" Path="Resources/Emojis/faces/085-sad-11.png"/>
+		<Emoji Name="sad" Code="$#017" Path="Resources/Emojis/faces/035-sad-14.png"/>
+		<Emoji Name="sad" Code="$#018" Path="Resources/Emojis/faces/073-sad-12.png"/>
+		<Emoji Name="sad" Code="$#019" Path="Resources/Emojis/faces/091-sad-10.png"/>
+		<Emoji Name="sad" Code="$#020" Path="Resources/Emojis/faces/131-sad-8.png"/>
+		<Emoji Name="sad" Code="$#021" Path="Resources/Emojis/faces/164-sad-7.png"/>
+		<Emoji Name="sad" Code="$#022" Path="Resources/Emojis/faces/182-sad-6.png"/>
+		<Emoji Name="sad" Code="$#023" Path="Resources/Emojis/faces/183-sad-5.png"/>
+		<Emoji Name="sad" Code="$#024" Path="Resources/Emojis/faces/184-sad-4.png"/>
+		<Emoji Name="sad" Code="$#025" Path="Resources/Emojis/faces/185-sad-3.png"/>
+		<Emoji Name="smile" Code="$#026" Path="Resources/Emojis/faces/015-smile-1.png"/>
+		<Emoji Name="cool" Code="$#027" Path="Resources/Emojis/faces/002-cool-5.png"/>
+		<Emoji Name="cool" Code="$#028" Path="Resources/Emojis/faces/078-cool-3.png"/>
+		<Emoji Name="cool" Code="$#029" Path="Resources/Emojis/faces/129-cool-2.png"/>
+		<Emoji Name="cool" Code="$#030" Path="Resources/Emojis/faces/165-cool-1.png"/>
+		<Emoji Name="surprised" Code="$#031" Path="Resources/Emojis/faces/004-surprised-9.png"/>
+		<Emoji Name="surprised" Code="$#032" Path="Resources/Emojis/faces/005-shocked-4.png"/>
+		<Emoji Name="surprised" Code="$#033" Path="Resources/Emojis/faces/040-surprised-7.png"/>
+		<Emoji Name="surprised" Code="$#034" Path="Resources/Emojis/faces/123-surprised-6.png"/>
+		<Emoji Name="surprised" Code="$#035" Path="Resources/Emojis/faces/134-surprised-5.png"/>
+		<Emoji Name="surprised" Code="$#036" Path="Resources/Emojis/faces/139-surprised-4.png"/>
+		<Emoji Name="surprised" Code="$#037" Path="Resources/Emojis/faces/162-surprised-3.png"/>
+		<Emoji Name="surprised" Code="$#038" Path="Resources/Emojis/faces/178-surprised-2.png"/>
+		<Emoji Name="surprised" Code="$#039" Path="Resources/Emojis/faces/179-surprised-1.png"/>
+		<Emoji Name="surprised" Code="$#040" Path="Resources/Emojis/faces/180-surprised.png"/>
+		<Emoji Name="shocked" Code="$#041" Path="Resources/Emojis/faces/006-shocked-3.png"/>
+		<Emoji Name="shocked" Code="$#042" Path="Resources/Emojis/faces/075-shocked-2.png"/>
+		<Emoji Name="shocked" Code="$#043" Path="Resources/Emojis/faces/077-shocked-1.png"/>
+		<Emoji Name="shocked" Code="$#044" Path="Resources/Emojis/faces/176-shocked.png"/>
+		<Emoji Name="nervous" Code="$#045" Path="Resources/Emojis/faces/007-nervous-2.png"/>
+		<Emoji Name="nervous" Code="$#046" Path="Resources/Emojis/faces/008-nervous-1.png"/>
+		<Emoji Name="nervous" Code="$#047" Path="Resources/Emojis/faces/017-nervous.png"/>
+		<Emoji Name="tired"	Code="$#048" Path="Resources/Emojis/faces/011-tired-2.png"/>
+		<Emoji Name="tongue" Code="$#049" Path="Resources/Emojis/faces/012-tongue-7.png"/>
+		<Emoji Name="tongue" Code="$#050" Path="Resources/Emojis/faces/013-tongue-6.png"/>
+		<Emoji Name="tongue" Code="$#051" Path="Resources/Emojis/faces/014-tongue-5.png"/>
+		<Emoji Name="tongue" Code="$#052" Path="Resources/Emojis/faces/019-tongue-4.png"/>
+		<Emoji Name="tongue" Code="$#053" Path="Resources/Emojis/faces/055-tongue-3.png"/>
+		<Emoji Name="tongue" Code="$#054" Path="Resources/Emojis/faces/096-tongue-2.png"/>
+		<Emoji Name="sleeping" Code="$#055" Path="Resources/Emojis/faces/016-sleeping-1.png"/>
+		<Emoji Name="surprised" Code="$#056" Path="Resources/Emojis/faces/018-surprised-8.png"/>
+		<Emoji Name="wink" Code="$#057" Path="Resources/Emojis/faces/021-wink-1.png"/>
+		<Emoji Name="laughing" Code="$#058" Path="Resources/Emojis/faces/022-laughing-2.png"/>
+		<Emoji Name="laughing" Code="$#059" Path="Resources/Emojis/faces/027-laughing.png"/>
+		<Emoji Name="laughing" Code="$#060" Path="Resources/Emojis/faces/023-laughing-1.png"/>
+		<Emoji Name="sweat" Code="$#061" Path="Resources/Emojis/faces/024-sweat-1.png"/>
+		<Emoji Name="crying" Code="$#062" Path="Resources/Emojis/faces/030-crying-8.png"/>
+		<Emoji Name="crying" Code="$#063" Path="Resources/Emojis/faces/031-crying-7.png"/>
+		<Emoji Name="crying" Code="$#064" Path="Resources/Emojis/faces/065-crying-6.png"/>
+		<Emoji Name="crying" Code="$#065" Path="Resources/Emojis/faces/079-crying-5.png"/>
+		<Emoji Name="crying" Code="$#066" Path="Resources/Emojis/faces/110-crying-4.png"/>
+		<Emoji Name="crying" Code="$#067" Path="Resources/Emojis/faces/121-crying-3.png"/>
+		<Emoji Name="crying" Code="$#068" Path="Resources/Emojis/faces/159-crying-2.png"/>
+		<Emoji Name="crying" Code="$#069" Path="Resources/Emojis/faces/160-crying-1.png"/>
+		<Emoji Name="crying" Code="$#070" Path="Resources/Emojis/faces/163-crying.png"/>
+		<Emoji Name="bored" Code="$#071" Path="Resources/Emojis/faces/032-bored.png"/>
+		<Emoji Name="angry" Code="$#072" Path="Resources/Emojis/faces/009-angry-6.png"/>
+		<Emoji Name="angry" Code="$#073" Path="Resources/Emojis/faces/036-angry-4.png"/>
+		<Emoji Name="angry" Code="$#074" Path="Resources/Emojis/faces/038-angry-3.png"/>
+		<Emoji Name="angry" Code="$#075" Path="Resources/Emojis/faces/127-angry-2.png"/>
+		<Emoji Name="angry" Code="$#076" Path="Resources/Emojis/faces/199-angry.png"/>
+		<Emoji Name="angel" Code="$#077" Path="Resources/Emojis/faces/157-angel.png"/>
+		<Emoji Name="thinking" Code="$#078" Path="Resources/Emojis/faces/041-thinking-2.png"/>
+		<Emoji Name="dead" Code="$#079" Path="Resources/Emojis/faces/044-dead-1.png"/>
+		<Emoji Name="dead" Code="$#080" Path="Resources/Emojis/faces/154-dead.png"/>
+		<Emoji Name="tired" Code="$#081" Path="Resources/Emojis/faces/053-tired-1.png"/>
+		<Emoji Name="tired" Code="$#082" Path="Resources/Emojis/faces/147-tired.png"/>
+		<Emoji Name="vampire" Code="$#083" Path="Resources/Emojis/faces/056-vampire.png"/>
+		<Emoji Name="hungry" Code="$#084" Path="Resources/Emojis/faces/063-hungry.png"/>
+		<Emoji Name="late" Code="$#085" Path="Resources/Emojis/faces/070-late.png"/>
+		<Emoji Name="sick" Code="$#086" Path="Resources/Emojis/faces/072-sick-3.png"/>
+		<Emoji Name="sick" Code="$#087" Path="Resources/Emojis/faces/125-sick-2.png"/>
+		<Emoji Name="sick" Code="$#088" Path="Resources/Emojis/faces/151-sick-1.png"/>
+		<Emoji Name="sick" Code="$#089" Path="Resources/Emojis/faces/156-sick.png"/>
+		<Emoji Name="zombie" Code="$#090" Path="Resources/Emojis/faces/080-zombie.png"/>
+		<Emoji Name="pain" Code="$#091" Path="Resources/Emojis/faces/081-pain.png"/>
+		<Emoji Name="sweat" Code="$#092" Path="Resources/Emojis/faces/083-sweat.png"/>
+		<Emoji Name="kiss" Code="$#093" Path="Resources/Emojis/faces/086-kiss-4.png"/>
+		<Emoji Name="angel" Code="$#094" Path="Resources/Emojis/faces/089-angel-1.png"/>
+		<Emoji Name="outrage" Code="$#095" Path="Resources/Emojis/faces/092-outrage-1.png"/>
+		<Emoji Name="ugly" Code="$#096" Path="Resources/Emojis/faces/054-ugly-3.png"/>
+		<Emoji Name="ugly" Code="$#097" Path="Resources/Emojis/faces/093-ugly-2.png"/>
+		<Emoji Name="ugly" Code="$#098" Path="Resources/Emojis/faces/094-ugly-1.png"/>
+		<Emoji Name="scared" Code="$#099" Path="Resources/Emojis/faces/095-scared.png"/>
+		<Emoji Name="greed" Code="$#100" Path="Resources/Emojis/faces/099-greed-2.png"/>
+		<Emoji Name="whistle" Code="$#101" Path="Resources/Emojis/faces/100-whistle.png"/>
+		<Emoji Name="nerd" Code="$#102" Path="Resources/Emojis/faces/098-nerd-9.png"/>
+		<Emoji Name="nerd" Code="$#103" Path="Resources/Emojis/faces/101-nerd-8.png"/>
+		<Emoji Name="nerd" Code="$#104" Path="Resources/Emojis/faces/109-nerd-6.png"/>
+		<Emoji Name="nerd" Code="$#105" Path="Resources/Emojis/faces/112-nerd-5.png"/>
+		<Emoji Name="nerd" Code="$#106" Path="Resources/Emojis/faces/118-nerd-4.png"/>
+		<Emoji Name="nerd" Code="$#107" Path="Resources/Emojis/faces/120-nerd-3.png"/>
+		<Emoji Name="nerd" Code="$#108" Path="Resources/Emojis/faces/132-nerd-2.png"/>
+		<Emoji Name="nerd" Code="$#109" Path="Resources/Emojis/faces/158-nerd-1.png"/>
+		<Emoji Name="nerd" Code="$#110" Path="Resources/Emojis/faces/172-nerd.png"/>
+		<Emoji Name="muted" Code="$#111" Path="Resources/Emojis/faces/102-muted-4.png"/>
+		<Emoji Name="muted" Code="$#112" Path="Resources/Emojis/faces/111-muted-3.png"/>
+		<Emoji Name="muted" Code="$#113" Path="Resources/Emojis/faces/124-muted-2.png"/>
+		<Emoji Name="muted" Code="$#114" Path="Resources/Emojis/faces/161-muted-1.png"/>
+		<Emoji Name="muted" Code="$#115" Path="Resources/Emojis/faces/168-muted.png"/>
+		<Emoji Name="in love" Code="$#116" Path="Resources/Emojis/faces/074-in-love-10.png"/>
+		<Emoji Name="in love" Code="$#117" Path="Resources/Emojis/faces/103-in-love-9.png"/>
+		<Emoji Name="in love" Code="$#118" Path="Resources/Emojis/faces/104-in-love-8.png"/>
+		<Emoji Name="in love" Code="$#119" Path="Resources/Emojis/faces/128-in-love-6.png"/>
+		<Emoji Name="in love" Code="$#120" Path="Resources/Emojis/faces/141-in-love-5.png"/>
+		<Emoji Name="in love" Code="$#121" Path="Resources/Emojis/faces/146-in-love-4.png"/>
+		<Emoji Name="in love" Code="$#122" Path="Resources/Emojis/faces/173-in-love-3.png"/>
+		<Emoji Name="in love" Code="$#123" Path="Resources/Emojis/faces/173-in-love-3.png"/>
+		<Emoji Name="in love" Code="$#124" Path="Resources/Emojis/faces/193-in-love-2.png"/>
+		<Emoji Name="in love" Code="$#125" Path="Resources/Emojis/faces/196-in-love-1.png"/>
+		<Emoji Name="in love" Code="$#126" Path="Resources/Emojis/faces/197-in-love.png"/>
+		<Emoji Name="kiss" Code="$#127" Path="Resources/Emojis/faces/113-kiss-2.png"/>
+		<Emoji Name="kiss" Code="$#128" Path="Resources/Emojis/faces/105-kiss-3.png"/>
+		<Emoji Name="greed" Code="$#129" Path="Resources/Emojis/faces/114-greed-1.png"/>
+		<Emoji Name="greed" Code="$#130" Path="Resources/Emojis/faces/119-greed.png"/>
+		<Emoji Name="pirate" Code="$#131" Path="Resources/Emojis/faces/115-pirate-1.png"/>
+		<Emoji Name="music" Code="$#132" Path="Resources/Emojis/faces/116-music.png"/>
+		<Emoji Name="confused" Code="$#133" Path="Resources/Emojis/faces/117-confused-2.png"/>
+		<Emoji Name="confused" Code="$#134" Path="Resources/Emojis/faces/130-confused-1.png"/>
+		<Emoji Name="cheering" Code="$#135" Path="Resources/Emojis/faces/122-cheering.png"/>
+		<Emoji Name="graduated" Code="$#136" Path="Resources/Emojis/faces/126-graduated.png"/>
+		<Emoji Name="birthday boy" Code="$#137" Path="Resources/Emojis/faces/133-birthday-boy.png"/>
+		<Emoji Name="sleeping" Code="$#138" Path="Resources/Emojis/faces/142-sleeping.png"/>
+		<Emoji Name="wink" Code="$#139" Path="Resources/Emojis/faces/145-wink.png"/>
+		<Emoji Name="injury" Code="$#140" Path="Resources/Emojis/faces/153-injury.png"/>
+		<Emoji Name="rich" Code="$#141" Path="Resources/Emojis/faces/155-rich-1.png"/>
+		<Emoji Name="thinking" Code="$#142" Path="Resources/Emojis/faces/167-thinking-1.png"/>
+		<Emoji Name="thinking" Code="$#143" Path="Resources/Emojis/faces/171-thinking.png"/>
+		<Emoji Name="confused" Code="$#144" Path="Resources/Emojis/faces/169-confused.png"/>
+		<Emoji Name="hypnotized" Code="$#145" Path="Resources/Emojis/faces/174-hypnotized.png"/>
+		<Emoji Name="furious" Code="$#146" Path="Resources/Emojis/faces/181-furious.png"/>
+		<Emoji Name="angry" Code="$#147" Path="Resources/Emojis/faces/186-angry-1.png"/>
+		<Emoji Name="kiss" Code="$#148" Path="Resources/Emojis/faces/195-kiss-1.png"/>
+		<Emoji Name="kiss" Code="$#149" Path="Resources/Emojis/faces/198-kiss.png"/>
+		<Emoji Name="sleepy" Code="$#150" Path="Resources/Emojis/faces/200-sleepy.png"/>
+	</EmojiGroup>
+	<EmojiGroup Name="Hands" Code="$#002" Path="Resources/Emojis/hands/175-hand.png">
+		<Emoji Name="middle finger" Code="$#201" Path="Resources/Emojis/hands/162-middle-finger.png"/>
+		<Emoji Name="salute" Code="$#202" Path="Resources/Emojis/hands/163-salute.png"/>
+		<Emoji Name="strong" Code="$#203" Path="Resources/Emojis/hands/164-strong.png"/>
+		<Emoji Name="clapping" Code="$#204" Path="Resources/Emojis/hands/165-clapping.png"/>
+		<Emoji Name="pointing up" Code="$#205" Path="Resources/Emojis/hands/166-pointing-up.png"/>
+		<Emoji Name="please" Code="$#206" Path="Resources/Emojis/hands/167-please.png"/>
+		<Emoji Name="raise hand" Code="$#207" Path="Resources/Emojis/hands/169-raise-hand.png"/>
+		<Emoji Name="pointing left" Code="$#208" Path="Resources/Emojis/hands/170-pointing-left.png"/>
+		<Emoji Name="pointing right" Code="$#209" Path="Resources/Emojis/hands/171-pointing-right.png"/>
+		<Emoji Name="tap" Code="$#210" Path="Resources/Emojis/hands/172-tap-1.png"/>
+		<Emoji Name="tap" Code="$#211" Path="Resources/Emojis/hands/173-tap.png"/>
+		<Emoji Name="hand" Code="$#212" Path="Resources/Emojis/hands/174-hand-1.png"/>
+		<Emoji Name="hand" Code="$#213" Path="Resources/Emojis/hands/175-hand.png"/>
+		<Emoji Name="waving hand" Code="$#214" Path="Resources/Emojis/hands/176-waving-hand.png"/>
+		<Emoji Name="victory" Code="$#215" Path="Resources/Emojis/hands/177-victory.png"/>
+		<Emoji Name="first" Code="$#216" Path="Resources/Emojis/hands/178-fist.png"/>
+		<Emoji Name="punch" Code="$#217" Path="Resources/Emojis/hands/180-punch.png"/>
+		<Emoji Name="ok" Code="$#218" Path="Resources/Emojis/hands/181-ok.png"/>
+		<Emoji Name="dislike" Code="$#219" Path="Resources/Emojis/hands/182-dislike.png"/>
+		<Emoji Name="like" Code="$#220" Path="Resources/Emojis/hands/183-like.png"/>
+	</EmojiGroup>
+	<EmojiGroup Name="Hearts" Code="$#003" Path="Resources/Emojis/hearts/107-heart-4.png">
+		<Emoji Name="kiss" Code="$#301" Path="Resources/Emojis/hearts/097-kiss-2.png"/>
+		<Emoji Name="email" Code="$#302" Path="Resources/Emojis/hearts/098-email.png"/>
+		<Emoji Name="cupid" Code="$#303" Path="Resources/Emojis/hearts/099-cupid.png"/>
+		<Emoji Name="hearts" Code="$#304" Path="Resources/Emojis/hearts/100-heart-9.png"/>
+		<Emoji Name="heart" Code="$#305" Path="Resources/Emojis/hearts/101-heart-8.png"/>
+		<Emoji Name="heart" Code="$#306" Path="Resources/Emojis/hearts/103-heart-7.png"/>
+		<Emoji Name="heart" Code="$#307" Path="Resources/Emojis/hearts/104-heart-6.png"/>
+		<Emoji Name="heart" Code="$#308" Path="Resources/Emojis/hearts/105-heart-5.png"/>
+		<Emoji Name="broken heart" Code="$#309" Path="Resources/Emojis/hearts/106-broken-heart.png"/>
+		<Emoji Name="red heart" Code="$#310" Path="Resources/Emojis/hearts/107-heart-4.png"/>
+		<Emoji Name="green heart" Code="$#311" Path="Resources/Emojis/hearts/108-heart-3.png"/>
+		<Emoji Name="violet heart" Code="$#312" Path="Resources/Emojis/hearts/109-heart-2.png"/>
+		<Emoji Name="blue heart" Code="$#313" Path="Resources/Emojis/hearts/110-heart-1.png"/>
+		<Emoji Name="yellow heart" Code="$#314" Path="Resources/Emojis/hearts/111-heart.png"/>
+	</EmojiGroup>
+	<EmojiGroup Name="Nature" Code="$#004" Path="Resources/Emojis/nature/010-panda.png">
+		<Emoji Name="dog" Code="$#400" Path="Resources/Emojis/nature/019-dog-1.png"/>
+		<Emoji Name="dog" Code="$#401" Path="Resources/Emojis/nature/165-dog.png"/>
+		<Emoji Name="cat" Code="$#402" Path="Resources/Emojis/nature/143-cat.png"/>
+		<Emoji Name="cat" Code="$#403" Path="Resources/Emojis/nature/015-cat-1.png"/>
+		<Emoji Name="plant" Code="$#404" Path="Resources/Emojis/nature/001-plant-1.png"/>
+		<Emoji Name="koala" Code="$#405" Path="Resources/Emojis/nature/002-koala.png"/>
+		<Emoji Name="chipmunk" Code="$#406" Path="Resources/Emojis/nature/003-chipmunk.png"/>
+		<Emoji Name="rat" Code="$#407" Path="Resources/Emojis/nature/004-rat.png"/>
+		<Emoji Name="mouse" Code="$#408" Path="Resources/Emojis/nature/005-mouse-1.png"/>
+		<Emoji Name="rabbit" Code="$#409" Path="Resources/Emojis/nature/006-rabbit-1.png"/>
+		<Emoji Name="rabbit" Code="$#410" Path="Resources/Emojis/nature/076-rabbit.png"/>
+		<Emoji Name="dove" Code="$#411" Path="Resources/Emojis/nature/007-dove.png"/>
+		<Emoji Name="turkey" Code="$#412" Path="Resources/Emojis/nature/008-turkey.png"/>
+		<Emoji Name="panda" Code="$#413" Path="Resources/Emojis/nature/010-panda.png"/>
+		<Emoji Name="tiger" Code="$#414" Path="Resources/Emojis/nature/050-tiger-1.png"/>
+		<Emoji Name="tyrannosaurus rex" Code="$#415" Path="Resources/Emojis/nature/012-tyrannosaurus-rex.png"/>
+		<Emoji Name="hen" Code="$#416" Path="Resources/Emojis/nature/013-hen-1.png"/>
+		<Emoji Name="hen" Code="$#417" Path="Resources/Emojis/nature/139-hen.png"/>
+		<Emoji Name="chicken" Code="$#418" Path="Resources/Emojis/nature/130-chicken-1.png"/>
+		<Emoji Name="dinosaur" Code="$#419" Path="Resources/Emojis/nature/014-dinosaur.png"/>
+		<Emoji Name="poodle" Code="$#420" Path="Resources/Emojis/nature/016-poodle.png"/>
+		<Emoji Name="hedgehog" Code="$#421" Path="Resources/Emojis/nature/017-hedgehog.png"/>
+		<Emoji Name="zebra" Code="$#422" Path="Resources/Emojis/nature/018-zebra.png"/>
+		<Emoji Name="giraffe" Code="$#423" Path="Resources/Emojis/nature/020-giraffe.png"/>
+		<Emoji Name="ewe" Code="$#424" Path="Resources/Emojis/nature/021-ewe.png"/>
+		<Emoji Name="bee" Code="$#425" Path="Resources/Emojis/nature/109-bee.png"/>
+		<Emoji Name="unicorn" Code="$#426" Path="Resources/Emojis/nature/111-unicorn.png"/>
+		<Emoji Name="turtle" Code="$#427" Path="Resources/Emojis/nature/088-turtle.png"/>
+		<Emoji Name="ram" Code="$#428" Path="Resources/Emojis/nature/023-ram.png"/>
+		<Emoji Name="snail" Code="$#429" Path="Resources/Emojis/nature/103-snail.png"/>
+		<Emoji Name="goat" Code="$#430" Path="Resources/Emojis/nature/025-goat.png"/>
+		<Emoji Name="hamster" Code="$#431" Path="Resources/Emojis/nature/098-hamster.png"/>
+		<Emoji Name="pig" Code="$#432" Path="Resources/Emojis/nature/026-pig-2.png"/>
+		<Emoji Name="chicken" Code="$#433" Path="Resources/Emojis/nature/133-chicken.png"/>
+		<Emoji Name="bird" Code="$#434" Path="Resources/Emojis/nature/135-bird.png"/>
+		<Emoji Name="monkey" Code="$#435" Path="Resources/Emojis/nature/140-monkey-4.png"/>
+		<Emoji Name="monkey" Code="$#436" Path="Resources/Emojis/nature/144-monkey-3.png"/>
+		<Emoji Name="monkey" Code="$#437" Path="Resources/Emojis/nature/147-monkey-2.png"/>
+		<Emoji Name="monkey" Code="$#438" Path="Resources/Emojis/nature/148-monkey-1.png"/>
+		<Emoji Name="monkey" Code="$#439" Path="Resources/Emojis/nature/150-monkey.png"/>
+		<Emoji Name="dragon" Code="$#440" Path="Resources/Emojis/nature/142-dragon.png"/>
+		<Emoji Name="frog" Code="$#441" Path="Resources/Emojis/nature/153-frog.png"/>
+		<Emoji Name="pig" Code="$#442" Path="Resources/Emojis/nature/155-pig-1.png"/>
+		<Emoji Name="cow" Code="$#443" Path="Resources/Emojis/nature/159-cow.png"/>
+		<Emoji Name="tiger" Code="$#444" Path="Resources/Emojis/nature/162-tiger.png"/>
+		<Emoji Name="pig" Code="$#445" Path="Resources/Emojis/nature/157-pig.png"/>
+		<Emoji Name="lion" Code="$#446" Path="Resources/Emojis/nature/161-lion.png"/>
+		<Emoji Name="penguin" Code="$#447" Path="Resources/Emojis/nature/137-penguin.png"/>
+		<Emoji Name="boar" Code="$#448" Path="Resources/Emojis/nature/115-boar.png"/>
+		<Emoji Name="wolf" Code="$#449" Path="Resources/Emojis/nature/116-wolf.png"/>
+		<Emoji Name="bat" Code="$#450" Path="Resources/Emojis/nature/119-bat.png"/>
+		<Emoji Name="mouse" Code="$#451" Path="Resources/Emojis/nature/120-mouse.png"/>
+		<Emoji Name="dragon" Code="$#452" Path="Resources/Emojis/nature/121-dragon-1.png"/>
+		<Emoji Name="owl" Code="$#453" Path="Resources/Emojis/nature/122-owl.png"/>
+		<Emoji Name="horse" Code="$#454" Path="Resources/Emojis/nature/029-horse-1.png"/>
+		<Emoji Name="gorilla" Code="$#455" Path="Resources/Emojis/nature/030-gorilla.png"/>
+		<Emoji Name="caterpillar" Code="$#456" Path="Resources/Emojis/nature/107-caterpillar.png"/>
+		<Emoji Name="bear" Code="$#457" Path="Resources/Emojis/nature/033-bear.png"/>
+		<Emoji Name="rhinoceros" Code="$#458" Path="Resources/Emojis/nature/035-rhinoceros.png"/>
+		<Emoji Name="eagle" Code="$#459" Path="Resources/Emojis/nature/125-eagle.png"/>
+		<Emoji Name="elephant" Code="$#460" Path="Resources/Emojis/nature/036-elephant.png"/>
+		<Emoji Name="butterfly" Code="$#461" Path="Resources/Emojis/nature/105-butterfly.png"/>
+		<Emoji Name="camel" Code="$#462" Path="Resources/Emojis/nature/039-camel-1.png"/>
+		<Emoji Name="camel" Code="$#463" Path="Resources/Emojis/nature/041-camel.png"/>
+		<Emoji Name="lizard" Code="$#464" Path="Resources/Emojis/nature/085-lizard.png"/>
+		<Emoji Name="deer" Code="$#465" Path="Resources/Emojis/nature/043-deer.png"/>
+		<Emoji Name="buffalo" Code="$#466" Path="Resources/Emojis/nature/048-buffalo.png"/>
+		<Emoji Name="duck" Code="$#467" Path="Resources/Emojis/nature/127-duck.png"/>
+		<Emoji Name="chicken" Code="$#468" Path="Resources/Emojis/nature/128-chicken-2.png"/>
+		<Emoji Name="fox" Code="$#469" Path="Resources/Emojis/nature/054-fox.png"/>
+		<Emoji Name="cow" Code="$#470" Path="Resources/Emojis/nature/045-cow-1.png"/>
+		<Emoji Name="ox" Code="$#471" Path="Resources/Emojis/nature/046-ox.png"/>
+		<Emoji Name="crocodile" Code="$#472" Path="Resources/Emojis/nature/056-crocodile.png"/>
+		<Emoji Name="horse" Code="$#473" Path="Resources/Emojis/nature/113-horse.png"/>
+		<Emoji Name="leopard" Code="$#474" Path="Resources/Emojis/nature/052-leopard.png"/>
+		<Emoji Name="snake" Code="$#475" Path="Resources/Emojis/nature/086-snake.png"/>
+		<Emoji Name="fish" Code="$#476" Path="Resources/Emojis/nature/069-fish-1.png"/>
+		<Emoji Name="fish" Code="$#477" Path="Resources/Emojis/nature/070-fish.png"/>
+		<Emoji Name="whale" Code="$#478" Path="Resources/Emojis/nature/058-whale-1.png"/>
+		<Emoji Name="whale" Code="$#479" Path="Resources/Emojis/nature/061-whale.png"/>
+		<Emoji Name="shark" Code="$#480" Path="Resources/Emojis/nature/063-shark.png"/>
+		<Emoji Name="dolphin" Code="$#481" Path="Resources/Emojis/nature/065-dolphin.png"/>
+		<Emoji Name="blowfish" Code="$#482" Path="Resources/Emojis/nature/067-blowfish.png"/>
+		<Emoji Name="shrimp" Code="$#483" Path="Resources/Emojis/nature/072-shrimp.png"/>
+		<Emoji Name="octopus" Code="$#484" Path="Resources/Emojis/nature/074-octopus.png"/>
+		<Emoji Name="squid" Code="$#485" Path="Resources/Emojis/nature/078-squid.png"/>
+		<Emoji Name="crab" Code="$#486" Path="Resources/Emojis/nature/081-crab.png"/>
+		<Emoji Name="sea snail" Code="$#487" Path="Resources/Emojis/nature/100-sea-snail.png"/>
+		<Emoji Name="ant" Code="$#488" Path="Resources/Emojis/nature/095-ant.png"/>
+		<Emoji Name="ladybug" Code="$#489" Path="Resources/Emojis/nature/096-ladybug.png"/>
+		<Emoji Name="scorpion" Code="$#490" Path="Resources/Emojis/nature/082-scorpion.png"/>
+		<Emoji Name="spider" Code="$#491" Path="Resources/Emojis/nature/092-spider.png"/>
+		<Emoji Name="cricket" Code="$#492" Path="Resources/Emojis/nature/009-cricket.png"/>
+		<Emoji Name="sun" Code="$#493" Path="Resources/Emojis/nature/068-sun-1.png"/>
+		<Emoji Name="sun" Code="$#494" Path="Resources/Emojis/nature/094-sun.png"/>
+		<Emoji Name="cloudy day" Code="$#495" Path="Resources/Emojis/nature/062-cloudy-day.png"/>
+		<Emoji Name="cloudy" Code="$#496" Path="Resources/Emojis/nature/066-cloudy.png"/>
+		<Emoji Name="cloudy" Code="$#497" Path="Resources/Emojis/nature/064-cloudy-1.png"/>
+		<Emoji Name="cloudy" Code="$#498" Path="Resources/Emojis/nature/060-cloudy-2.png"/>
+		<Emoji Name="rain" Code="$#499" Path="Resources/Emojis/nature/053-rain.png"/>
+		<Emoji Name="rain" Code="$#500" Path="Resources/Emojis/nature/022-rain-1.png"/>
+		<Emoji Name="drop" Code="$#501" Path="Resources/Emojis/nature/027-drop.png"/>
+		<Emoji Name="drops" Code="$#502" Path="Resources/Emojis/nature/024-drops.png"/>
+		<Emoji Name="tornado" Code="$#503" Path="Resources/Emojis/nature/034-tornado.png"/>
+		<Emoji Name="wind" Code="$#504" Path="Resources/Emojis/nature/037-wind-1.png"/>
+		<Emoji Name="wind" Code="$#505" Path="Resources/Emojis/nature/038-wind.png"/>
+		<Emoji Name="storm" Code="$#506" Path="Resources/Emojis/nature/049-storm-1.png"/>
+		<Emoji Name="storm" Code="$#507" Path="Resources/Emojis/nature/051-storm.png"/>
+		<Emoji Name="pine" Code="$#508" Path="Resources/Emojis/nature/055-pine.png"/>
+		<Emoji Name="snowflake" Code="$#509" Path="Resources/Emojis/nature/040-snowflake.png"/>
+		<Emoji Name="cloud" Code="$#510" Path="Resources/Emojis/nature/057-cloud.png"/>
+		<Emoji Name="snowing" Code="$#511" Path="Resources/Emojis/nature/047-snowing.png"/>
+		<Emoji Name="fog" Code="$#512" Path="Resources/Emojis/nature/031-fog.png"/>
+		<Emoji Name="sparkles" Code="$#513" Path="Resources/Emojis/nature/080-sparkles.png"/>
+		<Emoji Name="rainbow" Code="$#514" Path="Resources/Emojis/nature/059-rainbow.png"/>
+		<Emoji Name="lightning" Code="$#515" Path="Resources/Emojis/nature/079-lightning.png"/>
+		<Emoji Name="snowman" Code="$#516" Path="Resources/Emojis/nature/044-snowman.png"/>
+		<Emoji Name="snowman" Code="$#517" Path="Resources/Emojis/nature/042-snowman-1.png"/>
+		<Emoji Name="wave" Code="$#518" Path="Resources/Emojis/nature/028-wave.png"/>
+		<Emoji Name="shooting star" Code="$#519" Path="Resources/Emojis/nature/087-shooting-star.png"/>
+		<Emoji Name="star" Code="$#520" Path="Resources/Emojis/nature/083-star-1.png"/>
+		<Emoji Name="star" Code="$#521" Path="Resources/Emojis/nature/084-star.png"/>
+		<Emoji Name="earth globe" Code="$#522" Path="Resources/Emojis/nature/118-earth-globe-2.png"/>
+		<Emoji Name="earth globe" Code="$#523" Path="Resources/Emojis/nature/123-earth-globe-1.png"/>
+		<Emoji Name="earth globe" Code="$#524" Path="Resources/Emojis/nature/124-earth-globe.png"/>
+		<Emoji Name="full moon" Code="$#525" Path="Resources/Emojis/nature/117-full-moon.png"/>
+		<Emoji Name="half moon" Code="$#526" Path="Resources/Emojis/nature/089-half-moon-2.png"/>
+		<Emoji Name="half moon" Code="$#527" Path="Resources/Emojis/nature/091-half-moon-1.png"/>
+		<Emoji Name="half moon" Code="$#528" Path="Resources/Emojis/nature/093-half-moon.png"/>
+		<Emoji Name="moon" Code="$#529" Path="Resources/Emojis/nature/097-moon-8.png"/>
+		<Emoji Name="moon" Code="$#530" Path="Resources/Emojis/nature/101-moon-7.png"/>
+		<Emoji Name="moon" Code="$#531" Path="Resources/Emojis/nature/102-moon-6.png"/>
+		<Emoji Name="moon" Code="$#532" Path="Resources/Emojis/nature/104-moon-5.png"/>
+		<Emoji Name="moon" Code="$#533" Path="Resources/Emojis/nature/106-moon-4.png"/>
+		<Emoji Name="moon" Code="$#534" Path="Resources/Emojis/nature/108-moon-3.png"/>
+		<Emoji Name="moon" Code="$#535" Path="Resources/Emojis/nature/110-moon-2.png"/>
+		<Emoji Name="moon" Code="$#536" Path="Resources/Emojis/nature/112-moon-1.png"/>
+		<Emoji Name="moon" Code="$#537" Path="Resources/Emojis/nature/114-moon.png"/>
+		<Emoji Name="fire" Code="$#538" Path="Resources/Emojis/nature/075-fire.png"/>
+		<Emoji Name="comet" Code="$#539" Path="Resources/Emojis/nature/071-comet.png"/>
+		<Emoji Name="explosion" Code="$#540" Path="Resources/Emojis/nature/073-explosion.png"/>
+		<Emoji Name="spider web" Code="$#541" Path="Resources/Emojis/nature/090-spider-web.png"/>
+		<Emoji Name="cactus" Code="$#542" Path="Resources/Emojis/nature/099-cactus.png"/>
+		<Emoji Name="tree" Code="$#543" Path="Resources/Emojis/nature/032-tree.png"/>
+		<Emoji Name="plam tree" Code="$#544" Path="Resources/Emojis/nature/011-palm-tree.png"/>
+		<Emoji Name="christmas tree" Code="$#545" Path="Resources/Emojis/nature/077-christmas-tree.png"/>
+		<Emoji Name="hibiscus" Code="$#546" Path="Resources/Emojis/nature/126-hibiscus.png"/>
+		<Emoji Name="cherry blossom" Code="$#547" Path="Resources/Emojis/nature/129-cherry-blossom.png"/>
+		<Emoji Name="flower" Code="$#548" Path="Resources/Emojis/nature/131-flower-1.png"/>
+		<Emoji Name="sunflower" Code="$#549" Path="Resources/Emojis/nature/132-sunflower.png"/>
+		<Emoji Name="flower" Code="$#550" Path="Resources/Emojis/nature/134-flower.png"/>
+		<Emoji Name="rose" Code="$#551" Path="Resources/Emojis/nature/136-rose.png"/>
+		<Emoji Name="tulip" Code="$#552" Path="Resources/Emojis/nature/138-tulip.png"/>
+		<Emoji Name="bouquet" Code="$#553" Path="Resources/Emojis/nature/141-bouquet.png"/>
+		<Emoji Name="rice" Code="$#554" Path="Resources/Emojis/nature/145-rice.png"/>
+		<Emoji Name="mushroom" Code="$#555" Path="Resources/Emojis/nature/146-mushroom.png"/>
+		<Emoji Name="maple leaf" Code="$#556" Path="Resources/Emojis/nature/149-maple-leaf.png"/>
+		<Emoji Name="leaves" Code="$#557" Path="Resources/Emojis/nature/151-leaves-1.png"/>
+		<Emoji Name="leaves" Code="$#558" Path="Resources/Emojis/nature/152-leaves.png"/>
+		<Emoji Name="bamboo" Code="$#559" Path="Resources/Emojis/nature/154-bamboo.png"/>
+		<Emoji Name="plant" Code="$#560" Path="Resources/Emojis/nature/156-plant.png"/>
+		<Emoji Name="clover" Code="$#561" Path="Resources/Emojis/nature/158-clover.png"/>
+		<Emoji Name="shamrock" Code="$#562" Path="Resources/Emojis/nature/160-shamrock.png"/>
+		<Emoji Name="herb" Code="$#563" Path="Resources/Emojis/nature/163-herb.png"/>
+		<Emoji Name="pawprints" Code="$#564" Path="Resources/Emojis/nature/164-pawprints.png"/>
+	</EmojiGroup>
+	<EmojiGroup Name="Objects" Code="$#005" Path="Resources/Emojis/objects/001-balloon.png">
+		<Emoji Name="balloon" Code="$#600" Path="Resources/Emojis/objects/001-balloon.png"/>
+		<Emoji Name="gift" Code="$#601" Path="Resources/Emojis/objects/002-gift.png"/>
+		<Emoji Name="shopping cart" Code="$#602" Path="Resources/Emojis/objects/003-shopping-cart.png"/>
+		<Emoji Name="shopping bag" Code="$#603" Path="Resources/Emojis/objects/004-shopping-bag.png"/>
+		<Emoji Name="frame" Code="$#604" Path="Resources/Emojis/objects/005-frame.png"/>
+		<Emoji Name="bed" Code="$#605" Path="Resources/Emojis/objects/006-bed-1.pn"/>
+		<Emoji Name="bed" Code="$#606" Path="Resources/Emojis/objects/007-bed.png"/>
+		<Emoji Name="sofa" Code="$#607" Path="Resources/Emojis/objects/008-sofa.png"/>
+		<Emoji Name="door" Code="$#608" Path="Resources/Emojis/objects/009-door.png"/>
+		<Emoji Name="key" Code="$#609" Path="Resources/Emojis/objects/010-key-1.png"/>
+		<Emoji Name="key" Code="$#610" Path="Resources/Emojis/objects/013-key.png"/>
+		<Emoji Name="email" Code="$#611" Path="Resources/Emojis/objects/011-email-1.png"/>
+		<Emoji Name="email" Code="$#612" Path="Resources/Emojis/objects/169-email.png"/>
+		<Emoji Name="controller" Code="$#613" Path="Resources/Emojis/objects/012-controller.png"/>
+		<Emoji Name="bell" Code="$#614" Path="Resources/Emojis/objects/014-bell.png"/>
+		<Emoji Name="bathtub" Code="$#615" Path="Resources/Emojis/objects/015-bathtub-1.png"/>
+		<Emoji Name="bathtub" Code="$#616" Path="Resources/Emojis/objects/016-bathtub.png"/>
+		<Emoji Name="shower" Code="$#617" Path="Resources/Emojis/objects/017-shower.png"/>
+		<Emoji Name="faucet" Code="$#618" Path="Resources/Emojis/objects/018-faucet.png"/>
+		<Emoji Name="toilet" Code="$#619" Path="Resources/Emojis/objects/019-toilet.png"/>
+		<Emoji Name="thermometer" Code="$#620" Path="Resources/Emojis/objects/020-thermometer.png"/>
+		<Emoji Name="syringe" Code="$#621" Path="Resources/Emojis/objects/021-syringe.png"/>
+		<Emoji Name="pill" Code="$#622" Path="Resources/Emojis/objects/022-pill.png"/>
+		<Emoji Name="mouse" Code="$#623" Path="Resources/Emojis/objects/023-mouse.png"/>
+		<Emoji Name="letter" Code="$#624" Path="Resources/Emojis/objects/024-letter-1.png"/>
+		<Emoji Name="hole" Code="$#625" Path="Resources/Emojis/objects/025-hole.png"/>
+		<Emoji Name="microscope" Code="$#626" Path="Resources/Emojis/objects/026-microscope.png"/>
+		<Emoji Name="telescope" Code="$#627" Path="Resources/Emojis/objects/027-telescope.png"/>
+		<Emoji Name="flask" Code="$#628" Path="Resources/Emojis/objects/028-flask.png"/>
+		<Emoji Name="barber shop" Code="$#629" Path="Resources/Emojis/objects/029-barber-shop.png"/>
+		<Emoji Name="beads" Code="$#630" Path="Resources/Emojis/objects/030-beads.png"/>
+		<Emoji Name="fog" Code="$#631" Path="Resources/Emojis/objects/031-fog.png"/>
+		<Emoji Name="magic ball" Code="$#632" Path="Resources/Emojis/objects/031-magic-ball.png"/>
+		<Emoji Name="vase" Code="$#633" Path="Resources/Emojis/objects/032-vase-1.png"/>
+		<Emoji Name="vase" Code="$#634" Path="Resources/Emojis/objects/034-vase.png"/>
+		<Emoji Name="coffin" Code="$#635" Path="Resources/Emojis/objects/036-coffin.png"/>
+		<Emoji Name="book" Code="$#636" Path="Resources/Emojis/objects/033-book-3.png"/>
+		<Emoji Name="book" Code="$#637" Path="Resources/Emojis/objects/035-book-2.png"/>
+		<Emoji Name="book" Code="$#638" Path="Resources/Emojis/objects/037-book-1.png"/>
+		<Emoji Name="book" Code="$#639" Path="Resources/Emojis/objects/041-book.png"/>
+		<Emoji Name="printer" Code="$#640" Path="Resources/Emojis/objects/038-printer.png"/>
+		<Emoji Name="letter" Code="$#641" Path="Resources/Emojis/objects/039-letter.png"/>
+		<Emoji Name="cigarette" Code="$#642" Path="Resources/Emojis/objects/040-cigarette.png"/>
+		<Emoji Name="shield" Code="$#643" Path="Resources/Emojis/objects/042-shield.png"/>
+		<Emoji Name="swords" Code="$#644" Path="Resources/Emojis/objects/044-swords.png"/>
+		<Emoji Name="unlocked" Code="$#645" Path="Resources/Emojis/objects/045-unlocked.png"/>
+		<Emoji Name="sword" Code="$#646" Path="Resources/Emojis/objects/046-sword.png"/>
+		<Emoji Name="padlock" Code="$#647" Path="Resources/Emojis/objects/047-padlock-2.png"/>
+		<Emoji Name="padlock" Code="$#648" Path="Resources/Emojis/objects/048-padlock-1.png"/>
+		<Emoji Name="padlock" Code="$#649" Path="Resources/Emojis/objects/050-padlock.png"/>
+		<Emoji Name="knife" Code="$#650" Path="Resources/Emojis/objects/049-knife.png"/>
+		<Emoji Name="bomb" Code="$#651" Path="Resources/Emojis/objects/051-bomb.png"/>
+		<Emoji Name="loupe" Code="$#652" Path="Resources/Emojis/objects/052-loupe.png"/>
+		<Emoji Name="gun" Code="$#653" Path="Resources/Emojis/objects/053-gun.png"/>
+		<Emoji Name="pencil" Code="$#654" Path="Resources/Emojis/objects/054-pencil.png"/>
+		<Emoji Name="chain" Code="$#655" Path="Resources/Emojis/objects/055-chain.png"/>
+		<Emoji Name="gear" Code="$#656" Path="Resources/Emojis/objects/056-gear.png"/>
+		<Emoji Name="highlighter" Code="$#657" Path="Resources/Emojis/objects/058-highlighter.png"/>
+		<Emoji Name="bolt" Code="$#658" Path="Resources/Emojis/objects/059-bolt.png"/>
+		<Emoji Name="monitor" Code="$#659" Path="Resources/Emojis/objects/060-monitor.png"/>
+		<Emoji Name="lantern" Code="$#660" Path="Resources/Emojis/objects/061-lantern-1.png"/>
+		<Emoji Name="pick" Code="$#661" Path="Resources/Emojis/objects/062-pick.png"/>
+		<Emoji Name="paint brush" Code="$#662" Path="Resources/Emojis/objects/063-paint-brush.png"/>
+		<Emoji Name="repair tools" Code="$#663" Path="Resources/Emojis/objects/064-repair-tools.png"/>
+		<Emoji Name="pen" Code="$#664" Path="Resources/Emojis/objects/065-pen-1.png"/>
+		<Emoji Name="pen" Code="$#665" Path="Resources/Emojis/objects/066-pen.png"/>
+		<Emoji Name="hammers" Code="$#666" Path="Resources/Emojis/objects/067-hammers.png"/>
+		<Emoji Name="scissors" Code="$#667" Path="Resources/Emojis/objects/068-scissors.png"/>
+		<Emoji Name="hammer" Code="$#668" Path="Resources/Emojis/objects/069-hammer.png"/>
+		<Emoji Name="wrench" Code="$#669" Path="Resources/Emojis/objects/070-wrench.png"/>
+		<Emoji Name="pin" Code="$#670" Path="Resources/Emojis/objects/071-pin.png"/>
+		<Emoji Name="push pin" Code="$#671" Path="Resources/Emojis/objects/072-push-pin.png"/>
+		<Emoji Name="libra" Code="$#672" Path="Resources/Emojis/objects/073-libra.png"/>
+		<Emoji Name="ruler" Code="$#673" Path="Resources/Emojis/objects/074-ruler.png"/>
+		<Emoji Name="diamond" Code="$#674" Path="Resources/Emojis/objects/075-diamond.png"/>
+		<Emoji Name="set square" Code="$#675" Path="Resources/Emojis/objects/076-set-square.png"/>
+		<Emoji Name="credit card" Code="$#676" Path="Resources/Emojis/objects/077-credit-card.png"/>
+		<Emoji Name="money bag" Code="$#677" Path="Resources/Emojis/objects/078-money-bag.png"/>
+		<Emoji Name="paperclip" Code="$#678" Path="Resources/Emojis/objects/079-paperclip-1.png"/>
+		<Emoji Name="pound sterling" Code="$#679" Path="Resources/Emojis/objects/080-pound-sterling.png"/>
+		<Emoji Name="paperclip" Code="$#680" Path="Resources/Emojis/objects/081-paperclip.png"/>
+		<Emoji Name="lantern" Code="$#681" Path="Resources/Emojis/objects/082-lantern.png"/>
+		<Emoji Name="keyboard" Code="$#682" Path="Resources/Emojis/objects/083-keyboard.png"/>
+		<Emoji Name="money" Code="$#683" Path="Resources/Emojis/objects/084-money-2.png"/>
+		<Emoji Name="money" Code="$#684" Path="Resources/Emojis/objects/088-money-1.png"/>
+		<Emoji Name="money" Code="$#685" Path="Resources/Emojis/objects/090-money.png"/>
+		<Emoji Name="link" Code="$#686" Path="Resources/Emojis/objects/085-link.png"/>
+		<Emoji Name="tag" Code="$#687" Path="Resources/Emojis/objects/086-tag-1.png"/>
+		<Emoji Name="tag" Code="$#688" Path="Resources/Emojis/objects/158-tag.png"/>
+		<Emoji Name="shooting star" Code="$#689" Path="Resources/Emojis/objects/087-shooting-star.png"/>
+		<Emoji Name="yen" Code="$#690" Path="Resources/Emojis/objects/087-yen.png"/>
+		<Emoji Name="half moon" Code="$#691" Path="Resources/Emojis/objects/089-half-moon-2.png"/>
+		<Emoji Name="open book" Code="$#692" Path="Resources/Emojis/objects/089-open-book.png"/>
+		<Emoji Name="spider web" Code="$#693" Path="Resources/Emojis/objects/090-spider-web.png"/>
+		<Emoji Name="books" Code="$#694" Path="Resources/Emojis/objects/091-books.png"/>
+		<Emoji Name="barrel" Code="$#695" Path="Resources/Emojis/objects/093-barrel.png"/>
+		<Emoji Name="trash" Code="$#696" Path="Resources/Emojis/objects/094-trash.png"/>
+		<Emoji Name="diamond" Code="$#697" Path="Resources/Emojis/objects/095-diamond.png"/>
+		<Emoji Name="notebook" Code="$#698" Path="Resources/Emojis/objects/092-notebook-2.png"/>
+		<Emoji Name="notebook" Code="$#699" Path="Resources/Emojis/objects/095-notebook-1.png"/>
+		<Emoji Name="notebook" Code="$#700" Path="Resources/Emojis/objects/096-notebook.png"/>
+		<Emoji Name="engagement ring" Code="$#701" Path="Resources/Emojis/objects/096-engagement-ring.png"/>
+		<Emoji Name="candle" Code="$#702" Path="Resources/Emojis/objects/097-candle.png"/>
+		<Emoji Name="newspaper" Code="$#703" Path="Resources/Emojis/objects/098-newspaper-1.png"/>
+		<Emoji Name="newspaper" Code="$#704" Path="Resources/Emojis/objects/100-newspaper.png"/>
+		<Emoji Name="cactus" Code="$#705" Path="Resources/Emojis/objects/099-cactus.png"/>
+		<Emoji Name="flashlight" Code="$#706" Path="Resources/Emojis/objects/099-flashlight.png"/>
+		<Emoji Name="sea snail" Code="$#707" Path="Resources/Emojis/objects/100-sea-snail.png"/>
+		<Emoji Name="idea" Code="$#708" Path="Resources/Emojis/objects/101-idea.png"/>
+		<Emoji Name="fozlder" Code="$#709" Path="Resources/Emojis/objects/102-folder-2.png"/>
+		<Emoji Name="folder" Code="$#710" Path="Resources/Emojis/objects/106-folder-1.png"/>
+		<Emoji Name="folder" Code="$#711" Path="Resources/Emojis/objects/109-folder.png"/>
+		<Emoji Name="plug" Code="$#712" Path="Resources/Emojis/objects/103-plug.png"/>
+		<Emoji Name="geisha" Code="$#713" Path="Resources/Emojis/objects/104-geisha.png"/>
+		<Emoji Name="butterfly" Code="$#714" Path="Resources/Emojis/objects/105-butterfly.png"/>
+		<Emoji Name="laptop" Code="$#715" Path="Resources/Emojis/objects/105-laptop.png"/>
+		<Emoji Name="battery" Code="$#716" Path="Resources/Emojis/objects/107-battery.png"/>
+		<Emoji Name="satellite dish" Code="$#717" Path="Resources/Emojis/objects/108-satellite-dish.png"/>
+		<Emoji Name="clipboard" Code="$#718" Path="Resources/Emojis/objects/110-clipboard.png"/>
+		<Emoji Name="hourglass" Code="$#719" Path="Resources/Emojis/objects/111-hourglass-1.png"/>
+		<Emoji Name="hourglass" Code="$#720" Path="Resources/Emojis/objects/112-hourglass.png"/>
+		<Emoji Name="lipstick" Code="$#721" Path="Resources/Emojis/objects/112-lipstick.png"/>
+		<Emoji Name="archive" Code="$#722" Path="Resources/Emojis/objects/113-archive.png"/>
+		<Emoji Name="clock" Code="$#723" Path="Resources/Emojis/objects/114-clock.png"/>
+		<Emoji Name="umbrella" Code="$#724" Path="Resources/Emojis/objects/114-umbrella.png"/>
+		<Emoji Name="box" Code="$#725" Path="Resources/Emojis/objects/115-box-1.png"/>
+		<Emoji Name="ribbon" Code="$#726" Path="Resources/Emojis/objects/115-ribbon.png"/>
+		<Emoji Name="alarm clock" Code="$#727" Path="Resources/Emojis/objects/116-alarm-clock.png"/>
+		<Emoji Name="sunglasses" Code="$#728" Path="Resources/Emojis/objects/116-sunglasses.png"/>
+		<Emoji Name="box" Code="$#729" Path="Resources/Emojis/objects/117-box.png"/>
+		<Emoji Name="purse" Code="$#730" Path="Resources/Emojis/objects/117-purse.png"/>
+		<Emoji Name="clutch" Code="$#731" Path="Resources/Emojis/objects/118-clutch.png"/>
+		<Emoji Name="stopwatch" Code="$#732" Path="Resources/Emojis/objects/118-stopwatch-1.png"/>
+		<Emoji Name="stopwatch" Code="$#733" Path="Resources/Emojis/objects/120-stopwatch.png"/>
+		<Emoji Name="calendar" Code="$#734" Path="Resources/Emojis/objects/119-calendar-4.png"/>
+		<Emoji Name="calendar" Code="$#735" Path="Resources/Emojis/objects/121-calendar-3.png"/>
+		<Emoji Name="calendar" Code="$#736" Path="Resources/Emojis/objects/123-calendar-2.png"/>
+		<Emoji Name="calendar" Code="$#737" Path="Resources/Emojis/objects/125-calendar-1.png"/>
+		<Emoji Name="calendar" Code="$#738" Path="Resources/Emojis/objects/129-calendar.png"/>
+		<Emoji Name="handbag" Code="$#739" Path="Resources/Emojis/objects/119-handbag.png"/>
+		<Emoji Name="briefcase" Code="$#740" Path="Resources/Emojis/objects/120-briefcase.png"/>
+		<Emoji Name="bikini" Code="$#741" Path="Resources/Emojis/objects/121-bikini.png"/>
+		<Emoji Name="plate" Code="$#742" Path="Resources/Emojis/objects/122-remote-control-1.png"/>
+		<Emoji Name="regulator" Code="$#743" Path="Resources/Emojis/objects/124-remote-control.png"/>
+		<Emoji Name="smartphone" Code="$#744" Path="Resources/Emojis/objects/126-smartphone-1.png"/>
+		<Emoji Name="smartphone" Code="$#745" Path="Resources/Emojis/objects/148-smartphone.png"/>
+		<Emoji Name="confetti" Code="$#746" Path="Resources/Emojis/objects/127-confetti-1.png"/>
+		<Emoji Name="confetti" Code="$#747" Path="Resources/Emojis/objects/149-confetti.png"/>
+		<Emoji Name="shirt" Code="$#748" Path="Resources/Emojis/objects/127-shirt-1.png"/>
+		<Emoji Name="shirt" Code="$#749" Path="Resources/Emojis/objects/128-shirt.png"/>
+		<Emoji Name="microphone" Code="$#750" Path="Resources/Emojis/objects/128-microphone.png"/>
+		<Emoji Name="polo shirt" Code="$#751" Path="Resources/Emojis/objects/129-polo-shirt.png"/>
+		<Emoji Name="boot" Code="$#752" Path="Resources/Emojis/objects/130-boot.png"/>
+		<Emoji Name="radio" Code="$#753" Path="Resources/Emojis/objects/130-radio.png"/>
+		<Emoji Name="high heel" Code="$#754" Path="Resources/Emojis/objects/131-high-heel.png"/>
+		<Emoji Name="loss" Code="$#755" Path="Resources/Emojis/objects/131-loss.png"/>
+		<Emoji Name="sandal" Code="$#756" Path="Resources/Emojis/objects/132-sandal.png"/>
+		<Emoji Name="television" Code="$#757" Path="Resources/Emojis/objects/132-television.png"/>
+		<Emoji Name="bar chart" Code="$#758" Path="Resources/Emojis/objects/133-bar-chart-1.png"/>
+		<Emoji Name="bar chart" Code="$#759" Path="Resources/Emojis/objects/134-bar-chart.png"/>
+		<Emoji Name="shoe" Code="$#760" Path="Resources/Emojis/objects/133-shoe.png"/>
+		<Emoji Name="sneakers" Code="$#761" Path="Resources/Emojis/objects/134-sneakers.png"/>
+		<Emoji Name="fax" Code="$#762" Path="Resources/Emojis/objects/135-fax.png"/>
+		<Emoji Name="pager" Code="$#763" Path="Resources/Emojis/objects/136-pager.png"/>
+		<Emoji Name="crown" Code="$#764" Path="Resources/Emojis/objects/137-crown.png"/>
+		<Emoji Name="telephone" Code="$#765" Path="Resources/Emojis/objects/138-telephone-1.png"/>
+		<Emoji Name="telephone" Code="$#766" Path="Resources/Emojis/objects/140-telephone.png"/>
+		<Emoji Name="file" Code="$#767" Path="Resources/Emojis/objects/057-file-3.png"/>
+		<Emoji Name="file" Code="$#768" Path="Resources/Emojis/objects/137-file-2.png"/>
+		<Emoji Name="file" Code="$#769" Path="Resources/Emojis/objects/139-file-1.png"/>
+		<Emoji Name="file" Code="$#770" Path="Resources/Emojis/objects/141-file.png"/>
+		<Emoji Name="scroll" Code="$#771" Path="Resources/Emojis/objects/142-scroll.png"/>
+		<Emoji Name="film" Code="$#772" Path="Resources/Emojis/objects/143-film.png"/>
+		<Emoji Name="horn" Code="$#773" Path="Resources/Emojis/objects/145-horn.png"/>
+		<Emoji Name="video camera" Code="$#774" Path="Resources/Emojis/objects/144-video-camera-2.png"/>
+		<Emoji Name="video camera" Code="$#775" Path="Resources/Emojis/objects/146-video-camera-1.png"/>
+		<Emoji Name="video camera" Code="$#776" Path="Resources/Emojis/objects/150-video-camera.png"/>
+		<Emoji Name="mailbox" Code="$#777" Path="Resources/Emojis/objects/147-mailbox-3.png"/>
+		<Emoji Name="mailbox" Code="$#778" Path="Resources/Emojis/objects/151-mailbox-2.png"/>
+		<Emoji Name="mailbox" Code="$#779" Path="Resources/Emojis/objects/152-mailbox-1.png"/>
+		<Emoji Name="mailbox" Code="$#780" Path="Resources/Emojis/objects/154-mailbox.png"/>
+		<Emoji Name="mailbox" Code="$#781" Path="Resources/Emojis/objects/157-mail-box.png"/>
+		<Emoji Name="photo camera" Code="$#782" Path="Resources/Emojis/objects/153-photo-camera-1.png"/>
+		<Emoji Name="photo camera" Code="$#783" Path="Resources/Emojis/objects/155-photo-camera.png"/>
+		<Emoji Name="vhs" Code="$#784" Path="Resources/Emojis/objects/156-vhs.png"/>
+		<Emoji Name="compact disk" Code="$#785" Path="Resources/Emojis/objects/159-compact-disc-1.png"/>
+		<Emoji Name="compact disk" Code="$#786" Path="Resources/Emojis/objects/160-compact-disc.png"/>
+		<Emoji Name="package" Code="$#787" Path="Resources/Emojis/objects/161-package.png"/>
+		<Emoji Name="floppy disk" Code="$#788" Path="Resources/Emojis/objects/162-floppy-disk.png"/>
+		<Emoji Name="outbox" Code="$#789" Path="Resources/Emojis/objects/163-outbox.png"/>
+		<Emoji Name="hard disc" Code="$#790" Path="Resources/Emojis/objects/164-hard-disk.png"/>
+		<Emoji Name="inbox" Code="$#791" Path="Resources/Emojis/objects/165-inbox.png"/>
+		<Emoji Name="vise" Code="$#792" Path="Resources/Emojis/objects/166-vise.png"/>
+		<Emoji Name="love letter" Code="$#793" Path="Resources/Emojis/objects/167-love-letter.png"/>
+		<Emoji Name="koinobori" Code="$#794" Path="Resources/Emojis/objects/168-koinobori.png"/>
+		<Emoji Name="joystick" Code="$#795" Path="Resources/Emojis/objects/170-joystick.png"/>
+		<Emoji Name="watch" Code="$#796" Path="Resources/Emojis/objects/171-watch.png"/>
+		<Emoji Name="bow" Code="$#797" Path="Resources/Emojis/objects/172-bow.png"/>
+	</EmojiGroup>
+	<EmojiGroup Name="Flags" Code="$#006" Path="Resources/Emojis/flags/259-european-union.png">
+		<Emoji Name="Mauritius" Code="$#800" Path="Resources/Emojis/flags/001-mauritius.png"/>
+		<Emoji Name="Cyprus" Code="$#801" Path="Resources/Emojis/flags/002-cyprus.png"/>
+		<Emoji Name="Austria" Code="$#802" Path="Resources/Emojis/flags/003-austria.png"/>
+		<Emoji Name="Oman" Code="$#803" Path="Resources/Emojis/flags/004-oman.png"/>
+		<Emoji Name="Ethiopia" Code="$#804" Path="Resources/Emojis/flags/005-ethiopia.png"/>
+		<Emoji Name="Tanzania" Code="$#805" Path="Resources/Emojis/flags/006-tanzania.png"/>
+		<Emoji Name="Nicaragua" Code="$#806" Path="Resources/Emojis/flags/007-nicaragua.png"/>
+		<Emoji Name="Estonia" Code="$#807" Path="Resources/Emojis/flags/008-estonia.png"/>
+		<Emoji Name="Uganda" Code="$#808" Path="Resources/Emojis/flags/009-uganda.png"/>
+		<Emoji Name="Slovenia" Code="$#809" Path="Resources/Emojis/flags/010-slovenia.png"/>
+		<Emoji Name="Zimbabwe" Code="$#810" Path="Resources/Emojis/flags/011-zimbabwe.png"/>
+		<Emoji Name="Italy" Code="$#811" Path="Resources/Emojis/flags/013-italy.png"/>
+		<Emoji Name="Wales" Code="$#812" Path="Resources/Emojis/flags/014-wales.png"/>
+		<Emoji Name="Nepal" Code="$#813" Path="Resources/Emojis/flags/016-nepal.png"/>
+		<Emoji Name="Lebanon" Code="$#814" Path="Resources/Emojis/flags/018-lebanon.png"/>
+		<Emoji Name="Ceuta" Code="$#815" Path="Resources/Emojis/flags/019-ceuta.png"/>
+		<Emoji Name="Iraq" Code="$#816" Path="Resources/Emojis/flags/020-iraq.png"/>
+		<Emoji Name="Syria" Code="$#817" Path="Resources/Emojis/flags/022-syria.png"/>
+		<Emoji Name="Honduras" Code="$#818" Path="Resources/Emojis/flags/024-honduras.png"/>
+		<Emoji Name="Anguilla" Code="$#819" Path="Resources/Emojis/flags/025-anguilla.png"/>
+		<Emoji Name="North korea" Code="$#820" Path="Resources/Emojis/flags/030-north-korea.png"/>
+		<Emoji Name="Zambia" Code="$#821" Path="Resources/Emojis/flags/032-zambia.png"/>
+		<Emoji Name="China" Code="$#822" Path="Resources/Emojis/flags/034-china.png"/>
+		<Emoji Name="Luxembourg" Code="$#823" Path="Resources/Emojis/flags/035-luxembourg.png"/>
+		<Emoji Name="Central african republic" Code="$#824" Path="Resources/Emojis/flags/036-central-african-republic.png"/>
+		<Emoji Name="Jamaica" Code="$#825" Path="Resources/Emojis/flags/037-jamaica.png"/>
+		<Emoji Name="Monaco" Code="$#826" Path="Resources/Emojis/flags/039-monaco.png"/>
+		<Emoji Name="Paraguay" Code="$#827" Path="Resources/Emojis/flags/041-paraguay.png"/>
+		<Emoji Name="Latvia" Code="$#828" Path="Resources/Emojis/flags/044-latvia.png"/>
+		<Emoji Name="Andorra" Code="$#829" Path="Resources/Emojis/flags/045-andorra.png"/>
+		<Emoji Name="Micronesia" Code="$#830" Path="Resources/Emojis/flags/046-micronesia.png"/>
+		<Emoji Name="Dominican republic" Code="$#831" Path="Resources/Emojis/flags/047-dominican-republic.png"/>
+		<Emoji Name="Abkhazia" Code="$#832" Path="Resources/Emojis/flags/048-abkhazia.png"/>
+		<Emoji Name="Tunisia" Code="$#833" Path="Resources/Emojis/flags/049-tunisia.pn"/>
+		<Emoji Name="Kosovo" Code="$#834" Path="Resources/Emojis/flags/052-kosovo.png"/>
+		<Emoji Name="Ghana" Code="$#835" Path="Resources/Emojis/flags/053-ghana.png"/>
+		<Emoji Name="Scotland" Code="$#836" Path="Resources/Emojis/flags/055-scotland.png"/>
+		<Emoji Name="Gabon" Code="$#837" Path="Resources/Emojis/flags/059-gabon.png"/>
+		<Emoji Name="Namibia" Code="$#838" Path="Resources/Emojis/flags/062-namibia.png"/>
+		<Emoji Name="Japan" Code="$#839" Path="Resources/Emojis/flags/063-japan.png"/>
+		<Emoji Name="Lithuania" Code="$#840" Path="Resources/Emojis/flags/064-lithuania.png"/>
+		<Emoji Name="Chad" Code="$#841" Path="Resources/Emojis/flags/066-chad.png"/>
+		<Emoji Name="Kenya" Code="$#842" Path="Resources/Emojis/flags/067-kenya.png"/>
+		<Emoji Name="Serbia" Code="$#843" Path="Resources/Emojis/flags/071-serbia.png"/>
+		<Emoji Name="Kazakhstan" Code="$#844" Path="Resources/Emojis/flags/074-kazakhstan.png"/>
+		<Emoji Name="Iceland" Code="$#845" Path="Resources/Emojis/flags/080-iceland.png"/>
+		<Emoji Name="Somalia" Code="$#846" Path="Resources/Emojis/flags/083-somalia.png"/>
+		<Emoji Name="Barbados" Code="$#847" Path="Resources/Emojis/flags/084-barbados.png"/>
+		<Emoji Name="Nigeria" Code="$#848" Path="Resources/Emojis/flags/086-nigeria.png"/>
+		<Emoji Name="Uruguay" Code="$#849" Path="Resources/Emojis/flags/088-uruguay.png"/>
+		<Emoji Name="Slovakia" Code="$#850" Path="Resources/Emojis/flags/091-slovakia.png"/>
+		<Emoji Name="south korea" Code="$#851" Path="Resources/Emojis/flags/094-south-korea.png"/>
+		<Emoji Name="San marino" Code="$#852" Path="Resources/Emojis/flags/097-san-marino.png"/>
+		<Emoji Name="Guatemala" Code="$#853" Path="Resources/Emojis/flags/098-guatemala.png"/>
+		<Emoji Name="Albania" Code="$#854" Path="Resources/Emojis/flags/099-albania.png"/>
+		<Emoji Name="Pakistan" Code="$#855" Path="Resources/Emojis/flags/100-pakistan.png"/>
+		<Emoji Name="Ecuador" Code="$#856" Path="Resources/Emojis/flags/104-ecuador.png"/>
+		<Emoji Name="Cameroon" Code="$#857" Path="Resources/Emojis/flags/105-cameroon.png"/>
+		<Emoji Name="Panama" Code="$#858" Path="Resources/Emojis/flags/106-panama.png"/>
+		<Emoji Name="Kwait" Code="$#859" Path="Resources/Emojis/flags/107-kwait.png"/>
+		<Emoji Name="Armenia" Code="$#860" Path="Resources/Emojis/flags/108-armenia.png"/>
+		<Emoji Name="Romania" Code="$#861" Path="Resources/Emojis/flags/109-romania.png"/>
+		<Emoji Name="Guinea" Code="$#862" Path="Resources/Emojis/flags/110-guinea.png"/>
+		<Emoji Name="Afghanistan" Code="$#863" Path="Resources/Emojis/flags/111-afghanistan.png"/>
+		<Emoji Name="Laos" Code="$#864" Path="Resources/Emojis/flags/112-laos.png"/>
+		<Emoji Name="Greenland" Code="$#865" Path="Resources/Emojis/flags/113-greenland.png"/>
+		<Emoji Name="Hungary" Code="$#866" Path="Resources/Emojis/flags/115-hungary.png"/>
+		<Emoji Name="Angola" Code="$#867" Path="Resources/Emojis/flags/117-angola.png"/>
+		<Emoji Name="Malasya" Code="$#868" Path="Resources/Emojis/flags/118-malasya.png"/>
+		<Emoji Name="Brunei" Code="$#869" Path="Resources/Emojis/flags/119-brunei.png"/>
+		<Emoji Name="Bahamas" Code="$#870" Path="Resources/Emojis/flags/120-bahamas.png"/>
+		<Emoji Name="New zealand" Code="$#871" Path="Resources/Emojis/flags/121-new-zealand.png"/>
+		<Emoji Name="Vatican city" Code="$#872" Path="Resources/Emojis/flags/124-vatican-city.png"/>
+		<Emoji Name="Finland" Code="$#873" Path="Resources/Emojis/flags/125-finland.png"/>
+		<Emoji Name="Botswana" Code="$#874" Path="Resources/Emojis/flags/126-botswana.png"/>
+		<Emoji Name="Sri lanka" Code="$#875" Path="Resources/Emojis/flags/127-sri-lanka.png"/>
+		<Emoji Name="Spain" Code="$#876" Path="Resources/Emojis/flags/128-spain.png"/>
+		<Emoji Name="Ossetia" Code="$#877" Path="Resources/Emojis/flags/129-ossetia.png"/>
+		<Emoji Name="Chile" Code="$#878" Path="Resources/Emojis/flags/131-chile.png"/>
+		<Emoji Name="Bosnia and herzegovina" Code="$#879" Path="Resources/Emojis/flags/132-bosnia-and-herzegovina.png"/>
+		<Emoji Name="Saudi arabia" Code="$#880" Path="Resources/Emojis/flags/133-saudi-arabia.png"/>
+		<Emoji Name="Liechtenstein" Code="$#881" Path="Resources/Emojis/flags/134-liechtenstein.png"/>
+		<Emoji Name="Belarus" Code="$#882" Path="Resources/Emojis/flags/135-belarus.png"/>
+		<Emoji Name="Iran" Code="$#883" Path="Resources/Emojis/flags/136-iran.png"/>
+		<Emoji Name="Fiji" Code="$#884" Path="Resources/Emojis/flags/137-fiji.png"/>
+		<Emoji Name="Bahrain" Code="$#885" Path="Resources/Emojis/flags/138-bahrain.png"/>
+		<Emoji Name="Venezuela" Code="$#886" Path="Resources/Emojis/flags/139-venezuela.png"/>
+		<Emoji Name="Azerbaijan" Code="$#887" Path="Resources/Emojis/flags/141-azerbaijan.png"/>
+		<Emoji Name="Norway" Code="$#888" Path="Resources/Emojis/flags/143-norway.png"/>
+		<Emoji Name="Algeria" Code="$#889" Path="Resources/Emojis/flags/144-algeria.png"/>
+		<Emoji Name="Ukraine" Code="$#890" Path="Resources/Emojis/flags/145-ukraine.png"/>
+		<Emoji Name="Gambia" Code="$#891" Path="Resources/Emojis/flags/146-gambia.png"/>
+		<Emoji Name="Bangladesh" Code="$#892" Path="Resources/Emojis/flags/147-bangladesh.png"/>
+		<Emoji Name="Madeira" Code="$#893" Path="Resources/Emojis/flags/148-madeira.png"/>
+		<Emoji Name="Czech republic" Code="$#894" Path="Resources/Emojis/flags/149-czech-republic.png"/>
+		<Emoji Name="Bolivia" Code="$#895" Path="Resources/Emojis/flags/150-bolivia.png"/>
+		<Emoji Name="United arab emirates" Code="$#896" Path="Resources/Emojis/flags/151-united-arab-emirates.png"/>
+		<Emoji Name="Kyrgyzstan" Code="$#897" Path="Resources/Emojis/flags/152-kyrgyzstan.png"/>
+		<Emoji Name="Cuba" Code="$#898" Path="Resources/Emojis/flags/153-cuba.png"/>
+		<Emoji Name="Israel" Code="$#899" Path="Resources/Emojis/flags/155-israel.png"/>
+		<Emoji Name="Costa rica" Code="$#900" Path="Resources/Emojis/flags/156-costa-rica.png"/>
+		<Emoji Name="Republic of the congo" Code="$#901" Path="Resources/Emojis/flags/157-republic-of-the-congo.png"/>
+		<Emoji Name="Egypt" Code="$#902" Path="Resources/Emojis/flags/158-egypt.png"/>
+		<Emoji Name="Cambodia" Code="$#903" Path="Resources/Emojis/flags/159-cambodia.png"/>
+		<Emoji Name="Germany" Code="$#904" Path="Resources/Emojis/flags/162-germany.png"/>
+		<Emoji Name="Croatia" Code="$#905" Path="Resources/Emojis/flags/164-croatia.png"/>
+		<Emoji Name="Belgium" Code="$#906" Path="Resources/Emojis/flags/165-belgium.png"/>
+		<Emoji Name="Morocco" Code="$#907" Path="Resources/Emojis/flags/166-morocco.png"/>
+		<Emoji Name="Bulgaria" Code="$#908" Path="Resources/Emojis/flags/168-bulgaria.png"/>
+		<Emoji Name="Liberia" Code="$#909" Path="Resources/Emojis/flags/169-liberia.png"/>
+		<Emoji Name="Greece" Code="$#910" Path="Resources/Emojis/flags/170-greece.png"/>
+		<Emoji Name="Denmark" Code="$#911" Path="Resources/Emojis/flags/174-denmark.png"/>
+		<Emoji Name="Colombia" Code="$#912" Path="Resources/Emojis/flags/177-colombia.png"/>
+		<Emoji Name="Ireland" Code="$#913" Path="Resources/Emojis/flags/179-ireland.png"/>
+		<Emoji Name="Sweden" Code="$#914" Path="Resources/Emojis/flags/184-sweden.png"/>
+		<Emoji Name="Haiti" Code="$#915" Path="Resources/Emojis/flags/185-haiti.png"/>
+		<Emoji Name="Dominica" Code="$#916" Path="Resources/Emojis/flags/186-dominica.png"/>
+		<Emoji Name="Peru" Code="$#917" Path="Resources/Emojis/flags/188-peru.png"/>
+		<Emoji Name="Uzbekistn" Code="$#918" Path="Resources/Emojis/flags/190-uzbekistn.png"/>
+		<Emoji Name="Malta" Code="$#919" Path="Resources/Emojis/flags/194-malta.png"/>
+		<Emoji Name="France" Code="$#920" Path="Resources/Emojis/flags/195-france.png"/>
+		<Emoji Name="Tajikistan" Code="$#921" Path="Resources/Emojis/flags/196-tajikistan.png"/>
+		<Emoji Name="Argentina" Code="$#922" Path="Resources/Emojis/flags/198-argentina.png"/>
+		<Emoji Name="Sudan" Code="$#923" Path="Resources/Emojis/flags/199-sudan.png"/>
+		<Emoji Name="South africa" Code="$#924" Path="Resources/Emojis/flags/200-south-africa.png"/>
+		<Emoji Name="Taiwan" Code="$#925" Path="Resources/Emojis/flags/202-taiwan.png"/>
+		<Emoji Name="Switzerland" Code="$#926" Path="Resources/Emojis/flags/205-switzerland.png"/>
+		<Emoji Name="Palestine" Code="$#927" Path="Resources/Emojis/flags/208-palestine.png"/>
+		<Emoji Name="Indonesia" Code="$#928" Path="Resources/Emojis/flags/209-indonesia.png"/>
+		<Emoji Name="Poland" Code="$#929" Path="Resources/Emojis/flags/211-poland.png"/>
+		<Emoji Name="Moldova" Code="$#930" Path="Resources/Emojis/flags/212-moldova.png"/>
+		<Emoji Name="Malawi" Code="$#931" Path="Resources/Emojis/flags/214-malawi.png"/>
+		<Emoji Name="England" Code="$#932" Path="Resources/Emojis/flags/216-england.png"/>
+		<Emoji Name="Turkey" Code="$#933" Path="Resources/Emojis/flags/218-turkey.png"/>
+		<Emoji Name="Vietnam" Code="$#934" Path="Resources/Emojis/flags/220-vietnam.png"/>
+		<Emoji Name="Niger" Code="$#935" Path="Resources/Emojis/flags/222-niger.png"/>
+		<Emoji Name="Portugal" Code="$#936" Path="Resources/Emojis/flags/224-portugal.png"/>
+		<Emoji Name="Senegal" Code="$#937" Path="Resources/Emojis/flags/227-senegal.png"/>
+		<Emoji Name="Turkmenistan" Code="$#938" Path="Resources/Emojis/flags/229-turkmenistan.png"/>
+		<Emoji Name="Singapore" Code="$#939" Path="Resources/Emojis/flags/230-singapore.png"/>
+		<Emoji Name="Libya" Code="$#940" Path="Resources/Emojis/flags/231-libya.png"/>
+		<Emoji Name="Yemen" Code="$#941" Path="Resources/Emojis/flags/232-yemen.png"/>
+		<Emoji Name="Transnistria" Code="$#942" Path="Resources/Emojis/flags/233-transnistria.png"/>
+		<Emoji Name="Australia" Code="$#943" Path="Resources/Emojis/flags/234-australia.png"/>
+		<Emoji Name="Republic of macedonia" Code="$#944" Path="Resources/Emojis/flags/236-republic-of-macedonia.png"/>
+		<Emoji Name="Netherlands" Code="$#945" Path="Resources/Emojis/flags/237-netherlands.png"/>
+		<Emoji Name="Thailand" Code="$#946" Path="Resources/Emojis/flags/238-thailand.png"/>
+		<Emoji Name="Canada" Code="$#947" Path="Resources/Emojis/flags/243-canada.png"/>
+		<Emoji Name="South sudan" Code="$#948" Path="Resources/Emojis/flags/244-south-sudan.png"/>
+		<Emoji Name="Jersey" Code="$#949" Path="Resources/Emojis/flags/245-jersey.png"/>
+		<Emoji Name="India" Code="$#950" Path="Resources/Emojis/flags/246-india.png"/>
+		<Emoji Name="Somaliland" Code="$#951" Path="Resources/Emojis/flags/247-somaliland.png"/>
+		<Emoji Name="Russia" Code="$#952" Path="Resources/Emojis/flags/248-russia.png"/>
+		<Emoji Name="Mexico" Code="$#953" Path="Resources/Emojis/flags/252-mexico.png"/>
+		<Emoji Name="Brazil" Code="$#954" Path="Resources/Emojis/flags/255-brazil.png"/>
+		<Emoji Name="Georgia" Code="$#955" Path="Resources/Emojis/flags/256-georgia.png"/>
+		<Emoji Name="Mongolia" Code="$#966" Path="Resources/Emojis/flags/258-mongolia.png"/>
+		<Emoji Name="European union" Code="$#957" Path="Resources/Emojis/flags/259-european-union.png"/>
+		<Emoji Name="United kingdom" Code="$#958" Path="Resources/Emojis/flags/260-united-kingdom.png"/>
+		<Emoji Name="Hawaii" Code="$#959" Path="Resources/Emojis/flags/262-hawaii.png"/>
+	</EmojiGroup>
+</Root>

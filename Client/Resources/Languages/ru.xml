@@ -1,0 +1,801 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root>
+	<HelloUser>Здравствуйте, уважаемый пользователь, добро пожаловать в чат-приложение LetsTalk!</HelloUser>
+	<HelpUser>Выберите нужный чат из списка меню, чтобы начать общение, или создайте новый</HelpUser>
+
+	<Ok>Окей</Ok>
+	<Cancel>Отиена</Cancel>
+
+	<Entrance>Вход</Entrance>
+	<Name>Имя</Name>
+	<Login>Логин</Login>	
+	<Password>Пароль</Password>
+	<SignIn>Войти</SignIn>
+	<Registrate>Зарегистрироваться</Registrate>
+	<Back>Назад</Back>
+	
+	<NameErrorLength>Должео быть в диапазоне 4-12 букв</NameErrorLength>
+	<NameErrorValidSymbols>Имя может содержать только буквы</NameErrorValidSymbols>
+	<PasswordErrorLength>Должно быть в диапазоне 5-15 символов</PasswordErrorLength>
+	<PasswordErrorValidSymbols>Допустимы символы (!,#,$,%,^,&amp;,*,@)</PasswordErrorValidSymbols>
+	<AllFieldsError>Все поля должы быть введены</AllFieldsError>
+	
+	<LoginError>этот логин уже существует</LoginError>
+	<PasswordError>этот пароль уже существует</PasswordError>
+	<StreamError>Не удалось отправить файл</StreamError>
+	<ConnectionError>Этот пользователь уже подключен</ConnectionError>
+	<AuthorizationError>Логин или пароль неверны</AuthorizationError>
+	<ServerError>Что то пошло не так с сервером</ServerError>
+	
+	<ImageFiles>Файлы изображений (*.jpg, *.jpeg, *.png)|*.jpg; *.jpeg; *.png</ImageFiles>
+	
+	<CreateChatroom>Создать чатрум</CreateChatroom>
+	<Settings>Настройки</Settings>
+	<AvatarError>изображения аватара не может загрузиться</AvatarError>
+	<YouAreRemoved>Вы были удалены</YouAreRemoved>
+	<YouAreAdded>Вы были добавлены</YouAreAdded>
+	<ChatroomError>Чат уже существует, вы не может создать новый</ChatroomError>
+		
+	<SearchUsers>Найти пользователей</SearchUsers>
+	<Search>Найти</Search>
+	<DragUsersToAdd>Переташите пользователей чтобы добавить их в группу</DragUsersToAdd>
+	<ShowMore>Показать ещё</ShowMore>
+	<EnterNameOfChat>Введите имя чатрума</EnterNameOfChat>
+	<MembersOfGroup>Участники группы</MembersOfGroup>
+	<CreateGroup>Создвть группу</CreateGroup>
+	<PleaseEnterChatroomName>Введите имя чатрума</PleaseEnterChatroomName>
+	
+	<Leave>Выйти</Leave>
+	<EditChat>Изменить чат</EditChat>
+	<Smile>Смайл</Smile>
+	<File>Файл</File>
+	<Save>Сохранить</Save>
+	
+	<GeneralSettings>Обшие Настройки</GeneralSettings>
+	<AppearanceSettings>Настройки внешнего вида</AppearanceSettings>
+	<NotificationSettings>Настройки уведомлений</NotificationSettings>
+	
+	<UserProfile>Профиль пользователя</UserProfile>
+	<Language>Язык</Language>
+	<SelectedLanguageText>Выбранный язык: Русский</SelectedLanguageText>
+	<ChatSettings>Настройки чата</ChatSettings>
+	<MessageDownloadStep>шаг загрузки сообщений</MessageDownloadStep>
+	
+	<GroupSettings>Настройки группы</GroupSettings>
+	<ChatNotification>Оповешения чатов</ChatNotification>
+	<GroupNotification>Оповешения группы</GroupNotification>
+	<ChatSounds>Звуки чатов</ChatSounds>
+	<GroupSounds>Звуки группы</GroupSounds>
+	
+	<ShowAvatarInGroupMessage>Показать изображения аватара в груповых сообщениях</ShowAvatarInGroupMessage>
+	<ChatFontSize>размер шрифта в чатах</ChatFontSize>
+	<LetsTalkWallpapers>letsTalk обои</LetsTalkWallpapers>
+	<SelectFromDevice>Выбрать из устройтсва</SelectFromDevice>
+	
+	<Emojis>
+		<EmojiGroup Code="$#001" Name="Смайлы">
+			<Emoji Code="$#001" Name="счастливый" />
+			<Emoji Code="$#002" Name="счастливый" />
+			<Emoji Code="$#003" Name="счастливый" />
+			<Emoji Code="$#004" Name="счастливый" />
+			<Emoji Code="$#005" Name="счастливый" />
+			<Emoji Code="$#006" Name="счастливый" />
+			<Emoji Code="$#007" Name="счастливый" />
+			<Emoji Code="$#008" Name="счастливый" />
+			<Emoji Code="$#009" Name="счастливый" />
+			<Emoji Code="$#010" Name="счастливый" />
+			<Emoji Code="$#011" Name="счастливый" />
+			<Emoji Code="$#012" Name="счастливый" />
+			<Emoji Code="$#013" Name="счастливый" />
+			<Emoji Code="$#014" Name="счастливый" />
+			<Emoji Code="$#015" Name="печальный" />
+			<Emoji Code="$#016" Name="печальный" />
+			<Emoji Code="$#017" Name="печальный" />
+			<Emoji Code="$#018" Name="печальный" />
+			<Emoji Code="$#019" Name="печальный" />
+			<Emoji Code="$#020" Name="печальный" />
+			<Emoji Code="$#021" Name="печальный" />
+			<Emoji Code="$#022" Name="печальный" />
+			<Emoji Code="$#023" Name="печальный" />
+			<Emoji Code="$#024" Name="печальный" />
+			<Emoji Code="$#025" Name="печальный" />
+			<Emoji Code="$#026" Name="улыбка" />
+			<Emoji Code="$#027" Name="здорово" />
+			<Emoji Code="$#028" Name="здорово" />
+			<Emoji Code="$#029" Name="здорово" />
+			<Emoji Code="$#030" Name="здорово" />
+			<Emoji Code="$#031" Name="удивлен" />
+			<Emoji Code="$#032" Name="удивлен" />
+			<Emoji Code="$#033" Name="удивлен" />
+			<Emoji Code="$#034" Name="удивлен" />
+			<Emoji Code="$#035" Name="удивлен" />
+			<Emoji Code="$#036" Name="удивлен" />
+			<Emoji Code="$#037" Name="удивлен" />
+			<Emoji Code="$#038" Name="удивлен" />
+			<Emoji Code="$#039" Name="удивлен" />
+			<Emoji Code="$#040" Name="удивлен" />
+			<Emoji Code="$#041" Name="потрясенный" />
+			<Emoji Code="$#042" Name="потрясенный" />
+			<Emoji Code="$#043" Name="потрясенный" />
+			<Emoji Code="$#044" Name="потрясенный" />
+			<Emoji Code="$#045" Name="нервный" />
+			<Emoji Code="$#046" Name="нервный" />
+			<Emoji Code="$#047" Name="нервный" />
+			<Emoji Code="$#048" Name="устал" />
+			<Emoji Code="$#049" Name="язык" />
+			<Emoji Code="$#050" Name="язык" />
+			<Emoji Code="$#051" Name="язык" />
+			<Emoji Code="$#052" Name="язык" />
+			<Emoji Code="$#053" Name="язык" />
+			<Emoji Code="$#054" Name="язык" />
+			<Emoji Code="$#055" Name="спать" />
+			<Emoji Code="$#056" Name="удивлен" />
+			<Emoji Code="$#057" Name="подмигивание" />
+			<Emoji Code="$#058" Name="смеющийся" />
+			<Emoji Code="$#059" Name="смеющийся" />
+			<Emoji Code="$#060" Name="смеющийся" />
+			<Emoji Code="$#061" Name="пот" />
+			<Emoji Code="$#062" Name="плач" />
+			<Emoji Code="$#063" Name="плач" />
+			<Emoji Code="$#064" Name="плач" />
+			<Emoji Code="$#065" Name="плач" />
+			<Emoji Code="$#066" Name="плач" />
+			<Emoji Code="$#067" Name="плач" />
+			<Emoji Code="$#068" Name="плач" />
+			<Emoji Code="$#069" Name="плач" />
+			<Emoji Code="$#070" Name="плач" />
+			<Emoji Code="$#071" Name="скучающий" />
+			<Emoji Code="$#072" Name="сердитый" />
+			<Emoji Code="$#073" Name="сердитый" />
+			<Emoji Code="$#074" Name="сердитый" />
+			<Emoji Code="$#075" Name="сердитый" />
+			<Emoji Code="$#076" Name="сердитый" />
+			<Emoji Code="$#077" Name="ангел" />
+			<Emoji Code="$#078" Name="мышление" />
+			<Emoji Code="$#079" Name="мертвый" />
+			<Emoji Code="$#080" Name="мертвый" />
+			<Emoji Code="$#081" Name="устал" />
+			<Emoji Code="$#082" Name="устал" />
+			<Emoji Code="$#083" Name="вампир" />
+			<Emoji Code="$#084" Name="голодный" /> 
+			<Emoji Code="$#085" Name="поздно" />
+			<Emoji Code="$#086" Name="больной" />
+			<Emoji Code="$#087" Name="больной" />
+			<Emoji Code="$#088" Name="больной" />
+			<Emoji Code="$#089" Name="больной" />
+			<Emoji Code="$#090" Name="зомби" />
+			<Emoji Code="$#091" Name="боль" />
+			<Emoji Code="$#092" Name="пот" />
+			<Emoji Code="$#093" Name="целовать" />
+			<Emoji Code="$#094" Name="ангел" />
+			<Emoji Code="$#095" Name="возмущение" />
+			<Emoji Code="$#096" Name="уродливый" />
+			<Emoji Code="$#097" Name="уродливый" />
+			<Emoji Code="$#098" Name="уродливый" />
+			<Emoji Code="$#099" Name="напуган" />
+			<Emoji Code="$#100" Name="жадность" />
+			<Emoji Code="$#101" Name="свист" />
+			<Emoji Code="$#102" Name="умник" />
+			<Emoji Code="$#103" Name="умник" />
+			<Emoji Code="$#104" Name="умник" />
+			<Emoji Code="$#105" Name="умник" />
+			<Emoji Code="$#106" Name="умник" />
+			<Emoji Code="$#107" Name="умник" />
+			<Emoji Code="$#108" Name="умник" />
+			<Emoji Code="$#109" Name="умник" />
+			<Emoji Code="$#110" Name="умник" />
+			<Emoji Code="$#111" Name="приглушенный" />
+			<Emoji Code="$#112" Name="приглушенный" />
+			<Emoji Code="$#113" Name="приглушенный" />
+			<Emoji Code="$#114" Name="приглушенный" />
+			<Emoji Code="$#115" Name="приглушенный" />
+			<Emoji Code="$#116" Name="влюблен" />
+			<Emoji Code="$#117" Name="влюблен" />
+			<Emoji Code="$#118" Name="влюблен" />
+			<Emoji Code="$#119" Name="влюблен" />
+			<Emoji Code="$#120" Name="влюблен" />
+			<Emoji Code="$#121" Name="влюблен" />
+			<Emoji Code="$#122" Name="влюблен" />
+			<Emoji Code="$#123" Name="влюблен" />
+			<Emoji Code="$#124" Name="влюблен" />
+			<Emoji Code="$#125" Name="влюблен" />
+			<Emoji Code="$#126" Name="влюблен" />
+			<Emoji Code="$#127" Name="целовать" />
+			<Emoji Code="$#128" Name="целовать" />
+			<Emoji Code="$#129" Name="жадность" />
+			<Emoji Code="$#130" Name="жадность" />
+			<Emoji Code="$#131" Name="пират" />
+			<Emoji Code="$#132" Name="музыка" />
+			<Emoji Code="$#133" Name="смущенный" />
+			<Emoji Code="$#134" Name="смущенный" />
+			<Emoji Code="$#135" Name="аплодисменты" />
+			<Emoji Code="$#136" Name="закончил" />
+			<Emoji Code="$#137" Name="именинник" />
+			<Emoji Code="$#138" Name="спать" />
+			<Emoji Code="$#139" Name="подмигивание" />
+			<Emoji Code="$#140" Name="травма" />
+			<Emoji Code="$#141" Name="богатые" />
+			<Emoji Code="$#142" Name="мышление" />
+			<Emoji Code="$#143" Name="мышление" />
+			<Emoji Code="$#144" Name="смущенный" />
+			<Emoji Code="$#145" Name="загипнотизированный" />
+			<Emoji Code="$#146" Name="яростный" />
+			<Emoji Code="$#147" Name="сердитый" />
+			<Emoji Code="$#148" Name="целовать" />
+			<Emoji Code="$#149" Name="целовать" />
+			<Emoji Code="$#150" Name="сонный" />
+		</EmojiGroup>    
+		                 
+		<EmojiGroup Code="$#002" Name="Руки">
+			<Emoji Code="$#201" Name="средний палец" />
+			<Emoji Code="$#202" Name="салют" />
+			<Emoji Code="$#203" Name="сильный" />
+			<Emoji Code="$#204" Name="хлопать в ладоши" />
+			<Emoji Code="$#205" Name="указывая вверх" />
+			<Emoji Code="$#206" Name="пожалуйста" />
+			<Emoji Code="$#207" Name="поднять руку" />
+			<Emoji Code="$#208" Name="указывая налево" />
+			<Emoji Code="$#209" Name="указывая вправо" />
+			<Emoji Code="$#210" Name="нажмите" />
+			<Emoji Code="$#211" Name="нажмите" />
+			<Emoji Code="$#212" Name="рука" />
+			<Emoji Code="$#213" Name="рука" />
+			<Emoji Code="$#214" Name="машет рукой" />
+			<Emoji Code="$#215" Name="победа" />
+			<Emoji Code="$#216" Name="первый" />
+			<Emoji Code="$#217" Name="ударить кулаком" />
+			<Emoji Code="$#218" Name="хорошо" />
+			<Emoji Code="$#219" Name="не нравится" />
+			<Emoji Code="$#220" Name="нравится" />
+		</EmojiGroup>    
+		                 
+		<EmojiGroup Code="$#003" Name="Сердца">
+		    <Email Code="$#301" Name="целовать"/>  
+			<Email Code="$#302" Name="письмо"/>  
+			<Email Code="$#303" Name="купидон"/>  
+			<Email Code="$#304" Name="сердца"/>  
+			<Email Code="$#305" Name="сердце"/>  
+			<Email Code="$#306" Name="сердце"/>  
+			<Email Code="$#307" Name="сердце"/>  
+			<Email Code="$#308" Name="сердце"/>  
+			<Email Code="$#309" Name="разбитое сердце"/>  
+			<Email Code="$#310" Name="красное сердце"/>  
+			<Email Code="$#311" Name="зеленое сердце"/>  
+			<Email Code="$#312" Name="фиолетовое сердце"/>  
+			<Email Code="$#313" Name="синее сердце"/>  
+			<Email Code="$#314" Name="желтое сердце"/>  
+		</EmojiGroup>    
+		                 
+		<EmojiGroup Code="$#004" Name="Природа">
+		    <Emoji Code="$#400" Name="собака" />
+			<Emoji Code="$#401" Name="собака" />
+			<Emoji Code="$#402" Name="кошка" />
+			<Emoji Code="$#403" Name="кошка" />
+			<Emoji Code="$#404" Name="растение" />
+			<Emoji Code="$#405" Name="коала" />
+			<Emoji Code="$#406" Name="бурундук" />
+			<Emoji Code="$#407" Name="крыса" />
+			<Emoji Code="$#408" Name="мышка" />
+			<Emoji Code="$#409" Name="заяц" />
+			<Emoji Code="$#410" Name="заяц" />
+			<Emoji Code="$#411" Name="голубь" />
+			<Emoji Code="$#412" Name="индейка" />
+			<Emoji Code="$#413" Name="панда" />
+			<Emoji Code="$#414" Name="тигр" />
+			<Emoji Code="$#415" Name="тиранозавр рех" />
+			<Emoji Code="$#416" Name="петух" />
+			<Emoji Code="$#417" Name="петух" />
+			<Emoji Code="$#418" Name="курица" />
+			<Emoji Code="$#419" Name="динозавр" />
+			<Emoji Code="$#420" Name="пудель" />
+			<Emoji Code="$#421" Name="ежик" />
+			<Emoji Code="$#422" Name="зебра" />
+			<Emoji Code="$#423" Name="жираф" />
+			<Emoji Code="$#424" Name="овца" />
+			<Emoji Code="$#425" Name="пчела" />
+			<Emoji Code="$#426" Name="единорог" />
+			<Emoji Code="$#427" Name="черепаха" />
+			<Emoji Code="$#428" Name="баран" />
+			<Emoji Code="$#429" Name="улитка" />
+			<Emoji Code="$#430" Name="козел" />
+			<Emoji Code="$#431" Name="хомяк" />
+			<Emoji Code="$#432" Name="свинья" />
+			<Emoji Code="$#433" Name="курица" />
+			<Emoji Code="$#434" Name="птица" />
+			<Emoji Code="$#435" Name="обезьяна" />
+			<Emoji Code="$#436" Name="обезьяна" />
+			<Emoji Code="$#437" Name="обезьяна" />
+			<Emoji Code="$#438" Name="обезьяна" />
+			<Emoji Code="$#439" Name="обезьяна" />
+			<Emoji Code="$#440" Name="дракон" />
+			<Emoji Code="$#441" Name="лягушка" />
+			<Emoji Code="$#442" Name="свинья" />
+			<Emoji Code="$#443" Name="корова" />
+			<Emoji Code="$#444" Name="тигр" />
+			<Emoji Code="$#445" Name="свинья" />
+			<Emoji Code="$#446" Name="лев" />
+			<Emoji Code="$#447" Name="пингвин" />
+			<Emoji Code="$#448" Name="кабан" />
+			<Emoji Code="$#449" Name="волк" />
+			<Emoji Code="$#450" Name="летучая мышь" />
+			<Emoji Code="$#451" Name="мышь" />
+			<Emoji Code="$#452" Name="дракон" />
+			<Emoji Code="$#453" Name="сова" />
+			<Emoji Code="$#454" Name="лошадь" />
+			<Emoji Code="$#455" Name="горилла" />
+			<Emoji Code="$#456" Name="гусеница" />
+			<Emoji Code="$#457" Name="медведь" />
+			<Emoji Code="$#458" Name="носорог" />
+			<Emoji Code="$#459" Name="орел" />
+			<Emoji Code="$#460" Name="слон" />
+			<Emoji Code="$#461" Name="бабочка" />
+			<Emoji Code="$#462" Name="верблюд" />
+			<Emoji Code="$#463" Name="верблюд" />
+			<Emoji Code="$#464" Name="ящерица" />
+			<Emoji Code="$#465" Name="олень" />
+			<Emoji Code="$#466" Name="буйвол" />
+			<Emoji Code="$#467" Name="утка" />
+			<Emoji Code="$#468" Name="курица" />
+			<Emoji Code="$#469" Name="лиса" />
+			<Emoji Code="$#470" Name="корова" />
+			<Emoji Code="$#471" Name="бык" />
+			<Emoji Code="$#472" Name="крокодил" />
+			<Emoji Code="$#473" Name="лошадь" />
+			<Emoji Code="$#474" Name="леопард" />
+			<Emoji Code="$#475" Name="змея" />
+			<Emoji Code="$#476" Name="рыба" />
+			<Emoji Code="$#477" Name="рыба" />
+			<Emoji Code="$#478" Name="кит" />
+			<Emoji Code="$#479" Name="кит" />
+			<Emoji Code="$#480" Name="акула" />
+			<Emoji Code="$#481" Name="дельфин" />
+			<Emoji Code="$#482" Name="иглобрюх" />
+			<Emoji Code="$#483" Name="креветка" />
+			<Emoji Code="$#484" Name="осьминог" />
+			<Emoji Code="$#485" Name="кальмар" />
+			<Emoji Code="$#486" Name="краб" />
+			<Emoji Code="$#487" Name="морская улитка" />
+			<Emoji Code="$#488" Name="муравей" />
+			<Emoji Code="$#489" Name="божья коровка" />
+			<Emoji Code="$#490" Name="скорпион" />
+			<Emoji Code="$#491" Name="паук" />
+			<Emoji Code="$#492" Name="крикет" />
+			<Emoji Code="$#493" Name="солнце" />
+			<Emoji Code="$#494" Name="солнце" />
+			<Emoji Code="$#495" Name="пасмурный день" />
+			<Emoji Code="$#496" Name="облачно" />
+			<Emoji Code="$#497" Name="облачно" />
+			<Emoji Code="$#498" Name="облачно" />
+			<Emoji Code="$#499" Name="дождь" />
+			<Emoji Code="$#500" Name="дождь" />
+			<Emoji Code="$#501" Name="капля" />
+			<Emoji Code="$#502" Name="капли" />
+			<Emoji Code="$#503" Name="торнадо" />
+			<Emoji Code="$#504" Name="ветер" />
+			<Emoji Code="$#505" Name="ветер" />
+			<Emoji Code="$#506" Name="буря" />
+			<Emoji Code="$#507" Name="буря" />
+			<Emoji Code="$#508" Name="сосна" />
+			<Emoji Code="$#509" Name="снежинка" />
+			<Emoji Code="$#510" Name="облако" />
+			<Emoji Code="$#511" Name="идет снег" />
+			<Emoji Code="$#512" Name="туман" />
+			<Emoji Code="$#513" Name="сверкать" />
+			<Emoji Code="$#514" Name="радуга" />
+			<Emoji Code="$#515" Name="молния" />
+			<Emoji Code="$#516" Name="cнеговик" />
+			<Emoji Code="$#517" Name="cнеговик" />
+			<Emoji Code="$#518" Name="волна" />
+			<Emoji Code="$#519" Name="падающая звезда" />
+			<Emoji Code="$#520" Name="звезда" />
+			<Emoji Code="$#521" Name="звезда" />
+			<Emoji Code="$#522" Name="земной шар" />
+			<Emoji Code="$#523" Name="земной шар" />
+			<Emoji Code="$#524" Name="земной шар" />
+			<Emoji Code="$#525" Name="полнолуние" />
+			<Emoji Code="$#526" Name="месяц" />
+			<Emoji Code="$#527" Name="месяц" />
+			<Emoji Code="$#528" Name="месяц" />
+			<Emoji Code="$#529" Name="луна" />
+			<Emoji Code="$#530" Name="луна" />
+			<Emoji Code="$#531" Name="луна" />
+			<Emoji Code="$#532" Name="луна" />
+			<Emoji Code="$#533" Name="луна" />
+			<Emoji Code="$#534" Name="луна" />
+			<Emoji Code="$#535" Name="луна" />
+			<Emoji Code="$#536" Name="луна" />
+			<Emoji Code="$#537" Name="луна" />
+			<Emoji Code="$#538" Name="огонь" />
+			<Emoji Code="$#539" Name="комета" />
+			<Emoji Code="$#540" Name="взрыв" />
+			<Emoji Code="$#541" Name="паутина" />
+			<Emoji Code="$#542" Name="кактус" />
+			<Emoji Code="$#543" Name="дерево" />
+			<Emoji Code="$#544" Name="пальма" />
+			<Emoji Code="$#545" Name="елка" />
+			<Emoji Code="$#546" Name="гибискус" />
+			<Emoji Code="$#547" Name="вишня" />
+			<Emoji Code="$#548" Name="цветок" />
+			<Emoji Code="$#549" Name="подсолнечник" />
+			<Emoji Code="$#550" Name="цветок" />
+			<Emoji Code="$#551" Name="роза" />
+			<Emoji Code="$#552" Name="тюльпан" />
+			<Emoji Code="$#553" Name="букет" />
+			<Emoji Code="$#554" Name="рис" />
+			<Emoji Code="$#555" Name="гриб" />
+			<Emoji Code="$#556" Name="кленовый лист" />
+			<Emoji Code="$#557" Name="листья" />
+			<Emoji Code="$#558" Name="листья" />
+			<Emoji Code="$#559" Name="бамбук" />
+			<Emoji Code="$#560" Name="растение" />
+			<Emoji Code="$#561" Name="клевер" />
+			<Emoji Code="$#562" Name="трилистник" />
+			<Emoji Code="$#563" Name="трава" />
+			<Emoji Code="$#564" Name="лапа" />
+		</EmojiGroup>    
+		
+		<EmojiGroup Code="$#005" Name="Предметы">                                           
+		    <Emoji Code="$#600" Name="воздушный шар" />
+			<Emoji Code="$#601" Name="подарок" />
+			<Emoji Code="$#602" Name="тележка" />
+			<Emoji Code="$#603" Name="сумка для покупок" />
+			<Emoji Code="$#604" Name="рамка" />
+			<Emoji Code="$#605" Name="кровать" />
+			<Emoji Code="$#606" Name="кровать" />
+			<Emoji Code="$#607" Name="кресло" />
+			<Emoji Code="$#608" Name="дверь" />
+			<Emoji Code="$#609" Name="ключ" />
+			<Emoji Code="$#610" Name="ключ" />
+			<Emoji Code="$#611" Name="письмо" />
+			<Emoji Code="$#612" Name="письмо" />
+			<Emoji Code="$#613" Name="пульт" />
+			<Emoji Code="$#614" Name="колокол" />
+			<Emoji Code="$#615" Name="ванна" />
+			<Emoji Code="$#616" Name="ванна" />
+			<Emoji Code="$#617" Name="душ" />
+			<Emoji Code="$#618" Name="кран" />
+			<Emoji Code="$#619" Name="туалет" />
+			<Emoji Code="$#620" Name="термометр" />
+			<Emoji Code="$#621" Name="шприц" />
+			<Emoji Code="$#622" Name="таблетка" />
+			<Emoji Code="$#623" Name="мышь" />
+			<Emoji Code="$#624" Name="письмо" />
+			<Emoji Code="$#625" Name="отверстие" />
+			<Emoji Code="$#626" Name="микроскоп" />
+			<Emoji Code="$#627" Name="телескоп" />
+			<Emoji Code="$#628" Name="фляга" />
+			<Emoji Code="$#629" Name="парикмахерская" />
+			<Emoji Code="$#630" Name="бусы" />
+			<Emoji Code="$#631" Name="туман" />
+			<Emoji Code="$#632" Name="волшебный шар" />
+			<Emoji Code="$#633" Name="ваза" />
+			<Emoji Code="$#634" Name="ваза" />
+			<Emoji Code="$#635" Name="гроб" />
+			<Emoji Code="$#636" Name="книга" />
+			<Emoji Code="$#637" Name="книга" />
+			<Emoji Code="$#638" Name="книга" />
+			<Emoji Code="$#639" Name="книга" />
+			<Emoji Code="$#640" Name="принтер" />
+			<Emoji Code="$#641" Name="письмо" />
+			<Emoji Code="$#642" Name="сигарета" />
+			<Emoji Code="$#643" Name="щит" />
+			<Emoji Code="$#644" Name="мечи" />
+			<Emoji Code="$#645" Name="разблокирован" />
+			<Emoji Code="$#646" Name="меч" />
+			<Emoji Code="$#647" Name="замок" />
+			<Emoji Code="$#648" Name="замок" />
+			<Emoji Code="$#649" Name="замок" />
+			<Emoji Code="$#650" Name="нож" />
+			<Emoji Code="$#651" Name="бомба" />
+			<Emoji Code="$#652" Name="лупа" />
+			<Emoji Code="$#653" Name="пистолет" />
+			<Emoji Code="$#654" Name="карандаш" />
+			<Emoji Code="$#655" Name="цепь" />
+			<Emoji Code="$#656" Name="механизм" />
+			<Emoji Code="$#657" Name="маркер" />
+			<Emoji Code="$#658" Name="болт" />
+			<Emoji Code="$#659" Name="монитор" />
+			<Emoji Code="$#660" Name="фонарь" />
+			<Emoji Code="$#661" Name="кирка" />
+			<Emoji Code="$#662" Name="кисть" />
+			<Emoji Code="$#663" Name="инструмент" />
+			<Emoji Code="$#664" Name="ручка" />
+			<Emoji Code="$#665" Name="ручка" />
+			<Emoji Code="$#666" Name="молотоки" />
+			<Emoji Code="$#667" Name="ножницы" />
+			<Emoji Code="$#668" Name="молоток" />
+			<Emoji Code="$#669" Name="гаечный ключ" />
+			<Emoji Code="$#670" Name="булавка" />
+			<Emoji Code="$#671" Name="канцелярская кнопка" />
+			<Emoji Code="$#672" Name="весы" />
+			<Emoji Code="$#673" Name="линейка" />
+			<Emoji Code="$#674" Name="алмаз" />
+			<Emoji Code="$#675" Name="угольник" />
+			<Emoji Code="$#676" Name="кредитная карта" />
+			<Emoji Code="$#677" Name="мешок для денег" />
+			<Emoji Code="$#678" Name="скрепка" />
+			<Emoji Code="$#679" Name="фунт стерлингов" />
+			<Emoji Code="$#680" Name="скрепка" />
+			<Emoji Code="$#681" Name="фонарь" />
+			<Emoji Code="$#682" Name="клавиатура" />
+			<Emoji Code="$#683" Name="деньги" />
+			<Emoji Code="$#684" Name="деньги" />
+			<Emoji Code="$#685" Name="деньги" />
+			<Emoji Code="$#686" Name="ссылка" />
+			<Emoji Code="$#687" Name="ярлык" />
+			<Emoji Code="$#688" Name="ярлык" />
+			<Emoji Code="$#689" Name="падающая звезда" />
+			<Emoji Code="$#690" Name="иена" />
+			<Emoji Code="$#691" Name="месяц" />
+			<Emoji Code="$#692" Name="книга" />
+			<Emoji Code="$#693" Name="паутина" />
+			<Emoji Code="$#694" Name="книги" />
+			<Emoji Code="$#695" Name="бочка" />
+			<Emoji Code="$#696" Name="мусор" />
+			<Emoji Code="$#697" Name="алмаз" />
+			<Emoji Code="$#698" Name="блокнот" />
+			<Emoji Code="$#699" Name="блокнот" />
+			<Emoji Code="$#700" Name="блокнот" />
+			<Emoji Code="$#701" Name="кольцо" />
+			<Emoji Code="$#702" Name="свеча" />
+			<Emoji Code="$#703" Name="газета" />
+			<Emoji Code="$#704" Name="газета" />
+			<Emoji Code="$#705" Name="кактус" />
+			<Emoji Code="$#706" Name="фонарик" />
+			<Emoji Code="$#707" Name="морская улитка" />
+			<Emoji Code="$#708" Name="идея" />
+			<Emoji Code="$#709" Name="папка" />
+			<Emoji Code="$#710" Name="папка" />
+			<Emoji Code="$#711" Name="папка" />
+			<Emoji Code="$#712" Name="штепсель" />
+			<Emoji Code="$#713" Name="гейша" />
+			<Emoji Code="$#714" Name="бабочка" />
+			<Emoji Code="$#715" Name="ноутбук" />
+			<Emoji Code="$#716" Name="батарейка" />
+			<Emoji Code="$#717" Name="спутниковая тарелка" />
+			<Emoji Code="$#718" Name="блокнот" />
+			<Emoji Code="$#719" Name="песочные часы" />
+			<Emoji Code="$#720" Name="песочные часы" />
+			<Emoji Code="$#721" Name="помада" />
+			<Emoji Code="$#722" Name="архив" />
+			<Emoji Code="$#723" Name="часы" />
+			<Emoji Code="$#724" Name="зонтик" />
+			<Emoji Code="$#725" Name="коробка" />
+			<Emoji Code="$#726" Name="бабочка" />
+			<Emoji Code="$#727" Name="будильник" />
+			<Emoji Code="$#728" Name="очки" />
+			<Emoji Code="$#729" Name="коробка" />
+			<Emoji Code="$#730" Name="кошелек" />
+			<Emoji Code="$#731" Name="сумочка" />
+			<Emoji Code="$#732" Name="секундомер" />
+			<Emoji Code="$#733" Name="секундомер" />
+			<Emoji Code="$#734" Name="календарь" />
+			<Emoji Code="$#735" Name="календарь" />
+			<Emoji Code="$#736" Name="календарь" />
+			<Emoji Code="$#737" Name="календарь" />
+			<Emoji Code="$#738" Name="календарь" />
+			<Emoji Code="$#739" Name="сумочка" />
+			<Emoji Code="$#740" Name="портфель" />
+			<Emoji Code="$#741" Name="бикини" />
+			<Emoji Code="$#742" Name="плита" />
+			<Emoji Code="$#743" Name="регулирователь" />
+			<Emoji Code="$#744" Name="смартфон" />
+			<Emoji Code="$#745" Name="смартфон" />
+			<Emoji Code="$#746" Name="конфетти" />
+			<Emoji Code="$#747" Name="конфетти" />
+			<Emoji Code="$#748" Name="рубашка" />
+			<Emoji Code="$#749" Name="рубашка" />
+			<Emoji Code="$#750" Name="микрофон" />
+			<Emoji Code="$#751" Name="рубашка поло" />
+			<Emoji Code="$#752" Name="ботинок" />
+			<Emoji Code="$#753" Name="радио" />
+			<Emoji Code="$#754" Name="каблук" />
+			<Emoji Code="$#755" Name="убыток" />
+			<Emoji Code="$#756" Name="сандалии" />
+			<Emoji Code="$#757" Name="телевидение" />
+			<Emoji Code="$#758" Name="гистограмма" />
+			<Emoji Code="$#759" Name="гистограмма" />
+			<Emoji Code="$#760" Name="обувь" />
+			<Emoji Code="$#761" Name="кроссовки" />
+			<Emoji Code="$#762" Name="факс" />
+			<Emoji Code="$#763" Name="пейджер" />
+			<Emoji Code="$#764" Name="корона" />
+			<Emoji Code="$#765" Name="телефон" />
+			<Emoji Code="$#766" Name="телефон" />
+			<Emoji Code="$#767" Name="файл" />
+			<Emoji Code="$#768" Name="файл" />
+			<Emoji Code="$#769" Name="файл" />
+			<Emoji Code="$#770" Name="файл" />
+			<Emoji Code="$#771" Name="свиток" />
+			<Emoji Code="$#772" Name="фильм" />
+			<Emoji Code="$#773" Name="видеокамера" />
+			<Emoji Code="$#774" Name="видеокамера" />
+			<Emoji Code="$#775" Name="видеокамера" />
+			<Emoji Code="$#776" Name="почтовый ящик" />
+			<Emoji Code="$#777" Name="почтовый ящик" />
+			<Emoji Code="$#778" Name="почтовый ящик" />
+			<Emoji Code="$#779" Name="почтовый ящик" />
+			<Emoji Code="$#780" Name="почтовый ящик" />
+			<Emoji Code="$#781" Name="почтовый ящик" />
+			<Emoji Code="$#782" Name="фото камера" />
+			<Emoji Code="$#783" Name="фото камера" />
+			<Emoji Code="$#784" Name="касета" />
+			<Emoji Code="$#785" Name="компакт-диск" />
+			<Emoji Code="$#786" Name="компакт-диск" />
+			<Emoji Code="$#787" Name="упаковка" />
+			<Emoji Code="$#788" Name="дискета" />
+			<Emoji Code="$#789" Name="исходящие" />
+			<Emoji Code="$#790" Name="жесткий диск" />
+			<Emoji Code="$#791" Name="входящие" />
+			<Emoji Code="$#792" Name="виза" />
+			<Emoji Code="$#793" Name="любовное письмо" />
+			<Emoji Code="$#794" Name="коинобори" />
+			<Emoji Code="$#795" Name="джойстик" />
+			<Emoji Code="$#796" Name="часы" />
+			<Emoji Code="$#797" Name="лук" />
+		</EmojiGroup>    
+		                 
+		<EmojiGroup Code="$#006" Name="Флаги">
+			<Emoji Code="$#800" Name="Маврикий" />
+			<Emoji Code="$#801" Name="Кипр" />
+			<Emoji Code="$#802" Name="Австрия" />
+			<Emoji Code="$#803" Name="Оман" />
+			<Emoji Code="$#804" Name="Эфиопия" />
+			<Emoji Code="$#805" Name="Танзания" />
+			<Emoji Code="$#806" Name="Никарагуа" />
+			<Emoji Code="$#807" Name="Эстония" />
+			<Emoji Code="$#808" Name="Уганда" />
+			<Emoji Code="$#809" Name="Словения" />
+			<Emoji Code="$#810" Name="Зимбабве" />
+			<Emoji Code="$#811" Name="Италия" />
+			<Emoji Code="$#812" Name="Уэльс" />
+			<Emoji Code="$#813" Name="Непал" />
+			<Emoji Code="$#814" Name="Ливан" />
+			<Emoji Code="$#815" Name="Сеута" />
+			<Emoji Code="$#816" Name="Ирак" />
+			<Emoji Code="$#817" Name="Сирия" />
+			<Emoji Code="$#818" Name="Гондурас" />
+			<Emoji Code="$#819" Name="Ангилья" />
+			<Emoji Code="$#820" Name="Северная Корея" />
+			<Emoji Code="$#821" Name="Замбия" />
+			<Emoji Code="$#822" Name="Китай" />
+			<Emoji Code="$#823" Name="Люксембург" />
+			<Emoji Code="$#824" Name="Центрально-Африканская Республика" />
+			<Emoji Code="$#825" Name="Ямайка" />
+			<Emoji Code="$#826" Name="Монако" />
+			<Emoji Code="$#827" Name="Парагвай" />
+			<Emoji Code="$#828" Name="Латвия" />
+			<Emoji Code="$#829" Name="Андорра" />
+			<Emoji Code="$#830" Name="Микронезия" />
+			<Emoji Code="$#831" Name="Доминиканская Республика" />
+			<Emoji Code="$#832" Name="Абхазия" />
+			<Emoji Code="$#833" Name="Тунис" />
+			<Emoji Code="$#834" Name="Косово" />
+			<Emoji Code="$#835" Name="Гана" />
+			<Emoji Code="$#836" Name="Шотландия" />
+			<Emoji Code="$#837" Name="Габон" />
+			<Emoji Code="$#838" Name="Намибия" />
+			<Emoji Code="$#839" Name="Япония" />
+			<Emoji Code="$#840" Name="Литва" />
+			<Emoji Code="$#841" Name="Чад" />
+			<Emoji Code="$#842" Name="Кения" />
+			<Emoji Code="$#843" Name="Сербия" />
+			<Emoji Code="$#844" Name="Казахстан" />
+			<Emoji Code="$#845" Name="Исландия" />
+			<Emoji Code="$#846" Name="Сомали" />
+			<Emoji Code="$#847" Name="Барбадос" />
+			<Emoji Code="$#848" Name="Нигерия" />
+			<Emoji Code="$#849" Name="Уругвай" />
+			<Emoji Code="$#850" Name="Словакия" />
+			<Emoji Code="$#851" Name="Южная Корея" />
+			<Emoji Code="$#852" Name="Сан-Марино" />
+			<Emoji Code="$#853" Name="Гватемала" />
+			<Emoji Code="$#854" Name="Албания" />
+			<Emoji Code="$#855" Name="Пакистан" />
+			<Emoji Code="$#856" Name="Эквадор" />
+			<Emoji Code="$#857" Name="Камерун" />
+			<Emoji Code="$#858" Name="Панама" />
+			<Emoji Code="$#859" Name="Кувейт" />
+			<Emoji Code="$#860" Name="Армения" />
+			<Emoji Code="$#861" Name="Румыния" />
+			<Emoji Code="$#862" Name="Гвинея" />
+			<Emoji Code="$#863" Name="Афганистан" />
+			<Emoji Code="$#864" Name="Лаос" />
+			<Emoji Code="$#865" Name="Гренландия" />
+			<Emoji Code="$#866" Name="Венгрия" />
+			<Emoji Code="$#867" Name="Ангола" />
+			<Emoji Code="$#868" Name="Малася" />
+			<Emoji Code="$#869" Name="Бруней" />
+			<Emoji Code="$#870" Name="Багамы" />
+			<Emoji Code="$#871" Name="Новая Зеландия" />
+			<Emoji Code="$#872" Name="Ватикан" />
+			<Emoji Code="$#873" Name="Финляндия" />
+			<Emoji Code="$#874" Name="Ботсвана" />
+			<Emoji Code="$#875" Name="Шри ланка" />
+			<Emoji Code="$#876" Name="Испания" />
+			<Emoji Code="$#877" Name="Осетия" />
+			<Emoji Code="$#878" Name="Чили" />
+			<Emoji Code="$#879" Name="Босния и Герцеговина" />
+			<Emoji Code="$#880" Name="Саудовская Аравия" />
+			<Emoji Code="$#881" Name="Лихтенштейн" />
+			<Emoji Code="$#882" Name="Беларусь" />
+			<Emoji Code="$#883" Name="Иран" />
+			<Emoji Code="$#884" Name="Фиджи" />
+			<Emoji Code="$#885" Name="Бахрейн" />
+			<Emoji Code="$#886" Name="Венесуэла" />
+			<Emoji Code="$#887" Name="Азербайджан" />
+			<Emoji Code="$#888" Name="Норвегия" />
+			<Emoji Code="$#889" Name="Алжир" />
+			<Emoji Code="$#890" Name="Украина" />
+			<Emoji Code="$#891" Name="Гамбия" />
+			<Emoji Code="$#892" Name="Бангладеш" />
+			<Emoji Code="$#893" Name="Мадейра" />
+			<Emoji Code="$#894" Name="Чехия" />
+			<Emoji Code="$#895" Name="Боливия" />
+			<Emoji Code="$#896" Name="Объединенные Арабские Эмираты" />
+			<Emoji Code="$#897" Name="Кыргызстан" />
+			<Emoji Code="$#898" Name="Куба" />
+			<Emoji Code="$#899" Name="Израиль" />
+			<Emoji Code="$#900" Name="Коста-Рика" />
+			<Emoji Code="$#901" Name="Республика Конго" />
+			<Emoji Code="$#902" Name="Египет" />
+			<Emoji Code="$#903" Name="Камбоджа" />
+			<Emoji Code="$#904" Name="Германия" />
+			<Emoji Code="$#905" Name="Хорватия" />
+			<Emoji Code="$#906" Name="Бельгия" />
+			<Emoji Code="$#907" Name="Марокко" />
+			<Emoji Code="$#908" Name="Болгария" />
+			<Emoji Code="$#909" Name="Либерия" />
+			<Emoji Code="$#910" Name="Греция" />
+			<Emoji Code="$#911" Name="Дания" />
+			<Emoji Code="$#912" Name="Колумбия" />
+			<Emoji Code="$#913" Name="Ирландия" />
+			<Emoji Code="$#914" Name="Швеция" />
+			<Emoji Code="$#915" Name="Гаити" />
+			<Emoji Code="$#916" Name="Доминика" />
+			<Emoji Code="$#917" Name="Перу" />
+			<Emoji Code="$#918" Name="Узбекистн" />
+			<Emoji Code="$#919" Name="Мальта" />
+			<Emoji Code="$#920" Name="Франция" />
+			<Emoji Code="$#921" Name="Таджикистан" />
+			<Emoji Code="$#922" Name="Аргентина" />
+			<Emoji Code="$#923" Name="Судан" />
+			<Emoji Code="$#924" Name="Южная Африка" />
+			<Emoji Code="$#925" Name="Тайвань" />
+			<Emoji Code="$#926" Name="Швейцария " />
+			<Emoji Code="$#927" Name="Палестина" />
+			<Emoji Code="$#928" Name="Индонезия" />
+			<Emoji Code="$#929" Name="Польша" />
+			<Emoji Code="$#930" Name="Молдова" />
+			<Emoji Code="$#931" Name="Малави" />
+			<Emoji Code="$#932" Name="Англия" />
+			<Emoji Code="$#933" Name="Турция" />
+			<Emoji Code="$#934" Name="Вьетнам" />
+			<Emoji Code="$#935" Name="Нигер" />
+			<Emoji Code="$#936" Name="Португалия" />
+			<Emoji Code="$#937" Name="Сенегал" />
+			<Emoji Code="$#938" Name="Туркменистан" />
+			<Emoji Code="$#939" Name="Сингапур" />
+			<Emoji Code="$#940" Name="Ливия" />
+			<Emoji Code="$#941" Name="Йемен" />
+			<Emoji Code="$#942" Name="Приднестровье" />
+			<Emoji Code="$#943" Name="Австралия" />
+			<Emoji Code="$#944" Name="Республика Македония" />
+			<Emoji Code="$#945" Name="Нидерланды" />
+			<Emoji Code="$#946" Name="Таиланд" />
+			<Emoji Code="$#947" Name="Канада" />
+			<Emoji Code="$#948" Name="Южный Судан " />
+			<Emoji Code="$#949" Name="Джерси" />
+			<Emoji Code="$#950" Name="Индия" />
+			<Emoji Code="$#951" Name="Сомалиленд" />
+			<Emoji Code="$#952" Name="Россия" />
+			<Emoji Code="$#953" Name="Мексика" />
+			<Emoji Code="$#954" Name="Бразилия" />
+			<Emoji Code="$#955" Name="Грузия " />
+			<Emoji Code="$#956" Name="Монголия " />
+			<Emoji Code="$#957" Name="Европейский союз" />
+			<Emoji Code="$#958" Name="Объединенное Королевство" />
+			<Emoji Code="$#959" Name="Гавайи" />
+		</EmojiGroup>    
+	</Emojis>            
+</Root>
